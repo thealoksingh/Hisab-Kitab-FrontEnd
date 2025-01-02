@@ -1,9 +1,9 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import SignupForm from '../SignupForm';
-import LogInForm from '../LogInForm';
-import Authentication from '../Authentication';
-import UserDashboard from '../UserDashboard'; 
+import SignupForm from '../Authentication/SignupForm';
+import LogInForm from '../Authentication/LogInForm';
+import Authentication from '../Authentication/Authentication';
+import UserDashboard from '../UserDashBoard/UserDashboard'; 
 
 const Routing = () => {
   return (
