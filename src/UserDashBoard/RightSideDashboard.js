@@ -17,6 +17,7 @@ function RightSideDashBoard() {
                <b>Select any friend to View Deatails</b> 
               </h2>          
           </div> */}
+          
         <div className="right-header top-[0] h-[10%] bg-slate-400 w-full absolute p-[10px] flex gap-[10px] flex items-center ">
           <div className="alphabet-circle bg-teal-600 h-[50px] w-[50px] rounded-full flex items-center justify-center">
             <h1 className="text-white text-lg">A</h1>
