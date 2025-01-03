@@ -5,6 +5,11 @@ import LeftSideDashBoard from './LeftSideDashboard';
 import RightSideDashBoard from './RightSideDashboard';
 
 const UserDashboard = () => {
+
+  const [isFriendSelected, setIsFriendSelected] = useState(false);
+  const [selectedFriend, setSelectedFriend] = useState(null);
+
+
   // const location = useLocation();
   // const [error, setError] = useState(null);
   // const [friends, setFriends] = useState([]);
@@ -37,7 +42,8 @@ const UserDashboard = () => {
 
   return (
     <>
-      <button
+    {/* navigation started  */}
+    <button
         data-drawer-target="default-sidebar"
         data-drawer-toggle="default-sidebar"
         aria-controls="default-sidebar"
@@ -210,10 +216,21 @@ const UserDashboard = () => {
         </div>
       </aside>
 
+    {/* navigation ended  */}
+
       <div class=" whole-dashboard p-2 ml-64">
         <div class="flex gap-2 ">
-         <LeftSideDashBoard/>
-         <RightSideDashBoard/>        
+        <LeftSideDashBoard
+            isFriendSelected={isFriendSelected}
+            setIsFriendSelected={setIsFriendSelected}
+            selectedFriend={selectedFriend}
+            setSelectedFriend={setSelectedFriend}
+          />
+
+          <RightSideDashBoard
+            isFriendSelected={isFriendSelected}
+            selectedFriend={selectedFriend}
+          />       
         </div>
        
 
