@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import AddFriendModal from "../Modals/AddFriendModal";
 
-function LeftSideDashBoard({ setIsFriendSelected, setSelectedFriend }) {
+function LeftSideDashBoard({ user,friends,setIsFriendSelected, setSelectedFriend }) {
   const location = useLocation();
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -69,39 +69,41 @@ function LeftSideDashBoard({ setIsFriendSelected, setSelectedFriend }) {
                 </tr>
               </thead>
               <tbody>
-                <tr
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer"
-                  onClick={() =>
-                    handleRowClick({
-                      name: "Alok Singh",
-                      date: "17/10/23",
-                      amount: "23$",
-                      type: "you'll get",
-                    })
-                  }
-                >
-                  <td
-                    scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
-                  >
-                    <span className="inline-block w-8 h-8 bg-blue-500 text-white flex items-center justify-center rounded-full mr-3">
-                      A
-                    </span>
-                    <div className="flex flex-col">
-                      <span className="font-medium text-white">
-                        Alok Singh
-                      </span>
-                      <span className="text-xs text-white">17/10/23</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-right pr-[25px]">
-                    <div className="flex flex-col">
-                      <span className="font-medium text-white">23$</span>
-                      <span className="text-xs text-white">you'll get</span>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
+        {friends.map((friend) => (
+          <tr
+            key={friend.userId} // Use userId as key for each row
+            className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer"
+            onClick={() =>
+              handleRowClick({
+                name: friend.fullName,
+                email: friend.email,
+                contactNo: friend.contactNo,
+                amount: "23$", // Replace with actual amount
+                type: "you'll get", // Adjust type as needed
+              })
+            }
+          >
+            <td
+              scope="row"
+              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
+            >
+              <span className="inline-block w-8 h-8 bg-blue-500 text-white flex items-center justify-center rounded-full mr-3">
+                {friend.fullName[0]} {/* First letter of name for avatar */}
+              </span>
+              <div className="flex flex-col">
+                <span className="font-medium text-white">{friend.fullName}</span>
+                <span className="text-xs text-white">17/10/23</span> {/* Replace with actual date if needed */}
+              </div>
+            </td>
+            <td className="px-6 py-4 text-right pr-[25px]">
+              <div className="flex flex-col">
+                <span className="font-medium text-white">23$</span>
+                <span className="text-xs text-white">you'll get</span>
+              </div>
+            </td>
+          </tr>
+        ))}
+      </tbody>
             </table>
           </div>
         </div>
@@ -114,7 +116,7 @@ function LeftSideDashBoard({ setIsFriendSelected, setSelectedFriend }) {
             Add Friend
           </button>
 
-          <AddFriendModal isOpen={isModalOpen} toggleModal={toggleModal} />
+          <AddFriendModal userId={user.userId} isOpen={isModalOpen} toggleModal={toggleModal} />
         </div>
       </div>
     </>
