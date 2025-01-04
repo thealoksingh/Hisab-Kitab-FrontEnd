@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { loginApi } from '../Api/HisabKitabApi'
+
 
 const LogInForm = () => {
   const { role } = useParams();
@@ -9,33 +11,21 @@ const LogInForm = () => {
   const [error, setError] = useState(null);
 
   const handleLogin = async (e) => {
+
+    console.log("login method called");
     e.preventDefault();
     setError(null); // Reset error before login attempt
 
     try {
-      const response = await fetch('http://localhost:8080/Hisab-Kitab/user/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          email: email,
-          password: password,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Invalid login credentials");
-      }
-      const user = await response.json();
-      // console.log("Login successful:", user.fullName || user?.data?.fullName || "No name available");
+      const response = await loginApi(email, password);
+      console.log("Login Api called");
+      const user = response.data;
       console.log("User object:", user);
-
 
       // Pass user data to the dashboard
       navigate(`/dashboard/${role}`, { state: { user } });
     } catch (error) {
-      setError(error.message);
+      setError("Invalid login credentials");
     }
   };
 

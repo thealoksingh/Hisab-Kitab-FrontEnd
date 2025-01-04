@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { signUpUser } from '../Api/HisabKitabApi'
 
 const SignupForm = () => {
   const { role } = useParams();
@@ -14,42 +15,29 @@ const SignupForm = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    setError(null); // Reset error before the signup attempt
+    setError(null);
 
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
-    console.log(role)
-    
+
+    const userData = {
+      fullName,
+      email,
+      contactNo: phoneNumber,
+      password,
+      role,
+    };
 
     try {
-      const response = await fetch('http://localhost:8080/Hisab-Kitab/user/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          fullName: fullName,
-          email: email,
-          contactNo: phoneNumber,
-          password: password,
-          role: role,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("User already exists or invalid input");
-      }
-
-
+      await signUpUser(userData);
       setSuccessMessage("Signup successful! You can now log in.");
       setTimeout(() => {
-        navigate(`/login/${role}`); // Redirect to login after successful signup
+        navigate(`/login/${role}`);
       }, 2000);
-
     } catch (error) {
-      setError(error.message);
+      setError(error.response?.data?.message || "User already exists or invalid input");
     }
   };
 
