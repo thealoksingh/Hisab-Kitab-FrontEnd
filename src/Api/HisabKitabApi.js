@@ -13,3 +13,15 @@ export const signUpUser = (userData) =>
 export const getFriendList = (userId) => {
     return apiClient.get(`/user/getAllFriendList/${userId}`);
   };
+
+
+// API for adding a friend
+export const addFriend = (userId, contactNo) => {
+    return apiClient.get(`/user/addfriend/${userId}?contactNo=${contactNo}`);
+  };
+
+  
+// API for Get Friend Transaction Details
+export const getTransactionDetailsWithFriend = (userId, friendId) => {
+  return apiClient.get(`/user/getAllTransactionWithFriend?userId=${userId}&friendId=${friendId}`);
+};

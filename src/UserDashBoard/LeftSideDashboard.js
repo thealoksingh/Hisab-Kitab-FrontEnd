@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import AddFriendModal from "../Modals/AddFriendModal";
 
-function LeftSideDashBoard({ user,friends,setIsFriendSelected, setSelectedFriend }) {
+function LeftSideDashBoard({ user, friends, setIsFriendSelected, setSelectedFriend }) {
   const location = useLocation();
   const [isModalOpen, setModalOpen] = useState(false);
+
+  const[getAmount, setGetAmount] = useState(0);
+  const[giveAmount, setGiveAmount] = useState(0);
 
   const toggleModal = () => {
     setModalOpen(!isModalOpen);
@@ -19,16 +22,36 @@ function LeftSideDashBoard({ user,friends,setIsFriendSelected, setSelectedFriend
     setSelectedFriend(friend); // Set the selected friend's details
   };
 
+  useEffect(() => {
+    calculateAmount(friends);
+  }, [friends]); // Dependency array ensures the function runs whenever `friendList` changes
+
+  function calculateAmount(friendList) {
+    let totalGetAmount = 0;
+    let totalGiveAmount = 0;
+
+    friendList.forEach(friend => {
+      if (friend.closingBalance > 0) {
+        totalGetAmount += friend.closingBalance;
+      } else {
+        totalGiveAmount -= friend.closingBalance;
+      }
+    });
+
+    setGetAmount(totalGetAmount);
+    setGiveAmount(totalGiveAmount);
+  }
+
   return (
     <>
       <div className="left-side rounded bg-slate-200 w-[50%] min-h-[100vh] relative overflow-hidden">
         <div className="left-upper h-[20%] bg-slate-300 w-[100%] relative">
           <div className="flex h-[30%] relative bg-slate-400">
             <div className="w-[35%] h-[100%] p-2">
-              You'll Give:<span className="text-rose-600"> $5000</span>
+              You'll Give:<span className="text-rose-600"> ${giveAmount}</span>
             </div>
             <div className="w-[35%] h-[100%] p-2">
-              You'll Get:<span className="text-green-900"> $8000</span>
+              You'll Get:<span className="text-green-900"> ${getAmount}</span>
             </div>
             <div className="w-[30%] h-[100%] p-1">
               <button className="bg-rose-600 text-white font-bold py-1 px-4 rounded-[4px] flex items-center justify-center">
@@ -69,41 +92,44 @@ function LeftSideDashBoard({ user,friends,setIsFriendSelected, setSelectedFriend
                 </tr>
               </thead>
               <tbody>
-        {friends.map((friend) => (
-          <tr
-            key={friend.userId} // Use userId as key for each row
-            className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer"
-            onClick={() =>
-              handleRowClick({
-                name: friend.fullName,
-                email: friend.email,
-                contactNo: friend.contactNo,
-                amount: "23$", // Replace with actual amount
-                type: "you'll get", // Adjust type as needed
-              })
-            }
-          >
-            <td
-              scope="row"
-              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
-            >
-              <span className="inline-block w-8 h-8 bg-blue-500 text-white flex items-center justify-center rounded-full mr-3">
-                {friend.fullName[0]} {/* First letter of name for avatar */}
-              </span>
-              <div className="flex flex-col">
-                <span className="font-medium text-white">{friend.fullName}</span>
-                <span className="text-xs text-white">17/10/23</span> {/* Replace with actual date if needed */}
-              </div>
-            </td>
-            <td className="px-6 py-4 text-right pr-[25px]">
-              <div className="flex flex-col">
-                <span className="font-medium text-white">23$</span>
-                <span className="text-xs text-white">you'll get</span>
-              </div>
-            </td>
-          </tr>
-        ))}
-      </tbody>
+                {friends.map((friend) => (
+                  <tr
+                    key={friend.userEntity.userId} // Use userId as key for each row
+                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer"
+                    onClick={() =>
+                      handleRowClick(friend.userEntity)
+                    }
+                  >
+                    <td
+                      scope="row"
+                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
+                    >
+                      <span className="inline-block w-8 h-8 bg-blue-500 text-white flex items-center justify-center rounded-full mr-3">
+                        {friend.userEntity.fullName[0]} {/* First letter of name for avatar */}
+                      </span>
+                      <div className="flex flex-col">
+                        <span className="font-medium text-white">{friend.userEntity.fullName}</span>
+                        <span className="text-xs text-white">{friend.lastTransactionDate}</span> {/* Replace with actual date if needed */}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-right pr-[25px]">
+                      <div className="flex flex-col">
+                        <span
+                          className={`font-medium ${friend.closingBalance >= 0 ? "text-green-500" : "text-red-500"
+                            }`}
+                        >
+                          {friend.closingBalance}
+                        </span>
+
+                        <span className="text-xs text-white">
+                          {friend.closingBalance != null && friend.closingBalance >= 0 ? "You will get" : "You will give"}
+                        </span>
+
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
         </div>

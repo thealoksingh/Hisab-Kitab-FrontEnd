@@ -222,6 +222,7 @@ const UserDashboard = () => {
           />
 
           <RightSideDashBoard
+            user={user}
             isFriendSelected={isFriendSelected}
             selectedFriend={selectedFriend}
           />
