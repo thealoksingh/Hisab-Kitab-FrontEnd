@@ -25,3 +25,6 @@ export const addFriend = (userId, contactNo) => {
 export const getTransactionDetailsWithFriend = (userId, friendId) => {
   return apiClient.get(`/user/getAllTransactionWithFriend?userId=${userId}&friendId=${friendId}`);
 };
+export const createTransaction = (transactionData) => {
+  return apiClient.post("/user/friendTransactions", transactionData);
+};

@@ -105,7 +105,8 @@ function LeftSideDashBoard({ user, friends, setIsFriendSelected, setSelectedFrie
                       className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
                     >
                       <span className="inline-block w-8 h-8 bg-blue-500 text-white flex items-center justify-center rounded-full mr-3">
-                        {friend.userEntity.fullName[0]} {/* First letter of name for avatar */}
+                      {friend.userEntity.fullName[0].toUpperCase()} {/* First letter of name for avatar */}
+                    
                       </span>
                       <div className="flex flex-col">
                         <span className="font-medium text-white">{friend.userEntity.fullName}</span>
