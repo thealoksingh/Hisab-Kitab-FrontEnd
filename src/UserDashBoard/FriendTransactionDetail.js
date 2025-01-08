@@ -12,7 +12,8 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transactionType, setTransactionType] = useState(""); // Track the transaction type (Give or Got)
   const [isCommentSectionOpen, setIsCommentSetionOpen] = useState(false);
-  
+  const [commentTransaction, setCommentTransaction] = useState([]);
+  const [isRowClicked, setIsRowClicked] = useState(false);
 
   const toggleCommentSection = () => {
     setIsCommentSetionOpen(!isCommentSectionOpen); // Toggle the state when the button is clicked
@@ -55,6 +56,7 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
 
   function handleRowClick(transaction) {
     console.log("Transaction Row has been clicked..");
+    // setCommentTransaction(transaction);
   }
   console.log();
 
@@ -139,7 +141,11 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
                   key={transactionDto.transaction.transId}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                   onClick={() => {
-                    handleRowClick(transactionDto);  // Call handleRowClick with the transactionDto
+                    setIsRowClicked(!isRowClicked);
+                    setCommentTransaction(transactionDto.transaction);
+                     console.log(commentTransaction) ;// Call handleRowClick with the transactionDto
+                     console.log("after comment transaction.") ;// Call handleRowClick with the transactionDto
+                    // handleRowClick(transactionDto.transaction); 
                     toggleCommentSection();                 // Call toggleDetail to open/close the details section
                   }}
                 >
@@ -216,7 +222,10 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
 
      <CommentSection
       isOpen={isCommentSectionOpen}
-      
+      isRowClicked={isRowClicked}
+      setIsRowClicked={setIsRowClicked}
+      user={user}
+      commentTransaction={commentTransaction}
       toggleCommentSection={toggleCommentSection} />
  
 
