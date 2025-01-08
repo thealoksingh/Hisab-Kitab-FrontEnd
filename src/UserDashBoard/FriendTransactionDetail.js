@@ -92,7 +92,7 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
                 {transactionsDto[0].lastClosingBalance >= 0
                   ? "You will get :"
                   : "You will give :"}
-                <span>${transactionsDto[0].lastClosingBalance}</span>
+                <span>${Math.abs(transactionsDto[0].lastClosingBalance)}</span>
               </>
             )}
           </h2>

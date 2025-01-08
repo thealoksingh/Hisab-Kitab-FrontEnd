@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import AddFriendModal from "../Modals/AddFriendModal";
+import moment from 'moment';
 
 function LeftSideDashBoard({ user, friends, setIsFriendSelected, setSelectedFriend, refreshFriendTransaction, setRefreshFriendTransaction }) {
   const location = useLocation();
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const[getAmount, setGetAmount] = useState(0);
-  const[giveAmount, setGiveAmount] = useState(0);
+  const [getAmount, setGetAmount] = useState(0);
+  const [giveAmount, setGiveAmount] = useState(0);
 
   const toggleModal = () => {
     setModalOpen(!isModalOpen);
@@ -24,7 +25,7 @@ function LeftSideDashBoard({ user, friends, setIsFriendSelected, setSelectedFrie
 
   useEffect(() => {
     calculateAmount(friends);
-  }, [user, refreshFriendTransaction]); // Dependency array ensures the function runs whenever `friendList` changes
+  }, [user, friends, refreshFriendTransaction]); // Dependency array ensures the function runs whenever `friendList` changes
 
   function calculateAmount(friendList) {
     let totalGetAmount = 0;
@@ -105,12 +106,14 @@ function LeftSideDashBoard({ user, friends, setIsFriendSelected, setSelectedFrie
                       className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
                     >
                       <span className="inline-block w-8 h-8 bg-blue-500 text-white flex items-center justify-center rounded-full mr-3">
-                      {friend.userEntity.fullName[0].toUpperCase()} {/* First letter of name for avatar */}
-                    
+                        {friend.userEntity.fullName[0].toUpperCase()} {/* First letter of name for avatar */}
+
                       </span>
                       <div className="flex flex-col">
                         <span className="font-medium text-white">{friend.userEntity.fullName}</span>
-                        <span className="text-xs text-white">{friend.lastTransactionDate}</span> {/* Replace with actual date if needed */}
+                        <span className="text-xs text-white">
+                          {friend.lastTransactionDate ? moment(friend.lastTransactionDate).fromNow() : ''}
+                        </span>
                       </div>
                     </td>
                     <td className="px-6 py-4 text-right pr-[25px]">
@@ -119,7 +122,7 @@ function LeftSideDashBoard({ user, friends, setIsFriendSelected, setSelectedFrie
                           className={`font-medium ${friend.closingBalance >= 0 ? "text-green-500" : "text-red-500"
                             }`}
                         >
-                          {friend.closingBalance}
+                          {Math.abs(friend.closingBalance)}
                         </span>
 
                         <span className="text-xs text-white">
@@ -144,8 +147,8 @@ function LeftSideDashBoard({ user, friends, setIsFriendSelected, setSelectedFrie
           </button>
 
           <AddFriendModal userId={user.userId} isOpen={isModalOpen} toggleModal={toggleModal}
-          refreshFriendTransaction={refreshFriendTransaction}
-          setRefreshFriendTransaction={setRefreshFriendTransaction}
+            refreshFriendTransaction={refreshFriendTransaction}
+            setRefreshFriendTransaction={setRefreshFriendTransaction}
           />
         </div>
       </div>
