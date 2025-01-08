@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import AddFriendModal from "../Modals/AddFriendModal";
 
-function LeftSideDashBoard({ user, friends, setIsFriendSelected, setSelectedFriend }) {
+function LeftSideDashBoard({ user, friends, setIsFriendSelected, setSelectedFriend, refreshFriendTransaction, setRefreshFriendTransaction }) {
   const location = useLocation();
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -24,7 +24,7 @@ function LeftSideDashBoard({ user, friends, setIsFriendSelected, setSelectedFrie
 
   useEffect(() => {
     calculateAmount(friends);
-  }, [friends]); // Dependency array ensures the function runs whenever `friendList` changes
+  }, [user, refreshFriendTransaction]); // Dependency array ensures the function runs whenever `friendList` changes
 
   function calculateAmount(friendList) {
     let totalGetAmount = 0;
@@ -143,7 +143,10 @@ function LeftSideDashBoard({ user, friends, setIsFriendSelected, setSelectedFrie
             Add Friend
           </button>
 
-          <AddFriendModal userId={user.userId} isOpen={isModalOpen} toggleModal={toggleModal} />
+          <AddFriendModal userId={user.userId} isOpen={isModalOpen} toggleModal={toggleModal}
+          refreshFriendTransaction={refreshFriendTransaction}
+          setRefreshFriendTransaction={setRefreshFriendTransaction}
+          />
         </div>
       </div>
     </>

@@ -5,13 +5,14 @@ import React, { useState, useEffect } from "react";
 import { getTransactionDetailsWithFriend } from "../Api/HisabKitabApi";
 import GiveGotModal from "../Modals/GiveGotModal";
 
-function FriendTranscationDetail({ user, selectedFriend }) {
+function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransaction, setRefreshFriendTransaction }) {
   const [transactionsDto, setTransactionsDto] = useState([]);
   // const [lastClosingBalance, setLastClosingBalance] = useState(0);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transactionType, setTransactionType] = useState(""); // Track the transaction type (Give or Got)
   const [isCommentSectionOpen, setIsCommentSetionOpen] = useState(false);
+  
 
   const toggleCommentSection = () => {
     setIsCommentSetionOpen(!isCommentSectionOpen); // Toggle the state when the button is clicked
@@ -48,7 +49,7 @@ function FriendTranscationDetail({ user, selectedFriend }) {
     };
 
     fetchTransactions();
-  }, [user, selectedFriend, transactionsDto.length]);
+  }, [user, selectedFriend, refreshFriendTransaction]);
 
   console.log(selectedFriend.fullName[0]);
 
@@ -206,6 +207,9 @@ function FriendTranscationDetail({ user, selectedFriend }) {
             toggleModal={toggleModal}
             transactionType={transactionType}
             friendId={selectedFriend.userId}
+            refreshFriendTransaction={refreshFriendTransaction}
+            setRefreshFriendTransaction={setRefreshFriendTransaction}
+            
           />
         </div>
       </div>

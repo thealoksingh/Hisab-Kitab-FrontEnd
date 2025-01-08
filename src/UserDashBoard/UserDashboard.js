@@ -12,6 +12,7 @@ const UserDashboard = () => {
   const [friends, setFriends] = useState([]);
   const [error, setError] = useState(null);
   const user = location.state?.user;
+  const [refreshFriendTransaction, setRefreshFriendTransaction] = useState(false);
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -28,7 +29,8 @@ const UserDashboard = () => {
     };
 
     fetchFriends();
-  }, [user]);
+  
+  }, [user, refreshFriendTransaction]);
 
 
 
@@ -219,12 +221,16 @@ const UserDashboard = () => {
             setIsFriendSelected={setIsFriendSelected}
             selectedFriend={selectedFriend}
             setSelectedFriend={setSelectedFriend}
+            refreshFriendTransaction={refreshFriendTransaction}
+            setRefreshFriendTransaction={setRefreshFriendTransaction}
           />
 
           <RightSideDashBoard
             user={user}
             isFriendSelected={isFriendSelected}
             selectedFriend={selectedFriend}
+            refreshFriendTransaction={refreshFriendTransaction}
+            setRefreshFriendTransaction={setRefreshFriendTransaction}
           />
         </div>
 

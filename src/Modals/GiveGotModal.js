@@ -7,6 +7,8 @@ const GiveGotModal = ({
   userId,
   transactionType,
   friendId,
+  refreshFriendTransaction,
+  setRefreshFriendTransaction
 }) => {
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
@@ -29,9 +31,16 @@ const GiveGotModal = ({
       const response = await createTransaction(transactionData);
       console.log("Transaction created successfully", response);
       toggleModal(); // Close the modal after submission
+      // setTransactionsDto([...transactionsDto, transactionData]);
+      setAmount("");
+      setDate("");
+      setDescription("");
+      refreshFriendTransaction?setRefreshFriendTransaction(false):setRefreshFriendTransaction(true);
     } catch (error) {
       console.error("Error creating transaction", error);
     }
+
+    
   };
 
   if (!isOpen) return null;

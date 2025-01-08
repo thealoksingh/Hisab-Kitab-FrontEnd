@@ -2,7 +2,7 @@ import React from 'react';
 import {addFriend } from "../Api/HisabKitabApi";
 
 
-const AddFriendModal = ({ isOpen, toggleModal, userId }) => {
+const AddFriendModal = ({ isOpen, toggleModal, userId, refreshFriendTransaction, setRefreshFriendTransaction }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const contactNo = e.target.mobile.value;
@@ -12,6 +12,7 @@ const AddFriendModal = ({ isOpen, toggleModal, userId }) => {
         // Handle success (e.g., close the modal, show a success message, etc.)
         console.log('Friend added successfully:', data);
         toggleModal(); // Close modal after success
+        setRefreshFriendTransaction(!refreshFriendTransaction);  //Change the state of refreshFriendTransaction to re-run the getFriendListAPI
       })
       .catch((error) => {
         // Handle error
