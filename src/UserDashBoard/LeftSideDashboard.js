@@ -44,9 +44,9 @@ function LeftSideDashBoard({ user, friends, setIsFriendSelected, setSelectedFrie
 
   return (
     <>
-      <div className="left-side rounded bg-slate-200 w-[50%] min-h-[100vh] relative overflow-hidden">
-        <div className="left-upper h-[20%] bg-slate-300 w-[100%] relative">
-          <div className="flex h-[30%] relative bg-slate-400">
+      <div className="left-side rounded border border-teal-500 w-[50%] min-h-[100vh] relative overflow-hidden">
+        <div className="left-upper h-[20%] bg-teal-200 w-[100%] relative">
+          <div className="flex h-[30%] relative bg-teal-400">
             <div className="w-[35%] h-[100%] p-2">
               You'll Give:<span className="text-rose-600"> ${giveAmount}</span>
             </div>
@@ -69,7 +69,7 @@ function LeftSideDashBoard({ user, friends, setIsFriendSelected, setSelectedFrie
               <input
                 type="text"
                 placeholder="Search..."
-                className="w-full h-10 px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full h-10 px-4 border border-teal-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
@@ -78,10 +78,10 @@ function LeftSideDashBoard({ user, friends, setIsFriendSelected, setSelectedFrie
           </div>
         </div>
 
-        <div className="left-side-middle min-h-64 bg-slate-100 w-[100%] relative">
+        <div className="left-side-middle  w-[100%] relative">
           <div className="relative overflow-auto">
-            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-              <thead className="sticky bg-gray-50 dark:bg-gray-700 text-xs text-gray-700 uppercase dark:text-gray-400">
+            <table className="w-full text-sm text-left text-gray-700 dark:text-gray-400">
+              <thead className="sticky bg-teal-50 dark:bg-teal-400 text-xs text-gray-900 uppercase dark:text-gray-700">
                 <tr>
                   <th scope="col" className="px-6 py-3">
                     Name
@@ -95,22 +95,22 @@ function LeftSideDashBoard({ user, friends, setIsFriendSelected, setSelectedFrie
                 {friends.map((friend) => (
                   <tr
                     key={friend.userEntity.userId} // Use userId as key for each row
-                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer"
+                    className={`bg-teal border-b ${friend.closingBalance >= 0 ? "bg-teal-100" : "bg-rose-100"} dark:border-teal-900 cursor-pointer text-gray-900 `}
                     onClick={() =>
                       handleRowClick(friend.userEntity)
                     }
                   >
                     <td
                       scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
+                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black flex items-center"
                     >
                       <span className="inline-block w-8 h-8 bg-blue-500 text-white flex items-center justify-center rounded-full mr-3">
                       {friend.userEntity.fullName[0].toUpperCase()} {/* First letter of name for avatar */}
                     
                       </span>
                       <div className="flex flex-col">
-                        <span className="font-medium text-white">{friend.userEntity.fullName}</span>
-                        <span className="text-xs text-white">{friend.lastTransactionDate}</span> {/* Replace with actual date if needed */}
+                        <span className="font-medium text-gray-900">{friend.userEntity.fullName}</span>
+                        <span className="text-xs text-gray-900">{friend.lastTransactionDate}</span> {/* Replace with actual date if needed */}
                       </div>
                     </td>
                     <td className="px-6 py-4 text-right pr-[25px]">
@@ -122,7 +122,7 @@ function LeftSideDashBoard({ user, friends, setIsFriendSelected, setSelectedFrie
                           {friend.closingBalance}
                         </span>
 
-                        <span className="text-xs text-white">
+                        <span className="text-xs text-gray-900">
                           {friend.closingBalance != null && friend.closingBalance >= 0 ? "You will get" : "You will give"}
                         </span>
 
@@ -138,7 +138,7 @@ function LeftSideDashBoard({ user, friends, setIsFriendSelected, setSelectedFrie
         <div className="left-side-lower w-full bottom-4 absolute h-[50px] flex items-center justify-center">
           <button
             onClick={handleAddFriendClick}
-            className="block text-white w-96 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="block text-white w-96 bg-teal-500 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
           >
             Add Friend
           </button>

@@ -60,8 +60,8 @@ function FriendTranscationDetail({ user, selectedFriend }) {
   return (
     <>
   
-      <div className="right-header top-[0] h-[10%] bg-slate-400 w-full absolute p-[10px] flex gap-[10px] flex items-center ">
-        <div className="alphabet-circle bg-teal-600 h-[50px] w-[50px] rounded-full flex items-center justify-center">
+      <div className="right-header top-[0] h-[10%] bg-teal-300 w-full absolute p-[10px] flex gap-[10px] flex items-center ">
+        <div className="alphabet-circle bg-orange-600 h-[50px] w-[50px] rounded-full flex items-center justify-center">
           <h1 className="text-white text-lg">{selectedFriend.fullName[0].toUpperCase()}</h1>
         </div>
         <div className="user-name">
@@ -113,7 +113,7 @@ function FriendTranscationDetail({ user, selectedFriend }) {
 
       <div class="table-division  w-full absolute top-[10%]">
         <table className=" w-full text-sm text-left text-gray-500 dark:text-gray-400">
-          <thead className="sticky bg-gray-50 dark:bg-gray-700 text-xs text-gray-700 uppercase dark:text-gray-400">
+          <thead className="sticky bg-teal-50 dark:bg-teal-400 text-xs text-gray-700 uppercase dark:text-gray-700">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Entries
@@ -135,13 +135,16 @@ function FriendTranscationDetail({ user, selectedFriend }) {
 
               return (
                 <tr
-                  key={transactionDto.transaction.transId}
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                  onClick={() => {
-                    handleRowClick(transactionDto);  // Call handleRowClick with the transactionDto
-                    toggleCommentSection();                 // Call toggleDetail to open/close the details section
-                  }}
-                >
+                key={transactionDto.transaction.transId}
+                className={`border-b dark:border-teal-700 ${
+                  isUserGave ? 'bg-rose-100' : 'bg-teal-100'
+                }`}
+                onClick={() => {
+                  handleRowClick(transactionDto); // Call handleRowClick with the transactionDto
+                  toggleCommentSection(); // Call toggleDetail to open/close the details section
+                }}
+              >
+              
                   {/* Closing Balance */}
                   <td
                     scope="row"
@@ -149,11 +152,11 @@ function FriendTranscationDetail({ user, selectedFriend }) {
                    
                   >
                     <div className="flex flex-col">
-                      <span className="font-medium text-white">
+                      <span className="font-medium text-gray-900">
                         Closing Balance: <span>$</span>{" "}
                         <span>{transactionDto.lastClosingBalance}</span>
                       </span>
-                      <span className="text-xs text-white mt-1">
+                      <span className="text-xs text-gray-900 mt-1">
                         {transactionDto.transaction.transDate}
                       </span>
                     </div>
@@ -195,7 +198,7 @@ function FriendTranscationDetail({ user, selectedFriend }) {
             You Gave : <span>$</span>
           </button>
           <button
-            className="text-white text-lg h-[40px] w-40 rounded bg-green-500"
+            className="text-white text-lg h-[40px] w-40 rounded bg-green-700"
             onClick={handleGotButtonClick}
           >
             You Got : <span>$</span>

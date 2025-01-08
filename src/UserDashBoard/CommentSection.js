@@ -17,7 +17,8 @@ function CommentSection({ isOpen, toggleCommentSection }) {
   return (
     <>
       <div
-      className="Details h-full bg-teal-100 z-50 absolute right-0 p-2"
+      className="Details h-full bg-teal-100 z-50 absolute right-0 p-2 shadow-xl "
+
       style={{
         width: width,
         visibility: width === '0' ? 'hidden' : 'visible', // Hide when width is 0%
