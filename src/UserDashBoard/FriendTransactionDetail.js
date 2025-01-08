@@ -112,9 +112,9 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
         </div>
       </div>
 
-      <div class="table-division  w-full absolute top-[10%]">
-        <table className=" w-full text-sm text-left text-gray-500 dark:text-gray-400">
-          <thead className="sticky bg-gray-50 dark:bg-gray-700 text-xs text-gray-700 uppercase dark:text-gray-400">
+      <div class="table-division w-full h-[80%]  absolute top-[10%]  overflow-y-auto  ">
+       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <thead className="sticky top-0 bg-gray-50 dark:bg-gray-700 text-xs text-gray-700 uppercase dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Entries
@@ -187,8 +187,8 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
           </tbody>
         </table>
       </div>
-      <div className="right-footer w-full  bottom-4 absolute h-[50px] flex items-center justify-center gap-12 ">
-        <div className="right-footer w-full bottom-4 absolute h-[50px] flex items-center justify-center gap-12">
+      <div className="right-footer w-full   h-[10%] bg-slate-400 flex items-center justify-center gap-12 ">
+        <div className=" w-full bg-slate-400 bottom-4 absolute h-[50px] flex items-center justify-center gap-12  p-4">
           <button
             className="text-white text-lg h-[40px] w-40 rounded bg-rose-500"
             onClick={handleGiveButtonClick}

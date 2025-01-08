@@ -45,7 +45,7 @@ function LeftSideDashBoard({ user, friends, setIsFriendSelected, setSelectedFrie
 
   return (
     <>
-      <div className="left-side rounded bg-slate-200 w-[50%] min-h-[100vh] relative overflow-hidden">
+      <div className="left-side rounded  w-[50%] min-h-[100vh] relative overflow-hidden">
         <div className="left-upper h-[20%] bg-slate-300 w-[100%] relative">
           <div className="flex h-[30%] relative bg-slate-400">
             <div className="w-[35%] h-[100%] p-2">
@@ -79,11 +79,10 @@ function LeftSideDashBoard({ user, friends, setIsFriendSelected, setSelectedFrie
           </div>
         </div>
 
-        <div className="left-side-middle min-h-64 bg-slate-100 w-[100%] relative">
-          <div className="relative overflow-auto">
-            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-              <thead className="sticky bg-gray-50 dark:bg-gray-700 text-xs text-gray-700 uppercase dark:text-gray-400">
-                <tr>
+        <div className="h-[70%] w-[100%] g-slate-200 relative overflow-y-auto">
+         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead className="sticky top-0 bg-gray-50 dark:bg-gray-700 text-xs text-gray-700 uppercase dark:text-gray-400">
+           <tr>
                   <th scope="col" className="px-6 py-3">
                     Name
                   </th>
@@ -135,10 +134,10 @@ function LeftSideDashBoard({ user, friends, setIsFriendSelected, setSelectedFrie
                 ))}
               </tbody>
             </table>
-          </div>
+          
         </div>
 
-        <div className="left-side-lower w-full bottom-4 absolute h-[50px] flex items-center justify-center">
+        <div className="left-side-lower w-full  bg-slate-400 h-[10%] bottom-4 absolute h-[50px] flex items-center justify-center">
           <button
             onClick={handleAddFriendClick}
             className="block text-white w-96 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
