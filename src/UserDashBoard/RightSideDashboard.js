@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import friendicon from "../assets/friendicon.png";
 import FriendTransactionDetail from "./FriendTransactionDetail";
+import { getTransactionDetailsWithFriend } from "../Api/HisabKitabApi";
 
-function RightSideDashBoard({ isFriendSelected, selectedFriend }) {
+
+function RightSideDashBoard({ user,isFriendSelected, selectedFriend ,refreshFriendTransaction, setRefreshFriendTransaction}) {
+
+  
   return (
-    <div className="right-side flex items-center justify-center rounded bg-slate-300 w-[50%] min-h-full relative overflow-hidden">
+    <div className="right-side flex items-center justify-center rounded  w-[50%] min-h-full relative overflow-hidden">
       {isFriendSelected ? (
         // Render FriendTransactionDetail when a friend is selected
-        <FriendTransactionDetail selectedFriend={selectedFriend} />
+        <FriendTransactionDetail user={user} selectedFriend={selectedFriend} 
+        refreshFriendTransaction={refreshFriendTransaction}
+        setRefreshFriendTransaction={setRefreshFriendTransaction} />
       ) : (
         // Render default message when no friend is selected
         <div className="default-right">
