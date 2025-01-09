@@ -11,3 +11,12 @@
 .shadow-inner-custom {
   box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2); /* Add 1px inner shadow */
 }
+.form-custom-shadow-inner{
+  box-shadow: inset 0 0 10px rgba(0, 0,0, 0.3);
+}
+.input-field-shadow {
+ 
+  border: 1px solid #ccc;
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
+}
+

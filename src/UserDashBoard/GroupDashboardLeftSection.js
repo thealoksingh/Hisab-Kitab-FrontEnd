@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../CssStyle/GroupDashboard.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload, faTrash } from "@fortawesome/free-solid-svg-icons";
+import AddExpencesModal from "../Modals/AddExpencesModal";
+
 const GroupDashboardLeftSection = () => {
   return (
     <>
@@ -38,6 +38,7 @@ const GroupDashboardLeftSection = () => {
             <button className="text-sm text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-20 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
               Add Group
             </button>
+            <AddExpencesModal/>
           </div>
         </div>
     </>

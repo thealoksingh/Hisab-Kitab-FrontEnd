@@ -2,9 +2,20 @@ import React, { useEffect, useState } from "react";
 import "../CssStyle/GroupDashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faTrash } from "@fortawesome/free-solid-svg-icons";
+import AddExpencesModal from "../Modals/AddExpencesModal";
 const GroupDashboardMiddleSection = () => {
+
+const [isFormOpen, setIsFormOpen] = useState(false);
+
+const toggleForm = () => {
+  setIsFormOpen(!isFormOpen);
+};
+
   return (
     <>
+    < AddExpencesModal isOpen={isFormOpen}
+                 toggleModal={toggleForm}
+    />
      <div className="w-[60%] h-full border border-gray-300 bg-gray-100 flex flex-col relative items-center rounded overflow-hidden">
           <div className="text-white text-lg h-16 p-2 bg-gray-600 w-full items-center  flex">
             <div className="flex items-center ">
@@ -14,8 +25,9 @@ const GroupDashboardMiddleSection = () => {
               <h4 className="px-4 text-lg text-white">Group Name 3</h4>
             </div>
             <div className="flex items-center gap-2 right-4 absolute">
-              <button className="text-sm text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-4 focus:ring-sky-300 font-medium rounded-sm px-10 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
+              <button  onClick={toggleForm} className="text-sm text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-4 focus:ring-sky-300 font-medium rounded-sm px-10 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
                 Add Expences
+             
               </button>
               <button className="text-sm text-white bg-emerald-500 hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium rounded-sm px-10 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
                 Settle
