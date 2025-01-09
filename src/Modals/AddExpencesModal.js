@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "../CssStyle/GroupDashboard.css";
 
 const AddExpencesModal = ({ isOpen, toggleModal }) => {
-
   const [isForm2Visible, setIsForm2Visible] = useState(false);
 
   const toggleForm2 = () => {
@@ -16,7 +15,7 @@ const AddExpencesModal = ({ isOpen, toggleModal }) => {
       id="add-Expences-modal"
       tabIndex="-1"
       aria-hidden={!isOpen}
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-50 ${
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-70 ${
         isOpen ? "" : "hidden"
       }`}
     >
@@ -143,7 +142,7 @@ const AddExpencesModal = ({ isOpen, toggleModal }) => {
                 <input
                   type="date"
                   id="transaction-date"
-                  className="w-full h-1/2 iinput-field-shadow border border-gray-300 text-gray-400 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block  p-2 bg-white placeholder-gray-400"
+                  className="w-full h-1/2 input-field-shadow border border-gray-300 text-gray-400 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block  p-2 bg-white placeholder-gray-400"
                   placeholder="Enter Transaction Date"
                   required
                 />
