@@ -42,11 +42,11 @@ const UserDashboard = () => {
         data-drawer-toggle="default-sidebar"
         aria-controls="default-sidebar"
         type="button"
-        class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+        className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
       >
-        <span class="sr-only">Open sidebar</span>
+        <span className="sr-only">Open sidebar</span>
         <svg
-          class="w-6 h-6"
+          className="w-6 h-6"
           aria-hidden="true"
           fill="currentColor"
           viewBox="0 0 20 20"
@@ -214,7 +214,7 @@ const UserDashboard = () => {
 
       <div class="  whole-dashboard  p-2 ml-64">
         <div class="flex gap-2 ">
-          {/* <LeftSideDashBoard
+          <LeftSideDashBoard
             user={user} // Pass user data
             friends={friends} // Pass friends data
             isFriendSelected={isFriendSelected}
@@ -231,9 +231,9 @@ const UserDashboard = () => {
             selectedFriend={selectedFriend}
             refreshFriendTransaction={refreshFriendTransaction}
             setRefreshFriendTransaction={setRefreshFriendTransaction}
-          /> */}
+          />
         </div>
-      <GroupDashBoard/>
+      {/* <GroupDashBoard/> */}
 
 
       </div>
