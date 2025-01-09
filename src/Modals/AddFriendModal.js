@@ -1,26 +1,22 @@
 import React from 'react';
+import {addFriend } from "../Api/HisabKitabApi";
 
-const AddFriendModal = ({ isOpen, toggleModal, userId }) => {
+
+const AddFriendModal = ({ isOpen, toggleModal, userId, refreshFriendTransaction, setRefreshFriendTransaction }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const contactNo = e.target.mobile.value;
-  console.log(userId)
-    // Make the API call to add friend
-    fetch(`http://localhost:8080/Hisab-Kitab/user/addfriend/${userId}?contactNo=${contactNo}`, {
-      method: 'GET',
-      // Add any additional headers or options as needed
-    })
-      .then((response) => {
-        if (response.ok) {
-          // Handle success (e.g., close the modal, show a success message, etc.)
-          toggleModal();
-        } else {
-          // Handle error (e.g., show an error message)
-          console.error('Failed to add friend');
-        }
+
+    addFriend(userId, contactNo)
+      .then((data) => {
+        // Handle success (e.g., close the modal, show a success message, etc.)
+        console.log('Friend added successfully:', data);
+        toggleModal(); // Close modal after success
+        setRefreshFriendTransaction(!refreshFriendTransaction);  //Change the state of refreshFriendTransaction to re-run the getFriendListAPI
       })
       .catch((error) => {
-        console.error('Error:', error);
+        // Handle error
+        console.error('Error adding friend:', error);
       });
   };
 

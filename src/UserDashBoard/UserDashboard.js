@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { getFriendList } from "../Api/HisabKitabApi";
 import LeftSideDashBoard from './LeftSideDashboard';
 import RightSideDashBoard from './RightSideDashboard';
-
+import GroupDashBoard from './GroupDashBoard';
 const UserDashboard = () => {
 
   const [isFriendSelected, setIsFriendSelected] = useState(false);
@@ -12,6 +12,7 @@ const UserDashboard = () => {
   const [friends, setFriends] = useState([]);
   const [error, setError] = useState(null);
   const user = location.state?.user;
+  const [refreshFriendTransaction, setRefreshFriendTransaction] = useState(false);
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -28,7 +29,8 @@ const UserDashboard = () => {
     };
 
     fetchFriends();
-  }, [user]);
+  
+  }, [user, refreshFriendTransaction]);
 
 
 
@@ -40,11 +42,11 @@ const UserDashboard = () => {
         data-drawer-toggle="default-sidebar"
         aria-controls="default-sidebar"
         type="button"
-        class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+        className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
       >
-        <span class="sr-only">Open sidebar</span>
+        <span className="sr-only">Open sidebar</span>
         <svg
-          class="w-6 h-6"
+          className="w-6 h-6"
           aria-hidden="true"
           fill="currentColor"
           viewBox="0 0 20 20"
@@ -210,7 +212,7 @@ const UserDashboard = () => {
 
       {/* navigation ended  */}
 
-      <div class=" whole-dashboard p-2 ml-64">
+      <div class="  whole-dashboard  p-2 ml-64">
         <div class="flex gap-2 ">
           <LeftSideDashBoard
             user={user} // Pass user data
@@ -219,14 +221,19 @@ const UserDashboard = () => {
             setIsFriendSelected={setIsFriendSelected}
             selectedFriend={selectedFriend}
             setSelectedFriend={setSelectedFriend}
+            refreshFriendTransaction={refreshFriendTransaction}
+            setRefreshFriendTransaction={setRefreshFriendTransaction}
           />
 
           <RightSideDashBoard
+            user={user}
             isFriendSelected={isFriendSelected}
             selectedFriend={selectedFriend}
+            refreshFriendTransaction={refreshFriendTransaction}
+            setRefreshFriendTransaction={setRefreshFriendTransaction}
           />
         </div>
-
+      {/* <GroupDashBoard/> */}
 
 
       </div>
