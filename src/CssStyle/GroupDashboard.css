@@ -1,0 +1,13 @@
+/* Hide vertical scrollbar but keep scrolling functionality */
+.scrollable {
+  overflow-y: scroll; /* Enables vertical scrolling */
+  scrollbar-width: none; /* Hides scrollbar in Firefox */
+}
+
+.scrollable::-webkit-scrollbar {
+  display: none; /* Hides scrollbar in Chrome, Safari, Edge */
+}
+/* Custom inner shadow */
+.shadow-inner-custom {
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2); /* Add 1px inner shadow */
+}
