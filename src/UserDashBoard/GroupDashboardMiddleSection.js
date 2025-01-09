@@ -3,11 +3,16 @@ import "../CssStyle/GroupDashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faTrash } from "@fortawesome/free-solid-svg-icons";
 import AddExpencesModal from "../Modals/AddExpencesModal";
+import SettleExpencesModal from "../Modals/SettleExpencesModal";
 const GroupDashboardMiddleSection = () => {
-  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isAddExpFormOpen, setIsAddExpFormOpen] = useState(false);
+  const [isSettleFormOpen, setIsSettleFormOpen] = useState(false);
 
-  const toggleForm = () => {
-    setIsFormOpen(!isFormOpen);
+  const toggleAddExpForm = () => {
+    setIsAddExpFormOpen(!isAddExpFormOpen);
+  };
+  const toggleSettleForm = () => {
+    setIsSettleFormOpen(!isSettleFormOpen);
   };
 
   return (
@@ -22,16 +27,17 @@ const GroupDashboardMiddleSection = () => {
           </div>
           <div className="flex items-center gap-2 right-4 absolute">
             <button
-              onClick={toggleForm}
+              onClick={toggleAddExpForm}
               className="text-sm text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-4 focus:ring-sky-300 font-medium rounded-sm px-10 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
             >
               Add Expences
             </button>
-            <AddExpencesModal isOpen={isFormOpen} toggleModal={toggleForm} />
+            <AddExpencesModal isOpen={isAddExpFormOpen} toggleModal={toggleAddExpForm} />
 
-            <button className="text-sm text-white bg-emerald-500 hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium rounded-sm px-10 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
+            <button onClick={toggleSettleForm} className="text-sm text-white bg-emerald-500 hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium rounded-sm px-10 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
               Settle
             </button>
+            <SettleExpencesModal isOpen={isSettleFormOpen} toggleModal={toggleSettleForm} />
           </div>
         </div>
         {/* transaction */}
@@ -148,7 +154,7 @@ const GroupDashboardMiddleSection = () => {
           {/* ................ */}
         </div>
         {/* Middle footer  */}
-        <div className="absolute bottom-0 w-full h-[10%] p-2 bg-gray-600 flex items-center justify-center"></div>
+        <div className="absolute bottom-0 w-full h-[10%] p-2  flex items-center justify-center"></div>
       </div>
     </>
   );

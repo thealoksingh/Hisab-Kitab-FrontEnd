@@ -105,7 +105,7 @@ const AddGroupModal = ({ isOpen, toggleModal }) => {
 
               <button
               type="submit"
-              className=" mt-4 w-full text-sm input-field-shadow text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-4 focus:ring-sky-300 font-medium rounded-sm px-10 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+              className=" mt-4 w-full text-sm input-field-shadow text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-10 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
             >
               Add a New Group
             </button>

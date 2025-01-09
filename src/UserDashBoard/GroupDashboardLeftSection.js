@@ -40,10 +40,10 @@ const GroupDashboardLeftSection = () => {
           </div>
         </div>
         {/* Add Group Button */}
-        <div className="absolute bottom-0 w-full h-[10%] p-2 bg-gray-400 flex items-center justify-center">
+        <div className="absolute bottom-0 w-full h-[10%] p-2 flex items-center justify-center">
           <button
             onClick={toggleAddGroupForm}
-            className="text-sm text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-20 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+            className="text-sm text-white  bg-cyan-500 hover:bg-cyan-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-20 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
           >
             Add Group
           </button>

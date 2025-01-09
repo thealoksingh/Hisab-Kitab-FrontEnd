@@ -156,12 +156,18 @@ const AddExpencesModal = ({ isOpen, toggleModal }) => {
               </button>
             </div>
 
-            <button
-              type="submit"
-              className=" w-full text-sm text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-4 focus:ring-sky-300 font-medium rounded-sm px-10 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-            >
-              AddExpences
+            <div className="mb-2 flex gap-4 ">
+            <button 
+            type="submit"
+            className="w-1/3 text-sm text-white bg-sky-500  hover:bg-sky-600 focus:outline-none focus:ring-4 focus:ring-sky-300 font-medium rounded-sm px-4 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
+              Save Expence
             </button>
+            <button 
+            type="submit"
+            className="w-1/3 text-sm text-white bg-rose-500  hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-4 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
+              Cancel
+            </button>
+            </div>
           </form>
         </div>
         {/* .....2nd form div......  */}
