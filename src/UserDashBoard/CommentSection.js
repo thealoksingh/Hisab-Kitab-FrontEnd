@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShareFromSquare, faPenToSquare, faList, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import  '../CssStyle/GroupDashboard.css';
-function CommentSection({ isOpen, toggleCommentSection }) {
+import { getAllCommentsByTransactionId, postNewCommentsByTransactionId } from "../Api/HisabKitabApi";
+
+function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,setIsRowClicked,isRowClicked }) {
 
   const [width, setWidth] = useState('0'); // Initially set width to 0%
   const [comments, setComments] = useState([]);
