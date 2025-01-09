@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { getFriendList } from "../Api/HisabKitabApi";
 import LeftSideDashBoard from './LeftSideDashboard';
 import RightSideDashBoard from './RightSideDashboard';
-
+import GroupDashBoard from './GroupDashBoard';
 const UserDashboard = () => {
 
   const [isFriendSelected, setIsFriendSelected] = useState(false);
@@ -212,9 +212,9 @@ const UserDashboard = () => {
 
       {/* navigation ended  */}
 
-      <div class=" whole-dashboard p-2 ml-64">
+      <div class="  whole-dashboard  p-2 ml-64">
         <div class="flex gap-2 ">
-          <LeftSideDashBoard
+          {/* <LeftSideDashBoard
             user={user} // Pass user data
             friends={friends} // Pass friends data
             isFriendSelected={isFriendSelected}
@@ -231,9 +231,9 @@ const UserDashboard = () => {
             selectedFriend={selectedFriend}
             refreshFriendTransaction={refreshFriendTransaction}
             setRefreshFriendTransaction={setRefreshFriendTransaction}
-          />
+          /> */}
         </div>
-
+      <GroupDashBoard/>
 
 
       </div>

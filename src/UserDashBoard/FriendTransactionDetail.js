@@ -4,7 +4,7 @@ import CommentSection from "./CommentSection";
 import React, { useState, useEffect } from "react";
 import { getTransactionDetailsWithFriend } from "../Api/HisabKitabApi";
 import GiveGotModal from "../Modals/GiveGotModal";
-
+import  '../CssStyle/GroupDashboard.css';
 function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransaction, setRefreshFriendTransaction }) {
   const [transactionsDto, setTransactionsDto] = useState([]);
   // const [lastClosingBalance, setLastClosingBalance] = useState(0);
@@ -112,7 +112,7 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
         </div>
       </div>
 
-      <div class="table-division w-full h-[80%]  absolute top-[10%]  overflow-y-auto  ">
+      <div class="table-division w-full h-[80%] bg-gray-300  absolute top-[10%]  scrollable  ">
        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
       <thead className="sticky top-0 bg-gray-50 dark:bg-gray-700 text-xs text-gray-700 uppercase dark:text-gray-400">
             <tr>
@@ -187,7 +187,7 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
           </tbody>
         </table>
       </div>
-      <div className="right-footer w-full   h-[10%] bg-slate-400 flex items-center justify-center gap-12 ">
+      <div className="right-footer w-full   h-[10%] bg-slate-400 flex items-center justify-center  ">
         <div className=" w-full bg-slate-400 bottom-4 absolute h-[50px] flex items-center justify-center gap-12  p-4">
           <button
             className="text-white text-lg h-[40px] w-40 rounded bg-rose-500"

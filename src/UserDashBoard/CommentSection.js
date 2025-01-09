@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShareFromSquare, faPenToSquare, faList, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-
+import  '../CssStyle/GroupDashboard.css';
 function CommentSection({ isOpen, toggleCommentSection }) {
 
   const [width, setWidth] = useState('0'); // Initially set width to 0%
@@ -97,7 +97,7 @@ function CommentSection({ isOpen, toggleCommentSection }) {
           </div>
 
           {/* Comments Box */}
-          <div className="comment-box flex flex-col gap-2 bg-teal-200 border border-teal-300 p-2 overflow-y-auto h-[70%]">
+          <div className="comment-box flex flex-col gap-2 bg-teal-200 border border-teal-300 p-2  h-[70%] scrollable">
             {/* Repeat User Comments */}
             <div className="user-comment flex gap-2 p-2 bg-white rounded-md shadow-sm">
               <div className="alphabet-circle bg-teal-600 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
