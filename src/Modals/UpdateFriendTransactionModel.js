@@ -1,8 +1,46 @@
-import React, { useEffect, useState } from "react";
-import "../CssStyle/GroupDashboard.css";
+import React, { useState } from "react";
+import { updateFriendTransactionById } from "../Api/HisabKitabApi";
 
-const UpdateFriendTransaction = ({ isOpen, toggleModal }) => {
+const UpdateFriendTransaction = ({ isOpen, toggleModal, user, transaction }) => {
+  console.log("Transaction is");
+  console.log(transaction);
+  
+  const [description, setDescription] = useState(transaction?.description);
+  const [transDate, setTransDate] = useState(transaction?.transDate);
+  const [amount, setAmount] = useState(transaction?.amount);
+  // const [transId, setTransId] = useState(transaction.transId || 0);
+  console.log("amount = "+amount );
+  console.log(user);
+  const [type, setType] = useState(
+    transaction?.fromUserId === user.userId ? "Give" : "Got"
+  );
+  console.log("desc = "+description);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const fromUserId = type === "Give" ? user.userId : transaction.fromUserId;
+    const toUserId = type === "Give" ? transaction.toUserId : user.userId;
+
+    const updatedTransaction = {
+      transId: transaction.transId, // Ensure transId is passed correctly
+      fromUserId: fromUserId,       // Correctly set fromUserId
+      toUserId: toUserId,           // Correctly set toUserId
+      amount: amount,   // Ensure amount is a valid number
+      transDate: transDate,         // Ensure transDate is in the correct format
+      description: description,     // Pass the updated description
+    };
+
+    try {
+      const response = await updateFriendTransactionById(updatedTransaction);
+      console.log("Transaction updated successfully!");
+      toggleModal();
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error updating transaction:", error);
+      alert("Failed to update transaction. Please try again.");
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -11,17 +49,12 @@ const UpdateFriendTransaction = ({ isOpen, toggleModal }) => {
       id="UpdateFriendTransaction-modal"
       tabIndex="-1"
       aria-hidden={!isOpen}
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-70 ${
-        isOpen ? "" : "hidden"
-      }`}
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-70 ${isOpen ? "" : "hidden"}`}
     >
       <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
-        <div className="form1 relative w-1/3 bg-white rounded-sm shadow dark:bg-gray-300 form-custom-shadow-inner ">
-          {" "}
-          <div className="flex items-center justify-between p-2 md:p-4  rounded-t bg-gray-600 dark:border-gray-700">
-            <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Update Transaction
-            </h4>
+        <div className="form1 relative w-1/3 bg-white rounded-sm shadow dark:bg-gray-300 form-custom-shadow-inner">
+          <div className="flex items-center justify-between p-2 md:p-4 rounded-t bg-gray-600 dark:border-gray-700">
+            <h4 className="text-lg font-semibold text-gray-900 dark:text-white">Update Transaction</h4>
             <button
               type="button"
               className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-6 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -45,53 +78,49 @@ const UpdateFriendTransaction = ({ isOpen, toggleModal }) => {
               <span className="sr-only">Close modal</span>
             </button>
           </div>
-          <form className="p-4 md:p-5">
+          <form onSubmit={handleSubmit} className="p-4 md:p-5">
             <div className="mb-4">
               <label
-                htmlFor=""
+                htmlFor="type"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
               >
                 Select type
               </label>
-
-              {/* select type*/}
-              <div className="flex gap-4 space-x-4 mt-4  p-2 rounded border border-gray-300">
-              
-               <div className="w-1/3">
-                <input
-                  type="radio"
-                  id="transType"
-                  name="transaction-type"
-                  value="e"
-                  className="form-radio-button-shadow text-gray-400 dark:text-white"
-                  required
-                />
-                <label
-                  htmlFor="expense"
-                  className="ml-3 text-sm font-medium text-gray-900 dark:text-black"
-                >
-                  Give
-                </label>
-               </div>
-               <div className="w1/3">
-               <input
-                  type="radio"
-                  id="transType"
-                  name="transaction-type"
-                  value="e"
-                  className="form-radio-button-shadow text-gray-400 dark:text-white"
-                  required
-                />
-                <label
-                  htmlFor="got"
-                  className="ml-3 text-sm font-medium text-gray-900 dark:text-black"
-                >
-                  Got
-                </label>
+              <div className="flex gap-4 space-x-4 mt-4 p-2 rounded border border-gray-300">
+                <div className="w-1/3">
+                  <input
+                    type="radio"
+                    id="give"
+                    name="type"
+                    value="Give"
+                    checked={type === "Give"}
+                    onChange={() => setType("Give")}
+                  />
+                  <label
+                    htmlFor="give"
+                    className="ml-3 text-sm font-medium text-gray-900 dark:text-black"
+                  >
+                    Give
+                  </label>
+                </div>
+                <div className="w-1/3">
+                  <input
+                    type="radio"
+                    id="got"
+                    name="type"
+                    value="Got"
+                    checked={type === "Got"}
+                    onChange={() => setType("Got")}
+                  />
+                  <label
+                    htmlFor="got"
+                    className="ml-3 text-sm font-medium text-gray-900 dark:text-black"
+                  >
+                    Got
+                  </label>
                 </div>
               </div>
             </div>
-           
             <div className="mb-4">
               <label
                 htmlFor="description"
@@ -100,67 +129,70 @@ const UpdateFriendTransaction = ({ isOpen, toggleModal }) => {
                 Description
               </label>
               <input
-                  type="text"
-                  id="transaction-decription"
-                  className="w-full h-1/2 input-field-shadow border border-gray-300 text-gray-400 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block  p-2 bg-white placeholder-gray-400"
-                  placeholder="Enter Description "
-                  required
-                />
+                type="text"
+                id="description"
+                name="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full input-field-shadow border border-gray-300 text-sm rounded-sm p-2 bg-white placeholder-gray-400"
+                placeholder="Enter Description"
+                required
+              />
             </div>
-
             <div className="mb-4 flex relative gap-2">
-              <div className="w-1/2  ">
+              <div className="w-1/2">
                 <label
                   htmlFor="date"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
                 >
                   Transaction Date
                 </label>
-
                 <input
                   type="date"
-                  id="transaction-date"
-                  className="w-full h-1/2 input-field-shadow border border-gray-300 text-gray-400 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block  p-2 bg-white placeholder-gray-400"
-                  placeholder="Enter Transaction Date"
+                  id="date"
+                  name="transDate"
+                  value={transDate}
+                  onChange={(e) => setTransDate(e.target.value)}
+                  className="w-full input-field-shadow border border-gray-300 text-sm rounded-sm p-2 bg-white placeholder-gray-400"
                   required
                 />
               </div>
-              <div className="w-1/2  ">
+              <div className="w-1/2">
                 <label
-                  htmlFor="date"
+                  htmlFor="amount"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
                 >
                   Transaction Amount
                 </label>
-
                 <input
                   type="text"
-                  id="transaction-amont"
-                  className="w-full h-1/2 input-field-shadow border border-gray-300 text-gray-400 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block  p-2 bg-white placeholder-gray-400"
+                  id="amount"
+                  name="amount"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="w-full input-field-shadow border border-gray-300 text-sm rounded-sm p-2 bg-white placeholder-gray-400"
                   placeholder="Enter Amount"
                   required
                 />
               </div>
-
-              
             </div>
-
-            <div className="mb-2 flex gap-4 ">
-            <button 
-            type="submit"
-            className="w-1/3 text-sm text-white bg-sky-500  hover:bg-sky-600 focus:outline-none focus:ring-4 focus:ring-sky-300 font-medium rounded-sm px-4 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
-              Save
-            </button>
-            <button 
-             onClick={toggleModal}
-            type="submit"
-            className="w-1/3 text-sm text-white bg-rose-500  hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-4 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
-              Cancel
-            </button>
+            <div className="mb-2 flex gap-4">
+              <button
+                type="submit"
+                className="w-1/3 text-sm text-white bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:ring-sky-300 font-medium rounded-sm px-4 py-2 shadow-md"
+              >
+                Save
+              </button>
+              <button
+                type="button"
+                onClick={toggleModal}
+                className="w-1/3 text-sm text-white bg-rose-500 hover:bg-rose-600 focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-4 py-2 shadow-md"
+              >
+                Cancel
+              </button>
             </div>
           </form>
         </div>
-       
       </div>
     </div>
   );

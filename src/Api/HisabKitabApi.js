@@ -41,3 +41,13 @@ export const getAllCommentsByTransactionId = (transId) => {
 export const postNewCommentsByTransactionId = (commentRequestDto) => {
   return apiClient.post("/user/transaction/comment/save", commentRequestDto);
 }
+
+// API for Deleting the Transaction with Id
+export const deleteTransactionById = (transId) => {
+  return apiClient.delete(`/user/transaction/${transId}`);
+}
+
+// API for updating a transaction by ID
+export const updateFriendTransactionById = ( updatedTransactionData) => {
+  return apiClient.put("/user/updatefriendTransactions", updatedTransactionData);
+};

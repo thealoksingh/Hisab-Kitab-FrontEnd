@@ -5,7 +5,7 @@ import  '../CssStyle/GroupDashboard.css';
 import { getAllCommentsByTransactionId, postNewCommentsByTransactionId } from "../Api/HisabKitabApi";
 import UpdateFriendTransaction from '../Modals/UpdateFriendTransactionModel';
 import DeleteAlertModal from '../Modals/DeleteAlertModal';
-function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,setIsRowClicked,isRowClicked }) {
+function CommentSection({ isOpen,refreshFriendTransaction,setRefreshFriendTransaction, toggleCommentSection, commentTransaction,user,setIsRowClicked,isRowClicked }) {
 
   const [width, setWidth] = useState('0'); // Initially set width to 0%
   const [comments, setComments] = useState([]);
@@ -72,10 +72,7 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,
 
   };
 
-  const deleteTransactionDetails = 
-    (transId)=> {
-      console.log("TranId" + transId);
-    };
+ 
 
   
   return (
@@ -131,7 +128,9 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,
           <button onClick={toggleUpdateForm} className="net-balance border border-teal-400 h-[40px] w-80 rounded flex items-center justify-center dark:hover:bg-teal-300 dark:hover:text-white">
             <span className="mr-5"><FontAwesomeIcon icon={faPenToSquare} /></span> Update Entry
           </button>
-          <UpdateFriendTransaction isOpen={isUpdateFormOpen} toggleModal={toggleUpdateForm}/>
+          <UpdateFriendTransaction user={user}
+          transaction={commentTransaction}
+          isOpen={isUpdateFormOpen} toggleModal={toggleUpdateForm}/>
         </div>
 
         <div className="transaction-amount h-[8%] w-full p-[10px] flex gap-[10px] flex items-center">
@@ -202,11 +201,15 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,
     </div>
         </div>
 
-        <div className="w-full flex items-center justify-center" onClick={()=>deleteTransactionDetails(commentTransaction.transId)}>
+        <div className="w-full flex items-center justify-center" >
           <button onClick={toggleDeleteAlert} className="net-balance bg-rose-100 border border-rose-400 h-[40px] w-80 rounded flex items-center justify-center dark:hover:bg-rose-300 dark:hover:text-white">
             <span className="mr-5"><FontAwesomeIcon icon={faTrashCan} /></span> Delete Entry
           </button>
-          <DeleteAlertModal isOpen={isDeleteAlertOpen} toggleModal={toggleDeleteAlert}/>
+          <DeleteAlertModal refreshFriendTransaction ={refreshFriendTransaction}
+          setRefreshFriendTransaction={setRefreshFriendTransaction}
+          toggleCommentSection={toggleCommentSection}
+          
+          isOpen={isDeleteAlertOpen} toggleModal={toggleDeleteAlert} transId={commentTransaction.transId}/>
         </div>
       </div>
     </>

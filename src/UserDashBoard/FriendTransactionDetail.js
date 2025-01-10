@@ -143,9 +143,7 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
                   onClick={() => {
                     setIsRowClicked(!isRowClicked);
                     setCommentTransaction(transactionDto.transaction);
-                     console.log(commentTransaction) ;// Call handleRowClick with the transactionDto
-                     console.log("after comment transaction.") ;// Call handleRowClick with the transactionDto
-                    // handleRowClick(transactionDto.transaction); 
+                    
                     toggleCommentSection();                 // Call toggleDetail to open/close the details section
                   }}
                 >
@@ -225,6 +223,8 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
       isRowClicked={isRowClicked}
       setIsRowClicked={setIsRowClicked}
       user={user}
+      refreshFriendTransaction={setRefreshFriendTransaction}
+      setRefreshFriendTransaction={setRefreshFriendTransaction}
       commentTransaction={commentTransaction}
       toggleCommentSection={toggleCommentSection} />
  
