@@ -56,7 +56,7 @@ const UpdateFriendTransaction = ({ setRefreshFriendTransaction, refreshFriendTra
       id="UpdateFriendTransaction-modal"
       tabIndex="-1"
       aria-hidden={!isOpen}
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-70 ${isOpen ? "" : "hidden"}`}
+      className={fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-70 ${isOpen ? "" : "hidden"}}
     >
       <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
         <div className="form1 relative w-1/3 bg-white rounded-sm shadow dark:bg-gray-300 form-custom-shadow-inner">
@@ -178,7 +178,7 @@ const UpdateFriendTransaction = ({ setRefreshFriendTransaction, refreshFriendTra
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   className="w-full input-field-shadow border border-gray-300 text-sm rounded-sm p-2 bg-white placeholder-gray-400"
-                  placeholder={`${transaction.amount}`}
+                  placeholder={${transaction.amount}}
                
                 />
               </div>
