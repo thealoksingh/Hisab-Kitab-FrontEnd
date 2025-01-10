@@ -3,13 +3,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShareFromSquare, faPenToSquare, faList, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import  '../CssStyle/GroupDashboard.css';
 import { getAllCommentsByTransactionId, postNewCommentsByTransactionId } from "../Api/HisabKitabApi";
-
+import UpdateFriendTransaction from '../Modals/UpdateFriendTransactionModel';
+import DeleteAlertModal from '../Modals/DeleteAlertModal';
 function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,setIsRowClicked,isRowClicked }) {
 
   const [width, setWidth] = useState('0'); // Initially set width to 0%
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState("");
   const [error, setError] = useState(null);
+ const[isUpdateFormOpen,setIsUpdateFormOpen]=useState(false);
+ const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+
+ const toggleDeleteAlert = () => {
+   setIsDeleteAlertOpen(!isDeleteAlertOpen);
+ };
+  const toggleUpdateForm=()=>{
+    setIsUpdateFormOpen(!isUpdateFormOpen);
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -118,9 +128,10 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,
         </div>
 
         <div className="w-full flex items-center justify-center">
-          <div className="net-balance border border-teal-400 h-[40px] w-80 rounded flex items-center justify-center dark:hover:bg-teal-300 dark:hover:text-white">
+          <button onClick={toggleUpdateForm} className="net-balance border border-teal-400 h-[40px] w-80 rounded flex items-center justify-center dark:hover:bg-teal-300 dark:hover:text-white">
             <span className="mr-5"><FontAwesomeIcon icon={faPenToSquare} /></span> Update Entry
-          </div>
+          </button>
+          <UpdateFriendTransaction isOpen={isUpdateFormOpen} toggleModal={toggleUpdateForm}/>
         </div>
 
         <div className="transaction-amount h-[8%] w-full p-[10px] flex gap-[10px] flex items-center">
@@ -192,9 +203,10 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,
         </div>
 
         <div className="w-full flex items-center justify-center" onClick={()=>deleteTransactionDetails(commentTransaction.transId)}>
-          <div className="net-balance bg-rose-100 border border-rose-400 h-[40px] w-80 rounded flex items-center justify-center dark:hover:bg-rose-300 dark:hover:text-white">
+          <button onClick={toggleDeleteAlert} className="net-balance bg-rose-100 border border-rose-400 h-[40px] w-80 rounded flex items-center justify-center dark:hover:bg-rose-300 dark:hover:text-white">
             <span className="mr-5"><FontAwesomeIcon icon={faTrashCan} /></span> Delete Entry
-          </div>
+          </button>
+          <DeleteAlertModal isOpen={isDeleteAlertOpen} toggleModal={toggleDeleteAlert}/>
         </div>
       </div>
     </>
