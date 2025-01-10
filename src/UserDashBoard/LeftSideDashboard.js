@@ -19,6 +19,52 @@ function LeftSideDashBoard({
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
+
+  const [filterName, setFilterName] = useState("All");
+
+  const [filteredFriends, setFilteredFriends] = useState([]);
+  const [filterCriteria, setFilterCriteria] = useState("All");
+
+  const applyFilter = (criteria) => {
+    setFilteredFriends([]);
+    setFilterCriteria(criteria);
+
+    function calculateYouWillGet(friends) {
+      return friends.filter((friend) => friend.closingBalance > 0);
+    }
+
+    function calculateYouWillGive(friends) {
+      return friends.filter((friend) => friend.closingBalance < 0);
+    }
+
+    function calculateSettled(friends) {
+      return friends.filter((friend) => friend.closingBalance === 0);
+    }
+
+    let sortedFriends = [];
+
+    switch (criteria) {
+      case "You Will Get":
+        sortedFriends = calculateYouWillGet(friends);
+        break;
+      case "You Will Give":
+        sortedFriends = calculateYouWillGive(friends);
+        break;
+      case "Settled":
+        sortedFriends = calculateSettled(friends);
+        break;
+      default:
+        sortedFriends = friends;
+        break;
+    }
+
+    setFilteredFriends(sortedFriends);
+    setIsFilterOpen(false); // Close the dropdown after selection
+  };
+
+
+
+
   const toggleSortDropdown = () => {
     setIsSortOpen(!isSortOpen);
   };
@@ -41,6 +87,7 @@ function LeftSideDashBoard({
 
   useEffect(() => {
     calculateAmount(friends);
+    applyFilter(filterCriteria);
   }, [user, friends, refreshFriendTransaction]); // Dependency array ensures the function runs whenever `friendList` changes
 
   function calculateAmount(friendList) {
@@ -58,6 +105,14 @@ function LeftSideDashBoard({
     setGetAmount(totalGetAmount);
     setGiveAmount(totalGiveAmount);
   }
+
+  // useEffect(() => {
+  //   // Run applyFilter with "ALL" when the component first renders
+  //   applyFilter(filterCriteria);
+  // }, [user]); // Empty dependency array ensures it runs only on initial render
+
+
+
 
   return (
     <>
@@ -94,7 +149,7 @@ function LeftSideDashBoard({
                 className="absolute bottom-0 w-[90%] h-10 text-white bg-gray-200 hover:bg-gray-700   font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
                 type="button"
               >
-                Filter
+                {filterCriteria}
                 <svg
                   className="w-2.5 h-2.5 ms-3"
                   aria-hidden="true"
@@ -114,29 +169,18 @@ function LeftSideDashBoard({
               {isFilterOpen && (
                 <div className="z-50 mt-[30%] absolute bg-white divide-y divide-gray-100 rounded-sm shadow w-[90%] dark:bg-gray-700">
                   <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
-                    <li>
-                      <p className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        Higest
-                      </p>
-                    </li>
-                    <li>
-                      <p className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        Lowest
-                      </p>
-                    </li>
-                    <li>
-                      <p className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        Given
-                      </p>
-                    </li>
-                    <li>
-                      <p className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        Taken
-                      </p>
-                    </li>
+                    {["All", "You Will Get", "You Will Give", "Settled"].map((criteria) => (
+                      <li key={criteria}>
+                        <button
+                          onClick={() => applyFilter(criteria)}
+                          className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        >
+                          {criteria}
+                        </button>
+                      </li>
+                    ))}
                   </ul>
-                </div>
-              )}
+                </div>)}
             </div>
             <div className="sort-section w-[30%] h-[100%]   relative p-2">
               <h4 className="">Sort By</h4>
@@ -202,7 +246,7 @@ function LeftSideDashBoard({
               </tr>
             </thead>
             <tbody>
-              {friends.map((friend) => (
+              {filteredFriends.map((friend) => (
                 <tr
                   key={friend.userEntity.userId} // Use userId as key for each row
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer"
@@ -230,18 +274,17 @@ function LeftSideDashBoard({
                   <td className="px-6 py-4 text-right pr-[25px]">
                     <div className="flex flex-col">
                       <span
-                        className={`font-medium ${
-                          friend.closingBalance >= 0
-                            ? "text-green-500"
-                            : "text-red-500"
-                        }`}
+                        className={`font-medium ${friend.closingBalance >= 0
+                          ? "text-green-500"
+                          : "text-red-500"
+                          }`}
                       >
                         {Math.abs(friend.closingBalance)}
                       </span>
 
                       <span className="text-xs text-white">
                         {friend.closingBalance != null &&
-                        friend.closingBalance >= 0
+                          friend.closingBalance >= 0
                           ? "You will get"
                           : "You will give"}
                       </span>
