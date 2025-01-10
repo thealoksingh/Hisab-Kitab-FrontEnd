@@ -50,7 +50,7 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
     };
 
     fetchTransactions();
-  }, [user, selectedFriend, refreshFriendTransaction]);
+  }, [user, selectedFriend, refreshFriendTransaction,commentTransaction]);
 
   console.log(selectedFriend.fullName[0]);
 

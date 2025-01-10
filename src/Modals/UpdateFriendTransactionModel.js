@@ -1,19 +1,25 @@
 import React, { useState } from "react";
 import { updateFriendTransactionById } from "../Api/HisabKitabApi";
 
-const UpdateFriendTransaction = ({ isOpen, toggleModal, user, transaction }) => {
+const UpdateFriendTransaction = ({ setRefreshFriendTransaction, refreshFriendTransaction,isOpen, toggleModal, user, transaction }) => {
   console.log("Transaction is");
-  console.log(transaction);
   
-  const [description, setDescription] = useState(transaction?.description);
+  const amountPrev = transaction?.amount;
+
+  const [description, setDescription] = useState("");
   const [transDate, setTransDate] = useState(transaction?.transDate);
-  const [amount, setAmount] = useState(transaction?.amount);
+  const [amount, setAmount] = useState(amountPrev);
   // const [transId, setTransId] = useState(transaction.transId || 0);
-  console.log("amount = "+amount );
+  // setDescription(transaction?.description);
+ console.log("new"+transaction.amount)
+
+  console.log("amount = "+amount);
   console.log(user);
+
   const [type, setType] = useState(
     transaction?.fromUserId === user.userId ? "Give" : "Got"
   );
+
   console.log("desc = "+description);
 
   const handleSubmit = async (e) => {
@@ -35,6 +41,7 @@ const UpdateFriendTransaction = ({ isOpen, toggleModal, user, transaction }) => 
       const response = await updateFriendTransactionById(updatedTransaction);
       console.log("Transaction updated successfully!");
       toggleModal();
+      setRefreshFriendTransaction(!refreshFriendTransaction); // Update the parent component's state to fetch the updated transaction list
       console.log(response.data);
     } catch (error) {
       console.error("Error updating transaction:", error);
@@ -126,7 +133,7 @@ const UpdateFriendTransaction = ({ isOpen, toggleModal, user, transaction }) => 
                 htmlFor="description"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
               >
-                Description
+               New Description
               </label>
               <input
                 type="text"
@@ -136,7 +143,7 @@ const UpdateFriendTransaction = ({ isOpen, toggleModal, user, transaction }) => 
                 onChange={(e) => setDescription(e.target.value)}
                 className="w-full input-field-shadow border border-gray-300 text-sm rounded-sm p-2 bg-white placeholder-gray-400"
                 placeholder="Enter Description"
-                required
+              
               />
             </div>
             <div className="mb-4 flex relative gap-2">
@@ -145,7 +152,7 @@ const UpdateFriendTransaction = ({ isOpen, toggleModal, user, transaction }) => 
                   htmlFor="date"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
                 >
-                  Transaction Date
+                 New Date
                 </label>
                 <input
                   type="date"
@@ -154,7 +161,7 @@ const UpdateFriendTransaction = ({ isOpen, toggleModal, user, transaction }) => 
                   value={transDate}
                   onChange={(e) => setTransDate(e.target.value)}
                   className="w-full input-field-shadow border border-gray-300 text-sm rounded-sm p-2 bg-white placeholder-gray-400"
-                  required
+                  
                 />
               </div>
               <div className="w-1/2">
@@ -162,7 +169,7 @@ const UpdateFriendTransaction = ({ isOpen, toggleModal, user, transaction }) => 
                   htmlFor="amount"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
                 >
-                  Transaction Amount
+                  New Amount
                 </label>
                 <input
                   type="text"
@@ -171,8 +178,8 @@ const UpdateFriendTransaction = ({ isOpen, toggleModal, user, transaction }) => 
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   className="w-full input-field-shadow border border-gray-300 text-sm rounded-sm p-2 bg-white placeholder-gray-400"
-                  placeholder="Enter Amount"
-                  required
+                  placeholder={`${transaction.amount}`}
+               
                 />
               </div>
             </div>

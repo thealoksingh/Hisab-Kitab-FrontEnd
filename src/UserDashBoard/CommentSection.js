@@ -28,7 +28,7 @@ function CommentSection({ isOpen,refreshFriendTransaction,setRefreshFriendTransa
       setWidth('0'); // When isOpen is false, set width to 0%
     }
   }, [isOpen]);
-
+  
  useEffect(() => {
     const fetchComments = async () => {
       if (!user) return;
@@ -128,7 +128,10 @@ function CommentSection({ isOpen,refreshFriendTransaction,setRefreshFriendTransa
           <button onClick={toggleUpdateForm} className="net-balance border border-teal-400 h-[40px] w-80 rounded flex items-center justify-center dark:hover:bg-teal-300 dark:hover:text-white">
             <span className="mr-5"><FontAwesomeIcon icon={faPenToSquare} /></span> Update Entry
           </button>
-          <UpdateFriendTransaction user={user}
+          <UpdateFriendTransaction 
+          setRefreshFriendTransaction={setRefreshFriendTransaction}
+          refreshFriendTransaction={refreshFriendTransaction} 
+          user={user}
           transaction={commentTransaction}
           isOpen={isUpdateFormOpen} toggleModal={toggleUpdateForm}/>
         </div>
