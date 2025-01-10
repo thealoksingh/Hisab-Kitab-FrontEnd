@@ -25,6 +25,9 @@ function LeftSideDashBoard({
   const [filteredFriends, setFilteredFriends] = useState([]);
   const [filterCriteria, setFilterCriteria] = useState("All");
 
+  const [sortCriteria, setSortCriteria] = useState("Most Recent"); // e.g., "By Type", "By Date", "By Name"
+
+
   const applyFilter = (criteria) => {
     setFilteredFriends([]);
     setFilterCriteria(criteria);
@@ -61,6 +64,34 @@ function LeftSideDashBoard({
     setFilteredFriends(sortedFriends);
     setIsFilterOpen(false); // Close the dropdown after selection
   };
+
+  const sortItems = (criteria) => {
+    let sorted = [...filteredFriends]; // Assuming `filteredFriends` is the filtered array
+
+    if (criteria === "Most Recent") {
+      sorted.sort((a, b) => new Date(b.lastTransactionDate) - new Date(a.lastTransactionDate)); // Sort by newest date first
+    } else if (criteria === "Oldest") {
+      sorted.sort((a, b) => new Date(a.lastTransactionDate) - new Date(b.lastTransactionDate)); // Sort by oldest date first
+    } else if (criteria === "Highest Amount") {
+      sorted.sort((a, b) => b.closingBalance - a.closingBalance); // Sort by highest amount first
+    } else if (criteria === "Lowest Amount") {
+      sorted.sort((a, b) => a.closingBalance - b.closingBalance); // Sort by lowest amount first
+    } else if (criteria === "By Name") {
+      sorted.sort((a, b) => a.userEntity.fullName.localeCompare(b.userEntity.fullName)); // Sort alphabetically by name
+    }
+
+    setFilteredFriends(sorted);
+    console.log("Filter friend sorted on the basis of")
+    // Update the filtered items with the sorted array
+  };
+
+  const handleSort = (criteria) => {
+    setSortCriteria(criteria); // Store the current sorting criteria
+    sortItems(criteria); // Apply sorting
+    toggleSortDropdown();
+  };
+
+
 
 
 
@@ -190,7 +221,7 @@ function LeftSideDashBoard({
                 className="absolute bottom-0 w-[90%] h-10 text-white bg-gray-200 hover:bg-gray-700   font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
                 type="button"
               >
-                Sort By
+                {sortCriteria}
                 <svg
                   className="w-2.5 h-2.5 ms-3"
                   aria-hidden="true"
@@ -212,18 +243,43 @@ function LeftSideDashBoard({
                 <div className="z-50 mt-[30%] absolute bg-white divide-y divide-gray-100 rounded-sm shadow w-[90%] dark:bg-gray-700">
                   <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                     <li>
-                      <p className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        By Type
+                      <p
+                        onClick={() => handleSort("Most Recent")}
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                      >
+                        Most Recent
                       </p>
                     </li>
                     <li>
-                      <p className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        By Date
+                      <p
+                        onClick={() => handleSort("Oldest")}
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                      >
+                        Oldest
                       </p>
                     </li>
                     <li>
-                      <p className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        By name
+                      <p
+                        onClick={() => handleSort("Highest Amount")}
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                      >
+                        Highest Amount
+                      </p>
+                    </li>
+                    <li>
+                      <p
+                        onClick={() => handleSort("Lowest Amount")}
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                      >
+                        Lowest Amount
+                      </p>
+                    </li>
+                    <li>
+                      <p
+                        onClick={() => handleSort("By Name")}
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                      >
+                        By Name
                       </p>
                     </li>
                   </ul>
