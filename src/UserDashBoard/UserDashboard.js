@@ -4,6 +4,8 @@ import { getFriendList } from "../Api/HisabKitabApi";
 import LeftSideDashBoard from './LeftSideDashboard';
 import RightSideDashBoard from './RightSideDashboard';
 // import GroupDashBoard from './GroupDashBoard';
+import FriendRequestModal from '../Modals/FriendRequestModal';
+
 const UserDashboard = () => {
 
   const [isFriendSelected, setIsFriendSelected] = useState(false);
@@ -13,6 +15,15 @@ const UserDashboard = () => {
   const [error, setError] = useState(null);
   const user = location.state?.user;
   const [refreshFriendTransaction, setRefreshFriendTransaction] = useState(false);
+  // const [isOpenFriendRequestModal, setIsOpenFriendRequestModal] =useState();
+
+  // const closeFriendRequestModal=()=>{
+   
+  //   if(isOpenFriendRequestModal==true){
+  //     setIsOpenFriendRequestModal( !isOpenFriendRequestModal);
+  //   }
+   
+  // }
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -36,6 +47,7 @@ const UserDashboard = () => {
 
   return (
     <>
+
       {/* navigation started  */}
       <button
         data-drawer-target="default-sidebar"
@@ -212,7 +224,7 @@ const UserDashboard = () => {
 
       {/* navigation ended  */}
 
-      <div class="  whole-dashboard  p-2 ml-64">
+      <div  class="  whole-dashboard  p-2 ml-64 ">
         <div class="flex gap-2 ">
           <LeftSideDashBoard
             user={user} // Pass user data
@@ -234,7 +246,7 @@ const UserDashboard = () => {
           />
         </div>
       {/* <GroupDashBoard/> */}
-
+      {/* <FriendRequestModal isOpen={isOpenFriendRequestModal} toggleModal={closeFriendRequestModal}/> */}
 
       </div>
     </>

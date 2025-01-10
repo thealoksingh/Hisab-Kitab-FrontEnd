@@ -193,8 +193,8 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
           </tbody>
         </table>
       </div>
-      <div className="right-footer w-full   h-[10%] bg-slate-400 flex items-center justify-center  ">
-        <div className=" w-full bg-slate-400 bottom-4 absolute h-[50px] flex items-center justify-center gap-12  p-4">
+     <div className="left-side-lower w-full gap-4 bg-slate-200 p-2 bottom-4 absolute h-[50px] flex items-center justify-center">
+           <div className=" w-full  bg-slate-400 bottom-4 absolute h-[50px] flex items-center justify-center gap-12  p-4">
           <button
             className="text-white text-lg h-[40px] w-40 rounded bg-rose-500"
             onClick={handleGiveButtonClick}
@@ -202,7 +202,8 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
             You Gave : <span>$</span>
           </button>
           <button
-            className="text-white text-lg h-[40px] w-40 rounded bg-green-500"
+         className="text-white text-lg h-[40px] w-40 rounded bg-green-500"
+           
             onClick={handleGotButtonClick}
           >
             You Got : <span>$</span>

@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import AddFriendModal from "../Modals/AddFriendModal";
 import moment from "moment";
 import "../CssStyle/GroupDashboard.css";
+import FriendRequestModal from "../Modals/FriendRequestModal";
 function LeftSideDashBoard({
   user,
   friends,
@@ -26,8 +27,11 @@ function LeftSideDashBoard({
   const [filterCriteria, setFilterCriteria] = useState("All");
 
   const [sortCriteria, setSortCriteria] = useState("Most Recent"); // e.g., "By Type", "By Date", "By Name"
+  const [isFriendRequestModalOpen, setIsFriendRequestModalOpen] = useState(false);
 
-
+   const toggleFriendRequestModal=()=>{
+    setIsFriendRequestModalOpen(!isFriendRequestModalOpen);
+   };
   const applyFilter = (criteria) => {
     setFilteredFriends([]);
     setFilterCriteria(criteria);
@@ -352,13 +356,14 @@ function LeftSideDashBoard({
           </table>
         </div>
 
-        <div className="left-side-lower w-full  bg-slate-400 h-[10%] bottom-4 absolute h-[50px] flex items-center justify-center">
-          <button
-            onClick={handleAddFriendClick}
-            className="block text-white w-96 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Add Friend
+        <div className="left-side-lower w-full gap-4 bg-slate-200 p-2 bottom-4 absolute h-[50px] flex items-center justify-center">
+       
+
+            <button onClick={handleAddFriendClick} className="w-1/3  h-full bg-cyan-600 text-sm text-white 600    hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
+            Add Friend       
+            
           </button>
+          
 
           <AddFriendModal
             userId={user.userId}
@@ -367,6 +372,12 @@ function LeftSideDashBoard({
             refreshFriendTransaction={refreshFriendTransaction}
             setRefreshFriendTransaction={setRefreshFriendTransaction}
           />
+          <button onClick={toggleFriendRequestModal} className="w-1/3  h-full bg-teal-600 text-sm text-white 600    hover:bg-teal-500 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
+                   
+          View Friend Request
+                 </button>
+
+              <FriendRequestModal isOpen={isFriendRequestModalOpen} toggleModal={toggleFriendRequestModal}/>
         </div>
       </div>
     </>

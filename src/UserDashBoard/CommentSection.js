@@ -81,7 +81,7 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,
   return (
     <>
       <div
-        className="Details h-full bg-teal-100 z-50 absolute right-0 p-2"
+        className="Details h-full shadow-inner-custom bg-gray-100 z-50 absolute right-0 p-2"
         style={{
           width: width,
           visibility: width === '0' ? 'hidden' : 'visible', // Hide when width is 0%
@@ -89,11 +89,11 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,
         }}
       >
 
-        <div className="h-10 w-full bg-teal-200 p-5 flex items-center">
+        <div className="h-10 shadow-inner-custom w-full bg-gray-300 p-5 flex items-center">
           <h2>Entry Details</h2>
           <button
             type="button"
-            className="text-gray-400 bg-transparent hover:bg-rose-600 hover:text-rose-500 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-teal-300 dark:hover:text-white"
+            className=" close-button text-gray-400 bg-transparent hover:bg-gray-600 hover:text-gray-500 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-300 dark:hover:text-white"
             onClick={toggleCommentSection}
           >
             <svg
@@ -116,8 +116,9 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,
         </div>
 
         <div className="friend-profile h-[10%] w-full p-[10px] flex gap-[10px] flex items-center">
-          <div className="alphabet-circle bg-teal-600 h-[50px] w-[50px] rounded-full flex items-center justify-center">
-            <h1 className="text-white text-lg">R</h1>
+          <div className="alphabet-circle bg-cyan-800 h-[50px] w-[50px] rounded-full flex items-center justify-center">
+            <h1 className="text-white text-lg">{user.fullName[0].toUpperCase()}
+            </h1>
           </div>
           <div className="user-name">
             <h2 className="text-lg text-gray-800">{user.fullName}</h2>
@@ -128,7 +129,7 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,
         </div>
 
         <div className="w-full flex items-center justify-center">
-          <button onClick={toggleUpdateForm} className="net-balance border border-teal-400 h-[40px] w-80 rounded flex items-center justify-center dark:hover:bg-teal-300 dark:hover:text-white">
+          <button onClick={toggleUpdateForm} className="w-[80%]  h-[40px] border border-teal-800 text-sm text-teal-800 hover:text-white   hover:bg-teal-600 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
             <span className="mr-5"><FontAwesomeIcon icon={faPenToSquare} /></span> Update Entry
           </button>
           <UpdateFriendTransaction isOpen={isUpdateFormOpen} toggleModal={toggleUpdateForm}/>
@@ -154,48 +155,72 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,
             {commentTransaction.description}          </p>
         </div>
 
-        <div className="comment-section w-full h-[50%] bg-rose-100 flex flex-col">
+        <div className="comment-section w-full h-[50%]  flex flex-col">
           {/* Heading */}
-          <div className="comment-heading text-lg flex justify-center items-center bg-teal-200 border border-teal-300 py-2">
+          <div className="comment-heading shadow-inner-custom border border-gray-400 text-lg flex justify-center items-center bg-gray-200 border border-gray-300 py-2">
             Comments
           </div>
 
           {/* Comments Box */}
-          <div className="comment-box flex flex-col gap-2 bg-teal-200 border border-teal-300 p-2  h-[70%] scrollable">
+          <div className="comment-box flex flex-col border border-gray-400 gap-2 bg-gray-300 shadow-inner-custom border border-gray-300 p-2  h-[70%] scrollable">
             {/* Repeat User Comments */}
             {comments.map((comment, index) => {
               // Calculate lastClosingAmount dynamically
               
-
               return (
-            <div key = {index} className="user-comment flex gap-2 p-2 bg-white rounded-md shadow-sm">
-              <div className="alphabet-circle bg-teal-600 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
-                <h1 className="text-white text-sm leading-none">{comment.userFullName[0].toUpperCase()}</h1>
-              </div>
-              <div className="user-name">
-                <h2 className="text-sm text-gray-800 font-semibold">{comment.userFullName}</h2>
-                <p className="text-sm text-gray-600">
-                  {comment.comments}
-                </p>
-              </div>
-            </div>
+                <div
+  key={index}
+  className="user-comment border border-gray-400 flex shadow-inner-custom gap-2 p-2 bg-white rounded-sm shadow-sm items-start"
+>
+  {/* User Icon */}
+  <div className="alphabet-circle bg-cyan-800 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
+    <h1 className="text-white text-sm leading-none">
+      {comment.userFullName[0].toUpperCase()}
+    </h1>
+  </div>
+
+  {/* Comment Content */}
+  <div className="flex-1">
+    <div className="user-name flex justify-between items-start">
+      {/* User Name */}
+      <h2 className="text-sm text-gray-800 font-semibold">
+        {comment.userFullName}
+      </h2>
+
+      {/* Trash Bin */}
+      <span className="text-rose-800 cursor-pointer">
+        <FontAwesomeIcon icon={faTrashCan} />
+      </span>
+    </div>
+
+    {/* Comment Text */}
+    <p className="text-sm  text-gray-600 break-all overflow-hidden">
+      {comment.comments}
+    </p>
+  </div>
+</div>
+
+              
+              
               )})}
        
           </div>
 
           {/* Input Section */}
-          <div className="comment-input flex gap-2 items-center bg-teal-100 border-t border-teal-300 p-2">
+          <div className="comment-input flex gap-2 items-center p-2">
       <input
         type="text"
         placeholder="Write a comment..."
         value={commentText}
         onChange={(e) => setCommentText(e.target.value)}
-        className="flex-grow p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-400"
+        required
+        className="flex-grow p-2 rounded-sm border border-gray-300 focus:outline-none focus:ring-0.5 focus:ring-gray-400"
       />
       <button
         type="button"
         onClick={handleCommentSubmit}
-        className="bg-teal-600 text-white text-sm px-3 py-1 rounded-md hover:bg-teal-700"
+        className="bg-teal-600 text-white text-sm px-3 py-1 rounded-sm hover:bg-teal-700 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+      
       >
         Send
       </button>
@@ -203,7 +228,7 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,
         </div>
 
         <div className="w-full flex items-center justify-center" onClick={()=>deleteTransactionDetails(commentTransaction.transId)}>
-          <button onClick={toggleDeleteAlert} className="net-balance bg-rose-100 border border-rose-400 h-[40px] w-80 rounded flex items-center justify-center dark:hover:bg-rose-300 dark:hover:text-white">
+          <button onClick={toggleDeleteAlert} className="w-[80%]  h-[40px] border border-rose-800 text-sm text-rose-800 hover:text-white   hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
             <span className="mr-5"><FontAwesomeIcon icon={faTrashCan} /></span> Delete Entry
           </button>
           <DeleteAlertModal isOpen={isDeleteAlertOpen} toggleModal={toggleDeleteAlert}/>
