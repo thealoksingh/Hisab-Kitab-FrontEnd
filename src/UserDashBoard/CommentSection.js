@@ -61,6 +61,12 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,
     }
 
   };
+
+  const deleteTransactionDetails = 
+    (transId)=> {
+      console.log("TranId" + transId);
+    };
+
   
   return (
     <>
@@ -185,7 +191,7 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,
     </div>
         </div>
 
-        <div className="w-full flex items-center justify-center">
+        <div className="w-full flex items-center justify-center" onClick={()=>deleteTransactionDetails(commentTransaction.transId)}>
           <div className="net-balance bg-rose-100 border border-rose-400 h-[40px] w-80 rounded flex items-center justify-center dark:hover:bg-rose-300 dark:hover:text-white">
             <span className="mr-5"><FontAwesomeIcon icon={faTrashCan} /></span> Delete Entry
           </div>
