@@ -18,7 +18,7 @@ console.log(isOpen);
       <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
         <div className="form1 relative w-1/3 bg-white rounded-sm shadow dark:bg-gray-300 form-custom-shadow-inner ">
           
-          <div className="flex items-center justify-between p-2 md:p-4  rounded-t bg-rose-500 dark:border-gray-700">
+          <div className="flex items-center justify-between p-2 md:p-4  rounded-sm bg-rose-500 dark:border-gray-700">
             <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
               Delete Alert
             </h4>

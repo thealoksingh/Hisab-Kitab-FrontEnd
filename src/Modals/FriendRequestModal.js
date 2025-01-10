@@ -17,7 +17,7 @@ const FriendRequestModal = ({ isOpen, toggleModal }) => {
           className="form1 w-1/4 bg-white rounded-sm shadow dark:bg-gray-300 form-custom-shadow-inner"
           
         >
-          <div className="flex items-center justify-between p-2 md:p-2  rounded-t bg-gray-600 dark:border-gray-700">
+          <div className="flex items-center justify-between p-2 md:p-2  rounded-sm bg-gray-600 dark:border-gray-700">
             <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
               Friend Requests
             </h4>
