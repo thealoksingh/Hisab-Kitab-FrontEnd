@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import SignUpForm from '../Authentication/SignUpForm';
+import SignUpForm from '../Authentication/SignupForm';
 import UserDashboard from '../UserDashBoard/UserDashboard';
 import LoginForm from '../Authentication/LogInForm';
 import AdminDashboard from '../AdminDashboard/AdminDashboard';

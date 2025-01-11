@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signUpUser } from '../Api/HisabKitabApi'
-const SignUpForm2 = () => {
+const SignUpForm = () => {
   const [isOpen, setIsOpen] = useState(true); // State to control modal visibility
   const [otpSent, setOtpSent] = useState(false); // State to handle OTP sent status
   const [otpVerified, setOtpVerified] = useState(false); // State to handle OTP verification
@@ -238,4 +238,4 @@ const SignUpForm2 = () => {
   );
 };
 
-export default SignUpForm2;
+export default SignUpForm;

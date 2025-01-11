@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginApi } from "../Api/HisabKitabApi"; // Assuming you have an API to check user credentials
 
-const LogInForm2 = () => {
+const LogInForm = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -132,4 +132,4 @@ const LogInForm2 = () => {
   );
 };
 
-export default LogInForm2;
+export default LogInForm;

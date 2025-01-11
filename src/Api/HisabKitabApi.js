@@ -15,11 +15,33 @@ export const getFriendList = (userId) => {
   };
 
 
-// API for adding a friend
+// API for sent a friend request
 export const addFriend = (userId, contactNo) => {
-    return apiClient.get(`/user/addfriend/${userId}?contactNo=${contactNo}`);
+    return apiClient.post(`/user/friend-request/send?senderId=${userId}&recieverContactNo=${contactNo}`);
   };
 
+// API for getting all pending friend requests
+export const getAllPendingRequest = (userId) => {
+  return apiClient.get(`/user/friend-request/pending?receiverId=${userId}`);
+};
+// API for getting all sent friend requests
+export const getAllSentRequest = (userId) => {
+  return apiClient.get(`/user/friend-request/sent?senderId=${userId}`);
+};
+// API for accepting a friend request
+export const acceptRequest = (requestId) => {
+  return apiClient.put(`/user/friend-request/accept${requestId}`);
+};
+
+// API for unsend a friend request
+export const unsendRequest = (requestId) => {
+  return apiClient.delete(`/user/friend-request/unsend${requestId}`);
+};
+
+// API for rejecting a friend request
+export const rejectRequest = (requestId) => {
+  return apiClient.delete(`/user/friend-request/delete${requestId}`);
+};
   
 // API for Get Friend Transaction Details
 export const getTransactionDetailsWithFriend = (userId, friendId) => {
