@@ -1,23 +1,82 @@
 import React, { useState, useEffect } from "react";
+import { 
+  acceptRequest, 
+  getAllPendingRequest, 
+  getAllSentRequest, 
+  rejectRequest, 
+  unsendRequest 
+} from "../Api/HisabKitabApi";
 
-const FriendRequestModal = ({ isOpen, toggleModal }) => {
+const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
+  const [pendingRequests, setPendingRequests] = useState([]);
+  const [sentRequests, setSentRequests] = useState([]);
 
+  useEffect(() => {
+    if (!isOpen) return; // Avoid fetching if modal is closed
 
-  if (!isOpen) return null; // Conditional return AFTER hooks
+    const fetchRequests = async () => {
+      try {
+        const pendingResponse = await getAllPendingRequest(user.userId);
+        setPendingRequests(pendingResponse?.data || []);
+        
+        const sentResponse = await getAllSentRequest(user.userId);
+        setSentRequests(sentResponse?.data || []);
+      } catch (error) {
+        console.error("Error fetching requests:", error);
+      }
+    };
+
+    fetchRequests();
+  }, [isOpen, user]);
+
+  const handleAccept = async (requestId) => {
+    try {
+      const response = await acceptRequest(requestId);
+      console.log("Request accepted:", response.data);
+      setPendingRequests((prev) =>
+        prev.filter((request) => request.id !== requestId)
+      );
+    } catch (error) {
+      console.error("Error accepting request:", error);
+    }
+  };
+
+  const handleReject = async (requestId) => {
+    try {
+      const response = await rejectRequest(requestId);
+      console.log("Request rejected:", response.data);
+      setPendingRequests((prev) =>
+        prev.filter((request) => request.id !== requestId)
+      );
+    } catch (error) {
+      console.error("Error rejecting request:", error);
+    }
+  };
+
+  const handleUnsend = async (requestId) => {
+    try {
+      const response = await unsendRequest(requestId);
+      console.log("Request unsent:", response.data);
+      setSentRequests((prev) =>
+        prev.filter((request) => request.id !== requestId)
+      );
+    } catch (error) {
+      console.error("Error unsending request:", error);
+    }
+  };
+
+  if (!isOpen) return null; // Prevent rendering if modal is closed
 
   return (
     <div
       id="Friend-Request-modal"
       tabIndex="-1"
       aria-hidden={!isOpen}
-      className={`inset-0 z-50 fixed bg-gray-900 bg-opacity-70`}
+      className="inset-0 z-50 fixed bg-gray-900 bg-opacity-70"
     >
       <div className="z-50 main-form w-full relative p-2 h-full flex justify-end">
-        <div
-          className="form1 w-1/4 bg-white rounded-sm shadow dark:bg-gray-300 form-custom-shadow-inner"
-          
-        >
-          <div className="flex items-center justify-between p-2 md:p-2  rounded-sm bg-gray-600 dark:border-gray-700">
+        <div className="form1 w-1/4 bg-white rounded-sm shadow dark:bg-gray-300 form-custom-shadow-inner">
+          <div className="flex items-center justify-between p-2 md:p-2 rounded-sm bg-gray-600 dark:border-gray-700">
             <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
               Friend Requests
             </h4>
@@ -44,53 +103,71 @@ const FriendRequestModal = ({ isOpen, toggleModal }) => {
               <span className="sr-only">Close modal</span>
             </button>
           </div>
-          <div className="main-content h-full p-2 ">
-            <h4 className="font-semibold text-gray-900">
-              Take Action on Request
-            </h4>
+          <div className="main-content h-full p-2">
+            <h4 className="font-semibold text-gray-900">Take Action on Request</h4>
             <div className="incoming-friend-request shadow-inner-custom h-72 w-full bg-gray-300 mt-2 p-2">
-              <div className="scrollable  shadow-inner-custom h-full w-full bg-gray-50 p-1">
-                {/* repeat requests  */}
-                <div className="requests shadow-inner-custom h-10 w-full bg-gray-100 mb-1 p-1.5 justify-between flex">
-                  <div className="h-7 w-7 text-xs rounded-full bg-cyan-600 flex justify-center items-center">
-                    A
-                  </div>
-                  <div className=" w-36  flex justify-center items-center  gap-1 p-0.5">
-                    <button className="w-16 text-xs h-full text-sm text-cyan-600 border border-cyan-600 hover:text-white   hover:bg-cyan-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
-                      Accept
-                    </button>
-
-                    <button className="w-16 text-xs h-full text-sm text-rose-600 border border-rose-600 hover:text-white   hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
-                      Reject
-                    </button>
-                  </div>
-                </div>
-                {/* ....  */}
-
-                {/* ....... */}
+              <div className="scrollable shadow-inner-custom h-full w-full bg-gray-50 p-1">
+                {pendingRequests.length > 0 ? (
+                  pendingRequests.map((request) => (
+                    <div
+                      key={request.id}
+                      className="requests shadow-inner-custom h-10 w-full bg-gray-100 mb-1 p-1.5 justify-between flex"
+                    >
+                      <div className="h-7 w-7 text-xs rounded-full bg-cyan-600 flex justify-center items-center">
+                        {request.sender?.fullName?.toUpperCase() || "N"}
+                      </div>
+                      <div className="w-36 flex justify-center items-center gap-1 p-0.5">
+                        <button
+                          onClick={() => handleAccept(request.id)}
+                          className="w-16 text-xs h-full text-sm text-cyan-600 border border-cyan-600 hover:text-white hover:bg-cyan-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                        >
+                          Accept
+                        </button>
+                        <button
+                          onClick={() => handleReject(request.id)}
+                          className="w-16 text-xs h-full text-sm text-rose-600 border border-rose-600 hover:text-white hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                        >
+                          Reject
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p>No pending requests found.</p>
+                )}
               </div>
             </div>
-            <h4 className="font-semibold text-gray-900 mt-1">
-              Pending Requests
-            </h4>
+
+            <h4 className="font-semibold text-gray-900 mt-1">Sent Requests</h4>
             <div className="pending-friend-request shadow-inner-custom h-64 w-full bg-gray-300 mt-2 p-2">
-              <div className="scrollable  shadow-inner-custom h-full w-full p-1 bg-gray-50">
-                <div className="requests shadow-inner-custom h-10 w-full bg-gray-100 mb-1 p-1.5 justify-between flex">
-                  <div className="h-7 w-7 text-xs rounded-full bg-teal-600 flex justify-center items-center">
-                    A
-                  </div>
-                  <div className=" w-36  flex justify-center items-center p-0.5">
-                    <button className="w-16 text-xs h-full text-sm text-yellow-600 border border-yellow-600 hover:text-white   hover:bg-yellow-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
-                      Unsend
-                    </button>
-                  </div>
-                </div>
+              <div className="scrollable shadow-inner-custom h-full w-full p-1 bg-gray-50">
+                {sentRequests.length > 0 ? (
+                  sentRequests.map((request) => (
+                    <div
+                      key={request.id}
+                      className="requests shadow-inner-custom h-10 w-full bg-gray-100 mb-1 p-1.5 justify-between flex"
+                    >
+                      <div className="h-7 w-7 text-xs rounded-full bg-teal-600 flex justify-center items-center">
+                        {request.reciever?.fullName?.toUpperCase() || "N"}
+                      </div>
+                      <div className="w-36 flex justify-center items-center p-0.5">
+                        <button
+                          onClick={() => handleUnsend(request.id)}
+                          className="w-16 text-xs h-full text-sm text-yellow-600 border border-yellow-600 hover:text-white hover:bg-yellow-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                        >
+                          Unsend
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p>No sent requests found.</p>
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
-      //{" "}
     </div>
   );
 };
