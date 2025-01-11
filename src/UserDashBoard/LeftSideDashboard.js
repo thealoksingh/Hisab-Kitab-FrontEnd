@@ -350,9 +350,9 @@ const applyFilterLogic = (list) => {
           </div>
         </div>
 
-        <div className="h-[70%] w-[100%] g-slate-300 relative scrollable">
+        <div className="h-[70%] border border-gray-400 shadow-inner-custom w-[100%] bg-gray-400 relative p-2 scrollable">
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="sticky w-full top-0 shadow-inner-custom border border-gray-400  flex justify-between items-center bg-gray-200 border border-gray-300 ">
+            <thead className="sticky shadow-inner-custom custom-border top-0 bg-gray-50 dark:bg-gray-200 text-xs text-gray-700 uppercase dark:text-gray-400">
               <tr>
                 <th scope="col" className="px-6 py-3">
                   Name
@@ -362,11 +362,11 @@ const applyFilterLogic = (list) => {
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody  className="">
               {filteredFriends.map((friend) => (
                 <tr
                   key={friend.userEntity.userId} // Use userId as key for each row
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer"
+                  className="bg-white  border-b border-1 shadow-inner-custom rounded-sm dark:bg-gray-200 dark:border-gray-100 cursor-pointer"
                   onClick={() => handleRowClick(friend.userEntity)}
                 >
                   <td
@@ -378,10 +378,10 @@ const applyFilterLogic = (list) => {
                       {/* First letter of name for avatar */}
                     </span>
                     <div className="flex flex-col">
-                      <span className="font-medium text-white">
+                      <span className="font-medium text-gray-800">
                         {friend.userEntity.fullName}
                       </span>
-                      <span className="text-xs text-white">
+                      <span className="text-xs text-gray-800">
                         {friend.lastTransactionDate
                           ? moment(friend.lastTransactionDate).fromNow()
                           : ""}
@@ -399,7 +399,7 @@ const applyFilterLogic = (list) => {
                         {Math.abs(friend.closingBalance)}
                       </span>
 
-                      <span className="text-xs text-white">
+                      <span className="text-xs text-gray-800">
                         {friend.closingBalance != null &&
                           friend.closingBalance >= 0
                           ? "You will get"

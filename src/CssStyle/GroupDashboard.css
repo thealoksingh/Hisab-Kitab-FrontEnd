@@ -14,3 +14,6 @@
 .shadow-inner-white-custom {
   box-shadow: inset 0 0 4px rgba(244, 243, 243, 0.655); /* Add 1px inner shadow */
 }
+.custom-border{
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.508); 
+}
