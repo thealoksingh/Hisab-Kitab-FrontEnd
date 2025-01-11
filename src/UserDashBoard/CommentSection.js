@@ -59,6 +59,7 @@ function CommentSection({ isOpen,refreshFriendTransaction,setRefreshFriendTransa
       userId: user.userId,
       comment: commentText
     };
+    
 
     try{
       const response = await postNewCommentsByTransactionId(commentRequestDto);
