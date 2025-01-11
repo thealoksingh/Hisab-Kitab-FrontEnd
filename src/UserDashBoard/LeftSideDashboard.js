@@ -434,7 +434,7 @@ const applyFilterLogic = (list) => {
           View Friend Request
                  </button>
 
-              <FriendRequestModal isOpen={isFriendRequestModalOpen} toggleModal={toggleFriendRequestModal}/>
+              <FriendRequestModal user={user} isOpen={isFriendRequestModalOpen} toggleModal={toggleFriendRequestModal}/>
         </div>
       </div>
     </>
