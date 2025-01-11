@@ -6,21 +6,28 @@ const AddFriendModal = ({ isOpen, toggleModal, userId, refreshFriendTransaction,
   const [contactNo, setContactNo] = useState(""); // State to store the contact number
   const [email, setEmail] = useState(""); // State to store the email
 
-  const handleSubmit = (e) => {
+  const handleAddFriend = async(e) => {
     e.preventDefault();
     if (contactNo !== "") {
-      addFriend(userId, contactNo)
+     await addFriend(userId, contactNo)
         .then((data) => {
           console.log("Friend added successfully:", data);
           toggleModal(); // Close the modal
         })
         .catch((error) => {
           console.error("Error adding friend:", error);
-          setIsAddButtonVisible(false); // Toggle the button visibility
+          setIsAddButtonVisible(false); // Switch to invite mode
           setContactNo(""); // Reset the contact number
         });
-    } else {
+    }
+  };
+
+  const handleInvite = (e) => {
+    e.preventDefault();
+    if (email !== "") {
       console.log("Invite email clicked", email);
+      // Add your invite logic here (e.g., API call to send an invite)
+      toggleModal(); // Close the modal
     }
   };
 
@@ -39,8 +46,8 @@ const AddFriendModal = ({ isOpen, toggleModal, userId, refreshFriendTransaction,
               type="button"
               className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-6 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
               onClick={() => {
-                toggleModal(); // Call the toggleModal function
-                setIsAddButtonVisible(true); // Reset the visibility state
+                toggleModal(); // Close modal
+                setIsAddButtonVisible(true); // Reset to Add mode
               }}
             >
               <svg
@@ -61,9 +68,9 @@ const AddFriendModal = ({ isOpen, toggleModal, userId, refreshFriendTransaction,
               <span className="sr-only">Close modal</span>
             </button>
           </div>
-          <form className="p-4 md:p-5" onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label className={`${isAddButtonVisible ? "block" : "hidden"} block mb-2 text-sm font-medium text-gray-900`}>
+          <form className="p-4 md:p-5">
+            <div className={`${isAddButtonVisible ? "block" : "hidden"} mb-4`}>
+              <label className="block mb-2 text-sm font-medium text-gray-900">
                 Mobile number
               </label>
               <input
@@ -72,12 +79,14 @@ const AddFriendModal = ({ isOpen, toggleModal, userId, refreshFriendTransaction,
                 id="mobile"
                 value={contactNo}
                 onChange={(e) => setContactNo(e.target.value)}
-                className={`${isAddButtonVisible ? "block" : "hidden"} w-full input-field-shadow border border-gray-300 text-gray-600 rounded-sm p-2`}
+                className="w-full input-field-shadow border border-gray-300 text-gray-600 rounded-sm p-2"
                 placeholder="Enter Mobile number"
-                // required={isAddButtonVisible}
-                // disabled={!isAddButtonVisible}
+                required={isAddButtonVisible}
+                disabled={!isAddButtonVisible}
               />
-              <label className={`${!isAddButtonVisible ? "block" : "hidden"} block mb-2 text-sm font-medium text-gray-900`}>
+            </div>
+            <div className={`${!isAddButtonVisible ? "block" : "hidden"} mb-4`}>
+              <label className="block mb-2 text-sm font-medium text-gray-900">
                 Email Id
               </label>
               <input
@@ -86,25 +95,28 @@ const AddFriendModal = ({ isOpen, toggleModal, userId, refreshFriendTransaction,
                 id="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className={`${!isAddButtonVisible ? "block" : "hidden"} w-full input-field-shadow border border-gray-300 text-gray-600 rounded-sm p-2`}
+                className="w-full input-field-shadow border border-gray-300 text-gray-600 rounded-sm p-2"
                 placeholder="Enter Email Id here"
-                // required={!isAddButtonVisible}
-                // disabled={isAddButtonVisible}
+                required={!isAddButtonVisible}
+                disabled={isAddButtonVisible}
               />
-              <h4 className={`${!isAddButtonVisible ? "block" : "hidden"} text-rose-500 text-xs`}>
-                !!User Doesn't Exist<span className="text-cyan-700"> Click below to Invite </span>
-              </h4>
             </div>
+            <h4 className={`${!isAddButtonVisible ? "block" : "hidden"} mb-2 text-rose-500 text-xs`}>
+              !!User Doesn't Exist<span className="text-cyan-700"> Click below to Invite </span>
+            </h4>
+            
             <div className="mb-2 flex gap-4">
               <button
                 type="submit"
-                className={`${isAddButtonVisible ? "block" : "hidden"} w-1/3 bg-sky-600 text-white px-4 py-2`}
+                className={`${isAddButtonVisible ? "block" : "hidden"} w-1/3 bg-sky-600 text-white px-4 py-2 focus:outline-none focus:ring-4 focus:ring-sky-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
+                onClick={handleAddFriend}
               >
                 Add
               </button>
               <button
-                type="button"
-                className={`${!isAddButtonVisible ? "block" : "hidden"} w-1/3 bg-cyan-600 text-white px-4 py-2`}
+                type="submit"
+                className={`${!isAddButtonVisible ? "block" : "hidden"} w-1/3 bg-cyan-600 text-white px-4 py-2 focus:outline-none focus:ring-4 focus:ring-emerald-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
+                onClick={handleInvite}
               >
                 Invite
               </button>
