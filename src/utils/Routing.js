@@ -1,19 +1,17 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
-import SignupForm from '../Authentication/SignupForm';
-import LogInForm from '../Authentication/LogInForm';
-import Authentication from '../Authentication/Authentication';
-import UserDashboard from '../UserDashBoard/UserDashboard'; 
+import { Routes, Route } from 'react-router-dom';
+import SignUpForm from '../Authentication/SignUpForm';
+import UserDashboard from '../UserDashBoard/UserDashboard';
+import LoginForm from '../Authentication/LogInForm';
+import AdminDashboard from '../AdminDashboard/AdminDashboard';
 
 const Routing = () => {
   return (
     <Routes>
-      <Route path="/" element={<Authentication />}>
-        <Route path="signup/:role" element={<SignupForm />} />
-        <Route path="login/:role" element={<LogInForm />} />
-      </Route>
-  
-      <Route path="dashboard/:role" element={<UserDashboard />} /> 
+      <Route path="/" element={<LoginForm />} />
+      <Route path="/signup" element={<SignUpForm />} />
+      <Route path="/user-dashboard" element={<UserDashboard />} />
+      <Route path="/admin-dashboard" element={<AdminDashboard />} />
     </Routes>
   );
 };

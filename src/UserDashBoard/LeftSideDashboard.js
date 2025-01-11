@@ -29,6 +29,8 @@ function LeftSideDashBoard({
   const [sortCriteria, setSortCriteria] = useState("Most Recent"); // e.g., "By Type", "By Date", "By Name"
   const [isFriendRequestModalOpen, setIsFriendRequestModalOpen] = useState(false);
 
+  const [searchQuery, setSearchQuery] = useState("");
+  
    const toggleFriendRequestModal=()=>{
     setIsFriendRequestModalOpen(!isFriendRequestModalOpen);
    };
@@ -64,6 +66,37 @@ function LeftSideDashBoard({
         sortedFriends = friends;
         break;
     }
+    const handleSearch = (event) => {
+  const query = event.target.value.toLowerCase();
+  setSearchQuery(query);
+
+  // Filter friends based on the search query and any applied filters
+  const filtered = friends.filter((friend) => {
+    const nameMatch = friend.userEntity.fullName.toLowerCase().includes(query);
+    const balanceMatch = friend.closingBalance.toString().includes(query);
+    return nameMatch || balanceMatch;
+  });
+
+  // Apply the current filter criteria to the search results
+  const finalFiltered = applyFilterLogic(filtered);
+
+  setFilteredFriends(finalFiltered);
+};
+
+// Function to reapply filter logic to search results
+const applyFilterLogic = (list) => {
+  switch (filterCriteria) {
+    case "You Will Get":
+      return list.filter((friend) => friend.closingBalance > 0);
+    case "You Will Give":
+      return list.filter((friend) => friend.closingBalance < 0);
+    case "Settled":
+      return list.filter((friend) => friend.closingBalance === 0);
+    default:
+      return list;
+  }
+};
+
 
     setFilteredFriends(sortedFriends);
     setIsFilterOpen(false); // Close the dropdown after selection
@@ -87,7 +120,29 @@ function LeftSideDashBoard({
     setFilteredFriends(sorted);
     console.log("Filter friend sorted on the basis of")
     // Update the filtered items with the sorted array
+   
+
   };
+  // let ListToApplySearch = [...filteredFriends];
+
+  const handleSearch = (event) => {
+    const query = event.target.value.toLowerCase();
+    setSearchQuery(query);
+  if (query!= ""){
+    const filtered = filteredFriends.filter((friend) => {
+      const nameMatch = friend.userEntity.fullName
+        .toLowerCase()
+        .includes(query);
+      const balanceMatch = friend.closingBalance
+        .toString()
+        .includes(query);
+      return nameMatch || balanceMatch;
+    });
+
+    setFilteredFriends(filtered );}
+    else { setFilteredFriends(friends)}
+  };
+
 
   const handleSort = (criteria) => {
     setSortCriteria(criteria); // Store the current sorting criteria
@@ -153,7 +208,7 @@ function LeftSideDashBoard({
     <>
       <div className="left-side rounded  w-[50%] min-h-[100vh] relative overflow-hidden  ">
         <div className="left-upper h-[20%] bg-slate-300 w-[100%] relative">
-          <div className="flex h-[30%] relative bg-slate-400">
+          <div className="flex shadow-inner-custom border border-gray-300 border-sm h-[30%] relative bg-slate-400">
             <div className="w-[35%] h-[100%] p-2">
               You'll Give:<span className="text-rose-600"> ${giveAmount}</span>
             </div>
@@ -166,22 +221,24 @@ function LeftSideDashBoard({
               </button>
             </div>
           </div>
-          <div className="flex h-[60%] relative gap-2">
+          <div className=" py-2 shadow-inner-custom bg-slate-300 justify-between flex h-[70%] relative gap-2">
             <div className="search-box w-[35%] h-[100%] p-2">
               <h4 className="">Search Friend</h4>
-              <div className=" h-[100%]  flex items-center justify-center">
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="w-full h-10 px-4 border border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+              <div className=" h-[100%] mb-2 p-2  flex items-center justify-center">
+                 <input
+        type="text"
+        placeholder="Search..."
+        className="w-full shadow-inner-white-custom h-10 py-1 px-4 border border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+        value={searchQuery}
+        onChange={handleSearch}
+      />
               </div>
             </div>
             <div className="filter-section w-[30%] h-[100%]   relative p-2 ">
               <h4 className="">Filter</h4>
               <button
                 onClick={toggleFilterDropdown}
-                className="absolute bottom-0 w-[90%] h-10 text-white bg-gray-200 hover:bg-gray-700   font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
+                className="absolute bottom-0 w-[90%] border border-gray-500 shadow-inner-white-custom h-10 text-white bg-gray-200 hover:bg-gray-700   font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
                 type="button"
               >
                 {filterCriteria}
@@ -222,7 +279,7 @@ function LeftSideDashBoard({
 
               <button
                 onClick={toggleSortDropdown}
-                className="absolute bottom-0 w-[90%] h-10 text-white bg-gray-200 hover:bg-gray-700   font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
+                className="absolute bottom-0 w-[90%] shadow-inner-white-custom border-gray-500 h-10 text-white bg-gray-200 hover:bg-gray-700   font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
                 type="button"
               >
                 {sortCriteria}
@@ -295,7 +352,7 @@ function LeftSideDashBoard({
 
         <div className="h-[70%] w-[100%] g-slate-300 relative scrollable">
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="sticky top-0 bg-gray-50 dark:bg-gray-700 text-xs text-gray-700 uppercase dark:text-gray-400">
+            <thead className="sticky w-full top-0 shadow-inner-custom border border-gray-400  flex justify-between items-center bg-gray-200 border border-gray-300 ">
               <tr>
                 <th scope="col" className="px-6 py-3">
                   Name
