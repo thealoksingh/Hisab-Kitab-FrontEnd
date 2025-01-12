@@ -33,6 +33,7 @@ function LeftSideDashBoard({
   
    const toggleFriendRequestModal=()=>{
     setIsFriendRequestModalOpen(!isFriendRequestModalOpen);
+    setRefreshFriendTransaction(!refreshFriendTransaction);
    };
   const applyFilter = (criteria) => {
     setFilteredFriends([]);
@@ -423,7 +424,7 @@ const applyFilterLogic = (list) => {
           
 
           <AddFriendModal
-            userId={user.userId}
+            user={user}
             isOpen={isModalOpen}
             toggleModal={toggleModal}
             refreshFriendTransaction={refreshFriendTransaction}
@@ -434,7 +435,10 @@ const applyFilterLogic = (list) => {
           View Friend Request
                  </button>
 
-              <FriendRequestModal user={user} isOpen={isFriendRequestModalOpen} toggleModal={toggleFriendRequestModal}/>
+              <FriendRequestModal 
+               refreshFriendTransaction = {refreshFriendTransaction}
+                setRefreshFriendTransaction={setRefreshFriendTransaction} 
+                user={user} isOpen={isFriendRequestModalOpen} toggleModal={toggleFriendRequestModal}/>
         </div>
       </div>
     </>

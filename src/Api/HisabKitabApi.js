@@ -30,17 +30,17 @@ export const getAllSentRequest = (userId) => {
 };
 // API for accepting a friend request
 export const acceptRequest = (requestId) => {
-  return apiClient.put(`/user/friend-request/accept${requestId}`);
+  return apiClient.put(`/user/friend-request/accept/${requestId}`);
 };
 
 // API for unsend a friend request
 export const unsendRequest = (requestId) => {
-  return apiClient.delete(`/user/friend-request/unsend${requestId}`);
+  return apiClient.delete(`/user/friend-request/unsend/${requestId}`);
 };
 
 // API for rejecting a friend request
 export const rejectRequest = (requestId) => {
-  return apiClient.delete(`/user/friend-request/delete${requestId}`);
+  return apiClient.delete(`/user/friend-request/delete/${requestId}`);
 };
   
 // API for Get Friend Transaction Details
@@ -63,3 +63,13 @@ export const getAllCommentsByTransactionId = (transId) => {
 export const postNewCommentsByTransactionId = (commentRequestDto) => {
   return apiClient.post("/user/transaction/comment/save", commentRequestDto);
 }
+
+//API for sending Invitation Email
+export const sendInvitationEmail = (email, senderName) => {
+  return apiClient.post(`/user/sendInvite?email=${email}&senderName=${senderName}`);
+};
+
+//API for sending OTP Email
+export const sendOtpEmail = (email) => {
+  return apiClient.post(`/user/sendOTP?email=${email}`);
+};

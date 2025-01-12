@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signUpUser } from '../Api/HisabKitabApi'
+import { sendOtpEmail, signUpUser } from '../Api/HisabKitabApi'
 const SignUpForm = () => {
   const [isOpen, setIsOpen] = useState(true); // State to control modal visibility
   const [otpSent, setOtpSent] = useState(false); // State to handle OTP sent status
   const [otpVerified, setOtpVerified] = useState(false); // State to handle OTP verification
+  const [otpEntered, setOtpEntered] = useState(""); // State to handle OTP verification
   const navigate = useNavigate();
 
 
-//    const { role } = useParams();
-//   const navigate = useNavigate();
+  //    const { role } = useParams();
+  //   const navigate = useNavigate();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -17,12 +18,18 @@ const SignUpForm = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  const role ="user";
+  const [otp, setOtp] = useState("");
+  const role = "user";
   const handleSignup = async (e) => {
     e.preventDefault();
     setError(null);
+    if (!otpVerified) {
+      setError("Please verify OTP First");
+      return;
+      
+    }
 
-    if (password !== confirmPassword) {
+    if (password !== confirmPassword ) {
       setError("Passwords do not match");
       return;
     }
@@ -52,14 +59,31 @@ const SignUpForm = () => {
     navigate("/");  // Redirect to the login page
   };
 
-  const handleOtpRequest = (e) => {
+  const handleOtpRequest = async (e) => {
     e.preventDefault();
-    setOtpSent(true);
-    // Future integration: Add API call for OTP sending
+    if (email !== "") {
+      try {
+        const response = await sendOtpEmail(email);
+        setOtp(response.data); // Update state with OTP
+        console.log("OTP sent successfully:", response.data); // Log the OTP directly
+        setOtpSent(true);
+      } catch (error) {
+        console.error("Error sending OTP:", error);
+        setOtpSent(false);
+      }
+    } else {
+      alert("Please enter a valid email");
+    }
   };
+  
 
   const handleOtpVerify = (e) => {
     e.preventDefault();
+    if (otp==null && otpEntered !== otp) {
+      setOtpVerified(false);
+      return;
+      
+    }
     setOtpVerified(true);
     // Future integration: Add API call for OTP verification
   };
@@ -112,19 +136,19 @@ const SignUpForm = () => {
                 onChange={(e) => setFullName(e.target.value)}
                 className="w-1/2 input-field-shadow border text-sm border-gray-300 text-gray-600 rounded-sm p-1"
                 placeholder="Enter your Full Name"
-              
+
               />
             </div>
             <div className="mb-1">
               <label className="block mb-2 text-sm font-medium text-gray-900">Mobile number</label>
               <input
-               id="phoneNumber"
-               name="phoneNumber"
-               type="tel"
-               required
-               value={phoneNumber}
-               onChange={(e) => setPhoneNumber(e.target.value)}
-               autoComplete="off"
+                id="phoneNumber"
+                name="phoneNumber"
+                type="tel"
+                required
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                autoComplete="off"
                 className="w-1/2 input-field-shadow border text-sm border-gray-300 text-gray-600 rounded-sm p-1"
                 placeholder="Enter Mobile Number"
               />
@@ -143,11 +167,12 @@ const SignUpForm = () => {
                   autoComplete="off"
                   className="w-[65%] input-field-shadow text-sm border border-gray-300 text-gray-600 rounded-sm p-1"
                   placeholder="Enter email Address"
-                
+
                 />
                 <button
                   type="submit"
                   onClick={handleOtpRequest}
+                  
                   className="w-1/3 bg-sky-600 text-sm text-white px-4 py-1 hover:bg-sky-500 focus:outline-none focus:ring-4 focus:ring-sky-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                 >
                   Send OTP
@@ -167,6 +192,7 @@ const SignUpForm = () => {
                   <input
                     type="text"
                     id="otp"
+                    onChange={(e) => setOtpEntered(e.target.value)}
                     className="w-1/4 input-field-shadow text-sm border border-gray-300 text-gray-600 rounded-sm p-1"
                     placeholder="Enter OTP"
                     required
@@ -190,34 +216,34 @@ const SignUpForm = () => {
               <label className="block mb-2 text-sm font-medium text-gray-900">Enter Password</label>
               <div className="flex gap-2">
                 <input
- id="password"
- name="password"
- type="password"
- required
- value={password}
- onChange={(e) => setPassword(e.target.value)}
- autoComplete="off"
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="off"
                   className="w-1/2 input-field-shadow text-sm border border-gray-300 text-gray-600 rounded-sm p-1"
                   placeholder="Enter Password"
-                 
+
                 />
                 <input
-                                 id="confirmPassword"
-                                 name="confirmPassword"
-                                 type="password"
-                                 required
-                                 value={confirmPassword}
-                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                 autoComplete="off"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  required
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  autoComplete="off"
                   className="w-1/2 input-field-shadow text-sm border border-gray-300 text-gray-600 rounded-sm p-1"
                   placeholder="Confirm Password"
-                
+
                 />
               </div>
             </div>
             {error && <p className="mt-1 py-1 mb-2 text-center text-sm text-red-500">{error}</p>}
             {/* <p className="mt-1 py-1 mb-2 text-center text-sm text-red-500 ">Signup succesfu you can login now</p> */}
-        {successMessage && <p className="mt-1 py-1 mb-2 text-center text-sm text-green-500">{successMessage}</p>}
+            {successMessage && <p className="mt-1 py-1 mb-2 text-center text-sm text-green-500">{successMessage}</p>}
 
             <div className="mb-2 flex gap-4">
               <button

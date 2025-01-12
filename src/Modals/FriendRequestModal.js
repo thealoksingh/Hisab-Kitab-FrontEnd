@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { 
-  acceptRequest, 
-  getAllPendingRequest, 
-  getAllSentRequest, 
-  rejectRequest, 
-  unsendRequest 
+import {
+  acceptRequest,
+  getAllPendingRequest,
+  getAllSentRequest,
+  rejectRequest,
+  unsendRequest
 } from "../Api/HisabKitabApi";
 
 const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
@@ -37,6 +37,8 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
       setPendingRequests((prev) =>
         prev.filter((request) => request.id !== requestId)
       );
+      console.log("Request accepted successfully");
+     
     } catch (error) {
       console.error("Error accepting request:", error);
     }
@@ -48,6 +50,7 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
       setPendingRequests((prev) =>
         prev.filter((request) => request.id !== requestId)
       );
+      console.log("Request rejected successfully");
     } catch (error) {
       console.error("Error rejecting request:", error);
     }
@@ -59,12 +62,13 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
       setSentRequests((prev) =>
         prev.filter((request) => request.id !== requestId)
       );
+      console.log("Request unsent successfully");
     } catch (error) {
       console.error("Error unsending request:", error);
     }
   };
 
-  if (!isOpen) return null; 
+  if (!isOpen) return null;
 
   return (
     <div
@@ -106,9 +110,9 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
             <h4 className="font-semibold text-gray-900">Take Action on Request</h4>
             <div className="incoming-friend-request shadow-inner-custom h-72 w-full bg-gray-300 mt-2 p-2">
               <div className="scrollable shadow-inner-custom h-full w-full bg-gray-50 p-1">
-              {pendingRequests.length > 0 ? (
-              pendingRequests.map((request) => (
-                <div
+                {pendingRequests.length > 0 ? (
+                  pendingRequests.map((request) => (
+                    <div
                       key={request.id}
                       className="requests shadow-inner-custom h-10 w-full bg-gray-100 mb-1 p-1.5 justify-between flex"
                     >
@@ -117,10 +121,10 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
                           {request.sender?.fullName?.[0]?.toUpperCase() || "N"}
                         </div>
                         <h4 className="px-2 ">
-  {request.sender?.fullName?.length > 10
-    ? request.sender.fullName.slice(0, 10) + "..."
-    : request.sender.fullName}
-</h4>
+                          {request.sender?.fullName?.length > 10
+                            ? request.sender.fullName.slice(0, 10) + "..."
+                            : request.sender.fullName}
+                        </h4>
 
                       </div>
                       <div className="w-36 flex justify-center items-center gap-1 p-0.5">
@@ -148,9 +152,9 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
             <h4 className="font-semibold text-gray-900 mt-1">Sent Requests</h4>
             <div className="pending-friend-request shadow-inner-custom h-64 w-full bg-gray-300 mt-2 p-2">
               <div className="scrollable shadow-inner-custom h-full w-full p-1 bg-gray-50">
-              {sentRequests.length > 0 ? (
-              sentRequests.map((request) => (
-                <div
+                {sentRequests.length > 0 ? (
+                  sentRequests.map((request) => (
+                    <div
                       key={request.id}
                       className="requests shadow-inner-custom h-10 w-full bg-gray-100 mb-1 p-1.5 justify-between flex"
                     >
@@ -159,10 +163,10 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
                           {request.receiver?.fullName?.[0]?.toUpperCase() || "O"}
                         </div>
                         <h4 className="px-2 ">
-  {request.receiver?.fullName?.length > 10
-    ? request.receiver.fullName.slice(0,10) + "..."
-    : request.receiver.fullName}
-</h4>
+                          {request.receiver?.fullName?.length > 10
+                            ? request.receiver.fullName.slice(0, 10) + "..."
+                            : request.receiver.fullName}
+                        </h4>
 
                       </div>
                       <div className="w-36 flex justify-center items-center p-0.5">

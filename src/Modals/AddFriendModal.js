@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { addFriend } from "../Api/HisabKitabApi";
+import { addFriend, sendInvitationEmail } from "../Api/HisabKitabApi";
 
-const AddFriendModal = ({ isOpen, toggleModal, userId, refreshFriendTransaction, setRefreshFriendTransaction }) => {
+const AddFriendModal = ({ isOpen, toggleModal, user }) => {
   const [isAddButtonVisible, setIsAddButtonVisible] = useState(true); // Tracks whether to show Add or Invite button
   const [contactNo, setContactNo] = useState(""); // State to store the contact number
   const [email, setEmail] = useState(""); // State to store the email
 
-  const handleAddFriend = async(e) => {
+  const handleAddFriend = async (e) => {
     e.preventDefault();
     if (contactNo !== "") {
-     await addFriend(userId, contactNo)
+      await addFriend(user.userId, contactNo)
         .then((data) => {
-          console.log("Friend added successfully:", data);
+          console.log("Friend request sent successfully:", data);
+          alert("Friend request sent successfully");
+          setContactNo(""); // Reset the email
           toggleModal(); // Close the modal
         })
         .catch((error) => {
@@ -19,17 +21,31 @@ const AddFriendModal = ({ isOpen, toggleModal, userId, refreshFriendTransaction,
           setIsAddButtonVisible(false); // Switch to invite mode
           setContactNo(""); // Reset the contact number
         });
+    } else {
+      alert("Please enter a valid mobile number");
     }
   };
 
-  const handleInvite = (e) => {
-    e.preventDefault();
-    if (email !== "") {
-      console.log("Invite email clicked", email);
-      // Add your invite logic here (e.g., API call to send an invite)
-      toggleModal(); // Close the modal
-    }
+  const handleInvite = async(e) => {
+  e.preventDefault();
+  console.log("Invite button clicked");
+  if (email !== "") {
+    await sendInvitationEmail(email, user.fullName)
+      .then((data) => {
+
+        console.log("Invite email clicked", email);
+        alert("Sign-up Invitation sent successfully");
+        setEmail(""); // Reset the email
+        toggleModal(); // Close the modal
+      }).catch((error) => {
+        console.error("Error sending invitation email:", error);
+        setEmail(""); // Reset the email
+      });
+  }
+  else {
+    alert("Please enter a valid email");
   };
+}
 
   return (
     <div
@@ -104,7 +120,7 @@ const AddFriendModal = ({ isOpen, toggleModal, userId, refreshFriendTransaction,
             <h4 className={`${!isAddButtonVisible ? "block" : "hidden"} mb-2 text-rose-500 text-xs`}>
               !!User Doesn't Exist<span className="text-cyan-700"> Click below to Invite </span>
             </h4>
-            
+
             <div className="mb-2 flex gap-4">
               <button
                 type="submit"
