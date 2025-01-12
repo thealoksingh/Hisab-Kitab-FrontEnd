@@ -42,10 +42,10 @@ const LogInForm = () => {
       id="SignIn-modal"
       tabIndex="-1"
       aria-hidden="false"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-0"
     >
-      <div className="main-form relative p-4 w-1/2 max-w-5xl flex gap-4 justify-center">
-        <div className="form2 relative bg-white w-1/2 rounded-sm shadow dark:bg-gray-300">
+      <div className="main-form relative p-4 w-[60%] h-[50%] max-w-5xl flex gap-4 justify-center">
+        <div className="form-signIn shadow-inner-custom border border-gray-400 relative bg-white w-1/2 rounded-sm shadow dark:bg-gray-300">
           <div className="flex items-center justify-between p-2 md:p-2 rounded-sm bg-gray-600">
             <h4 className="text-lg font-semibold text-gray-200">Log in to Hisabkitab</h4>
           </div>
@@ -85,7 +85,7 @@ const LogInForm = () => {
               <input
                 type="email"
                 id="email"
-                className="w-full input-field-shadow border text-sm border-gray-300 text-gray-600 rounded-sm p-1"
+                className="w-full input-field-shadow border text-sm border-gray-400 text-gray-600 rounded-sm p-1"
                 placeholder="Enter Email Here"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -99,7 +99,7 @@ const LogInForm = () => {
               <input
                 type="password"
                 id="password"
-                className="w-full input-field-shadow text-sm border border-gray-300 text-gray-600 rounded-sm p-1"
+                className="w-full input-field-shadow text-sm border border-gray-400 text-gray-600 rounded-sm p-1"
                 placeholder="Enter Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

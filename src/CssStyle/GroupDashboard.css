@@ -17,3 +17,7 @@
 .custom-border{
   box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.508); 
 }
+.input-field-shadow{
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
+  
+}

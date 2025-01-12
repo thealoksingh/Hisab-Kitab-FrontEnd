@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import { getTransactionDetailsWithFriend } from "../Api/HisabKitabApi";
 import GiveGotModal from "../Modals/GiveGotModal";
 import  '../CssStyle/GroupDashboard.css';
+import FriendTransactionReport from "../Modals/FriendTransactionReport";
 function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransaction, setRefreshFriendTransaction }) {
   const [transactionsDto, setTransactionsDto] = useState([]);
   // const [lastClosingBalance, setLastClosingBalance] = useState(0);
@@ -14,7 +15,12 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
   const [isCommentSectionOpen, setIsCommentSetionOpen] = useState(false);
   const [commentTransaction, setCommentTransaction] = useState([]);
   const [isRowClicked, setIsRowClicked] = useState(false);
+  const[isReportModalOpen, setReportModalOpen] =useState(false);
 
+  const toggleReportModal = () => {
+    setReportModalOpen(!isReportModalOpen);
+  };
+  
   const toggleCommentSection = () => {
     setIsCommentSetionOpen(!isCommentSectionOpen); // Toggle the state when the button is clicked
   };
@@ -102,8 +108,12 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
 
         <div className="report-settings right-[10px] absolute flex gap-[10px] flex items-center justify-center">
           <div className="report h-[35px] w-28 bg-rose-600 rounded flex items-center justify-center">
-            <h2 className="text-white">View Report</h2>
+            <h2 onClick={toggleReportModal} className="text-white">View Report</h2>
           </div>
+         < FriendTransactionReport isOpen={isReportModalOpen}
+          toggleModal={toggleReportModal}
+          selectedFriend={selectedFriend}
+         />
           <div className="settings h-[50px] w-12 flex items-center justify-center ">
             <FontAwesomeIcon
               icon={faGear}
