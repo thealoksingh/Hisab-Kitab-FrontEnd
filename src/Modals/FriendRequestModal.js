@@ -18,9 +18,11 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
       try {
         const pendingResponse = await getAllPendingRequest(user.userId);
         setPendingRequests(pendingResponse?.data || []);
-        
+        console.log("Pending requests fetched:", pendingResponse.data);
+
         const sentResponse = await getAllSentRequest(user.userId);
         setSentRequests(sentResponse?.data || []);
+        console.log("Sent requests fetched:", sentResponse.data);
       } catch (error) {
         console.error("Error fetching requests:", error);
       }
@@ -31,8 +33,7 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
 
   const handleAccept = async (requestId) => {
     try {
-      const response = await acceptRequest(requestId);
-      console.log("Request accepted:", response.data);
+      await acceptRequest(requestId);
       setPendingRequests((prev) =>
         prev.filter((request) => request.id !== requestId)
       );
@@ -43,8 +44,7 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
 
   const handleReject = async (requestId) => {
     try {
-      const response = await rejectRequest(requestId);
-      console.log("Request rejected:", response.data);
+      await rejectRequest(requestId);
       setPendingRequests((prev) =>
         prev.filter((request) => request.id !== requestId)
       );
@@ -55,8 +55,7 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
 
   const handleUnsend = async (requestId) => {
     try {
-      const response = await unsendRequest(requestId);
-      console.log("Request unsent:", response.data);
+      await unsendRequest(requestId);
       setSentRequests((prev) =>
         prev.filter((request) => request.id !== requestId)
       );
@@ -65,7 +64,7 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
     }
   };
 
-  if (!isOpen) return null; // Prevent rendering if modal is closed
+  if (!isOpen) return null; 
 
   return (
     <div
@@ -107,14 +106,22 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
             <h4 className="font-semibold text-gray-900">Take Action on Request</h4>
             <div className="incoming-friend-request shadow-inner-custom h-72 w-full bg-gray-300 mt-2 p-2">
               <div className="scrollable shadow-inner-custom h-full w-full bg-gray-50 p-1">
-                {pendingRequests.length > 0 ? (
-                  pendingRequests.map((request) => (
-                    <div
+              {pendingRequests.length > 0 ? (
+              pendingRequests.map((request) => (
+                <div
                       key={request.id}
                       className="requests shadow-inner-custom h-10 w-full bg-gray-100 mb-1 p-1.5 justify-between flex"
                     >
-                      <div className="h-7 w-7 text-xs rounded-full bg-cyan-600 flex justify-center items-center">
-                        {request.sender?.fullName?.toUpperCase() || "N"}
+                      <div className="w-36 flex items-center gap-1 p-0.5">
+                        <div className="h-7 w-7 text-white text-xs rounded-full bg-cyan-600 flex justify-center items-center">
+                          {request.sender?.fullName?.[0]?.toUpperCase() || "N"}
+                        </div>
+                        <h4 className="px-2 ">
+  {request.sender?.fullName?.length > 10
+    ? request.sender.fullName.slice(0, 10) + "..."
+    : request.sender.fullName}
+</h4>
+
                       </div>
                       <div className="w-36 flex justify-center items-center gap-1 p-0.5">
                         <button
@@ -141,14 +148,22 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
             <h4 className="font-semibold text-gray-900 mt-1">Sent Requests</h4>
             <div className="pending-friend-request shadow-inner-custom h-64 w-full bg-gray-300 mt-2 p-2">
               <div className="scrollable shadow-inner-custom h-full w-full p-1 bg-gray-50">
-                {sentRequests.length > 0 ? (
-                  sentRequests.map((request) => (
-                    <div
+              {sentRequests.length > 0 ? (
+              sentRequests.map((request) => (
+                <div
                       key={request.id}
                       className="requests shadow-inner-custom h-10 w-full bg-gray-100 mb-1 p-1.5 justify-between flex"
                     >
-                      <div className="h-7 w-7 text-xs rounded-full bg-teal-600 flex justify-center items-center">
-                        {request.reciever?.fullName?.toUpperCase() || "N"}
+                      <div className="w-36 flex items-center gap-1 p-0.5">
+                        <div className="h-7 w-7 text-xs text-white rounded-full bg-teal-600 flex justify-center items-center">
+                          {request.receiver?.fullName?.[0]?.toUpperCase() || "O"}
+                        </div>
+                        <h4 className="px-2 ">
+  {request.receiver?.fullName?.length > 10
+    ? request.receiver.fullName.slice(0,10) + "..."
+    : request.receiver.fullName}
+</h4>
+
                       </div>
                       <div className="w-36 flex justify-center items-center p-0.5">
                         <button

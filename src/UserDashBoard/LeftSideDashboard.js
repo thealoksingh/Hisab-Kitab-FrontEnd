@@ -350,9 +350,9 @@ const applyFilterLogic = (list) => {
           </div>
         </div>
 
-        <div className="h-[70%] border border-gray-400 shadow-inner-custom w-[100%] bg-gray-400 relative p-2 scrollable">
-          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="sticky shadow-inner-custom custom-border top-0 bg-gray-50 dark:bg-gray-200 text-xs text-gray-700 uppercase dark:text-gray-400">
+        <div className="h-[65%] border border-gray-400 shadow-inner-custom w-[100%] bg-gray-400 relative px-2 scrollable">
+          <table className="w-full border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead className="sticky fixed border  shadow-inner-custom  top-0 bg-gray-50 dark:bg-gray-200 text-xs text-gray-400 uppercase dark:text-gray-800">
               <tr>
                 <th scope="col" className="px-6 py-3">
                   Name

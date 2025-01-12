@@ -224,7 +224,7 @@ const UserDashboard = () => {
 
       {/* navigation ended  */}
 
-      <div  class="  whole-dashboard  p-2 ml-64 ">
+      <div  class="h-[100]  whole-dashboard  p-2 ml-64 ">
         <div class="flex gap-2 ">
           <LeftSideDashBoard
             user={user} // Pass user data
