@@ -27,13 +27,14 @@ function LeftSideDashBoard({
   const [filterCriteria, setFilterCriteria] = useState("All");
 
   const [sortCriteria, setSortCriteria] = useState("Most Recent"); // e.g., "By Type", "By Date", "By Name"
-  const [isFriendRequestModalOpen, setIsFriendRequestModalOpen] = useState(false);
+  const [isFriendRequestModalOpen, setIsFriendRequestModalOpen] =
+    useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
-  
-   const toggleFriendRequestModal=()=>{
+
+  const toggleFriendRequestModal = () => {
     setIsFriendRequestModalOpen(!isFriendRequestModalOpen);
-   };
+  };
   const applyFilter = (criteria) => {
     setFilteredFriends([]);
     setFilterCriteria(criteria);
@@ -67,36 +68,37 @@ function LeftSideDashBoard({
         break;
     }
     const handleSearch = (event) => {
-  const query = event.target.value.toLowerCase();
-  setSearchQuery(query);
+      const query = event.target.value.toLowerCase();
+      setSearchQuery(query);
 
-  // Filter friends based on the search query and any applied filters
-  const filtered = friends.filter((friend) => {
-    const nameMatch = friend.userEntity.fullName.toLowerCase().includes(query);
-    const balanceMatch = friend.closingBalance.toString().includes(query);
-    return nameMatch || balanceMatch;
-  });
+      // Filter friends based on the search query and any applied filters
+      const filtered = friends.filter((friend) => {
+        const nameMatch = friend.userEntity.fullName
+          .toLowerCase()
+          .includes(query);
+        const balanceMatch = friend.closingBalance.toString().includes(query);
+        return nameMatch || balanceMatch;
+      });
 
-  // Apply the current filter criteria to the search results
-  const finalFiltered = applyFilterLogic(filtered);
+      // Apply the current filter criteria to the search results
+      const finalFiltered = applyFilterLogic(filtered);
 
-  setFilteredFriends(finalFiltered);
-};
+      setFilteredFriends(finalFiltered);
+    };
 
-// Function to reapply filter logic to search results
-const applyFilterLogic = (list) => {
-  switch (filterCriteria) {
-    case "You Will Get":
-      return list.filter((friend) => friend.closingBalance > 0);
-    case "You Will Give":
-      return list.filter((friend) => friend.closingBalance < 0);
-    case "Settled":
-      return list.filter((friend) => friend.closingBalance === 0);
-    default:
-      return list;
-  }
-};
-
+    // Function to reapply filter logic to search results
+    const applyFilterLogic = (list) => {
+      switch (filterCriteria) {
+        case "You Will Get":
+          return list.filter((friend) => friend.closingBalance > 0);
+        case "You Will Give":
+          return list.filter((friend) => friend.closingBalance < 0);
+        case "Settled":
+          return list.filter((friend) => friend.closingBalance === 0);
+        default:
+          return list;
+      }
+    };
 
     setFilteredFriends(sortedFriends);
     setIsFilterOpen(false); // Close the dropdown after selection
@@ -106,54 +108,54 @@ const applyFilterLogic = (list) => {
     let sorted = [...filteredFriends]; // Assuming `filteredFriends` is the filtered array
 
     if (criteria === "Most Recent") {
-      sorted.sort((a, b) => new Date(b.lastTransactionDate) - new Date(a.lastTransactionDate)); // Sort by newest date first
+      sorted.sort(
+        (a, b) =>
+          new Date(b.lastTransactionDate) - new Date(a.lastTransactionDate)
+      ); // Sort by newest date first
     } else if (criteria === "Oldest") {
-      sorted.sort((a, b) => new Date(a.lastTransactionDate) - new Date(b.lastTransactionDate)); // Sort by oldest date first
+      sorted.sort(
+        (a, b) =>
+          new Date(a.lastTransactionDate) - new Date(b.lastTransactionDate)
+      ); // Sort by oldest date first
     } else if (criteria === "Highest Amount") {
       sorted.sort((a, b) => b.closingBalance - a.closingBalance); // Sort by highest amount first
     } else if (criteria === "Lowest Amount") {
       sorted.sort((a, b) => a.closingBalance - b.closingBalance); // Sort by lowest amount first
     } else if (criteria === "By Name") {
-      sorted.sort((a, b) => a.userEntity.fullName.localeCompare(b.userEntity.fullName)); // Sort alphabetically by name
+      sorted.sort((a, b) =>
+        a.userEntity.fullName.localeCompare(b.userEntity.fullName)
+      ); // Sort alphabetically by name
     }
 
     setFilteredFriends(sorted);
-    console.log("Filter friend sorted on the basis of")
+    console.log("Filter friend sorted on the basis of");
     // Update the filtered items with the sorted array
-   
-
   };
   // let ListToApplySearch = [...filteredFriends];
 
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchQuery(query);
-  if (query!= ""){
-    const filtered = filteredFriends.filter((friend) => {
-      const nameMatch = friend.userEntity.fullName
-        .toLowerCase()
-        .includes(query);
-      const balanceMatch = friend.closingBalance
-        .toString()
-        .includes(query);
-      return nameMatch || balanceMatch;
-    });
+    if (query != "") {
+      const filtered = filteredFriends.filter((friend) => {
+        const nameMatch = friend.userEntity.fullName
+          .toLowerCase()
+          .includes(query);
+        const balanceMatch = friend.closingBalance.toString().includes(query);
+        return nameMatch || balanceMatch;
+      });
 
-    setFilteredFriends(filtered );}
-    else { setFilteredFriends(friends)}
+      setFilteredFriends(filtered);
+    } else {
+      setFilteredFriends(friends);
+    }
   };
-
 
   const handleSort = (criteria) => {
     setSortCriteria(criteria); // Store the current sorting criteria
     sortItems(criteria); // Apply sorting
     toggleSortDropdown();
   };
-
-
-
-
-
 
   const toggleSortDropdown = () => {
     setIsSortOpen(!isSortOpen);
@@ -201,44 +203,42 @@ const applyFilterLogic = (list) => {
   //   applyFilter(filterCriteria);
   // }, [user]); // Empty dependency array ensures it runs only on initial render
 
-
-
-
   return (
     <>
-      <div className="left-side rounded  w-[50%] min-h-[100vh] relative overflow-hidden  ">
-        <div className="left-upper h-[20%] bg-slate-300 w-[100%] relative">
-          <div className="flex shadow-inner-custom border border-gray-300 border-sm h-[30%] relative bg-slate-400">
-            <div className="w-[35%] h-[100%] p-2">
+      <div className="left-side rounded w-[50%]  relative overflow-hidden  ">
+        <div className="left-upper h-36  w-[100%] ">
+          <div className="flex px-2 shadow-inner-custom items-center justify-between border border-gray-300 border-sm h-12  bg-gray-400">
+            <div className=" p-2">
               You'll Give:<span className="text-rose-600"> ${giveAmount}</span>
             </div>
-            <div className="w-[35%] h-[100%] p-2">
+            <div className="  p-2">
               You'll Get:<span className="text-green-900"> ${getAmount}</span>
             </div>
-            <div className="w-[30%] h-[100%] p-1">
+            <div className=" p-1">
               <button className="bg-rose-600 text-white font-bold py-1 px-4 rounded-[4px] flex items-center justify-center">
-                <span className="mr-2">^</span> View Report
+                <span className="mr-2">^</span>
+                <span> View Report</span>
               </button>
             </div>
           </div>
-          <div className=" py-2 shadow-inner-custom bg-slate-300 justify-between flex h-[70%] relative gap-2">
-            <div className="search-box w-[35%] h-[100%] p-2">
-              <h4 className="">Search Friend</h4>
-              <div className=" h-[100%] mb-2 p-2  flex items-center justify-center">
-                 <input
-        type="text"
-        placeholder="Search..."
-        className="w-full shadow-inner-white-custom h-10 py-1 px-4 border border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-        value={searchQuery}
-        onChange={handleSearch}
-      />
-              </div>
+          <div className=" py-2 shadow-inner-custom bg-gray-300 justify-between flex h-46 relative gap-2">
+            <div className="search-box w-[40%]  h-full p-2">
+              <p className="p-1">Search Friend</p>
+             
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="w-full shadow-inner-custom h-10 pb-1 px-3 border border-gray-400 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+                  value={searchQuery}
+                  onChange={handleSearch}
+                />
+             
             </div>
-            <div className="filter-section w-[30%] h-[100%]   relative p-2 ">
-              <h4 className="">Filter</h4>
+            <div className="filter-section w-[30%]  h-full  relative p-2 ">
+              <p className="p-1">Filter</p>
               <button
                 onClick={toggleFilterDropdown}
-                className="absolute bottom-0 w-[90%] border border-gray-500 shadow-inner-white-custom h-10 text-white bg-gray-200 hover:bg-gray-700   font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
+                className=" w-full h-10 border border-gray-500 shadow-inner-white-custom h-10 text-white bg-gray-200 hover:bg-gray-700   font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
                 type="button"
               >
                 {filterCriteria}
@@ -261,25 +261,28 @@ const applyFilterLogic = (list) => {
               {isFilterOpen && (
                 <div className="z-50 mt-[30%] absolute bg-white divide-y divide-gray-100 rounded-sm shadow w-[90%] dark:bg-gray-700">
                   <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
-                    {["All", "You Will Get", "You Will Give", "Settled"].map((criteria) => (
-                      <li key={criteria}>
-                        <button
-                          onClick={() => applyFilter(criteria)}
-                          className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                          {criteria}
-                        </button>
-                      </li>
-                    ))}
+                    {["All", "You Will Get", "You Will Give", "Settled"].map(
+                      (criteria) => (
+                        <li key={criteria}>
+                          <button
+                            onClick={() => applyFilter(criteria)}
+                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          >
+                            {criteria}
+                          </button>
+                        </li>
+                      )
+                    )}
                   </ul>
-                </div>)}
+                </div>
+              )}
             </div>
-            <div className="sort-section w-[30%] h-[100%]   relative p-2">
-              <h4 className="">Sort By</h4>
+            <div className="sort-section h-full w-[30%]   relative p-2">
+              <p className="p-1">Sort By</p>
 
               <button
                 onClick={toggleSortDropdown}
-                className="absolute bottom-0 w-[90%] shadow-inner-white-custom border-gray-500 h-10 text-white bg-gray-200 hover:bg-gray-700   font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
+                className="w-full h-10 shadow-inner-white-custom border-gray-500 h-10 text-white bg-gray-200 hover:bg-gray-700   font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
                 type="button"
               >
                 {sortCriteria}
@@ -350,7 +353,7 @@ const applyFilterLogic = (list) => {
           </div>
         </div>
 
-        <div className="h-[65%] border border-gray-400 shadow-inner-custom w-[100%] bg-gray-400 relative px-2 scrollable">
+        <div className="h-[70%] border border-gray-400 shadow-inner-custom w-[100%] bg-gray-400 relative px-2 scrollable">
           <table className="w-full border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-gray-400">
             <thead className="sticky fixed border  shadow-inner-custom  top-0 bg-gray-50 dark:bg-gray-200 text-xs text-gray-400 uppercase dark:text-gray-800">
               <tr>
@@ -362,7 +365,7 @@ const applyFilterLogic = (list) => {
                 </th>
               </tr>
             </thead>
-            <tbody  className="">
+            <tbody className="">
               {filteredFriends.map((friend) => (
                 <tr
                   key={friend.userEntity.userId} // Use userId as key for each row
@@ -391,17 +394,18 @@ const applyFilterLogic = (list) => {
                   <td className="px-6 py-4 text-right pr-[25px]">
                     <div className="flex flex-col">
                       <span
-                        className={`font-medium ${friend.closingBalance >= 0
-                          ? "text-green-500"
-                          : "text-red-500"
-                          }`}
+                        className={`font-medium ${
+                          friend.closingBalance >= 0
+                            ? "text-green-500"
+                            : "text-red-500"
+                        }`}
                       >
                         {Math.abs(friend.closingBalance)}
                       </span>
 
                       <span className="text-xs text-gray-800">
                         {friend.closingBalance != null &&
-                          friend.closingBalance >= 0
+                        friend.closingBalance >= 0
                           ? "You will get"
                           : "You will give"}
                       </span>
@@ -413,14 +417,13 @@ const applyFilterLogic = (list) => {
           </table>
         </div>
 
-        <div className="left-side-lower w-full gap-4 bg-slate-200 p-2 bottom-4 absolute h-[50px] flex items-center justify-center">
-       
-
-            <button onClick={handleAddFriendClick} className="w-1/3  h-full bg-cyan-600 text-sm text-white 600    hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
-            Add Friend       
-            
+        <div className="left-side-lower shadow-inner-custom w-full gap-4 bg-gray-300 p-2 bottom-4 absolute h-[50px] flex items-center justify-center">
+          <button
+            onClick={handleAddFriendClick}
+            className="w-1/3 shadow-inner-custom h-full bg-cyan-600 text-sm text-white 600    hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+          >
+            Add Friend
           </button>
-          
 
           <AddFriendModal
             userId={user.userId}
@@ -429,12 +432,18 @@ const applyFilterLogic = (list) => {
             refreshFriendTransaction={refreshFriendTransaction}
             setRefreshFriendTransaction={setRefreshFriendTransaction}
           />
-          <button onClick={toggleFriendRequestModal} className="w-1/3  h-full bg-teal-600 text-sm text-white 600    hover:bg-teal-500 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
-                   
-          View Friend Request
-                 </button>
+          <button
+            onClick={toggleFriendRequestModal}
+            className="w-1/3  h-full bg-teal-600 text-sm text-white 600   shadow-inner-custom hover:bg-teal-500 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+          >
+            View Friend Request
+          </button>
 
-              <FriendRequestModal user={user} isOpen={isFriendRequestModalOpen} toggleModal={toggleFriendRequestModal}/>
+          <FriendRequestModal
+            user={user}
+            isOpen={isFriendRequestModalOpen}
+            toggleModal={toggleFriendRequestModal}
+          />
         </div>
       </div>
     </>

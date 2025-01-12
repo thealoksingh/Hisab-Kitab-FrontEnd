@@ -63,15 +63,19 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
   return (
     <>
   
-      <div className="right-header top-[0] h-[10%] bg-slate-400 w-full absolute p-[10px] flex gap-[10px] flex items-center ">
-        <div className="alphabet-circle bg-teal-600 h-[50px] w-[50px] rounded-full flex items-center justify-center">
+      <div className="right-side-header shadow-inner-custom  h-24 bg-gray-300 w-full justify-between p-2 flex gap-2 flex items-center ">
+        
+        <div className="right-top-div  flex justify-between">
+        <div className="alphabet-circle bg-teal-600 h-12 w-12 rounded-full flex items-center justify-center">
           <h1 className="text-white text-lg">{selectedFriend.fullName[0].toUpperCase()}</h1>
         </div>
-        <div className="user-name">
+
+        <div className="">
           <h2 className="text-lg text-gray-800">{selectedFriend.fullName}</h2>
           <p className="text-sm text-gray-600">
             +91 <span>{selectedFriend.contactNo}</span>
           </p>
+          </div>
         </div>
         <div
           className={`net-balance border h-[35px] w-40 rounded flex items-center justify-center ml-5 ${
@@ -85,7 +89,7 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
             className={`text-black ${
               transactionsDto.length > 0 &&
               transactionsDto[0].lastClosingBalance >= 0
-                ? "border-teal-900 text-green-900"
+                ? "border-green-900 text-green-900"
                 : "border-red-900 text-red-900"
             }`}
           >
@@ -100,7 +104,7 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
           </h2>
         </div>
 
-        <div className="report-settings right-[10px] absolute flex gap-[10px] flex items-center justify-center">
+        <div className="report-settings  flex gap-2 flex items-center justify-center">
           <div className="report h-[35px] w-28 bg-rose-600 rounded flex items-center justify-center">
             <h2 className="text-white">View Report</h2>
           </div>
@@ -114,9 +118,9 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
         </div>
       </div>
 
-      <div class="table-division w-full h-[80%] bg-gray-300  absolute top-[10%]  scrollable  ">
-       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-      <thead className="sticky top-0 bg-gray-50 dark:bg-gray-700 text-xs text-gray-700 uppercase dark:text-gray-400">
+      <div className="h-[70%] border border-gray-400 shadow-inner-custom w-full bg-gray-400 relative px-2 scrollable">
+      <table className="w-full border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-gray-400">
+      <thead className="sticky fixed border  shadow-inner-custom  top-0 bg-gray-50 dark:bg-gray-200 text-xs text-gray-400 uppercase dark:text-gray-800">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Entries

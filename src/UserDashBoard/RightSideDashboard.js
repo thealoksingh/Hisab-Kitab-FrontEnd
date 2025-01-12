@@ -6,9 +6,8 @@ import { getTransactionDetailsWithFriend } from "../Api/HisabKitabApi";
 
 function RightSideDashBoard({ user,isFriendSelected, selectedFriend ,refreshFriendTransaction, setRefreshFriendTransaction}) {
 
-  
   return (
-    <div className="right-side flex items-center justify-center rounded  w-[50%] min-h-full relative overflow-hidden">
+    <div className="right-side flex  justify-center rounded  w-[50%]  relative overflow-hidden">
       {isFriendSelected ? (
         // Render FriendTransactionDetail when a friend is selected
         <FriendTransactionDetail user={user} selectedFriend={selectedFriend} 
