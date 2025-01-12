@@ -19,6 +19,7 @@ const SignUpForm = () => {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [otp, setOtp] = useState("");
+ 
   const role = "user";
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -75,7 +76,7 @@ const SignUpForm = () => {
       alert("Please enter a valid email");
     }
   };
-  
+
 
   const handleOtpVerify = (e) => {
     e.preventDefault();

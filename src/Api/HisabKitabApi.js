@@ -73,3 +73,9 @@ export const sendInvitationEmail = (email, senderName) => {
 export const sendOtpEmail = (email) => {
   return apiClient.post(`/user/sendOTP?email=${email}`);
 };
+//forgot password /update password
+export const forgetPassword = (email, newPassword) => {
+  return apiClient.post(`user/update-password?email=${email}&newPassword=${newPassword}`);
+};
+
+

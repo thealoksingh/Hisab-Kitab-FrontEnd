@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginApi } from "../Api/HisabKitabApi"; // Assuming you have an API to check user credentials
-
+import ForgetPasswordModal from "./ForgetPasswordModal";
 const LogInForm = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -105,6 +105,7 @@ const LogInForm = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+              <p className="text-rose-600">Forgot password?<span onClick={()=>navigate("/forget-password")} className="text-green-600">Click here</span></p>
             </div>
 
            
