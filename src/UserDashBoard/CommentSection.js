@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShareFromSquare, faPenToSquare, faList, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import  '../CssStyle/GroupDashboard.css';
+import '../CssStyle/GroupDashboard.css';
 import { getAllCommentsByTransactionId, postNewCommentsByTransactionId } from "../Api/HisabKitabApi";
 import UpdateFriendTransaction from '../Modals/UpdateFriendTransactionModel';
 import DeleteAlertModal from '../Modals/DeleteAlertModal';
-function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,setIsRowClicked,isRowClicked }) {
+function CommentSection({ isOpen, toggleCommentSection, commentTransaction, user, setIsRowClicked, isRowClicked }) {
 
   const [width, setWidth] = useState('0'); // Initially set width to 0%
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState("");
   const [error, setError] = useState(null);
- const[isUpdateFormOpen,setIsUpdateFormOpen]=useState(false);
- const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+  const [isUpdateFormOpen, setIsUpdateFormOpen] = useState(false);
+  const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
 
- const toggleDeleteAlert = () => {
-   setIsDeleteAlertOpen(!isDeleteAlertOpen);
- };
-  const toggleUpdateForm=()=>{
+  const toggleDeleteAlert = () => {
+    setIsDeleteAlertOpen(!isDeleteAlertOpen);
+  };
+  const toggleUpdateForm = () => {
     setIsUpdateFormOpen(!isUpdateFormOpen);
   };
 
@@ -29,16 +29,16 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,
     }
   }, [isOpen]);
 
- useEffect(() => {
+  useEffect(() => {
     const fetchComments = async () => {
-      if (!user) return;
+      if (!commentTransaction) return;
 
       try {
         console.log("getComment api called");
         const response = await getAllCommentsByTransactionId(commentTransaction.transId);
         console.log(response.data);
         console.log("above is comment response");
-        
+
         setComments(response.data); // Assuming the data is in response.data.friendList
         console.log(comments);
       } catch (err) {
@@ -47,11 +47,11 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,
     };
 
     fetchComments();
-  
-  }, [user, isRowClicked]);
+
+  }, [user, isRowClicked, commentTransaction]);
 
 
-  const handleCommentSubmit = async(e) => {
+  const handleCommentSubmit = async (e) => {
     e.preventDefault();
 
     const commentRequestDto = {
@@ -60,24 +60,24 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,
       comment: commentText
     };
 
-    try{
+    try {
       const response = await postNewCommentsByTransactionId(commentRequestDto);
       console.log("Comment Posted");
       setCommentText("");
       setIsRowClicked(!isRowClicked);
 
-    }catch (error) {
+    } catch (error) {
       console.error("Error creating transaction", error);
     }
 
   };
 
-  const deleteTransactionDetails = 
-    (transId)=> {
-      console.log("TranId" + transId);
+  const deleteTransactionDetails =
+    (transId) => {
+      console.log("TransId" + transId);
     };
 
-  
+ 
   return (
     <>
       <div
@@ -128,12 +128,16 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,
           </div>
         </div>
 
-        <div className="w-full flex items-center justify-center">
-          <button onClick={toggleUpdateForm} className="w-[80%]  h-[40px] border border-teal-800 text-sm text-teal-800 hover:text-white   hover:bg-teal-600 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
-            <span className="mr-5"><FontAwesomeIcon icon={faPenToSquare} /></span> Update Entry
-          </button>
-          <UpdateFriendTransaction isOpen={isUpdateFormOpen} toggleModal={toggleUpdateForm}/>
-        </div>
+        {(commentTransaction.createdBy === user.userId) && (
+          <div className="w-full flex items-center justify-center">
+            <button onClick={toggleUpdateForm} className="w-[80%]  h-[40px] border border-teal-800 text-sm text-teal-800 hover:text-white   hover:bg-teal-600 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
+              <span className="mr-5"><FontAwesomeIcon icon={faPenToSquare} /></span> Update Entry
+            </button>{console.log("transaction created by = " + commentTransaction.createdBy)}
+
+
+            <UpdateFriendTransaction isOpen={isUpdateFormOpen} toggleModal={toggleUpdateForm} />
+
+          </div>)}
 
         <div className="transaction-amount h-[8%] w-full p-[10px] flex gap-[10px] flex items-center">
           <div className="give-got-icon">
@@ -166,72 +170,73 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction,user,
             {/* Repeat User Comments */}
             {comments.map((comment, index) => {
               // Calculate lastClosingAmount dynamically
-              
+
               return (
                 <div
-  key={index}
-  className="user-comment border border-gray-400 flex shadow-inner-custom gap-2 p-2 bg-white rounded-sm shadow-sm items-start"
->
-  {/* User Icon */}
-  <div className="alphabet-circle bg-cyan-800 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
-    <h1 className="text-white text-sm leading-none">
-      {comment.userFullName[0].toUpperCase()}
-    </h1>
-  </div>
+                  key={index}
+                  className="user-comment border border-gray-400 flex shadow-inner-custom gap-2 p-2 bg-white rounded-sm shadow-sm items-start"
+                >
+                  {/* User Icon */}
+                  <div className="alphabet-circle bg-cyan-800 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
+                    <h1 className="text-white text-sm leading-none">
+                      {comment.userFullName[0].toUpperCase()}
+                    </h1>
+                  </div>
 
-  {/* Comment Content */}
-  <div className="flex-1">
-    <div className="user-name flex justify-between items-start">
-      {/* User Name */}
-      <h2 className="text-sm text-gray-800 font-semibold">
-        {comment.userFullName}
-      </h2>
+                  {/* Comment Content */}
+                  <div className="flex-1">
+                    <div className="user-name flex justify-between items-start">
+                      {/* User Name */}
+                      <h2 className="text-sm text-gray-800 font-semibold">
+                        {comment.userFullName}
+                      </h2>
 
-      {/* Trash Bin */}
-      <span className="text-rose-800 cursor-pointer">
-        <FontAwesomeIcon icon={faTrashCan} />
-      </span>
-    </div>
+                      {/* Trash Bin */}
+                      <span className="text-rose-800 cursor-pointer">
+                        <FontAwesomeIcon icon={faTrashCan} />
+                      </span>
+                    </div>
 
-    {/* Comment Text */}
-    <p className="text-sm  text-gray-600 break-all overflow-hidden">
-      {comment.comments}
-    </p>
-  </div>
-</div>
+                    {/* Comment Text */}
+                    <p className="text-sm  text-gray-600 break-all overflow-hidden">
+                      {comment.comments}
+                    </p>
+                  </div>
+                </div>
 
-              
-              
-              )})}
-       
+
+
+              )
+            })}
+
           </div>
 
           {/* Input Section */}
           <div className="comment-input flex gap-2 items-center p-2">
-      <input
-        type="text"
-        placeholder="Write a comment..."
-        value={commentText}
-        onChange={(e) => setCommentText(e.target.value)}
-        required
-        className="flex-grow p-2 rounded-sm border border-gray-300 focus:outline-none focus:ring-0.5 focus:ring-gray-400"
-      />
-      <button
-        type="button"
-        onClick={handleCommentSubmit}
-        className="bg-teal-600 text-white text-sm px-3 py-1 rounded-sm hover:bg-teal-700 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-      
-      >
-        Send
-      </button>
-    </div>
+            <input
+              type="text"
+              placeholder="Write a comment..."
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+              required
+              className="flex-grow p-2 rounded-sm border border-gray-300 focus:outline-none focus:ring-0.5 focus:ring-gray-400"
+            />
+            <button
+              type="button"
+              onClick={handleCommentSubmit}
+              className="bg-teal-600 text-white text-sm px-3 py-1 rounded-sm hover:bg-teal-700 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+
+            >
+              Send
+            </button>
+          </div>
         </div>
 
-        <div className="w-full flex items-center justify-center" onClick={()=>deleteTransactionDetails(commentTransaction.transId)}>
+        <div className="w-full flex items-center justify-center" onClick={() => deleteTransactionDetails(commentTransaction.transId)}>
           <button onClick={toggleDeleteAlert} className="w-[80%]  h-[40px] border border-rose-800 text-sm text-rose-800 hover:text-white   hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
             <span className="mr-5"><FontAwesomeIcon icon={faTrashCan} /></span> Delete Entry
           </button>
-          <DeleteAlertModal isOpen={isDeleteAlertOpen} toggleModal={toggleDeleteAlert}/>
+          <DeleteAlertModal transId={commentTransaction.transId} isOpen={isDeleteAlertOpen} toggleModal={toggleDeleteAlert} />
         </div>
       </div>
     </>
