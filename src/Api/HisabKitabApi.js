@@ -54,6 +54,16 @@ export const createTransaction = (transactionData) => {
   return apiClient.post("/user/friendTransactions", transactionData);
 };
 
+// API for Deleting the Transaction with Id
+export const deleteTransactionById = (transId) => {
+  return apiClient.delete(`/user/transaction/${transId}`);
+}
+
+// API for updating a transaction by ID
+export const updateFriendTransactionById = ( updatedTransactionData) => {
+  return apiClient.put("/user/updatefriendTransactions", updatedTransactionData);
+};
+
 // API for getting comments of a transaction
 
 export const getAllCommentsByTransactionId = (transId) => {
