@@ -26,7 +26,8 @@ const UpdateFriendTransactionModel = ({
       setDescription(commentTransaction.description || "");
       setDate(commentTransaction.transDate || "");
       const initialTransactionType =
-        commentTransaction.fromUserId === commentTransaction.userId ? "give" : "got";
+        commentTransaction.fromUserId === commentTransaction.createdBy ? "give" : "got";
+        console.log("initialTransactionType = ", initialTransactionType);
       setTransactionType(initialTransactionType);
       setFromUserId(
         initialTransactionType === "give" ? commentTransaction.fromUserId : commentTransaction.toUserId
@@ -38,7 +39,7 @@ const UpdateFriendTransactionModel = ({
   }, [commentTransaction]);
 
   const handleTransactionTypeChange = (type) => {
-    setTransactionType(type);
+     setTransactionType(type);
     // Swap user IDs based on the selected transaction type
     if (type === "give") {
       setFromUserId(commentTransaction.fromUserId);
@@ -47,6 +48,7 @@ const UpdateFriendTransactionModel = ({
       setFromUserId(commentTransaction.toUserId);
       setToUserId(commentTransaction.fromUserId);
     }
+    
   };
 
   const handleSubmit = async (e) => {
@@ -54,13 +56,15 @@ const UpdateFriendTransactionModel = ({
 
     const updatedCommentTransaction = {
       transId: transId,
-      fromUserId: transactionType === "give" ? fromUserId : toUserId,
-      toUserId: transactionType === "give" ? toUserId : fromUserId,
+      fromUserId:fromUserId ,
+      toUserId:  toUserId ,
       amount: amount,
       transDate: date,
       description: description,
       createdBy: createdBy,
     };
+
+    console.log("submitted CommentTransaction = ", updatedCommentTransaction);
 
     try {
       const response = await updateFriendTransactionById(updatedCommentTransaction);
