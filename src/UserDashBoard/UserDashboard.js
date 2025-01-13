@@ -15,15 +15,6 @@ const UserDashboard = () => {
   const [error, setError] = useState(null);
   const user = location.state?.user;
   const [refreshFriendTransaction, setRefreshFriendTransaction] = useState(false);
-  // const [isOpenFriendRequestModal, setIsOpenFriendRequestModal] =useState();
-
-  // const closeFriendRequestModal=()=>{
-   
-  //   if(isOpenFriendRequestModal==true){
-  //     setIsOpenFriendRequestModal( !isOpenFriendRequestModal);
-  //   }
-   
-  // }
 
   useEffect(() => {
     const fetchFriends = async () => {

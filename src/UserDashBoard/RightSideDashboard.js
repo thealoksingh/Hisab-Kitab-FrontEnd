@@ -6,7 +6,9 @@ import { getTransactionDetailsWithFriend } from "../Api/HisabKitabApi";
 
 function RightSideDashBoard({ user,isFriendSelected, selectedFriend ,refreshFriendTransaction, setRefreshFriendTransaction}) {
 
-  
+  if(!selectedFriend){
+    return null;
+  }
   return (
     <div className="right-side flex items-center justify-center rounded  w-[50%] min-h-full relative overflow-hidden">
       {isFriendSelected ? (

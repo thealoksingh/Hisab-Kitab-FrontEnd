@@ -16,10 +16,11 @@ import DeleteAlertModal from "../Modals/DeleteAlertModal";
 function CommentSection({
   isOpen,
   toggleCommentSection,
-  commentTransaction,
+  commentTransaction, setCommentTransaction,
   user,
   setIsRowClicked,
   isRowClicked,
+  refreshFriendTransaction, setRefreshFriendTransaction
 }) {
   const [width, setWidth] = useState("0"); // Initially set width to 0%
   const [comments, setComments] = useState([]);
@@ -27,7 +28,8 @@ function CommentSection({
   const [error, setError] = useState(null);
   const [isUpdateFormOpen, setIsUpdateFormOpen] = useState(false);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
-
+  
+  
   const toggleDeleteAlert = () => {
     setIsDeleteAlertOpen(!isDeleteAlertOpen);
   };
@@ -44,9 +46,11 @@ function CommentSection({
   }, [isOpen]);
 
   useEffect(() => {
-    const fetchComments = async () => {
-      if (!commentTransaction) return;
 
+    if(commentTransaction==null) return;
+    const fetchComments = async () => {
+      if (!isOpen) return;
+ 
       try {
         console.log("getComment api called");
         const response = await getAllCommentsByTransactionId(
@@ -66,7 +70,7 @@ function CommentSection({
 
   }, [user, isRowClicked, commentTransaction]);
 
-
+  if(commentTransaction==null) return;
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
 
@@ -92,7 +96,7 @@ function CommentSection({
 
   return (
     <>
-      <div
+      {commentTransaction&&<div
         className="Details h-full shadow-inner-custom bg-gray-100 z-50 absolute right-0 p-2"
         style={{
           width: width,
@@ -147,7 +151,9 @@ function CommentSection({
             </button>{console.log("transaction created by = " + commentTransaction.createdBy)}
 
 
-            <UpdateFriendTransaction isOpen={isUpdateFormOpen} toggleModal={toggleUpdateForm} />
+            <UpdateFriendTransaction toggleCommentSection={toggleCommentSection}
+            refreshFriendTransaction={refreshFriendTransaction} setRefreshFriendTransaction={setRefreshFriendTransaction}
+            commentTransaction={commentTransaction} setCommentTransaction={setCommentTransaction} isOpen={isUpdateFormOpen} toggleModal={toggleUpdateForm} />
 
           </div>)}
 
@@ -272,10 +278,13 @@ function CommentSection({
           <DeleteAlertModal
           transId={commentTransaction.transId}
             isOpen={isDeleteAlertOpen}
+            toggleCommentSection={toggleCommentSection}
             toggleModal={toggleDeleteAlert}
+            refreshFriendTransaction={refreshFriendTransaction} setRefreshFriendTransaction={setRefreshFriendTransaction}
+
           />
         </div>
-      </div>
+      </div>}
     </>
   );
 }
