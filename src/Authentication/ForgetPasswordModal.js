@@ -99,10 +99,10 @@ const ForgetPasswordForm = () => {
       id="SignIn-modal"
       tabIndex="-1"
       aria-hidden="false"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 "
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-0 "
     >
-      <div className="main-form relative p-4 w-1/2 max-w-5xl flex gap-4 justify-center">
-        <div className="form2 relative bg-white w-1/2 rounded-sm shadow dark:bg-gray-300">
+      <div className="main-form w-[60%] relative p-4 w-1/2 max-w-5xl flex gap-4 justify-center">
+        <div className="form-forget shadow-inner-custom border border-gray-400 relative bg-white w-1/2 rounded-sm shadow dark:bg-gray-300">
           <div className="flex items-center justify-between p-2 md:p-2 rounded-sm bg-gray-600">
             <h4 className="text-lg font-semibold text-gray-200">
               Forgot Password
@@ -139,7 +139,7 @@ const ForgetPasswordForm = () => {
                 <input
                   type="email"
                   id="email"
-                  className="w-[65%] input-field-shadow text-sm border border-gray-300 text-gray-600 rounded-sm p-1"
+                  className="w-[65%] input-field-shadow text-sm border border-gray-400 text-gray-600 rounded-sm p-1"
                   placeholder="Enter email Address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -168,7 +168,7 @@ const ForgetPasswordForm = () => {
                 <input
                   type="text"
                   id="otp"
-                  className="w-1/4 input-field-shadow text-sm border border-gray-300 text-gray-600  rounded-sm p-1"
+                  className="w-1/4 input-field-shadow text-sm border border-gray-400 text-gray-600  rounded-sm p-1"
                   placeholder="Enter OTP"
                   value={otpEntered}
                   onChange={(e) => setOtpEntered(e.target.value)}
@@ -196,7 +196,7 @@ const ForgetPasswordForm = () => {
                   <input
                     type="password"
                     id="new-password"
-                    className="w-1/2 input-field-shadow text-sm border border-gray-300 text-gray-600  rounded-sm p-1"
+                    className="w-1/2 input-field-shadow text-sm border border-gray-400 text-gray-600  rounded-sm p-1"
                     placeholder="Enter New Password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
@@ -205,7 +205,7 @@ const ForgetPasswordForm = () => {
                   <input
                     type="password"
                     id="confirm-password"
-                    className="w-1/2 input-field-shadow text-sm border border-gray-300 text-gray-600  rounded-sm p-1"
+                    className="w-1/2 input-field-shadow text-sm border border-gray-400 text-gray-600  rounded-sm p-1"
                     placeholder="Confirm New Password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}

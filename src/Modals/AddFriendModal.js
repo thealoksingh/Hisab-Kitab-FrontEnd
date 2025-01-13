@@ -52,15 +52,15 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
       id="add-friend-modal"
       tabIndex="-1"
       aria-hidden={!isOpen}
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ${isOpen ? "" : "hidden"}`}
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20 ${isOpen ? "" : "hidden"}`}
     >
       <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
-        <div className="form2 relative bg-white w-1/3 h-1/3 rounded-sm shadow dark:bg-gray-300">
-          <div className="flex items-center justify-between p-2 md:p-4 rounded-sm bg-gray-600">
+        <div className="form-add-frnd border border-gray-400 shadow-inner-custom relative bg-white w-1/3 h-1/3 rounded-sm shadow dark:bg-gray-300">
+          <div className="flex items-center justify-between p-2 md:p-2 rounded-sm bg-cyan-600">
             <h4 className="text-lg font-semibold text-gray-200">Add Friend</h4>
             <button
               type="button"
-              className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-6 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              className="text-gray-400 bg-transparent hover:bg-cyan-200 hover:text-gray-900 rounded-lg text-sm w-6 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-cyan-600 dark:hover:text-white"
               onClick={() => {
                 toggleModal(); // Close modal
                 setIsAddButtonVisible(true); // Reset to Add mode
@@ -95,7 +95,7 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
                 id="mobile"
                 value={contactNo}
                 onChange={(e) => setContactNo(e.target.value)}
-                className="w-full input-field-shadow border border-gray-300 text-gray-600 rounded-sm p-2"
+                className="w-full input-field-shadow border border-gray-400 text-gray-600 rounded-sm p-2"
                 placeholder="Enter Mobile number"
                 required={isAddButtonVisible}
                 disabled={!isAddButtonVisible}
@@ -111,27 +111,27 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
                 id="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full input-field-shadow border border-gray-300 text-gray-600 rounded-sm p-2"
+                className="w-full input-field-shadow border border-gray-400 text-gray-600 rounded-sm p-2"
                 placeholder="Enter Email Id here"
                 required={!isAddButtonVisible}
                 disabled={isAddButtonVisible}
               />
             </div>
-            <h4 className={`${!isAddButtonVisible ? "block" : "hidden"} mb-2 text-rose-500 text-xs`}>
-              !!User Doesn't Exist<span className="text-cyan-700"> Click below to Invite </span>
+            <h4 className={`${!isAddButtonVisible ? "block" : "hidden"} mb-2 text-rose-500 text-sm`}>
+              !!User Doesn't Exist.<span className="text-cyan-700"> Enter Email and Click below to Invite </span>
             </h4>
 
             <div className="mb-2 flex gap-4">
               <button
                 type="submit"
-                className={`${isAddButtonVisible ? "block" : "hidden"} w-1/3 bg-sky-600 text-white px-4 py-2 focus:outline-none focus:ring-4 focus:ring-sky-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
+                className={`${isAddButtonVisible ? "block" : "hidden"} w-1/3 bg-cyan-600 text-white px-4 py-2 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
                 onClick={handleAddFriend}
               >
                 Add
               </button>
               <button
                 type="submit"
-                className={`${!isAddButtonVisible ? "block" : "hidden"} w-1/3 bg-cyan-600 text-white px-4 py-2 focus:outline-none focus:ring-4 focus:ring-emerald-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
+                className={`${!isAddButtonVisible ? "block" : "hidden"} w-1/3 bg-teal-600 text-white px-4 py-2 focus:outline-none focus:ring-4 focus:ring-teal-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
                 onClick={handleInvite}
               >
                 Invite

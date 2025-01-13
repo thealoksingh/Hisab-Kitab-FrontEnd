@@ -96,10 +96,10 @@ const SignUpForm = () => {
       id="signUp-modal"
       tabIndex="-1"
       aria-hidden={!isOpen}
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ${isOpen ? "" : "hidden"}`}
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-0 ${isOpen ? "" : "hidden"}`}
     >
       <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
-        <div className="form2 relative bg-white w-1/2 rounded-sm shadow dark:bg-gray-300">
+        <div className="form-signup shadow-inner-custom relative bg-white w-1/2 rounded-sm border border-gray-400 shadow dark:bg-gray-300">
           <div className="flex items-center justify-between p-2 md:p-2 rounded-sm bg-gray-600">
             <h4 className="text-lg font-semibold text-gray-200">Sign up as a New User</h4>
             <button
@@ -135,7 +135,7 @@ const SignUpForm = () => {
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="w-1/2 input-field-shadow border text-sm border-gray-300 text-gray-600 rounded-sm p-1"
+                className="w-1/2  input-field-shadow  border text-sm border-gray-400 text-gray-600 rounded-sm p-1"
                 placeholder="Enter your Full Name"
 
               />
@@ -150,7 +150,7 @@ const SignUpForm = () => {
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 autoComplete="off"
-                className="w-1/2 input-field-shadow border text-sm border-gray-300 text-gray-600 rounded-sm p-1"
+                className="w-1/2 input-field-shadow border text-sm border-gray-400 text-gray-600 rounded-sm p-1"
                 placeholder="Enter Mobile Number"
               />
             </div>
@@ -166,7 +166,7 @@ const SignUpForm = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   autoComplete="off"
-                  className="w-[65%] input-field-shadow text-sm border border-gray-300 text-gray-600 rounded-sm p-1"
+                  className="w-[65%] input-field-shadow text-sm border border-gray-400 text-gray-600 rounded-sm p-1"
                   placeholder="Enter email Address"
 
                 />
@@ -194,7 +194,7 @@ const SignUpForm = () => {
                     type="text"
                     id="otp"
                     onChange={(e) => setOtpEntered(e.target.value)}
-                    className="w-1/4 input-field-shadow text-sm border border-gray-300 text-gray-600 rounded-sm p-1"
+                    className="w-1/4 input-field-shadow text-sm border border-gray-400 text-gray-600 rounded-sm p-1"
                     placeholder="Enter OTP"
                     required
                   />
@@ -224,7 +224,7 @@ const SignUpForm = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="off"
-                  className="w-1/2 input-field-shadow text-sm border border-gray-300 text-gray-600 rounded-sm p-1"
+                  className="w-1/2 input-field-shadow text-sm border border-gray-400 text-gray-600 rounded-sm p-1"
                   placeholder="Enter Password"
 
                 />
@@ -236,7 +236,7 @@ const SignUpForm = () => {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   autoComplete="off"
-                  className="w-1/2 input-field-shadow text-sm border border-gray-300 text-gray-600 rounded-sm p-1"
+                  className="w-1/2 input-field-shadow text-sm border border-gray-400 text-gray-600 rounded-sm p-1"
                   placeholder="Confirm Password"
 
                 />

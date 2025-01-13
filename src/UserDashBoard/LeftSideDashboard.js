@@ -4,6 +4,7 @@ import AddFriendModal from "../Modals/AddFriendModal";
 import moment from "moment";
 import "../CssStyle/GroupDashboard.css";
 import FriendRequestModal from "../Modals/FriendRequestModal";
+import WholeTransactionReport from "../Modals/WholeTransactionReport";
 function LeftSideDashBoard({
   user,
   friends,
@@ -28,9 +29,12 @@ function LeftSideDashBoard({
 
   const [sortCriteria, setSortCriteria] = useState("Most Recent"); // e.g., "By Type", "By Date", "By Name"
   const [isFriendRequestModalOpen, setIsFriendRequestModalOpen] = useState(false);
-
+const [isWholeTransactionReportModalOpen, setIsWholeTransactionReportModalOpen]=useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const toggleWholeTransactionReportModal=()=>{
+    setIsWholeTransactionReportModalOpen(!isWholeTransactionReportModalOpen);
   
+  }
    const toggleFriendRequestModal=()=>{
     setIsFriendRequestModalOpen(!isFriendRequestModalOpen);
     setRefreshFriendTransaction(!refreshFriendTransaction);
@@ -129,7 +133,7 @@ const applyFilterLogic = (list) => {
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchQuery(query);
-  if (query!= ""){
+  if (query!== ""){
     const filtered = filteredFriends.filter((friend) => {
       const nameMatch = friend.userEntity.fullName
         .toLowerCase()
@@ -217,9 +221,13 @@ const applyFilterLogic = (list) => {
               You'll Get:<span className="text-green-900"> ${getAmount}</span>
             </div>
             <div className="w-[30%] h-[100%] p-1">
-              <button className="bg-rose-600 text-white font-bold py-1 px-4 rounded-[4px] flex items-center justify-center">
+              <button onClick={toggleWholeTransactionReportModal} className="bg-rose-600 text-white font-bold py-1 px-4 rounded-[4px] flex items-center justify-center">
                 <span className="mr-2">^</span> View Report
               </button>
+              <WholeTransactionReport 
+              isOpen={isWholeTransactionReportModalOpen}
+              toggleModal={toggleWholeTransactionReportModal}
+              />
             </div>
           </div>
           <div className=" py-2 shadow-inner-custom bg-slate-300 justify-between flex h-[70%] relative gap-2">

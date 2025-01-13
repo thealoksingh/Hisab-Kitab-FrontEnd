@@ -75,7 +75,7 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
       id="Friend-Request-modal"
       tabIndex="-1"
       aria-hidden={!isOpen}
-      className="inset-0 z-50 fixed bg-gray-900 bg-opacity-70"
+      className="inset-0 z-50 fixed bg-gray-900 bg-opacity-30"
     >
       <div className="z-50 main-form w-full relative p-2 h-full flex justify-end">
         <div className="form1 w-1/4 bg-white rounded-sm shadow dark:bg-gray-300 form-custom-shadow-inner">

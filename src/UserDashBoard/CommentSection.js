@@ -1,13 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShareFromSquare, faPenToSquare, faList, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import '../CssStyle/GroupDashboard.css';
-import { getAllCommentsByTransactionId, postNewCommentsByTransactionId } from "../Api/HisabKitabApi";
-import UpdateFriendTransaction from '../Modals/UpdateFriendTransactionModel';
-import DeleteAlertModal from '../Modals/DeleteAlertModal';
-function CommentSection({ isOpen, toggleCommentSection, commentTransaction, user, setIsRowClicked, isRowClicked }) {
-
-  const [width, setWidth] = useState('0'); // Initially set width to 0%
+import {
+  faShareFromSquare,
+  faPenToSquare,
+  faList,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+import "../CssStyle/GroupDashboard.css";
+import {
+  getAllCommentsByTransactionId,
+  postNewCommentsByTransactionId,
+} from "../Api/HisabKitabApi";
+import UpdateFriendTransaction from "../Modals/UpdateFriendTransactionModel";
+import DeleteAlertModal from "../Modals/DeleteAlertModal";
+function CommentSection({
+  isOpen,
+  toggleCommentSection,
+  commentTransaction,
+  user,
+  setIsRowClicked,
+  isRowClicked,
+}) {
+  const [width, setWidth] = useState("0"); // Initially set width to 0%
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState("");
   const [error, setError] = useState(null);
@@ -23,9 +37,9 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction, user
 
   useEffect(() => {
     if (isOpen) {
-      setWidth('60%'); // When isOpen is true, set width to 60%
+      setWidth("60%"); // When isOpen is true, set width to 60%
     } else {
-      setWidth('0'); // When isOpen is false, set width to 0%
+      setWidth("0"); // When isOpen is false, set width to 0%
     }
   }, [isOpen]);
 
@@ -35,7 +49,9 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction, user
 
       try {
         console.log("getComment api called");
-        const response = await getAllCommentsByTransactionId(commentTransaction.transId);
+        const response = await getAllCommentsByTransactionId(
+          commentTransaction.transId
+        );
         console.log(response.data);
         console.log("above is comment response");
 
@@ -57,7 +73,7 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction, user
     const commentRequestDto = {
       transactionId: commentTransaction.transId,
       userId: user.userId,
-      comment: commentText
+      comment: commentText,
     };
 
     try {
@@ -65,30 +81,25 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction, user
       console.log("Comment Posted");
       setCommentText("");
       setIsRowClicked(!isRowClicked);
-
     } catch (error) {
       console.error("Error creating transaction", error);
     }
-
   };
 
-  const deleteTransactionDetails =
-    (transId) => {
-      console.log("TransId" + transId);
-    };
+  const deleteTransactionDetails = (transId) => {
+    console.log("TranId" + transId);
+  };
 
- 
   return (
     <>
       <div
         className="Details h-full shadow-inner-custom bg-gray-100 z-50 absolute right-0 p-2"
         style={{
           width: width,
-          visibility: width === '0' ? 'hidden' : 'visible', // Hide when width is 0%
-          transition: 'width 0.3s ease, visibility 0.1s ease', // Smooth transition for both width and visibility
+          visibility: width === "0" ? "hidden" : "visible", // Hide when width is 0%
+          transition: "width 0.3s ease, visibility 0.1s ease", // Smooth transition for both width and visibility
         }}
       >
-
         <div className="h-10 shadow-inner-custom w-full bg-gray-300 p-5 flex items-center">
           <h2>Entry Details</h2>
           <button
@@ -117,7 +128,8 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction, user
 
         <div className="friend-profile h-[10%] w-full p-[10px] flex gap-[10px] flex items-center">
           <div className="alphabet-circle bg-cyan-800 h-[50px] w-[50px] rounded-full flex items-center justify-center">
-            <h1 className="text-white text-lg">{user.fullName[0].toUpperCase()}
+            <h1 className="text-white text-lg">
+              {user.fullName[0].toUpperCase()}
             </h1>
           </div>
           <div className="user-name">
@@ -141,10 +153,26 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction, user
 
         <div className="transaction-amount h-[8%] w-full p-[10px] flex gap-[10px] flex items-center">
           <div className="give-got-icon">
-            <FontAwesomeIcon icon={faShareFromSquare} className="h-[15px] text-gray-700" />
+            <FontAwesomeIcon
+              icon={faShareFromSquare}
+              className="h-[15px] text-gray-700"
+            />
           </div>
           <div className="net-balance">
-            <h4 className="text-sm text-gray-800">You {(commentTransaction.fromUserId === user.userId) ? " Gave" : " Got"} :<span className={`text-sm ${(commentTransaction.fromUserId === user.userId) ? "text-red-600" : "text-green-600"}`}>$ <span>{commentTransaction.amount}</span></span></h4>
+            <h4 className="text-sm text-gray-800">
+              You{" "}
+              {commentTransaction.fromUserId === user.userId ? " Gave" : " Got"}{" "}
+              :
+              <span
+                className={`text-sm ${
+                  commentTransaction.fromUserId === user.userId
+                    ? "text-red-600"
+                    : "text-green-600"
+                }`}
+              >
+                $ <span>{commentTransaction.amount}</span>
+              </span>
+            </h4>
           </div>
         </div>
 
@@ -156,7 +184,8 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction, user
             <h4 className="text-sm text-gray-800">Description:</h4>
           </div>
           <p className="text-sm text-gray-600">
-            {commentTransaction.description}          </p>
+            {commentTransaction.description}{" "}
+          </p>
         </div>
 
         <div className="comment-section w-full h-[50%]  flex flex-col">
@@ -203,12 +232,8 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction, user
                     </p>
                   </div>
                 </div>
-
-
-
-              )
+              );
             })}
-
           </div>
 
           {/* Input Section */}
@@ -225,18 +250,29 @@ function CommentSection({ isOpen, toggleCommentSection, commentTransaction, user
               type="button"
               onClick={handleCommentSubmit}
               className="bg-teal-600 text-white text-sm px-3 py-1 rounded-sm hover:bg-teal-700 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-
             >
               Send
             </button>
           </div>
         </div>
 
-        <div className="w-full flex items-center justify-center" onClick={() => deleteTransactionDetails(commentTransaction.transId)}>
-          <button onClick={toggleDeleteAlert} className="w-[80%]  h-[40px] border border-rose-800 text-sm text-rose-800 hover:text-white   hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
-            <span className="mr-5"><FontAwesomeIcon icon={faTrashCan} /></span> Delete Entry
+        <div
+          className="w-full flex items-center justify-center"
+          onClick={() => deleteTransactionDetails(commentTransaction.transId)}
+        >
+          <button
+            onClick={toggleDeleteAlert}
+            className="w-[80%]  h-[40px] border border-rose-800 text-sm text-rose-800 hover:text-white   hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+          >
+            <span className="mr-5">
+              <FontAwesomeIcon icon={faTrashCan} />
+            </span>{" "}
+            Delete Entry
           </button>
-          <DeleteAlertModal transId={commentTransaction.transId} isOpen={isDeleteAlertOpen} toggleModal={toggleDeleteAlert} />
+          <DeleteAlertModal
+            isOpen={isDeleteAlertOpen}
+            toggleModal={toggleDeleteAlert}
+          />
         </div>
       </div>
     </>
