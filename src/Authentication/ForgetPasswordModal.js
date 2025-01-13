@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { sendOtpEmail, forgetPassword } from "../Api/HisabKitabApi";
-
+import "../CssStyle/GroupDashboard.css";
 const ForgetPasswordForm = () => {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");

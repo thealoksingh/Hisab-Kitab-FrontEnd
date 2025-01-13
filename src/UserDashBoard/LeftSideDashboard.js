@@ -207,70 +207,71 @@ const applyFilterLogic = (list) => {
   // }, [user]); // Empty dependency array ensures it runs only on initial render
 
 
-
-
   return (
     <>
-      <div className="left-side rounded  w-[50%] min-h-[100vh] relative overflow-hidden  ">
-        <div className="left-upper h-[20%] bg-slate-300 w-[100%] relative">
-          <div className="flex shadow-inner-custom border border-gray-300 border-sm h-[30%] relative bg-slate-400">
-            <div className="w-[35%] h-[100%] p-2">
-              You'll Give:<span className="text-rose-600"> ${giveAmount}</span>
-            </div>
-            <div className="w-[35%] h-[100%] p-2">
-              You'll Get:<span className="text-green-900"> ${getAmount}</span>
-            </div>
-            <div className="w-[30%] h-[100%] p-1">
-              <button onClick={toggleWholeTransactionReportModal} className="bg-rose-600 text-white font-bold py-1 px-4 rounded-[4px] flex items-center justify-center">
-                <span className="mr-2">^</span> View Report
-              </button>
-              <WholeTransactionReport 
-              isOpen={isWholeTransactionReportModalOpen}
-              toggleModal={toggleWholeTransactionReportModal}
-              />
-            </div>
-          </div>
-          <div className=" py-2 shadow-inner-custom bg-slate-300 justify-between flex h-[70%] relative gap-2">
-            <div className="search-box w-[35%] h-[100%] p-2">
-              <h4 className="">Search Friend</h4>
-              <div className=" h-[100%] mb-2 p-2  flex items-center justify-center">
-                 <input
-        type="text"
-        placeholder="Search..."
-        className="w-full shadow-inner-white-custom h-10 py-1 px-4 border border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-        value={searchQuery}
-        onChange={handleSearch}
+    <div className="left-side rounded h-screen w-[50%]  relative overflow-hidden  ">
+    <div className="left-upper  h-36 w-full">
+  <div className="flex  px-2 shadow-inner-custom items-center gap-1 justify-between border border-gray-300 h-12 bg-gray-400">
+    <div className="p-2 flex-shrink">
+      You'll Give:<span className="text-rose-600"> ${giveAmount}</span>
+    </div>
+    <div className="p-2 flex-shrink">
+      You'll Get:<span className="text-green-900"> ${getAmount}</span>
+    </div>
+    <div className="p-1 flex-shrink">
+      <button onClick={toggleWholeTransactionReportModal}className="shadow-inner-custom w-26 h-8 bg-rose-600 text-sm text-white 600    hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-4 py-1 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
+        {/* <span className="mr-2">^</span> */}
+        <span  className="line-clamp-1 text-sm">View Report</span>
+      </button>
+      <WholeTransactionReport
+       isOpen={isWholeTransactionReportModalOpen}
+       toggleModal={toggleWholeTransactionReportModal}
       />
-              </div>
-            </div>
-            <div className="filter-section w-[30%] h-[100%]   relative p-2 ">
-              <h4 className="">Filter</h4>
-              <button
-                onClick={toggleFilterDropdown}
-                className="absolute bottom-0 w-[90%] border border-gray-500 shadow-inner-white-custom h-10 text-white bg-gray-200 hover:bg-gray-700   font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
-                type="button"
+     
+    </div>
+  </div>
+        <div className=" py-2 shadow-inner-custom bg-gray-300 justify-between flex h-46 relative gap-2">
+          <div className="search-box w-[40%]  h-full p-2">
+            <p className="p-1">Search Friend</p>
+           
+              <input
+                type="text"
+                placeholder="Search..."
+                className="w-full shadow-inner-custom h-10 pb-1 px-3 border border-gray-400 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+                value={searchQuery}
+                onChange={handleSearch}
+              />
+           
+          </div>
+          <div className="filter-section w-[30%]  h-full  relative p-2 ">
+            <p className="p-1">Filter</p>
+            <button
+              onClick={toggleFilterDropdown}
+              className=" w-full h-10 border border-gray-500 shadow-inner-white-custom h-10 text-white bg-gray-200 hover:bg-gray-700   font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
+              type="button"
+            >
+              {filterCriteria}
+              <svg
+                className="w-2.5 h-2.5 ms-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 10 6"
               >
-                {filterCriteria}
-                <svg
-                  className="w-2.5 h-2.5 ms-3"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 10 6"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 1 4 4 4-4"
-                  />
-                </svg>
-              </button>
-              {isFilterOpen && (
-                <div className="z-50 mt-[30%] absolute bg-white divide-y divide-gray-100 rounded-sm shadow w-[90%] dark:bg-gray-700">
-                  <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
-                    {["All", "You Will Get", "You Will Give", "Settled"].map((criteria) => (
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 4 4 4-4"
+                />
+              </svg>
+            </button>
+            {isFilterOpen && (
+              <div className="z-50 mt-1 absolute bg-white divide-y divide-gray-100 rounded-sm shadow w-[90%] dark:bg-gray-700">
+                <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+                  {["All", "You Will Get", "You Will Give", "Settled"].map(
+                    (criteria) => (
                       <li key={criteria}>
                         <button
                           onClick={() => applyFilter(criteria)}
@@ -279,157 +280,161 @@ const applyFilterLogic = (list) => {
                           {criteria}
                         </button>
                       </li>
-                    ))}
-                  </ul>
-                </div>)}
-            </div>
-            <div className="sort-section w-[30%] h-[100%]   relative p-2">
-              <h4 className="">Sort By</h4>
+                    )
+                  )}
+                </ul>
+              </div>
+            )}
+          </div>
+          <div className="sort-section  h-full w-[30%]  relative p-2">
+            <p className="p-1">Sort By</p>
 
-              <button
-                onClick={toggleSortDropdown}
-                className="absolute bottom-0 w-[90%] shadow-inner-white-custom border-gray-500 h-10 text-white bg-gray-200 hover:bg-gray-700   font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
-                type="button"
+            <button
+              onClick={toggleSortDropdown}
+              className="w-full h-10 shadow-inner-white-custom border-gray-500 h-10 text-white bg-gray-200 hover:bg-gray-700   font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
+              type="button"
+            >
+              {sortCriteria}
+              <svg
+                className="w-2.5 h-2.5 ms-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 10 6"
               >
-                {sortCriteria}
-                <svg
-                  className="w-2.5 h-2.5 ms-3"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 10 6"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 1 4 4 4-4"
-                  />
-                </svg>
-              </button>
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 4 4 4-4"
+                />
+              </svg>
+            </button>
 
-              {isSortOpen && (
-                <div className="z-50 mt-[30%] absolute bg-white divide-y divide-gray-100 rounded-sm shadow w-[90%] dark:bg-gray-700">
-                  <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
-                    <li>
-                      <p
-                        onClick={() => handleSort("Most Recent")}
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
-                      >
-                        Most Recent
-                      </p>
-                    </li>
-                    <li>
-                      <p
-                        onClick={() => handleSort("Oldest")}
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
-                      >
-                        Oldest
-                      </p>
-                    </li>
-                    <li>
-                      <p
-                        onClick={() => handleSort("Highest Amount")}
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
-                      >
-                        Highest Amount
-                      </p>
-                    </li>
-                    <li>
-                      <p
-                        onClick={() => handleSort("Lowest Amount")}
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
-                      >
-                        Lowest Amount
-                      </p>
-                    </li>
-                    <li>
-                      <p
-                        onClick={() => handleSort("By Name")}
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
-                      >
-                        By Name
-                      </p>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </div>
+            {isSortOpen && (
+              <div className="z-50 mt-1 absolute bg-white divide-y divide-gray-100 rounded-sm shadow w-[90%] dark:bg-gray-700">
+                <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+                  <li>
+                    <p
+                      onClick={() => handleSort("Most Recent")}
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                    >
+                      Most Recent
+                    </p>
+                  </li>
+                  <li>
+                    <p
+                      onClick={() => handleSort("Oldest")}
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                    >
+                      Oldest
+                    </p>
+                  </li>
+                  <li>
+                    <p
+                      onClick={() => handleSort("Highest Amount")}
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                    >
+                      Highest Amount
+                    </p>
+                  </li>
+                  <li>
+                    <p
+                      onClick={() => handleSort("Lowest Amount")}
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                    >
+                      Lowest Amount
+                    </p>
+                  </li>
+                  <li>
+                    <p
+                      onClick={() => handleSort("By Name")}
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                    >
+                      By Name
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
         </div>
+      </div>
 
-        <div className="h-[65%] border border-gray-400 shadow-inner-custom w-[100%] bg-gray-400 relative px-2 scrollable">
-          <table className="w-full border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="sticky fixed border  shadow-inner-custom  top-0 bg-gray-50 dark:bg-gray-200 text-xs text-gray-400 uppercase dark:text-gray-800">
+      <div className="h-[70%] border border-gray-500 shadow-inner-custom w-full bg-gray-400 relative px-2 scrollable">
+        <table className="w-full  border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-gray-400">
+          <thead className="sticky fixed border  shadow-inner-custom  top-0 bg-gray-50 dark:bg-gray-100 text-xs text-gray-400 uppercase dark:text-gray-800">
               <tr>
-                <th scope="col" className="px-6 py-3">
-                  Name
-                </th>
-                <th scope="col" className="px-6 py-3 text-right">
-                  Amount
-                </th>
-              </tr>
-            </thead>
-            <tbody  className="">
-              {filteredFriends.map((friend) => (
-                <tr
-                  key={friend.userEntity.userId} // Use userId as key for each row
-                  className="bg-white  border-b border-1 shadow-inner-custom rounded-sm dark:bg-gray-200 dark:border-gray-100 cursor-pointer"
-                  onClick={() => handleRowClick(friend.userEntity)}
+              <th scope="col" className="px-6 py-3">
+                Name
+              </th>
+              <th scope="col" className="px-6 py-3 text-right">
+                Amount
+              </th>
+            </tr>
+          </thead>
+          <tbody className="">
+            {filteredFriends.map((friend) => (
+              <tr
+                key={friend.userEntity.userId} // Use userId as key for each row
+                className="bg-white  border-b border-1  shadow-inner-custom rounded-sm dark:bg-gray-100 dark:border-gray-100 cursor-pointer"
+                onClick={() => handleRowClick(friend.userEntity)}
+              >
+                <td
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
                 >
-                  <td
-                    scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
-                  >
-                    <span className="inline-block w-8 h-8 bg-blue-500 text-white flex items-center justify-center rounded-full mr-3">
-                      {friend.userEntity.fullName[0].toUpperCase()}{" "}
-                      {/* First letter of name for avatar */}
+                  <span className="inline-block w-8 h-8 bg-blue-500 text-white flex items-center justify-center rounded-full mr-3">
+                    {friend.userEntity.fullName[0].toUpperCase()}{" "}
+                    {/* First letter of name for avatar */}
+                  </span>
+                  <div className="flex flex-col">
+                    <span className="font-medium text-gray-800">
+                      {friend.userEntity.fullName}
                     </span>
-                    <div className="flex flex-col">
-                      <span className="font-medium text-gray-800">
-                        {friend.userEntity.fullName}
-                      </span>
-                      <span className="text-xs text-gray-800">
-                        {friend.lastTransactionDate
-                          ? moment(friend.lastTransactionDate).fromNow()
-                          : ""}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-right pr-[25px]">
-                    <div className="flex flex-col">
-                      <span
-                        className={`font-medium ${friend.closingBalance >= 0
+                    <span className="text-xs text-gray-800">
+                      {friend.lastTransactionDate
+                        ? moment(friend.lastTransactionDate).fromNow()
+                        : ""}
+                    </span>
+                  </div>
+                </td>
+                <td className="px-6 py-4 text-right pr-[25px]">
+                  <div className="flex flex-col">
+                    <span
+                      className={`font-medium ${
+                        friend.closingBalance >= 0
                           ? "text-green-500"
                           : "text-red-500"
-                          }`}
-                      >
-                        {Math.abs(friend.closingBalance)}
-                      </span>
+                      }`}
+                    >
+                      {Math.abs(friend.closingBalance)}
+                    </span>
 
-                      <span className="text-xs text-gray-800">
-                        {friend.closingBalance != null &&
-                          friend.closingBalance >= 0
-                          ? "You will get"
-                          : "You will give"}
-                      </span>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    <span className="text-xs text-gray-800">
+                      {friend.closingBalance != null &&
+                      friend.closingBalance >= 0
+                        ? "You will get"
+                        : "You will give"}
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-        <div className="left-side-lower w-full gap-4 bg-slate-200 p-2 bottom-4 absolute h-[50px] flex items-center justify-center">
-       
+      <div className="left-side-lower border border-gray-400 shadow-inner-custom w-full gap-4 bg-gray-300 p-2 bottom-4 absolute h-[50px] flex items-center justify-center">
+        <button
+          onClick={handleAddFriendClick}
+          className="w-1/3 shadow-inner-custom h-full bg-cyan-600 text-sm text-white 600    hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+        >
+          Add Friend
+        </button>
 
-            <button onClick={handleAddFriendClick} className="w-1/3  h-full bg-cyan-600 text-sm text-white 600    hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
-            Add Friend       
-            
-          </button>
-          
+
 
           <AddFriendModal
             user={user}

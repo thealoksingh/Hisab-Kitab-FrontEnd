@@ -8,7 +8,7 @@ function RightSideDashBoard({ user,isFriendSelected, selectedFriend ,refreshFrie
 
   
   return (
-    <div className="right-side flex items-center justify-center rounded  w-[50%] min-h-full relative overflow-hidden">
+    <div className="right-side rounded  w-[50%] h-screen relative overflow-hidden">
       {isFriendSelected ? (
         // Render FriendTransactionDetail when a friend is selected
         <FriendTransactionDetail user={user} selectedFriend={selectedFriend} 
@@ -16,7 +16,7 @@ function RightSideDashBoard({ user,isFriendSelected, selectedFriend ,refreshFrie
         setRefreshFriendTransaction={setRefreshFriendTransaction} />
       ) : (
         // Render default message when no friend is selected
-        <div className="default-right">
+        <div className="default-right h-[97.5%] border border-gray-400 shadow-inner-custom w-full h-full bg-gray-200 flex items-center justify-center">
           <div className="ml-24">
             <img src={friendicon} alt="Friend Icon" className="w-24 h-24" />
           </div>

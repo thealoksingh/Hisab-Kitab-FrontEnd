@@ -92,8 +92,7 @@ function CommentSection({
 
   return (
     <>
-      <div
-        className="Details h-full shadow-inner-custom bg-gray-100 z-50 absolute right-0 p-2"
+      <div className="comment-section-division  h-full shadow-inner-custom bg-gray-100 z-50 absolute right-0 p-2"
         style={{
           width: width,
           visibility: width === "0" ? "hidden" : "visible", // Hide when width is 0%

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { sendOtpEmail, signUpUser } from '../Api/HisabKitabApi'
+import "../CssStyle/GroupDashboard.css";
 const SignUpForm = () => {
   const [isOpen, setIsOpen] = useState(true); // State to control modal visibility
   const [otpSent, setOtpSent] = useState(false); // State to handle OTP sent status

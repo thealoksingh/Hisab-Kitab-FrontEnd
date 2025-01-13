@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginApi } from "../Api/HisabKitabApi"; // Assuming you have an API to check user credentials
 import ForgetPasswordModal from "./ForgetPasswordModal";
+import "../CssStyle/GroupDashboard.css";
 const LogInForm = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -44,7 +45,7 @@ const LogInForm = () => {
       aria-hidden="false"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-0"
     >
-      <div className="main-form relative p-4 w-[60%] h-[50%] max-w-5xl flex gap-4 justify-center">
+      <div className="main-form relative p-4 w-[60%] h-[55%] max-w-5xl flex gap-4 justify-center">
         <div className="form-signIn shadow-inner-custom border border-gray-400 relative bg-white w-1/2 rounded-sm shadow dark:bg-gray-300">
           <div className="flex items-center justify-between p-2 md:p-2 rounded-sm bg-gray-600">
             <h4 className="text-lg font-semibold text-gray-200">Log in to Hisabkitab</h4>
