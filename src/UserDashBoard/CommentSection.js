@@ -270,6 +270,7 @@ function CommentSection({
             Delete Entry
           </button>
           <DeleteAlertModal
+          transId={commentTransaction.transId}
             isOpen={isDeleteAlertOpen}
             toggleModal={toggleDeleteAlert}
           />
