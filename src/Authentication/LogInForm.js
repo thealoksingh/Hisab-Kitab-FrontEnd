@@ -1,121 +1,133 @@
-import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { loginApi } from '../Api/HisabKitabApi'
-
-
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { loginApi } from "../Api/HisabKitabApi"; // Assuming you have an API to check user credentials
+import ForgetPasswordModal from "./ForgetPasswordModal";
 const LogInForm = () => {
-  const { role } = useParams();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("user"); // default to user role
   const [error, setError] = useState(null);
 
   const handleLogin = async (e) => {
-
-    console.log("login method called");
     e.preventDefault();
     setError(null); // Reset error before login attempt
 
+    // Hardcoded admin credentials
+    const adminEmail = "alokadmin@gmail.com";
+    const adminPassword = "98765";
+
+    if (role === "admin" && email === adminEmail && password === adminPassword) {
+      // Admin login - redirect to admin dashboard
+      navigate("/admin-dashboard");
+      return;
+    }
+
+    // User login via API
     try {
       const response = await loginApi(email, password);
-      console.log("Login Api called");
       const user = response.data;
-      console.log("User object:", user);
-
-      // Pass user data to the dashboard
-      navigate(`/dashboard/${role}`, { state: { user } });
+      if (user) {
+        navigate("/user-dashboard", { state: { user } }); // Pass user data to the dashboard
+      } else {
+        setError("Invalid login credentials");
+      }
     } catch (error) {
       setError("Invalid login credentials");
     }
   };
 
-  const goBackHandler = () => {
-    navigate("/"); // Navigate to the previous page
-  };
-
-  const signUpHandler = () => {
-    navigate(`/signup/${role}`); // Navigate to the signup page with the role
-  };
-
   return (
-    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
-          className="mx-auto h-12 w-auto"
-          src="https://www.freeiconspng.com/uploads/blue-user-icon-32.jpg"
-          alt="Hisab Kitab"
-        />
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Sign in as a {role}
-        </h2>
-      </div>
-
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" onSubmit={handleLogin}>
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-              Email address
-            </label>
-            <div className="mt-2">
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
+    <div
+      id="SignIn-modal"
+      tabIndex="-1"
+      aria-hidden="false"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-0"
+    >
+      <div className="main-form relative p-4 w-[60%] h-[50%] max-w-5xl flex gap-4 justify-center">
+        <div className="form-signIn shadow-inner-custom border border-gray-400 relative bg-white w-1/2 rounded-sm shadow dark:bg-gray-300">
+          <div className="flex items-center justify-between p-2 md:p-2 rounded-sm bg-gray-600">
+            <h4 className="text-lg font-semibold text-gray-200">Log in to Hisabkitab</h4>
           </div>
-
-          <div>
-            <div className="flex items-center justify-between">
-              <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                Password
+          <form className="p-4 md:p-2" onSubmit={handleLogin}>
+          <div className="mb-2 mt-1">
+              <label className="block mb-2 text-sm font-medium text-gray-900">
+                Select Role
               </label>
-              <div className="text-sm">
-                <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                  Forgot password?
-                </a>
+              <div className="flex items-center gap-4">
+                <label>
+                  <input
+                    type="radio"
+                    name="role"
+                    value="user"
+                    checked={role === "user"}
+                    onChange={() => setRole("user")}
+                  />
+                  User
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="role"
+                    value="admin"
+                    checked={role === "admin"}
+                    onChange={() => setRole("admin")}
+                  />
+                  Admin
+                </label>
               </div>
             </div>
-            <div className="mt-2">
+
+            <div className="mb-1">
+              <label className="block mb-2 text-sm font-medium text-gray-900">
+                Email
+              </label>
               <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
+                type="email"
+                id="email"
+                className="w-full input-field-shadow border text-sm border-gray-400 text-gray-600 rounded-sm p-1"
+                placeholder="Enter Email Here"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
-          </div>
+            <div className="mb-2 mt-1">
+              <label className="block mb-2 text-sm font-medium text-gray-900">
+                Enter Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                className="w-full input-field-shadow text-sm border border-gray-400 text-gray-600 rounded-sm p-1"
+                placeholder="Enter Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <p className="text-rose-600">Forgot password?<span onClick={()=>navigate("/forget-password")} className="text-green-600">Click here</span></p>
+            </div>
 
-          <div>
-            <button
-              type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Sign in
-            </button>
-          </div>
-        </form>
+           
+            {error && <p className="text-rose-500 text-sm">{error}</p>}
 
-        {error && <p className="mt-5 text-center text-sm text-red-500">{error}</p>}
-
-        <p className="mt-10 text-center text-sm text-gray-500">
-          Are you not {role}?
-          <span
-            onClick={role === 'admin' ? goBackHandler : signUpHandler}
-            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 cursor-pointer"
-          >
-            {role === 'admin' ? ' Go to the home page' : ` Sign Up as a new ${role}`}
-          </span>
-        </p>
+            <div className="mb-2 mt-1 flex gap-4">
+              <button
+                type="submit"
+                className="w-1/3 bg-teal-600 text-sm text-white px-4 py-1 hover:bg-teal-500 focus:outline-none focus:ring-4 focus:ring-emerald-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+              >
+                Sign In
+              </button>
+              <span className="text-gray-800">New user?</span>
+              <span
+                onClick={() => navigate("/signup")}
+                className="text-sky-600 cursor-pointer"
+              >
+                SignUp
+              </span>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

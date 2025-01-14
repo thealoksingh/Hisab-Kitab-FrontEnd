@@ -1,42 +1,70 @@
-import React from 'react';
-import {addFriend } from "../Api/HisabKitabApi";
+import React, { useState } from "react";
+import { addFriend, sendInvitationEmail } from "../Api/HisabKitabApi";
 
+const AddFriendModal = ({ isOpen, toggleModal, user }) => {
+  const [isAddButtonVisible, setIsAddButtonVisible] = useState(true); // Tracks whether to show Add or Invite button
+  const [contactNo, setContactNo] = useState(""); // State to store the contact number
+  const [email, setEmail] = useState(""); // State to store the email
 
-const AddFriendModal = ({ isOpen, toggleModal, userId, refreshFriendTransaction, setRefreshFriendTransaction }) => {
-  const handleSubmit = (e) => {
+  const handleAddFriend = async (e) => {
     e.preventDefault();
-    const contactNo = e.target.mobile.value;
-
-    addFriend(userId, contactNo)
-      .then((data) => {
-        // Handle success (e.g., close the modal, show a success message, etc.)
-        console.log('Friend added successfully:', data);
-        toggleModal(); // Close modal after success
-        setRefreshFriendTransaction(!refreshFriendTransaction);  //Change the state of refreshFriendTransaction to re-run the getFriendListAPI
-      })
-      .catch((error) => {
-        // Handle error
-        console.error('Error adding friend:', error);
-      });
+    if (contactNo !== "") {
+      await addFriend(user.userId, contactNo)
+        .then((data) => {
+          console.log("Friend request sent successfully:", data);
+          alert("Friend request sent successfully");
+          setContactNo(""); // Reset the email
+          toggleModal(); // Close the modal
+        })
+        .catch((error) => {
+          console.error("Error adding friend:", error);
+          setIsAddButtonVisible(false); // Switch to invite mode
+          setContactNo(""); // Reset the contact number
+        });
+    } else {
+      alert("Please enter a valid mobile number");
+    }
   };
+
+  const handleInvite = async(e) => {
+  e.preventDefault();
+  console.log("Invite button clicked");
+  if (email !== "") {
+    await sendInvitationEmail(email, user.fullName)
+      .then((data) => {
+
+        console.log("Invite email clicked", email);
+        alert("Sign-up Invitation sent successfully");
+        setEmail(""); // Reset the email
+        toggleModal(); // Close the modal
+      }).catch((error) => {
+        console.error("Error sending invitation email:", error);
+        setEmail(""); // Reset the email
+      });
+  }
+  else {
+    alert("Please enter a valid email");
+  };
+}
 
   return (
     <div
       id="add-friend-modal"
       tabIndex="-1"
       aria-hidden={!isOpen}
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ${isOpen ? '' : 'hidden'}`}
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20 ${isOpen ? "" : "hidden"}`}
     >
-      <div className="relative p-4 w-full max-w-md">
-        <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-          <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Add a New Friend
-            </h3>
+      <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
+        <div className="form-add-frnd border border-gray-400 shadow-inner-custom relative bg-white w-1/3 h-1/3 rounded-sm shadow dark:bg-gray-300">
+          <div className="flex items-center justify-between p-2 md:p-2 rounded-sm bg-cyan-600">
+            <h4 className="text-lg font-semibold text-gray-200">Add Friend</h4>
             <button
               type="button"
-              className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-              onClick={toggleModal}
+              className="text-gray-400 bg-transparent hover:bg-cyan-200 hover:text-gray-900 rounded-lg text-sm w-6 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-cyan-600 dark:hover:text-white"
+              onClick={() => {
+                toggleModal(); // Close modal
+                setIsAddButtonVisible(true); // Reset to Add mode
+              }}
             >
               <svg
                 className="w-3 h-3"
@@ -56,29 +84,59 @@ const AddFriendModal = ({ isOpen, toggleModal, userId, refreshFriendTransaction,
               <span className="sr-only">Close modal</span>
             </button>
           </div>
-          <form className="p-4 md:p-5" onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label
-                htmlFor="mobile"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Mobile Number
+          <form className="p-4 md:p-5">
+            <div className={`${isAddButtonVisible ? "block" : "hidden"} mb-4`}>
+              <label className="block mb-2 text-sm font-medium text-gray-900">
+                Mobile number
               </label>
               <input
-                type="tel"
                 name="mobile"
+                type="text"
                 id="mobile"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Enter mobile number"
-                required
+                value={contactNo}
+                onChange={(e) => setContactNo(e.target.value)}
+                className="w-full input-field-shadow border border-gray-400 text-gray-600 rounded-sm p-2"
+                placeholder="Enter Mobile number"
+                required={isAddButtonVisible}
+                disabled={!isAddButtonVisible}
               />
             </div>
-            <button
-              type="submit"
-              className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Add Friend
-            </button>
+            <div className={`${!isAddButtonVisible ? "block" : "hidden"} mb-4`}>
+              <label className="block mb-2 text-sm font-medium text-gray-900">
+                Email Id
+              </label>
+              <input
+                name="email"
+                type="email"
+                id="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full input-field-shadow border border-gray-400 text-gray-600 rounded-sm p-2"
+                placeholder="Enter Email Id here"
+                required={!isAddButtonVisible}
+                disabled={isAddButtonVisible}
+              />
+            </div>
+            <h4 className={`${!isAddButtonVisible ? "block" : "hidden"} mb-2 text-rose-500 text-sm`}>
+              !!User Doesn't Exist.<span className="text-cyan-700"> Enter Email and Click below to Invite </span>
+            </h4>
+
+            <div className="mb-2 flex gap-4">
+              <button
+                type="submit"
+                className={`${isAddButtonVisible ? "block" : "hidden"} w-1/3 bg-cyan-600 text-white px-4 py-2 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
+                onClick={handleAddFriend}
+              >
+                Add
+              </button>
+              <button
+                type="submit"
+                className={`${!isAddButtonVisible ? "block" : "hidden"} w-1/3 bg-teal-600 text-white px-4 py-2 focus:outline-none focus:ring-4 focus:ring-teal-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
+                onClick={handleInvite}
+              >
+                Invite
+              </button>
+            </div>
           </form>
         </div>
       </div>

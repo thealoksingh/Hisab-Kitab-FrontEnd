@@ -15,11 +15,33 @@ export const getFriendList = (userId) => {
   };
 
 
-// API for adding a friend
+// API for sent a friend request
 export const addFriend = (userId, contactNo) => {
-    return apiClient.get(`/user/addfriend/${userId}?contactNo=${contactNo}`);
+    return apiClient.post(`/user/friend-request/send?senderId=${userId}&recieverContactNo=${contactNo}`);
   };
 
+// API for getting all pending friend requests
+export const getAllPendingRequest = (userId) => {
+  return apiClient.get(`/user/friend-request/pending?receiverId=${userId}`);
+};
+// API for getting all sent friend requests
+export const getAllSentRequest = (userId) => {
+  return apiClient.get(`/user/friend-request/sent?senderId=${userId}`);
+};
+// API for accepting a friend request
+export const acceptRequest = (requestId) => {
+  return apiClient.put(`/user/friend-request/accept/${requestId}`);
+};
+
+// API for unsend a friend request
+export const unsendRequest = (requestId) => {
+  return apiClient.delete(`/user/friend-request/unsend/${requestId}`);
+};
+
+// API for rejecting a friend request
+export const rejectRequest = (requestId) => {
+  return apiClient.delete(`/user/friend-request/delete/${requestId}`);
+};
   
 // API for Get Friend Transaction Details
 export const getTransactionDetailsWithFriend = (userId, friendId) => {
@@ -32,6 +54,16 @@ export const createTransaction = (transactionData) => {
   return apiClient.post("/user/friendTransactions", transactionData);
 };
 
+// API for Deleting the Transaction with Id
+export const deleteTransactionById = (transId) => {
+  return apiClient.delete(`/user/transaction/${transId}`);
+}
+
+// API for updating a transaction by ID
+export const updateFriendTransactionById = ( updatedTransactionData) => {
+  return apiClient.put("/user/updatefriendTransactions", updatedTransactionData);
+};
+
 // API for getting comments of a transaction
 
 export const getAllCommentsByTransactionId = (transId) => {
@@ -41,3 +73,19 @@ export const getAllCommentsByTransactionId = (transId) => {
 export const postNewCommentsByTransactionId = (commentRequestDto) => {
   return apiClient.post("/user/transaction/comment/save", commentRequestDto);
 }
+
+//API for sending Invitation Email
+export const sendInvitationEmail = (email, senderName) => {
+  return apiClient.post(`/user/sendInvite?email=${email}&senderName=${senderName}`);
+};
+
+//API for sending OTP Email
+export const sendOtpEmail = (email) => {
+  return apiClient.post(`/user/sendOTP?email=${email}`);
+};
+//forgot password /update password
+export const forgetPassword = (email, newPassword) => {
+  return apiClient.post(`user/update-password?email=${email}&newPassword=${newPassword}`);
+};
+
+

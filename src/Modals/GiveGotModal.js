@@ -25,6 +25,7 @@ const GiveGotModal = ({
       amount: amount,
       transDate: date,
       description: description,
+      createdBy: userId,
     };
 
     try {

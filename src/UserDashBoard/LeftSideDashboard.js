@@ -3,6 +3,8 @@ import { useLocation } from "react-router-dom";
 import AddFriendModal from "../Modals/AddFriendModal";
 import moment from "moment";
 import "../CssStyle/GroupDashboard.css";
+import FriendRequestModal from "../Modals/FriendRequestModal";
+import WholeTransactionReport from "../Modals/WholeTransactionReport";
 function LeftSideDashBoard({
   user,
   friends,
@@ -19,6 +21,145 @@ function LeftSideDashBoard({
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
+
+  const [filterName, setFilterName] = useState("All");
+
+  const [filteredFriends, setFilteredFriends] = useState([]);
+  const [filterCriteria, setFilterCriteria] = useState("All");
+
+  const [sortCriteria, setSortCriteria] = useState("Most Recent"); // e.g., "By Type", "By Date", "By Name"
+  const [isFriendRequestModalOpen, setIsFriendRequestModalOpen] = useState(false);
+const [isWholeTransactionReportModalOpen, setIsWholeTransactionReportModalOpen]=useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const toggleWholeTransactionReportModal=()=>{
+    setIsWholeTransactionReportModalOpen(!isWholeTransactionReportModalOpen);
+  
+  }
+   const toggleFriendRequestModal=()=>{
+    setIsFriendRequestModalOpen(!isFriendRequestModalOpen);
+    setRefreshFriendTransaction(!refreshFriendTransaction);
+   };
+  const applyFilter = (criteria) => {
+    setFilteredFriends([]);
+    setFilterCriteria(criteria);
+
+    function calculateYouWillGet(friends) {
+      return friends.filter((friend) => friend.closingBalance > 0);
+    }
+
+    function calculateYouWillGive(friends) {
+      return friends.filter((friend) => friend.closingBalance < 0);
+    }
+
+    function calculateSettled(friends) {
+      return friends.filter((friend) => friend.closingBalance === 0);
+    }
+
+    let sortedFriends = [];
+
+    switch (criteria) {
+      case "You Will Get":
+        sortedFriends = calculateYouWillGet(friends);
+        break;
+      case "You Will Give":
+        sortedFriends = calculateYouWillGive(friends);
+        break;
+      case "Settled":
+        sortedFriends = calculateSettled(friends);
+        break;
+      default:
+        sortedFriends = friends;
+        break;
+    }
+    const handleSearch = (event) => {
+  const query = event.target.value.toLowerCase();
+  setSearchQuery(query);
+
+  // Filter friends based on the search query and any applied filters
+  const filtered = friends.filter((friend) => {
+    const nameMatch = friend.userEntity.fullName.toLowerCase().includes(query);
+    const balanceMatch = friend.closingBalance.toString().includes(query);
+    return nameMatch || balanceMatch;
+  });
+
+  // Apply the current filter criteria to the search results
+  const finalFiltered = applyFilterLogic(filtered);
+
+  setFilteredFriends(finalFiltered);
+};
+
+// Function to reapply filter logic to search results
+const applyFilterLogic = (list) => {
+  switch (filterCriteria) {
+    case "You Will Get":
+      return list.filter((friend) => friend.closingBalance > 0);
+    case "You Will Give":
+      return list.filter((friend) => friend.closingBalance < 0);
+    case "Settled":
+      return list.filter((friend) => friend.closingBalance === 0);
+    default:
+      return list;
+  }
+};
+
+
+    setFilteredFriends(sortedFriends);
+    setIsFilterOpen(false); // Close the dropdown after selection
+  };
+
+  const sortItems = (criteria) => {
+    let sorted = [...filteredFriends]; // Assuming `filteredFriends` is the filtered array
+
+    if (criteria === "Most Recent") {
+      sorted.sort((a, b) => new Date(b.lastTransactionDate) - new Date(a.lastTransactionDate)); // Sort by newest date first
+    } else if (criteria === "Oldest") {
+      sorted.sort((a, b) => new Date(a.lastTransactionDate) - new Date(b.lastTransactionDate)); // Sort by oldest date first
+    } else if (criteria === "Highest Amount") {
+      sorted.sort((a, b) => b.closingBalance - a.closingBalance); // Sort by highest amount first
+    } else if (criteria === "Lowest Amount") {
+      sorted.sort((a, b) => a.closingBalance - b.closingBalance); // Sort by lowest amount first
+    } else if (criteria === "By Name") {
+      sorted.sort((a, b) => a.userEntity.fullName.localeCompare(b.userEntity.fullName)); // Sort alphabetically by name
+    }
+
+    setFilteredFriends(sorted);
+    console.log("Filter friend sorted on the basis of")
+    // Update the filtered items with the sorted array
+   
+
+  };
+  // let ListToApplySearch = [...filteredFriends];
+
+  const handleSearch = (event) => {
+    const query = event.target.value.toLowerCase();
+    setSearchQuery(query);
+  if (query!== ""){
+    const filtered = filteredFriends.filter((friend) => {
+      const nameMatch = friend.userEntity.fullName
+        .toLowerCase()
+        .includes(query);
+      const balanceMatch = friend.closingBalance
+        .toString()
+        .includes(query);
+      return nameMatch || balanceMatch;
+    });
+
+    setFilteredFriends(filtered );}
+    else { setFilteredFriends(friends)}
+  };
+
+
+  const handleSort = (criteria) => {
+    setSortCriteria(criteria); // Store the current sorting criteria
+    sortItems(criteria); // Apply sorting
+    toggleSortDropdown();
+  };
+
+
+
+
+
+
   const toggleSortDropdown = () => {
     setIsSortOpen(!isSortOpen);
   };
@@ -41,6 +182,7 @@ function LeftSideDashBoard({
 
   useEffect(() => {
     calculateAmount(friends);
+    applyFilter(filterCriteria);
   }, [user, friends, refreshFriendTransaction]); // Dependency array ensures the function runs whenever `friendList` changes
 
   function calculateAmount(friendList) {
@@ -59,11 +201,19 @@ function LeftSideDashBoard({
     setGiveAmount(totalGiveAmount);
   }
 
+  // useEffect(() => {
+  //   // Run applyFilter with "ALL" when the component first renders
+  //   applyFilter(filterCriteria);
+  // }, [user]); // Empty dependency array ensures it runs only on initial render
+
+
+
+
   return (
     <>
       <div className="left-side rounded  w-[50%] min-h-[100vh] relative overflow-hidden  ">
         <div className="left-upper h-[20%] bg-slate-300 w-[100%] relative">
-          <div className="flex h-[30%] relative bg-slate-400">
+          <div className="flex shadow-inner-custom border border-gray-300 border-sm h-[30%] relative bg-slate-400">
             <div className="w-[35%] h-[100%] p-2">
               You'll Give:<span className="text-rose-600"> ${giveAmount}</span>
             </div>
@@ -71,30 +221,36 @@ function LeftSideDashBoard({
               You'll Get:<span className="text-green-900"> ${getAmount}</span>
             </div>
             <div className="w-[30%] h-[100%] p-1">
-              <button className="bg-rose-600 text-white font-bold py-1 px-4 rounded-[4px] flex items-center justify-center">
+              <button onClick={toggleWholeTransactionReportModal} className="bg-rose-600 text-white font-bold py-1 px-4 rounded-[4px] flex items-center justify-center">
                 <span className="mr-2">^</span> View Report
               </button>
+              <WholeTransactionReport 
+              isOpen={isWholeTransactionReportModalOpen}
+              toggleModal={toggleWholeTransactionReportModal}
+              />
             </div>
           </div>
-          <div className="flex h-[60%] relative gap-2">
+          <div className=" py-2 shadow-inner-custom bg-slate-300 justify-between flex h-[70%] relative gap-2">
             <div className="search-box w-[35%] h-[100%] p-2">
               <h4 className="">Search Friend</h4>
-              <div className=" h-[100%]  flex items-center justify-center">
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="w-full h-10 px-4 border border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+              <div className=" h-[100%] mb-2 p-2  flex items-center justify-center">
+                 <input
+        type="text"
+        placeholder="Search..."
+        className="w-full shadow-inner-white-custom h-10 py-1 px-4 border border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+        value={searchQuery}
+        onChange={handleSearch}
+      />
               </div>
             </div>
             <div className="filter-section w-[30%] h-[100%]   relative p-2 ">
               <h4 className="">Filter</h4>
               <button
                 onClick={toggleFilterDropdown}
-                className="absolute bottom-0 w-[90%] h-10 text-white bg-gray-200 hover:bg-gray-700   font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
+                className="absolute bottom-0 w-[90%] border border-gray-500 shadow-inner-white-custom h-10 text-white bg-gray-200 hover:bg-gray-700   font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
                 type="button"
               >
-                Filter
+                {filterCriteria}
                 <svg
                   className="w-2.5 h-2.5 ms-3"
                   aria-hidden="true"
@@ -114,39 +270,28 @@ function LeftSideDashBoard({
               {isFilterOpen && (
                 <div className="z-50 mt-[30%] absolute bg-white divide-y divide-gray-100 rounded-sm shadow w-[90%] dark:bg-gray-700">
                   <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
-                    <li>
-                      <p className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        Higest
-                      </p>
-                    </li>
-                    <li>
-                      <p className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        Lowest
-                      </p>
-                    </li>
-                    <li>
-                      <p className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        Given
-                      </p>
-                    </li>
-                    <li>
-                      <p className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        Taken
-                      </p>
-                    </li>
+                    {["All", "You Will Get", "You Will Give", "Settled"].map((criteria) => (
+                      <li key={criteria}>
+                        <button
+                          onClick={() => applyFilter(criteria)}
+                          className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        >
+                          {criteria}
+                        </button>
+                      </li>
+                    ))}
                   </ul>
-                </div>
-              )}
+                </div>)}
             </div>
             <div className="sort-section w-[30%] h-[100%]   relative p-2">
               <h4 className="">Sort By</h4>
 
               <button
                 onClick={toggleSortDropdown}
-                className="absolute bottom-0 w-[90%] h-10 text-white bg-gray-200 hover:bg-gray-700   font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
+                className="absolute bottom-0 w-[90%] shadow-inner-white-custom border-gray-500 h-10 text-white bg-gray-200 hover:bg-gray-700   font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
                 type="button"
               >
-                Sort By
+                {sortCriteria}
                 <svg
                   className="w-2.5 h-2.5 ms-3"
                   aria-hidden="true"
@@ -168,18 +313,43 @@ function LeftSideDashBoard({
                 <div className="z-50 mt-[30%] absolute bg-white divide-y divide-gray-100 rounded-sm shadow w-[90%] dark:bg-gray-700">
                   <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                     <li>
-                      <p className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        By Type
+                      <p
+                        onClick={() => handleSort("Most Recent")}
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                      >
+                        Most Recent
                       </p>
                     </li>
                     <li>
-                      <p className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        By Date
+                      <p
+                        onClick={() => handleSort("Oldest")}
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                      >
+                        Oldest
                       </p>
                     </li>
                     <li>
-                      <p className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        By name
+                      <p
+                        onClick={() => handleSort("Highest Amount")}
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                      >
+                        Highest Amount
+                      </p>
+                    </li>
+                    <li>
+                      <p
+                        onClick={() => handleSort("Lowest Amount")}
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                      >
+                        Lowest Amount
+                      </p>
+                    </li>
+                    <li>
+                      <p
+                        onClick={() => handleSort("By Name")}
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                      >
+                        By Name
                       </p>
                     </li>
                   </ul>
@@ -189,9 +359,9 @@ function LeftSideDashBoard({
           </div>
         </div>
 
-        <div className="h-[70%] w-[100%] g-slate-300 relative scrollable">
-          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="sticky top-0 bg-gray-50 dark:bg-gray-700 text-xs text-gray-700 uppercase dark:text-gray-400">
+        <div className="h-[65%] border border-gray-400 shadow-inner-custom w-[100%] bg-gray-400 relative px-2 scrollable">
+          <table className="w-full border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead className="sticky fixed border  shadow-inner-custom  top-0 bg-gray-50 dark:bg-gray-200 text-xs text-gray-400 uppercase dark:text-gray-800">
               <tr>
                 <th scope="col" className="px-6 py-3">
                   Name
@@ -201,11 +371,11 @@ function LeftSideDashBoard({
                 </th>
               </tr>
             </thead>
-            <tbody>
-              {friends.map((friend) => (
+            <tbody  className="">
+              {filteredFriends.map((friend) => (
                 <tr
                   key={friend.userEntity.userId} // Use userId as key for each row
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer"
+                  className="bg-white  border-b border-1 shadow-inner-custom rounded-sm dark:bg-gray-200 dark:border-gray-100 cursor-pointer"
                   onClick={() => handleRowClick(friend.userEntity)}
                 >
                   <td
@@ -217,10 +387,10 @@ function LeftSideDashBoard({
                       {/* First letter of name for avatar */}
                     </span>
                     <div className="flex flex-col">
-                      <span className="font-medium text-white">
+                      <span className="font-medium text-gray-800">
                         {friend.userEntity.fullName}
                       </span>
-                      <span className="text-xs text-white">
+                      <span className="text-xs text-gray-800">
                         {friend.lastTransactionDate
                           ? moment(friend.lastTransactionDate).fromNow()
                           : ""}
@@ -230,18 +400,17 @@ function LeftSideDashBoard({
                   <td className="px-6 py-4 text-right pr-[25px]">
                     <div className="flex flex-col">
                       <span
-                        className={`font-medium ${
-                          friend.closingBalance >= 0
-                            ? "text-green-500"
-                            : "text-red-500"
-                        }`}
+                        className={`font-medium ${friend.closingBalance >= 0
+                          ? "text-green-500"
+                          : "text-red-500"
+                          }`}
                       >
                         {Math.abs(friend.closingBalance)}
                       </span>
 
-                      <span className="text-xs text-white">
+                      <span className="text-xs text-gray-800">
                         {friend.closingBalance != null &&
-                        friend.closingBalance >= 0
+                          friend.closingBalance >= 0
                           ? "You will get"
                           : "You will give"}
                       </span>
@@ -253,21 +422,31 @@ function LeftSideDashBoard({
           </table>
         </div>
 
-        <div className="left-side-lower w-full  bg-slate-400 h-[10%] bottom-4 absolute h-[50px] flex items-center justify-center">
-          <button
-            onClick={handleAddFriendClick}
-            className="block text-white w-96 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Add Friend
+        <div className="left-side-lower w-full gap-4 bg-slate-200 p-2 bottom-4 absolute h-[50px] flex items-center justify-center">
+       
+
+            <button onClick={handleAddFriendClick} className="w-1/3  h-full bg-cyan-600 text-sm text-white 600    hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
+            Add Friend       
+            
           </button>
+          
 
           <AddFriendModal
-            userId={user.userId}
+            user={user}
             isOpen={isModalOpen}
             toggleModal={toggleModal}
             refreshFriendTransaction={refreshFriendTransaction}
             setRefreshFriendTransaction={setRefreshFriendTransaction}
           />
+          <button onClick={toggleFriendRequestModal} className="w-1/3  h-full bg-teal-600 text-sm text-white 600    hover:bg-teal-500 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
+                   
+          View Friend Request
+                 </button>
+
+              <FriendRequestModal 
+               refreshFriendTransaction = {refreshFriendTransaction}
+                setRefreshFriendTransaction={setRefreshFriendTransaction} 
+                user={user} isOpen={isFriendRequestModalOpen} toggleModal={toggleFriendRequestModal}/>
         </div>
       </div>
     </>
