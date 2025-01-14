@@ -30,30 +30,36 @@ const UpdateFriendTransactionModel = ({
         console.log("initialTransactionType = ", initialTransactionType);
       setTransactionType(initialTransactionType);
       setFromUserId(
-        initialTransactionType === "give" ? commentTransaction.fromUserId : commentTransaction.toUserId
+        commentTransaction.fromUserId 
       );
       setToUserId(
-        initialTransactionType === "give" ? commentTransaction.toUserId : commentTransaction.fromUserId
+         commentTransaction.toUserId 
       );
     }
   }, [commentTransaction]);
 
   const handleTransactionTypeChange = (type) => {
      setTransactionType(type);
+     console.log("from = "+fromUserId+" to = "+ toUserId);
     // Swap user IDs based on the selected transaction type
-    if (type === "give") {
+    if (type === "give" && type == transactionType) {
       setFromUserId(commentTransaction.fromUserId);
       setToUserId(commentTransaction.toUserId);
     } else {
       setFromUserId(commentTransaction.toUserId);
       setToUserId(commentTransaction.fromUserId);
     }
-    
+
+    console.log("cliked trans type = ", type);
+    console.log("transtype after click = ", transactionType);
+    console.log("from = "+fromUserId+" to = "+ toUserId);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log("transtype after submission = ", transactionType);
+    console.log("after sumbit from = "+fromUserId+" to = "+ toUserId);
+    
     const updatedCommentTransaction = {
       transId: transId,
       fromUserId:fromUserId ,
