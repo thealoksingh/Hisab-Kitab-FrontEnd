@@ -42,7 +42,7 @@ const UpdateFriendTransactionModel = ({
      setTransactionType(type);
      console.log("from = "+fromUserId+" to = "+ toUserId);
     // Swap user IDs based on the selected transaction type
-    if (type === "give" && type == transactionType) {
+    if (type === "give" && type === transactionType) {
       setFromUserId(commentTransaction.fromUserId);
       setToUserId(commentTransaction.toUserId);
     } else {

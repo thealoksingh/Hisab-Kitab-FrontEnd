@@ -151,7 +151,7 @@ function CommentSection({
             </button>{console.log("transaction created by = " + commentTransaction.createdBy)}
 
 
-            <UpdateFriendTransaction toggleCommentSection={toggleCommentSection}
+            <UpdateFriendTransaction user={user} toggleCommentSection={toggleCommentSection}
             refreshFriendTransaction={refreshFriendTransaction} setRefreshFriendTransaction={setRefreshFriendTransaction}
             commentTransaction={commentTransaction} setCommentTransaction={setCommentTransaction} isOpen={isUpdateFormOpen} toggleModal={toggleUpdateForm} />
 
