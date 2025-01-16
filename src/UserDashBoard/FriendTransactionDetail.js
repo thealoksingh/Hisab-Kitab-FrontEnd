@@ -106,7 +106,7 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
           </div>
           <FriendTransactionReport isOpen={isReportModalOpen}
             toggleModal={toggleReportModal}
-            selectedFriend={selectedFriend}
+            selectedFriend={selectedFriend} user={user}
           />
           <div className="settings h-[50px] w-12 flex items-center justify-center ">
             <FontAwesomeIcon

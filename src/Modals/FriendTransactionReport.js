@@ -1,12 +1,70 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 
 import { sendOtpEmail, signUpUser } from '../Api/HisabKitabApi'
-const FriendTransactionReport= ({isOpen, toggleModal,selectedFriend}) => {
+import { apiClient } from "../Api/ApiClient";
+const FriendTransactionReport= ({isOpen, toggleModal,selectedFriend, user}) => {
+  const [friendId, setFriendId] = useState("");
+  const [userId, setUserId] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
+
+  useEffect(() => {
+    setFriendId(selectedFriend.userId);
+    setUserId(user.userId); 
+  }, [selectedFriend, user]);
  
   
   if (!isOpen) return null;  // If the modal is closed, return nothing
 
+  const handleDownload = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await apiClient.get("/api/reports/friend-transaction", {
+        params: {
+          friendId,
+          userId,
+          fromDate,
+          toDate,
+        },
+        responseType: "blob", // Ensures the response is handled as a binary file
+      });
+
+      // Create a Blob from the response
+      const blob = new Blob([response.data], { type: "application/pdf" });
+
+      // Generate a URL for the Blob
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+
+      // Extract filename from Content-Disposition header (if available)
+      const contentDisposition = response.headers["content-disposition"];
+      let filename = user.fullName+"-"+selectedFriend.fullName+" ("+fromDate+" to "+toDate+") report.pdf";
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename="(.+?)"/);
+        if (match && match[1]) {
+          filename = match[1];
+        }
+      }
+
+      // Set the filename and trigger download
+      link.download = filename;
+      link.click();
+
+      setLoading(false);
+    } catch (err) {
+      setError("Failed to download the report. Please try again.");
+      setLoading(false);
+    }
+  };
+
+  
   return (
     <div
       id="signUp-modal"
@@ -45,30 +103,33 @@ const FriendTransactionReport= ({isOpen, toggleModal,selectedFriend}) => {
             <h1 className="text-white h-4 w-4 p-4 flex justify-center items-center rounded-full bg-indigo-600">{selectedFriend.fullName[0].toUpperCase()}</h1>
             <h1 className="text-gray-800 h-4  p-5 flex justify-center items-center">{selectedFriend.fullName}</h1>
           </div>
-          <form className="p-4 md:p-5">
+          <form className="p-4 md:p-5" onSubmit={handleDownload}>
             <div className="mb-1">
               <label className="block mb-2 text-sm font-medium text-gray-900">Enter Start Date</label>
               <input
-                id="date"
-                name="date"
+                id="start_date"
+                name="startDate"
                 type="date"
                 required
-                
+                value={fromDate}
+            onChange={(e) => setFromDate(e.target.value)}
                 className="w-full  input-field-shadow  border text-sm border-gray-400 text-gray-600 rounded-sm p-1"
-                placeholder="Enter your Full Name"
+                placeholder="Enter Start Date"
 
               />
             </div>  
             <div className="mb-1">
               <label className="block mb-2 text-sm font-medium text-gray-900">Enter End Date</label>
               <input
-                id="date"
-                name="date"
+                id="end_date"
+                name="endDate"
                 type="date"
+                value={toDate}
+            onChange={(e) => setToDate(e.target.value)}
                 required
                 
                 className="w-full  input-field-shadow  border text-sm border-gray-400 text-gray-600 rounded-sm p-1"
-                placeholder="Enter your Full Name"
+                placeholder="Enter End date"
 
               />
             </div>      
@@ -77,8 +138,8 @@ const FriendTransactionReport= ({isOpen, toggleModal,selectedFriend}) => {
               <button
                 type="submit"
                 className=" bg-cyan-600 font-semibold text-white px-4 py-1 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-              >
-                Download Report
+              disabled={loading}>
+                  {loading ? "Downloading..." : "Download Report"}
               </button>
               
             </div>
