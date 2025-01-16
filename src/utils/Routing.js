@@ -5,6 +5,7 @@ import UserDashboard from '../UserDashBoard/UserDashboard';
 import LoginForm from '../Authentication/LogInForm';
 import AdminDashboard from '../AdminDashboard/AdminDashboard';
 import ForgetPasswordModal from '../Authentication/ForgetPasswordModal';
+import UnderDevPage from '../UserDashBoard/UnderDevPage';
 
 const Routing = () => {
   return (
@@ -14,6 +15,7 @@ const Routing = () => {
       <Route path="/forget-password" element={<ForgetPasswordModal />} />
       <Route path="/user-dashboard" element={<UserDashboard />} />
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
+      <Route path="/under-dev" element={<UnderDevPage />} />
     </Routes>
   );
 };

@@ -4,7 +4,8 @@ import AddFriendModal from "../Modals/AddFriendModal";
 import moment from "moment";
 import "../CssStyle/GroupDashboard.css";
 import FriendRequestModal from "../Modals/FriendRequestModal";
-import WholeTransactionReport from "../Modals/WholeTransactionReport";
+import { apiClient } from "../Api/ApiClient";
+
 function LeftSideDashBoard({
   user,
   friends,
@@ -29,12 +30,8 @@ function LeftSideDashBoard({
 
   const [sortCriteria, setSortCriteria] = useState("Most Recent"); // e.g., "By Type", "By Date", "By Name"
   const [isFriendRequestModalOpen, setIsFriendRequestModalOpen] = useState(false);
-const [isWholeTransactionReportModalOpen, setIsWholeTransactionReportModalOpen]=useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const toggleWholeTransactionReportModal=()=>{
-    setIsWholeTransactionReportModalOpen(!isWholeTransactionReportModalOpen);
-  
-  }
+ 
    const toggleFriendRequestModal=()=>{
     setIsFriendRequestModalOpen(!isFriendRequestModalOpen);
     setRefreshFriendTransaction(!refreshFriendTransaction);
@@ -205,7 +202,58 @@ const applyFilterLogic = (list) => {
   //   // Run applyFilter with "ALL" when the component first renders
   //   applyFilter(filterCriteria);
   // }, [user]); // Empty dependency array ensures it runs only on initial render
+const [error, setError] = useState("");
+   const [loading, setLoading] = useState(false);
+    const [userId, setUserId] = useState("");
 
+ useEffect(() => {
+     setUserId(user.userId); 
+  }, [ user]);
+
+  if(!user){
+  return;
+  }
+ 
+  const handleDownload = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await apiClient.get("/api/reports/whole-transaction", {
+        params: {
+          userId,
+        },
+        responseType: "blob", // Ensures the response is handled as a binary file
+      });
+
+      // Create a Blob from the response
+      const blob = new Blob([response.data], { type: "application/pdf" });
+
+      // Generate a URL for the Blob
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+
+      // Extract filename from Content-Disposition header (if available)
+      const contentDisposition = response.headers["content-disposition"];
+      let filename = user.fullName+"Transaction report.pdf";
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename="(.+?)"/);
+        if (match && match[1]) {
+          filename = match[1];
+        }
+      }
+
+      // Set the filename and trigger download
+      link.download = filename;
+      link.click();
+
+      setLoading(false);
+    } catch (err) {
+      setError("Failed to download the report. Please try again.");
+      setLoading(false);
+    }
+  };
 
 
 
@@ -221,13 +269,11 @@ const applyFilterLogic = (list) => {
               You'll Get:<span className="text-green-900"> ${getAmount}</span>
             </div>
             <div className="w-[30%] h-[100%] p-1">
-              <button onClick={toggleWholeTransactionReportModal} className="bg-rose-600 text-white font-bold py-1 px-4 rounded-[4px] flex items-center justify-center">
+              {/* view report  */}
+              <button onClick={handleDownload} className="bg-rose-600 text-white font-bold py-1 px-4 rounded-[4px] flex items-center justify-center">
                 <span className="mr-2">^</span> View Report
               </button>
-              <WholeTransactionReport 
-              isOpen={isWholeTransactionReportModalOpen}
-              toggleModal={toggleWholeTransactionReportModal}
-              />
+             
             </div>
           </div>
           <div className=" py-2 shadow-inner-custom bg-slate-300 justify-between flex h-[70%] relative gap-2">

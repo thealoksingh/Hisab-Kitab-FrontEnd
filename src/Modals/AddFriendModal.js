@@ -1,10 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { addFriend, sendInvitationEmail } from "../Api/HisabKitabApi";
 
 const AddFriendModal = ({ isOpen, toggleModal, user }) => {
   const [isAddButtonVisible, setIsAddButtonVisible] = useState(true); // Tracks whether to show Add or Invite button
   const [contactNo, setContactNo] = useState(""); // State to store the contact number
   const [email, setEmail] = useState(""); // State to store the email
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [timer, setTimer] = useState(60); // State for timer
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false); // State for disabling button
+
+  useEffect(() => {
+    let interval;
+
+    if (isButtonDisabled && timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1); // Correctly update timer using the previous value
+      }, 1000);
+    } else if (timer === 0) {
+      setIsButtonDisabled(false); // Enable the button when timer reaches 0
+      setTimer(60); // Reset the timer
+    }
+    return () => clearInterval(interval); // Clean up interval when the component unmounts or timer reaches 0
+  }, [isButtonDisabled, timer]); // Dependencies to trigger the timer logic
+
+  const handleInviteRequest = (e) => {
+    e.preventDefault();
+    if (email !== "") {
+      handleInvite(e); // Send OTP request
+      setIsButtonDisabled(true); // Disable button after OTP is sent
+    } else {
+      alert("Please enter a valid email.");
+    }
+  };
 
   const handleAddFriend = async (e) => {
     e.preventDefault();
@@ -13,7 +41,7 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
         .then((data) => {
           console.log("Friend request sent successfully:", data);
           alert("Friend request sent successfully");
-          setContactNo(""); // Reset the email
+          setContactNo(""); // Reset the contact number
           toggleModal(); // Close the modal
         })
         .catch((error) => {
@@ -26,27 +54,25 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
     }
   };
 
-  const handleInvite = async(e) => {
-  e.preventDefault();
-  console.log("Invite button clicked");
-  if (email !== "") {
-    await sendInvitationEmail(email, user.fullName)
-      .then((data) => {
-
-        console.log("Invite email clicked", email);
-        alert("Sign-up Invitation sent successfully");
-        setEmail(""); // Reset the email
-        toggleModal(); // Close the modal
-      }).catch((error) => {
-        console.error("Error sending invitation email:", error);
-        setEmail(""); // Reset the email
-      });
-  }
-  else {
-    alert("Please enter a valid email");
+  const handleInvite = async (e) => {
+    e.preventDefault();
+    console.log("Invite button clicked");
+    if (email !== "") {
+      await sendInvitationEmail(email, user.fullName)
+        .then((data) => {
+          console.log("Invite email sent:", email);
+          alert("Sign-up Invitation sent successfully");
+          setEmail(""); // Reset the email
+          toggleModal(); // Close the modal
+        })
+        .catch((error) => {
+          console.error("Error sending invitation email:", error);
+          setEmail(""); // Reset the email
+        });
+    } else {
+      alert("Please enter a valid email");
+    }
   };
-}
-
   return (
     <div
       id="add-friend-modal"
@@ -120,7 +146,10 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
             <h4 className={`${!isAddButtonVisible ? "block" : "hidden"} mb-2 text-rose-500 text-sm`}>
               !!User Doesn't Exist.<span className="text-cyan-700"> Enter Email and Click below to Invite </span>
             </h4>
-
+            {isButtonDisabled && <h5 className="text-green-500 font-sm">
+              {`Invite sent successfully. `}<span className="text-rose-600 font-sm"> {isButtonDisabled && ` Resend in ${timer} sec`}</span>
+            </h5>}
+          
             <div className="mb-2 flex gap-4">
               <button
                 type="submit"
@@ -132,7 +161,11 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
               <button
                 type="submit"
                 className={`${!isAddButtonVisible ? "block" : "hidden"} w-1/3 bg-teal-600 text-white px-4 py-2 focus:outline-none focus:ring-4 focus:ring-teal-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
-                onClick={handleInvite}
+                onClick={handleInviteRequest}
+                disabled={isButtonDisabled} // Disable button when timer is active
+                style={{
+                  backgroundColor: isButtonDisabled ? "transparent" : "rgb(0, 150, 135)", // Change color when disabled
+                }}
               >
                 Invite
               </button>

@@ -9,6 +9,7 @@ const LogInForm = () => {
   const [role, setRole] = useState("user"); // default to user role
   const [error, setError] = useState(null);
 
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(null); // Reset error before login attempt
@@ -24,6 +25,7 @@ const LogInForm = () => {
     }
 
     // User login via API
+
     try {
       const response = await loginApi(email, password);
       const user = response.data;
