@@ -3,6 +3,6 @@ import axios from "axios"
 export const apiClient = axios.create(
 
     {
-        baseURL: 'http://localhost:8080/Hisab-Kitab'
+        baseURL: 'https://hisab-kitab-backend-ixz5.onrender.com/Hisab-Kitab'
     }
 )
