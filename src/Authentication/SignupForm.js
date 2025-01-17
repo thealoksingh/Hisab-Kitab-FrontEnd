@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import { sendOtpEmail, signUpUser } from '../Api/HisabKitabApi'
 const SignUpForm = () => {
@@ -7,6 +7,9 @@ const SignUpForm = () => {
   const [otpVerified, setOtpVerified] = useState(false); // State to handle OTP verification
   const [otpEntered, setOtpEntered] = useState(""); // State to handle OTP verification
   const navigate = useNavigate();
+ const [timer, setTimer] = useState(60); // State for timer
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false); // State for disabling button
+ const [message, setMessage] = useState(null); // For success or incorrect OTP message
 
 
   //    const { role } = useParams();
@@ -20,6 +23,33 @@ const SignUpForm = () => {
   const [successMessage, setSuccessMessage] = useState(null);
   const [otp, setOtp] = useState("");
  
+
+   useEffect(() => {
+      let interval;
+  
+      if (isButtonDisabled && timer > 0) {
+        interval = setInterval(() => {
+          setTimer((prevTimer) => prevTimer - 1); // Correctly update timer using the previous value
+        }, 1000);
+      } else if (timer === 0) {
+        setIsButtonDisabled(false); // Enable the button when timer reaches 0
+        setTimer(60); // Reset the timer
+      }
+      return () => clearInterval(interval); // Clean up interval when the component unmounts or timer reaches 0
+    }, [isButtonDisabled, timer]); // Dependencies to trigger the timer logic
+  
+
+    
+    const handleTimeAndOtp = (e) => {
+      if(email!==""){
+      handleOtpRequest(e); // Send OTP request
+      setIsButtonDisabled(true); // Disable button after OTP is sent
+    }else{
+      setMessage("Please enter a valid email.");
+    }
+  
+  };
+
   const role = "user";
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -172,20 +202,22 @@ const SignUpForm = () => {
                 />
                 <button
                   type="submit"
-                  onClick={handleOtpRequest}
                   
                   className="w-1/3 bg-sky-600 text-sm text-white px-4 py-1 hover:bg-sky-500 focus:outline-none focus:ring-4 focus:ring-sky-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-                >
+                  onClick={handleTimeAndOtp}
+                  disabled={isButtonDisabled} // Disable button when timer is active
+                  style={{
+                    backgroundColor: isButtonDisabled ? "transparent" : "rgb(0, 150, 135)", // Change color when disabled
+                  }}
+               
+               >
                   Send OTP
                 </button>
               </div>
             </div>
-            {otpSent && (
-              <h5 className="text-green-500 font-sm">
-                OTP sent successfully{" "}
-                <span className="font-sm text-rose-500">Resend in 40 sec</span>
-              </h5>
-            )}
+            {isButtonDisabled && <h5 className="text-green-500 font-sm">
+              {`OTP sent successfully. `}<span className="text-rose-600 font-sm"> {isButtonDisabled && ` Resend in ${timer} sec`}</span>
+            </h5>}
 
             {otpSent && !otpVerified && (
               <div className="mb-2 mt-1">
@@ -209,6 +241,7 @@ const SignUpForm = () => {
               </div>
             )}
             {otpVerified && <h5 className="text-green-500 font-sm">OTP Verified</h5>}
+           
             {!otpVerified && otpSent && (
               <h5 className="text-rose-500 font-sm">!!! Incorrect OTP</h5>
             )}
@@ -249,7 +282,7 @@ const SignUpForm = () => {
             <div className="mb-2 flex gap-4">
               <button
                 type="submit"
-                className="w-1/3 bg-teal-600 text-sm text-white px-4 py-1 hover:bg-teal-500 focus:outline-none focus:ring-4 focus:ring-emerald-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                className="w-1/3 bg-cyan-600 text-sm text-white px-4 py-1 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
               >
                 Sign Up
               </button>

@@ -30,6 +30,8 @@ const ForgetPasswordForm = () => {
     return () => clearInterval(interval); // Clean up interval when the component unmounts or timer reaches 0
   }, [isButtonDisabled, timer]); // Dependencies to trigger the timer logic
 
+
+  
   const handleTimeAndOtp = (e) => {
     if(email!==""){
     handleOtpRequest(e); // Send OTP request
