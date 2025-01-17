@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear } from "@fortawesome/free-solid-svg-icons";
+import { faGear,faDownload } from "@fortawesome/free-solid-svg-icons";
 import CommentSection from "./CommentSection";
 import React, { useState, useEffect } from "react";
 import { getTransactionDetailsWithFriend } from "../Api/HisabKitabApi";
@@ -101,8 +101,8 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
         </div>
 
         <div className="report-settings right-[10px] absolute flex gap-[10px] flex items-center justify-center">
-          <div className="report h-[35px] w-28 bg-rose-600 rounded flex items-center justify-center">
-            <h2 onClick={toggleReportModal} className="text-white">View Report</h2>
+          <div onClick={toggleReportModal} className="report h-[35px] text-white px-2 font-semibold  bg-rose-600 rounded-sm flex items-center justify-center">
+           <span className="mr-1"><FontAwesomeIcon icon={faDownload} /></span>View Report
           </div>
           <FriendTransactionReport isOpen={isReportModalOpen}
             toggleModal={toggleReportModal}

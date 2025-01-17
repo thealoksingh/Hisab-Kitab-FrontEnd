@@ -5,7 +5,8 @@ import moment from "moment";
 import "../CssStyle/GroupDashboard.css";
 import FriendRequestModal from "../Modals/FriendRequestModal";
 import { apiClient } from "../Api/ApiClient";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faDownload,} from "@fortawesome/free-solid-svg-icons";
 function LeftSideDashBoard({
   user,
   friends,
@@ -270,8 +271,9 @@ const [error, setError] = useState("");
             </div>
             <div className="w-[30%] h-[100%] p-1">
               {/* view report  */}
-              <button onClick={handleDownload} className="bg-rose-600 text-white font-bold py-1 px-4 rounded-[4px] flex items-center justify-center">
-                <span className="mr-2">^</span> View Report
+              <button onClick={handleDownload} className="bg-rose-600 text-white font-bold py-1 px-4 rounded-sm flex items-center justify-center">
+                
+                <span className="mr-2"><FontAwesomeIcon icon={faDownload} /></span> View Report
               </button>
              
             </div>
