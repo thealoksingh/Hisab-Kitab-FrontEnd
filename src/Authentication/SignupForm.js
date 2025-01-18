@@ -1,6 +1,7 @@
 import React, { useState ,useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import { sendOtpEmail, signUpUser } from '../Api/HisabKitabApi'
+import "../CssStyle/GroupDashboard.css";
 const SignUpForm = () => {
   const [isOpen, setIsOpen] = useState(true); // State to control modal visibility
   const [otpSent, setOtpSent] = useState(false); // State to handle OTP sent status
@@ -10,7 +11,7 @@ const SignUpForm = () => {
  const [timer, setTimer] = useState(60); // State for timer
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // State for disabling button
  const [message, setMessage] = useState(null); // For success or incorrect OTP message
-
+const [isClicked, setClicked] = useState(false); // State to handle error prompt
 
   //    const { role } = useParams();
   //   const navigate = useNavigate();
@@ -109,14 +110,19 @@ const SignUpForm = () => {
 
 
   const handleOtpVerify = (e) => {
+    setClicked(true);
     e.preventDefault();
-    if (otp==null && otpEntered !== otp) {
+
+    if (otpEntered.trim() !== otp.toString().trim()) {
       setOtpVerified(false);
+      setMessage("Incorrect OTP");
       return;
-      
     }
+
     setOtpVerified(true);
-    // Future integration: Add API call for OTP verification
+    setMessage("OTP Verified Successfully");
+     // Show password fields after OTP is verified
+    
   };
 
   if (!isOpen) return null;  // If the modal is closed, return nothing
@@ -242,7 +248,7 @@ const SignUpForm = () => {
             )}
             {otpVerified && <h5 className="text-green-500 font-sm">OTP Verified</h5>}
            
-            {!otpVerified && otpSent && (
+            {!otpVerified && isClicked && (
               <h5 className="text-rose-500 font-sm">!!! Incorrect OTP</h5>
             )}
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ProfileCircle from "../utils/ProfileCircle";
 import {
   faShareFromSquare,
   faPenToSquare,
@@ -131,11 +132,11 @@ function CommentSection({
         </div>
 
         <div className="friend-profile h-[10%] w-full p-[10px] flex gap-[10px] flex items-center">
-          <div className="alphabet-circle bg-cyan-800 h-[50px] w-[50px] rounded-full flex items-center justify-center">
-            <h1 className="text-white text-lg">
-              {user.fullName[0].toUpperCase()}
-            </h1>
-          </div>
+           <ProfileCircle
+            className="h-10 w-10 mr-4 text-white text-lg"
+            name={user.fullName}
+          />
+         
           <div className="user-name">
             <h2 className="text-lg text-gray-800">{user.fullName}</h2>
             <p className="text-sm text-gray-600">
@@ -212,11 +213,10 @@ function CommentSection({
                   className="user-comment border border-gray-400 flex shadow-inner-custom gap-2 p-2 bg-white rounded-sm shadow-sm items-start"
                 >
                   {/* User Icon */}
-                  <div className="alphabet-circle bg-cyan-800 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
-                    <h1 className="text-white text-sm leading-none">
-                      {comment.userFullName[0].toUpperCase()}
-                    </h1>
-                  </div>
+                  <ProfileCircle
+            className="h-8 w-8 mr-4 text-white text-sm"
+            name={user.fullName}
+          />
 
                   {/* Comment Content */}
                   <div className="flex-1">
