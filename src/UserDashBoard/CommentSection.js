@@ -91,9 +91,7 @@ function CommentSection({
     }
   };
 
-  const deleteTransactionDetails = (transId) => {
-    console.log("TranId" + transId);
-  };
+  
 
   return (
     <>
@@ -262,9 +260,10 @@ function CommentSection({
           </div>
         </div>
 
-        <div
+       
+        {(commentTransaction.createdBy === user.userId) && ( <div
           className="w-full flex items-center justify-center"
-          onClick={() => deleteTransactionDetails(commentTransaction.transId)}
+          
         >
           <button
             onClick={toggleDeleteAlert}
@@ -283,7 +282,7 @@ function CommentSection({
             refreshFriendTransaction={refreshFriendTransaction} setRefreshFriendTransaction={setRefreshFriendTransaction}
 
           />
-        </div>
+        </div>)}
       </div>}
     </>
   );
