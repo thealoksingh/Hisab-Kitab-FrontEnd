@@ -85,7 +85,11 @@ export const sendOtpEmail = (email) => {
 };
 //forgot password /update password
 export const forgetPassword = (email, newPassword) => {
-  return apiClient.post(`user/update-password?email=${email}&newPassword=${newPassword}`);
+  return apiClient.post(`/user/update-password?email=${email}&newPassword=${newPassword}`);
 };
 
 
+//to delete comments
+export const deleteComment = (commentId) => {
+  return apiClient.delete(`/user/transaction/comment/${commentId}`);
+};

@@ -76,6 +76,7 @@ function FriendTranscationDetail({
           <ProfileCircle
             className="h-12 w-12 mr-4 text-white text-lg"
             name={selectedFriend.fullName}
+            color={selectedFriend.colorHexValue}
           />
 
           <div className="user-name-number ml-1  ">
@@ -107,7 +108,7 @@ function FriendTranscationDetail({
                 {transactionsDto[0].lastClosingBalance >= 0
                   ? "You will get :"
                   : "You will give :"}
-                <span>${Math.abs(transactionsDto[0].lastClosingBalance)}</span>
+                <span> ₹ {Math.abs(transactionsDto[0].lastClosingBalance)}</span>
               </>
             )}
           </h2>
@@ -173,7 +174,7 @@ function FriendTranscationDetail({
                   >
                     <div className="flex flex-col">
                       <span className="font-medium text-gray-900">
-                        Closing Balance: <span>$</span>{" "}
+                        Closing Balance: <span>₹</span>{" "}
                         <span>{transactionDto.lastClosingBalance}</span>
                       </span>
                       <span className="text-xs text-gray-900 mt-1">
@@ -186,7 +187,7 @@ function FriendTranscationDetail({
                     {isUserGave && (
                       <div className="flex flex-col">
                         <span className="font-medium text-rose-500">
-                          {transactionDto.transaction.amount} <span>$</span>
+                        <span>₹</span> {transactionDto.transaction.amount} 
                         </span>
                       </div>
                     )}
@@ -195,8 +196,8 @@ function FriendTranscationDetail({
                   <td className="px-6 py-4 text-right pr-[25px]">
                     {!isUserGave && (
                       <div className="flex flex-col">
-                        <span className="font-medium text-green-500">
-                          {transactionDto.transaction.amount} <span>$</span>
+                        <span className="font-medium text-green-500 ">
+                        <span>₹</span>  {transactionDto.transaction.amount} 
                         </span>
                       </div>
                     )}
@@ -212,13 +213,13 @@ function FriendTranscationDetail({
           className="w-1/3 shadow-inner-custom h-full bg-rose-600 text-sm text-white 600    hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
           onClick={handleGiveButtonClick}
         >
-          You Gave : <span>$</span>
+          You Gave : <span>₹</span>
         </button>
         <button
           className="w-1/3 shadow-inner-custom h-full bg-emerald-600 text-sm text-white 600    hover:bg-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
           onClick={handleGotButtonClick}
         >
-          You Got : <span>$</span>
+          You Got : <span>₹</span>
         </button>
         <GiveGotModal
           userId={user.userId}

@@ -34,6 +34,7 @@ function LeftSideDashBoard({
   const [isFriendRequestModalOpen, setIsFriendRequestModalOpen] =
     useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  // const [loading, setLoading] = useState(false);
 
   const toggleFriendRequestModal = () => {
     setIsFriendRequestModalOpen(!isFriendRequestModalOpen);
@@ -264,22 +265,34 @@ function LeftSideDashBoard({
       <div className="left-side rounded h-screen w-[50%]  relative overflow-hidden  ">
         <div className="left-upper  h-36 w-full">
           <div className="flex  px-2 shadow-inner-custom items-center gap-1 justify-between border border-gray-300 h-12 bg-gray-400">
-            <div className="p-2 flex-shrink">
-              You'll Give:<span className="text-rose-600"> ${giveAmount}</span>
+            <div className="p-2 flex-shrink font-semibold">
+              You'll Give:
+              <span className="text-rose-600 font-semibold">
+                {" "}
+                ₹ {giveAmount}
+              </span>
             </div>
-            <div className="p-2 flex-shrink">
-              You'll Get:<span className="text-green-900"> ${getAmount}</span>
+            <div className="p-2 flex-shrink font-semibold">
+              You'll Get:
+              <span className="text-green-900 font-semibold">
+                {" "}
+                ₹ {getAmount}
+              </span>
             </div>
             <div className="w-[30%] h-[100%] p-1">
               {/* view report  */}
               <button
                 onClick={handleDownload}
                 className="bg-rose-600 mt-1 text-white font-bold py-1 px-4 rounded-sm flex items-center justify-center hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                disabled={loading}
               >
                 <span className="mr-2">
                   <FontAwesomeIcon icon={faDownload} />
                 </span>{" "}
-                <span className=" line-clamp-1">View Report</span>
+                <span className=" line-clamp-1">
+                  {" "}
+                  {loading ? "Downloading..." : "View Report"}{" "}
+                </span>
               </button>
             </div>
           </div>
@@ -441,6 +454,7 @@ function LeftSideDashBoard({
                       className="h-8 w-8 mr-4"
                       key={friend.userEntity.userId}
                       name={friend.userEntity.fullName}
+                      color={friend.userEntity.colorHexValue} // Pass the user's associated color
                     />
 
                     <div className="flex flex-col">
@@ -457,13 +471,13 @@ function LeftSideDashBoard({
                   <td className="px-6 py-4 text-right pr-[25px]">
                     <div className="flex flex-col">
                       <span
-                        className={`font-medium ${
+                        className={` font-semibold  ${
                           friend.closingBalance >= 0
-                            ? "text-green-500"
+                            ? "text-green-500 "
                             : "text-red-500"
                         }`}
                       >
-                        {Math.abs(friend.closingBalance)}
+                        ₹ {Math.abs(friend.closingBalance)}
                       </span>
 
                       <span className="text-xs text-gray-800">
@@ -497,8 +511,11 @@ function LeftSideDashBoard({
           />
           <button
             onClick={toggleFriendRequestModal}
-            className="w-1/3  h-full bg-teal-600 text-sm text-white 600    hover:bg-teal-500 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+            className="relative w-1/3 h-full bg-teal-600 text-sm text-white hover:bg-teal-500 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
           >
+            <div className="h-6 w-6 absolute -right-2 -top-2 border border-white flex items-center justify-center rounded-full bg-orange-500 text-white text-xs font-bold shadow-sm">
+              67
+            </div>
             View Friend Request
           </button>
 

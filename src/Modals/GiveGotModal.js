@@ -151,9 +151,9 @@ const GiveGotModal = ({
   type="submit"
   className={`w-full text-white 
     ${transactionType === 'give' 
-      ? 'bg-[#be123c] hover:bg-[#9b0e35] border border-[#9b0e35]' 
-      : 'bg-[#10b981] hover:bg-[#059669] border border-[#059669]'}
-    focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-sm text-sm px-5 py-2.5 text-center`}
+      ? 'bg-[#be123c] hover:bg-[#9b0e35] border border-[#9b0e35] focus:ring-[#Ff007f]' 
+      : 'bg-[#10b981] hover:bg-[#059669] border border-[#059669] focus:ring-[#50c878]'}
+    focus:ring-4 focus:outline-none  font-medium rounded-sm text-sm px-5 py-2.5 text-center`}
 >
   {transactionType === 'give' ? 'Give Amount' : 'Receive Amount'}
 </button>
