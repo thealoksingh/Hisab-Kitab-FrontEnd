@@ -22,7 +22,12 @@ function FriendTranscationDetail({
   const [commentTransaction, setCommentTransaction] = useState([]);
   const [isRowClicked, setIsRowClicked] = useState(false);
   const [isReportModalOpen, setReportModalOpen] = useState(false);
+  const [selectedRowId, setSelectedRowId] = useState(null);
 
+  const handleRowClick = (transactionId) => {
+    setSelectedRowId(transactionId); 
+    
+  };
   const toggleReportModal = () => {
     setReportModalOpen(!isReportModalOpen);
   };
@@ -158,16 +163,18 @@ function FriendTranscationDetail({
 
               return (
                 <tr
-                  key={transactionDto.transaction.transId}
-                  className="bg-white  border-b border-1  shadow-inner-custom rounded-sm dark:bg-gray-100 dark:border-gray-100 cursor-pointer"
-                  onClick={() => {
-                    setCommentTransaction(transactionDto.transaction);
-                    console.log(commentTransaction); // Call handleRowClick with the transactionDto
-                    console.log("after comment transaction."); // Call handleRowClick with the transactionDto
-                    // handleRowClick(transactionDto.transaction);
-                    toggleCommentSection(); // Call toggleDetail to open/close the details section
-                  }}
-                >
+            key={transactionDto.transaction.transId}
+            className={`bg-white border-b border-1 shadow-inner-custom rounded-sm  dark:border-gray-100 cursor-pointer ${
+              selectedRowId === transactionDto.transaction.transId
+                ? 'bg-slate-200'
+                : 'bg-gray-100'
+            }`}
+            onClick={() => {
+              handleRowClick(transactionDto.transaction.transId); // Set the selected row's ID on click
+              setCommentTransaction(transactionDto.transaction);
+              toggleCommentSection(); // Call toggleDetail to open/close the details section
+            }}
+          >
                   <td
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"

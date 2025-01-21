@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import friendicon from "../assets/friendicon.png";
 import FriendTransactionDetail from "./FriendTransactionDetail";
-import { getTransactionDetailsWithFriend } from "../Api/HisabKitabApi";
 
 
 function RightSideDashBoard({ user,isFriendSelected, selectedFriend ,refreshFriendTransaction, setRefreshFriendTransaction}) {

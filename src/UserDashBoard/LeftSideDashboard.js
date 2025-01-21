@@ -176,10 +176,12 @@ function LeftSideDashBoard({
   const handleAddFriendClick = () => {
     toggleModal(); // Open the modal
   };
+  const [selectedRowId, setSelectedRowId] = useState(null);
 
   const handleRowClick = (friend) => {
-    setIsFriendSelected(true); // Update `isFriendSelected` to true
-    setSelectedFriend(friend); // Set the selected friend's details
+    setIsFriendSelected(true);
+    setSelectedFriend(friend);
+    setSelectedRowId(friend.userId); // Store the clicked row's ID
   };
 
   useEffect(() => {
@@ -439,12 +441,16 @@ function LeftSideDashBoard({
                 </th>
               </tr>
             </thead>
-            <tbody className="">
+            <tbody>
               {filteredFriends.map((friend) => (
                 <tr
-                  key={friend.userEntity.userId} // Use userId as key for each row
-                  className="bg-white  border-b border-1  shadow-inner-custom rounded-sm dark:bg-gray-100 dark:border-gray-100 cursor-pointer"
-                  onClick={() => handleRowClick(friend.userEntity)}
+                  key={friend.userEntity.userId}
+                  className={`bg-white border-b border-1 shadow-inner-custom rounded-sm  dark:border-gray-100 cursor-pointer ${
+                    selectedRowId === friend.userEntity.userId
+                      ? "bg-slate-200"
+                      : "bg-gray-100"
+                  }`}
+                  onClick={() => handleRowClick(friend.userEntity)} // Pass `userEntity` here
                 >
                   <td
                     scope="row"
