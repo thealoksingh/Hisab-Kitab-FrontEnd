@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios';
 
-import { sendOtpEmail, signUpUser } from '../Api/HisabKitabApi'
 import { apiClient } from "../Api/ApiClient";
+import ProfileCircle from "../utils/ProfileCircle";
 const FriendTransactionReport= ({isOpen, toggleModal,selectedFriend, user}) => {
   const [friendId, setFriendId] = useState("");
   const [userId, setUserId] = useState("");
@@ -99,9 +98,14 @@ const FriendTransactionReport= ({isOpen, toggleModal,selectedFriend, user}) => {
               <span className="sr-only">Close modal</span>
             </button>
           </div>
-          <div className="profile h-12 w-full border border-gray-400 shadow-inner-custom bg-gray-200 p-5 flex items-center gap-1">
-            <h1 className="text-white h-4 w-4 p-4 flex justify-center items-center rounded-full bg-indigo-600">{selectedFriend.fullName[0].toUpperCase()}</h1>
-            <h1 className="text-gray-800 h-4  p-5 flex justify-center items-center">{selectedFriend.fullName}</h1>
+          <div className="profile h-12 w-full mt-1  p-5 flex items-center gap-1">
+                 <ProfileCircle
+                      className="h-8 w-8   text-white text-sm"
+                      name={selectedFriend.fullName}
+                      color={selectedFriend.colorHexValue}
+                    />
+           
+            <h1 className="text-gray-800 h-4 font-semibold  p-5 flex justify-center items-center">{selectedFriend.fullName}</h1>
           </div>
           <form className="p-4 md:p-5" onSubmit={handleDownload}>
             <div className="mb-1">
@@ -137,7 +141,7 @@ const FriendTransactionReport= ({isOpen, toggleModal,selectedFriend, user}) => {
             <div className="mb-2 mt-2">
               <button
                 type="submit"
-                className=" bg-cyan-600 font-semibold text-white px-4 py-1 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                className=" bg-cyan-600 rounded-sm font-semibold text-white px-4 py-1 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
               disabled={loading}>
                   {loading ? "Downloading..." : "Download Report"}
               </button>

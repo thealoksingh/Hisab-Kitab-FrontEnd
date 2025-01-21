@@ -7,7 +7,8 @@ import GiveGotModal from "../Modals/GiveGotModal";
 import "../CssStyle/GroupDashboard.css";
 import FriendTransactionReport from "../Modals/FriendTransactionReport";
 import ProfileCircle from "../utils/ProfileCircle";
-
+import unFriendImage from "../assets/unFriend.png";
+import UnfriendModal from "../Modals/UnfriendModal";
 function FriendTranscationDetail({
   user,
   selectedFriend,
@@ -18,21 +19,28 @@ function FriendTranscationDetail({
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transactionType, setTransactionType] = useState(""); // Track the transaction type (Give or Got)
-  const [isCommentSectionOpen, setIsCommentSetionOpen] = useState(false);
+
   const [commentTransaction, setCommentTransaction] = useState([]);
   const [isRowClicked, setIsRowClicked] = useState(false);
   const [isReportModalOpen, setReportModalOpen] = useState(false);
   const [selectedRowId, setSelectedRowId] = useState(null);
+  const [isCommentSectionOpen, setIsCommentSetionOpen] = useState(false);
+const [isUnfriendModalOpen, setIsUnfriendModalOpen]= useState(false);
 
+ const toggleUnfriendModal=() =>{
+setIsUnfriendModalOpen(!isUnfriendModalOpen);
+ }
   const handleRowClick = (transactionId) => {
-    setSelectedRowId(transactionId); 
-    
+    setSelectedRowId(transactionId);
   };
   const toggleReportModal = () => {
     setReportModalOpen(!isReportModalOpen);
   };
 
   const toggleCommentSection = () => {
+    if (isCommentSectionOpen) {
+      setSelectedRowId(null);
+    }
     setIsCommentSetionOpen(!isCommentSectionOpen); // Toggle the state when the button is clicked
   };
 
@@ -76,7 +84,14 @@ function FriendTranscationDetail({
 
   return (
     <>
-      <div className="right-header p-2 absolute top-0  border border-gray-400 shadow-inner-custom justify-between h-24 bg-gray-300 w-full  p-[10px] flex gap-[10px] flex items-center ">
+      <div
+        onClick={() => {
+          if (isCommentSectionOpen) {
+            setIsCommentSetionOpen(false);
+          }
+        }}
+        className="right-header p-2 absolute top-0  border border-gray-400 shadow-inner-custom justify-between h-24 bg-gray-300 w-full  p-[10px] flex gap-[10px] flex items-center "
+      >
         <div className=" flex gap-2">
           <ProfileCircle
             className="h-12 w-12 mr-4 text-white text-lg"
@@ -85,7 +100,9 @@ function FriendTranscationDetail({
           />
 
           <div className="user-name-number ml-1  ">
-            <h2 className="text-lg text-gray-800 line-clamp-1">{selectedFriend.fullName}</h2>
+            <h2 className="text-lg text-gray-800 line-clamp-1">
+              {selectedFriend.fullName}
+            </h2>
             <p className="text-sm text-gray-600 line-clamp-1">
               +91 <span>{selectedFriend.contactNo}</span>
             </p>
@@ -113,15 +130,24 @@ function FriendTranscationDetail({
                 {transactionsDto[0].lastClosingBalance >= 0
                   ? "You will get :"
                   : "You will give :"}
-                <span> ₹ {Math.abs(transactionsDto[0].lastClosingBalance)}</span>
+                <span>
+                  {" "}
+                  ₹ {Math.abs(transactionsDto[0].lastClosingBalance)}
+                </span>
               </>
             )}
           </h2>
         </div>
 
         <div className="report-settings  flex gap-2 flex items-center justify-between">
-          <button onClick={toggleReportModal} className="report h-[35px] text-white px-3 font-semibold  bg-rose-600 rounded-sm flex items-center justify-center   hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm  shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
-           <span className="mr-1 "><FontAwesomeIcon icon={faDownload} /></span> <span className=" line-clamp-1">View Report</span>
+          <button
+            onClick={toggleReportModal}
+            className="report h-[35px] text-white px-3 font-semibold  bg-rose-600 rounded-sm flex items-center justify-center   hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm  shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+          >
+            <span className="mr-1 ">
+              <FontAwesomeIcon icon={faDownload} />
+            </span>{" "}
+            <span className=" line-clamp-1">View Report</span>
           </button>
           <FriendTransactionReport
             isOpen={isReportModalOpen}
@@ -129,11 +155,15 @@ function FriendTranscationDetail({
             selectedFriend={selectedFriend}
             user={user}
           />
-          <div className="settings h-[50px] w-12 flex items-center justify-center ">
-            <FontAwesomeIcon
-              icon={faGear}
-              className="text-white "
-              style={{ fontSize: "25px " }}
+          <div onClick={toggleUnfriendModal} className="settings h-10 w-10 rounded-full border border-white flex items-center justify-center bg-cyan-600">
+            <img
+              src={unFriendImage}
+              alt="Settings"
+              className="h-8 w-8 object-contain filter invert brightness-0"
+            />
+            <UnfriendModal
+            isOpen={isUnfriendModalOpen}
+            toggleModal={toggleUnfriendModal}
             />
           </div>
         </div>
@@ -141,7 +171,14 @@ function FriendTranscationDetail({
       {/* <div className="table-div absolute top-24 h-[70%] border border-gray-500 shadow-inner-custom w-full bg-gray-400 relative px-2 ">
       <table className="w-full  border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="sticky top-0 fixed border  shadow-inner-custom  top-0 bg-gray-50 dark:bg-gray-200 text-xs text-gray-400 uppercase dark:text-gray-800"> */}
-      <div class="table-division border border-gray-400 w-full h-[76.8%] bg-gray-400  absolute top-24 border-gray-500 shadow-inner-custom scrollable px-2  ">
+      <div
+        onClick={() => {
+          if (isCommentSectionOpen) {
+            setIsCommentSetionOpen(false);
+          }
+        }}
+        class="table-division border border-gray-400 w-full h-[76.8%] bg-gray-400  absolute top-24 border-gray-500 shadow-inner-custom scrollable px-2  "
+      >
         <table className="w-full border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="sticky top-0 fixed border  shadow-inner-custom  top-0 bg-gray-100  text-xs text-gray-400 uppercase dark:text-gray-800">
             <tr>
@@ -163,18 +200,18 @@ function FriendTranscationDetail({
 
               return (
                 <tr
-            key={transactionDto.transaction.transId}
-            className={`bg-white border-b border-1 shadow-inner-custom rounded-sm  dark:border-gray-100 cursor-pointer ${
-              selectedRowId === transactionDto.transaction.transId
-                ? 'bg-slate-200'
-                : 'bg-gray-100'
-            }`}
-            onClick={() => {
-              handleRowClick(transactionDto.transaction.transId); // Set the selected row's ID on click
-              setCommentTransaction(transactionDto.transaction);
-              toggleCommentSection(); // Call toggleDetail to open/close the details section
-            }}
-          >
+                  key={transactionDto.transaction.transId}
+                  className={`bg-white border-b border-1 shadow-inner-custom rounded-sm  dark:border-gray-100 cursor-pointer ${
+                    selectedRowId === transactionDto.transaction.transId
+                    ? "bg-gray-300 dark:bg-gray-300" 
+                    : "bg-gray-100 dark:bg-gray-100" 
+                  }`}
+                  onClick={() => {
+                    handleRowClick(transactionDto.transaction.transId); // Set the selected row's ID on click
+                    setCommentTransaction(transactionDto.transaction);
+                    toggleCommentSection();
+                  }}
+                >
                   <td
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
@@ -194,7 +231,7 @@ function FriendTranscationDetail({
                     {isUserGave && (
                       <div className="flex flex-col">
                         <span className="font-medium text-rose-500">
-                        <span>₹</span> {transactionDto.transaction.amount} 
+                          <span>₹</span> {transactionDto.transaction.amount}
                         </span>
                       </div>
                     )}
@@ -204,7 +241,7 @@ function FriendTranscationDetail({
                     {!isUserGave && (
                       <div className="flex flex-col">
                         <span className="font-medium text-green-500 ">
-                        <span>₹</span>  {transactionDto.transaction.amount} 
+                          <span>₹</span> {transactionDto.transaction.amount}
                         </span>
                       </div>
                     )}

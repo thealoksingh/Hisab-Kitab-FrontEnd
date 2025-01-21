@@ -6,23 +6,28 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
   const [contactNo, setContactNo] = useState(""); // State to store the contact number
   const [email, setEmail] = useState(""); // State to store the email
   const [error, setError] = useState(null);
+  const [AddFriendErrorMessage, setAddFriendErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  const [timer, setTimer] = useState(60); // State for timer
+  const [timer, setTimer] = useState(30); // State for timer
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // State for disabling button
 
-  useEffect(() => {
-    let interval;
+// const [loading, setLoading] = useState(false);
 
-    if (isButtonDisabled && timer > 0) {
-      interval = setInterval(() => {
-        setTimer((prevTimer) => prevTimer - 1); // Correctly update timer using the previous value
-      }, 1000);
-    } else if (timer === 0) {
-      setIsButtonDisabled(false); // Enable the button when timer reaches 0
-      setTimer(60); // Reset the timer
-    }
-    return () => clearInterval(interval); // Clean up interval when the component unmounts or timer reaches 0
-  }, [isButtonDisabled, timer]); // Dependencies to trigger the timer logic
+useEffect(() => {
+  let interval;
+
+  if (isButtonDisabled && timer > 0) {
+    interval = setInterval(() => {
+      setTimer((prevTimer) => prevTimer - 1); // Decrease timer by 1 every second
+    }, 1000);
+  } else if (timer === 0) {
+    setIsButtonDisabled(false); // Enable the button when the timer reaches 0
+    setTimer(30); // Reset the timer
+    setError(null); // Clear the error message after 60 seconds
+  }
+
+  return () => clearInterval(interval); // Cleanup the interval
+}, [isButtonDisabled, timer]); // Dependencies to watch
 
   const handleInviteRequest = (e) => {
     e.preventDefault();
@@ -40,33 +45,59 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
       await addFriend(user.userId, contactNo)
         .then((data) => {
           console.log("Friend request sent successfully:", data);
-          alert("Friend request sent successfully");
+          setAddFriendErrorMessage("Friend request sent successfully");
           setContactNo(""); // Reset the contact number
-          toggleModal(); // Close the modal
+          
         })
         .catch((error) => {
           console.error("Error adding friend:", error);
-          setIsAddButtonVisible(false); // Switch to invite mode
+  
+          // Handle specific error messages from the backend
+          if (error.response && error.response.data) {
+            const errorMessage = error.response.data;
+             console.log("🥹"+errorMessage);
+            if (errorMessage === "You cannot send a friend request to yourself.") {
+              setAddFriendErrorMessage("You cannot send a friend request to yourself.");
+            } else if (errorMessage === "You are already friends.") {
+              setAddFriendErrorMessage("You are already friends.");
+            } else if (errorMessage === "Friend request already sent.") {
+              setAddFriendErrorMessage("Friend request already sent.");
+            } else if (errorMessage === "User not exist") {
+              setIsAddButtonVisible(false); // Switch to invite mode
+              setAddFriendErrorMessage("The user does not exist.");
+            } else {
+              setAddFriendErrorMessage("An unexpected error occurred. Please try again.");
+            }
+          } else {
+            // Handle other generic errors
+            setAddFriendErrorMessage("Failed to send friend request. Please check your network or try again later.");
+          }
+  
+         
           setContactNo(""); // Reset the contact number
         });
     } else {
-      alert("Please enter a valid mobile number");
+      setAddFriendErrorMessage("Please enter a valid mobile number.");
     }
   };
+  
 
   const handleInvite = async (e) => {
     e.preventDefault();
     console.log("Invite button clicked");
+    
     if (email !== "") {
       await sendInvitationEmail(email, user.fullName)
         .then((data) => {
           console.log("Invite email sent:", email);
-          alert("Sign-up Invitation sent successfully");
+          setAddFriendErrorMessage("Invitation sent successfully");
+          alert("Invitation sent successfully");
           setEmail(""); // Reset the email
           toggleModal(); // Close the modal
         })
         .catch((error) => {
           console.error("Error sending invitation email:", error);
+          setError(error.message || "An unexpected error occurred");
           setEmail(""); // Reset the email
         });
     } else {
@@ -90,6 +121,7 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
               onClick={() => {
                 toggleModal(); // Close modal
                 setIsAddButtonVisible(true); // Reset to Add mode
+                setAddFriendErrorMessage(null);
               }}
             >
               <svg
@@ -143,24 +175,35 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
                 disabled={isAddButtonVisible}
               />
             </div>
+              {/* Display error or success message */}
+      {AddFriendErrorMessage && (
+    <p className={`mb-3 text-sm ${AddFriendErrorMessage.includes("successfully") ? "text-green-500" : "text-red-500"}`}>
+      {AddFriendErrorMessage}
+    </p>
+   )}
+
+            {error && <p className="text-red-500">{error}</p>}
+
             <h4 className={`${!isAddButtonVisible ? "block" : "hidden"} mb-2 text-rose-500 text-sm`}>
               !!User Doesn't Exist.<span className="text-cyan-700"> Enter Email and Click below to Invite </span>
             </h4>
-            {isButtonDisabled && <h5 className="text-green-500 font-sm">
-              {`Invite sent successfully. `}<span className="text-rose-600 font-sm"> {isButtonDisabled && ` Resend in ${timer} sec`}</span>
+
+            {isButtonDisabled && <h5 className="text-orange-500 font-sm">
+              {`Trying to send , Wait few Seconds`}<span className="text-rose-600 font-sm"> {isButtonDisabled && ` Resend in ${timer} sec`}</span>
             </h5>}
+
           
             <div className="mb-2 flex gap-4">
               <button
                 type="submit"
-                className={`${isAddButtonVisible ? "block" : "hidden"} w-1/3 bg-cyan-600 text-white px-4 py-2 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
+                className={`${isAddButtonVisible ? "block" : "hidden"} w-1/3 bg-cyan-600 text-white px-4 py-1 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
                 onClick={handleAddFriend}
               >
                 Add
               </button>
               <button
                 type="submit"
-                className={`${!isAddButtonVisible ? "block" : "hidden"} w-1/3 bg-teal-600 text-white px-4 py-2 focus:outline-none focus:ring-4 focus:ring-teal-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
+                className={`${!isAddButtonVisible ? "block" : "hidden"} w-1/3 bg-teal-600 text-white px-4 py-1 focus:outline-none focus:ring-4 focus:ring-teal-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
                 onClick={handleInviteRequest}
                 disabled={isButtonDisabled} // Disable button when timer is active
                 style={{
@@ -168,6 +211,17 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
                 }}
               >
                 Invite
+              </button>
+              <button
+                 onClick={() => {
+                  toggleModal(); // Close modal
+                  setIsAddButtonVisible(true); // Reset to Add mode
+                  setAddFriendErrorMessage(null);
+                }}
+                className="w-1/3 bg-rose-600 text-white px-4 py-1 focus:outline-none focus:ring-4 focus:ring-rose-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 "
+              
+              >
+                Cancel
               </button>
             </div>
           </form>

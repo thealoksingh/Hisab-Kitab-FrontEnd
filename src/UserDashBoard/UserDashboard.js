@@ -3,11 +3,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { getFriendList } from "../Api/HisabKitabApi";
 import LeftSideDashBoard from "./LeftSideDashboard";
 import RightSideDashBoard from "./RightSideDashboard";
+import logo from "../assets/logo-hisab-kitab.png";
+
 // import GroupDashBoard from './GroupDashBoard';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import HelpAndSupport from "../Modals/HelpAndSupport";
 import {
   faCalculator,
   faGear,
+  faClipboardQuestion,
   faPeoplePulling,
   faPeopleGroup,
   faBook,
@@ -21,17 +25,18 @@ const UserDashboard = () => {
   const location = useLocation();
   const [friends, setFriends] = useState([]);
   const [error, setError] = useState(null);
+  const [isHelpAndSupportOpen, setIsHelpAndSupportOpen] = useState(false);
   const user = location.state?.user;
   const [refreshFriendTransaction, setRefreshFriendTransaction] =
     useState(false);
   const navigate = useNavigate();
- 
+
   useEffect(() => {
     const fetchFriends = async () => {
       if (!user) return;
 
       try {
-        console.log("friendlist api called");
+        // console.log("friendlist api called");
         const response = await getFriendList(user.userId);
         console.log(response.data);
         setFriends(response.data.friendList); // Assuming the data is in response.data.friendList
@@ -42,6 +47,10 @@ const UserDashboard = () => {
 
     fetchFriends();
   }, [user, refreshFriendTransaction]);
+
+  const toggleHelpAndSupport = () => {
+    setIsHelpAndSupportOpen(!isHelpAndSupportOpen);
+  };
 
   return (
     <>
@@ -77,16 +86,16 @@ const UserDashboard = () => {
         <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
           <ul class="space-y-2 font-medium">
             <li>
-              <a class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                <FontAwesomeIcon
-                  className="text-white "
-                  style={{ fontSize: "25px " }}
-                  icon={faCalculator}
+              <a className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <img
+                  src={logo}
+                  alt="Hisab Kitab Logo"
+                  className="w-6 h-6" // Adjust width and height as per your design
                 />
-                <span class="ms-3">Hisab Kitab</span>
-                
+                <span className="ms-3">Hisab Kitab</span>
               </a>
             </li>
+
             <li>
               <a class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                 <FontAwesomeIcon
@@ -158,24 +167,30 @@ const UserDashboard = () => {
                 <span class="flex-1 ms-3 whitespace-nowrap">Settings</span>
               </a>
             </li>
+            <li onClick={toggleHelpAndSupport}>
+              <a className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <FontAwesomeIcon
+                  className="text-white"
+                  style={{ fontSize: "25px" }}
+                  icon={faClipboardQuestion}
+                />
+                <span className="flex-1 ms-3 whitespace-nowrap">
+                  Help & Support
+                </span>
+              </a>
+            </li>
             <li
-               onClick={() => {
+              onClick={() => {
                 // Clear user state (example assumes user is managed in state or context)
-               try{
-                user=null;
-               
-               }
-               catch(error){
-                navigate("/")
-          
-               }
-                 
+                try {
+                  user = null;
+                } catch (error) {
+                  navigate("/");
+                }
               }}
             >
               <a
                 href="/"
-
-                
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <FontAwesomeIcon
@@ -186,6 +201,7 @@ const UserDashboard = () => {
                 <span className="flex-1 ms-3 whitespace-nowrap">Sign Out</span>
               </a>
             </li>
+            
           </ul>
         </div>
       </aside>
@@ -213,6 +229,11 @@ const UserDashboard = () => {
             setRefreshFriendTransaction={setRefreshFriendTransaction}
           />
         </div>
+        <HelpAndSupport
+          isOpen={isHelpAndSupportOpen}
+          toggleModal={toggleHelpAndSupport}
+        />
+
         {/* <GroupDashBoard/> */}
         {/* <FriendRequestModal isOpen={isOpenFriendRequestModal} toggleModal={closeFriendRequestModal}/> */}
       </div>

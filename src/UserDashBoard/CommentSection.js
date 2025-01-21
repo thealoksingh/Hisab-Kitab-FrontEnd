@@ -291,7 +291,7 @@ function CommentSection({
             <div className="comment-input flex gap-2 items-center p-2">
               <input
                 type="text"
-                placeholder="Write a comment..."
+                placeholder="Write a comment...."
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
                 required
@@ -300,7 +300,7 @@ function CommentSection({
               <button
                 type="button"
                 onClick={handleCommentSubmit}
-                className="bg-teal-600 text-white text-sm px-3 py-1 rounded-sm hover:bg-teal-700 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                className="bg-teal-600 text-white text-sm px-4 py-1 rounded-sm hover:bg-teal-700 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
               >
                 Send
               </button>
@@ -311,7 +311,7 @@ function CommentSection({
             <div className="w-full flex items-center justify-center">
               <button
                 onClick={toggleDeleteAlert}
-                className="w-[80%]  h-[40px] border border-rose-800 text-sm text-rose-800 hover:text-white   hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                className="w-[80%] mt-4  h-[40px] border border-rose-800 text-sm text-rose-800 hover:text-white   hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
               >
                 <span className="mr-5">
                   <FontAwesomeIcon icon={faTrashCan} />

@@ -15,7 +15,11 @@ function LeftSideDashBoard({
   setSelectedFriend,
   refreshFriendTransaction,
   setRefreshFriendTransaction,
-}) {
+ 
+})
+
+
+{
   const location = useLocation();
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -35,6 +39,10 @@ function LeftSideDashBoard({
     useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   // const [loading, setLoading] = useState(false);
+const [noOfRequest,setNoOfRequest] =useState(0);
+const [error, setError] = useState("");
+const [loading, setLoading] = useState(false);
+const [userId, setUserId] = useState("");
 
   const toggleFriendRequestModal = () => {
     setIsFriendRequestModalOpen(!isFriendRequestModalOpen);
@@ -205,13 +213,7 @@ function LeftSideDashBoard({
     setGiveAmount(totalGiveAmount);
   }
 
-  // useEffect(() => {
-  //   // Run applyFilter with "ALL" when the component first renders
-  //   applyFilter(filterCriteria);
-  // }, [user]); // Empty dependency array ensures it runs only on initial render
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [userId, setUserId] = useState("");
+  
 
   useEffect(() => {
     setUserId(user.userId);
@@ -264,8 +266,8 @@ function LeftSideDashBoard({
 
   return (
     <>
-      <div className="left-side rounded h-screen w-[50%]  relative overflow-hidden  ">
-        <div className="left-upper  h-36 w-full">
+      <div   className="left-side rounded h-screen w-[50%]  relative overflow-hidden  ">
+        <div  className="left-upper  h-36 w-full">
           <div className="flex  px-2 shadow-inner-custom items-center gap-1 justify-between border border-gray-300 h-12 bg-gray-400">
             <div className="p-2 flex-shrink font-semibold">
               You'll Give:
@@ -447,8 +449,8 @@ function LeftSideDashBoard({
                   key={friend.userEntity.userId}
                   className={`bg-white border-b border-1 shadow-inner-custom rounded-sm  dark:border-gray-100 cursor-pointer ${
                     selectedRowId === friend.userEntity.userId
-                      ? "bg-slate-200"
-                      : "bg-gray-100"
+                    ? "bg-gray-300 dark:bg-gray-300" 
+                    : "bg-gray-100 dark:bg-gray-100" 
                   }`}
                   onClick={() => handleRowClick(friend.userEntity)} // Pass `userEntity` here
                 >
@@ -520,7 +522,7 @@ function LeftSideDashBoard({
             className="relative w-1/3 h-full bg-teal-600 text-sm text-white hover:bg-teal-500 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
           >
             <div className="h-6 w-6 absolute -right-2 -top-2 border border-white flex items-center justify-center rounded-full bg-orange-500 text-white text-xs font-bold shadow-sm">
-              67
+            {noOfRequest}
             </div>
             View Friend Request
           </button>
@@ -531,6 +533,7 @@ function LeftSideDashBoard({
             user={user}
             isOpen={isFriendRequestModalOpen}
             toggleModal={toggleFriendRequestModal}
+            setNoOfRequest={setNoOfRequest} 
           />
         </div>
       </div>

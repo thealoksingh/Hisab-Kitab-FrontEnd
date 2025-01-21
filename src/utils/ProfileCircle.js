@@ -9,7 +9,11 @@ const ProfileCircle = ({ name, className, color }) => {
     justifyContent: 'center',
     fontWeight: 'bold',
     textTransform: 'uppercase',
+    boxShadow: 'inset 0px 1px 3px rgba(0, 0, 0, 0.2)', 
+    border: '1px solid #E5E7EB', 
+    backgroundColor: '#E5E7EB', 
   };
+  
 
   return (
     <div className={`${className}`} style={styles}>
