@@ -15,6 +15,7 @@ function LeftSideDashBoard({
   setSelectedFriend,
   refreshFriendTransaction,
   setRefreshFriendTransaction,
+  friendRequestCount
  
 })
 
@@ -38,8 +39,7 @@ function LeftSideDashBoard({
   const [isFriendRequestModalOpen, setIsFriendRequestModalOpen] =
     useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  // const [loading, setLoading] = useState(false);
-const [noOfRequest,setNoOfRequest] =useState(0);
+
 const [error, setError] = useState("");
 const [loading, setLoading] = useState(false);
 const [userId, setUserId] = useState("");
@@ -522,7 +522,7 @@ const [userId, setUserId] = useState("");
             className="relative w-1/3 h-full bg-teal-600 text-sm text-white hover:bg-teal-500 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
           >
             <div className="h-6 w-6 absolute -right-2 -top-2 border border-white flex items-center justify-center rounded-full bg-orange-500 text-white text-xs font-bold shadow-sm">
-            {noOfRequest}
+            {friendRequestCount}
             </div>
             View Friend Request
           </button>
@@ -533,7 +533,7 @@ const [userId, setUserId] = useState("");
             user={user}
             isOpen={isFriendRequestModalOpen}
             toggleModal={toggleFriendRequestModal}
-            setNoOfRequest={setNoOfRequest} 
+            
           />
         </div>
       </div>

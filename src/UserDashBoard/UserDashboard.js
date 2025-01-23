@@ -4,10 +4,10 @@ import { getFriendList } from "../Api/HisabKitabApi";
 import LeftSideDashBoard from "./LeftSideDashboard";
 import RightSideDashBoard from "./RightSideDashboard";
 import logo from "../assets/logo-hisab-kitab.png";
-
+import HelpAndSupport from "../Modals/HelpAndSupport";
 // import GroupDashBoard from './GroupDashBoard';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import HelpAndSupport from "../Modals/HelpAndSupport";
+
 import {
   faCalculator,
   faGear,
@@ -29,6 +29,7 @@ const UserDashboard = () => {
   const user = location.state?.user;
   const [refreshFriendTransaction, setRefreshFriendTransaction] =
     useState(false);
+  const[friendRequestCount,setFriendRequestCount] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,6 +41,8 @@ const UserDashboard = () => {
         const response = await getFriendList(user.userId);
         console.log(response.data);
         setFriends(response.data.friendList); // Assuming the data is in response.data.friendList
+        setFriendRequestCount(response.data.friendRequestCount)
+        
       } catch (err) {
         setError(err.message);
       }
@@ -211,6 +214,7 @@ const UserDashboard = () => {
       <div class="h-[100]  whole-dashboard  p-2 ml-64 ">
         <div class="flex gap-2 ">
           <LeftSideDashBoard
+          friendRequestCount={friendRequestCount}
             user={user} // Pass user data
             friends={friends} // Pass friends data
             isFriendSelected={isFriendSelected}
@@ -230,6 +234,7 @@ const UserDashboard = () => {
           />
         </div>
         <HelpAndSupport
+        user={user}
           isOpen={isHelpAndSupportOpen}
           toggleModal={toggleHelpAndSupport}
         />

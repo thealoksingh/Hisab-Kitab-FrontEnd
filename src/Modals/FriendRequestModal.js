@@ -8,7 +8,7 @@ import {
   unsendRequest
 } from "../Api/HisabKitabApi";
 
-const FriendRequestModal = ({ isOpen, toggleModal, user ,setNoOfRequest }) => {
+const FriendRequestModal = ({ isOpen, toggleModal, user  }) => {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [sentRequests, setSentRequests] = useState([]);
   
@@ -19,7 +19,6 @@ const FriendRequestModal = ({ isOpen, toggleModal, user ,setNoOfRequest }) => {
       try {
         const pendingResponse = await getAllPendingRequest(user.userId);
         setPendingRequests(pendingResponse?.data || []);
-        setNoOfRequest(pendingResponse.data.length);
         console.log("Pending requests fetched:", pendingResponse.data);
 
         const sentResponse = await getAllSentRequest(user.userId);

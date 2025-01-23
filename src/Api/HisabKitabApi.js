@@ -93,3 +93,11 @@ export const forgetPassword = (email, newPassword) => {
 export const deleteComment = (commentId) => {
   return apiClient.delete(`/user/transaction/comment/${commentId}`);
 };
+
+export const createTicket = (ticketData) => {
+  return apiClient.post(`/user/tickets`, ticketData);
+};
+export const getAllTickets = (userId) => {
+  return apiClient.get(`user/tickets/${userId}`);
+};
+
