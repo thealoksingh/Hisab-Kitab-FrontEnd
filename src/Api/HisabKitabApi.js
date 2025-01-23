@@ -85,7 +85,26 @@ export const sendOtpEmail = (email) => {
 };
 //forgot password /update password
 export const forgetPassword = (email, newPassword) => {
-  return apiClient.post(`user/update-password?email=${email}&newPassword=${newPassword}`);
+  return apiClient.post(`/user/update-password?email=${email}&newPassword=${newPassword}`);
 };
 
 
+//to delete comments
+export const deleteComment = (commentId) => {
+  return apiClient.delete(`/user/transaction/comment/${commentId}`);
+};
+
+export const createTicket = (ticketData) => {
+  return apiClient.post(`/user/tickets`, ticketData);
+};
+export const getAllTickets = (userId) => {
+  return apiClient.get(`user/tickets/${userId}`);
+};
+
+export const unFriendApi = (userId,friendId) => {
+  return apiClient.delete(`user/${userId}/friends/${friendId}`);
+};
+
+export const deleteTicketApi = (ticketId) => {
+  return apiClient.delete(`user/tickets/${ticketId}`);
+};

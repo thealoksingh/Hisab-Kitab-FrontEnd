@@ -1,8 +1,6 @@
-import axios from "axios"
+import axios from "axios";
 
-export const apiClient = axios.create(
+export const apiClient = axios.create({
+    baseURL: process.env.REACT_APP_API_BASE_URL,
+});
 
-    {
-        baseURL: 'https://hisab-kitab-backend-ixz5.onrender.com/Hisab-Kitab'
-    }
-)

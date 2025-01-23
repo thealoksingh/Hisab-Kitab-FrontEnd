@@ -1,27 +1,46 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear,faDownload } from "@fortawesome/free-solid-svg-icons";
+import {  faDownload } from "@fortawesome/free-solid-svg-icons";
 import CommentSection from "./CommentSection";
 import React, { useState, useEffect } from "react";
 import { getTransactionDetailsWithFriend } from "../Api/HisabKitabApi";
 import GiveGotModal from "../Modals/GiveGotModal";
-import '../CssStyle/GroupDashboard.css';
+import "../CssStyle/GroupDashboard.css";
 import FriendTransactionReport from "../Modals/FriendTransactionReport";
-
-function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransaction, setRefreshFriendTransaction }) {
+import ProfileCircle from "../utils/ProfileCircle";
+import unFriendImage from "../assets/unFriend.png";
+import UnfriendModal from "../Modals/UnfriendModal";
+function FriendTranscationDetail({
+  user,
+  selectedFriend,
+  refreshFriendTransaction,
+  setRefreshFriendTransaction,
+}) {
   const [transactionsDto, setTransactionsDto] = useState([]);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transactionType, setTransactionType] = useState(""); // Track the transaction type (Give or Got)
-  const [isCommentSectionOpen, setIsCommentSetionOpen] = useState(false);
+
   const [commentTransaction, setCommentTransaction] = useState([]);
   const [isRowClicked, setIsRowClicked] = useState(false);
   const [isReportModalOpen, setReportModalOpen] = useState(false);
+  const [selectedRowId, setSelectedRowId] = useState(null);
+  const [isCommentSectionOpen, setIsCommentSetionOpen] = useState(false);
+const [isUnfriendModalOpen, setIsUnfriendModalOpen]= useState(false);
 
+ const toggleUnfriendModal=() =>{
+setIsUnfriendModalOpen(!isUnfriendModalOpen);
+ }
+  const handleRowClick = (transactionId) => {
+    setSelectedRowId(transactionId);
+  };
   const toggleReportModal = () => {
     setReportModalOpen(!isReportModalOpen);
   };
 
   const toggleCommentSection = () => {
+    if (isCommentSectionOpen) {
+      setSelectedRowId(null);
+    }
     setIsCommentSetionOpen(!isCommentSectionOpen); // Toggle the state when the button is clicked
   };
 
@@ -65,72 +84,116 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
 
   return (
     <>
-      <div className="right-header top-[0] h-[10%] bg-slate-400 w-full absolute p-[10px] flex gap-[10px] flex items-center ">
-        <div className="alphabet-circle bg-teal-600 h-[50px] w-[50px] rounded-full flex items-center justify-center">
-          <h1 className="text-white text-lg">{selectedFriend.fullName[0].toUpperCase()}</h1>
+      <div
+        onClick={() => {
+          if (isCommentSectionOpen) {
+            setIsCommentSetionOpen(false);
+          }
+        }}
+        className="right-header p-2 absolute top-0  border border-gray-400 shadow-inner-custom justify-between h-24 bg-gray-300 w-full  p-[10px] flex gap-[10px] flex items-center "
+      >
+        <div className=" flex gap-2">
+          <ProfileCircle
+            className="h-12 w-12 mr-4 text-white text-lg"
+            name={selectedFriend.fullName}
+            color={selectedFriend.colorHexValue}
+          />
+
+          <div className="user-name-number ml-1  ">
+            <h2 className="text-lg text-gray-800 line-clamp-1">
+              {selectedFriend.fullName}
+            </h2>
+            <p className="text-sm text-gray-600 line-clamp-1">
+              +91 <span>{selectedFriend.contactNo}</span>
+            </p>
+          </div>
         </div>
-        <div className="user-name">
-          <h2 className="text-lg text-gray-800">{selectedFriend.fullName}</h2>
-          <p className="text-sm text-gray-600">
-            +91 <span>{selectedFriend.contactNo}</span>
-          </p>
-        </div>
+
         <div
-          className={`net-balance border h-[35px] w-40 rounded flex items-center justify-center ml-5 ${transactionsDto.length > 0 &&
-              transactionsDto[0].lastClosingBalance >= 0
-              ? "border-teal-900 text-green-900"
+          className={`net-balance border p-1 h-10 w-40 rounded-sm flex items-center justify-center ml-5 ${
+            transactionsDto.length > 0 &&
+            transactionsDto[0].lastClosingBalance >= 0
+              ? "border-green-900 text-green-900"
               : "border-red-900 text-red-900"
-            }`}
+          }`}
         >
           <h2
-            className={`text-black ${transactionsDto.length > 0 &&
-                transactionsDto[0].lastClosingBalance >= 0
-                ? "border-teal-900 text-green-900"
+            className={`text-black line-clamp-1 ${
+              transactionsDto.length > 0 &&
+              transactionsDto[0].lastClosingBalance >= 0
+                ? "border-green-900 text-green-900"
                 : "border-red-900 text-red-900"
-              }`}
+            }`}
           >
             {transactionsDto.length > 0 && (
               <>
                 {transactionsDto[0].lastClosingBalance >= 0
                   ? "You will get :"
                   : "You will give :"}
-                <span>${Math.abs(transactionsDto[0].lastClosingBalance)}</span>
+                <span>
+                  {" "}
+                  ₹ {Math.abs(transactionsDto[0].lastClosingBalance)}
+                </span>
               </>
             )}
           </h2>
         </div>
 
-        <div className="report-settings right-[10px] absolute flex gap-[10px] flex items-center justify-center">
-          <div onClick={toggleReportModal} className="report h-[35px] text-white px-2 font-semibold  bg-rose-600 rounded-sm flex items-center justify-center">
-           <span className="mr-1"><FontAwesomeIcon icon={faDownload} /></span>View Report
-          </div>
-          <FriendTransactionReport isOpen={isReportModalOpen}
+        <div className="report-settings  flex gap-2 flex items-center justify-between">
+          <button
+            onClick={toggleReportModal}
+            className="report h-[35px] text-white px-3 font-semibold  bg-rose-600 rounded-sm flex items-center justify-center   hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm  shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+          >
+            <span className="mr-1 ">
+              <FontAwesomeIcon icon={faDownload} />
+            </span>{" "}
+            <span className=" line-clamp-1">View Report</span>
+          </button>
+          <FriendTransactionReport
+            isOpen={isReportModalOpen}
             toggleModal={toggleReportModal}
-            selectedFriend={selectedFriend} user={user}
+            selectedFriend={selectedFriend}
+            user={user}
           />
-          <div className="settings h-[50px] w-12 flex items-center justify-center ">
-            <FontAwesomeIcon
-              icon={faGear}
-              className="text-white "
-              style={{ fontSize: "25px " }}
+          <div onClick={toggleUnfriendModal} className="settings h-10 w-10 rounded-full border border-white flex items-center justify-center bg-cyan-600">
+            <img
+              src={unFriendImage}
+              alt="Settings"
+              className="h-8 w-8 object-contain filter invert brightness-0"
+            />
+            <UnfriendModal
+            isOpen={isUnfriendModalOpen}
+            toggleModal={toggleUnfriendModal}
+            userId={user.userId}
+            friendId={selectedFriend.userId}
             />
           </div>
         </div>
       </div>
-
-      <div class="table-division w-full h-[80%] bg-gray-400  absolute top-24 border-gray-500 shadow-inner-custom scrollable px-2  ">
-        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-          <thead className="sticky top-0 bg-gray-50 dark:bg-gray-700 text-xs text-gray-700 uppercase dark:text-gray-400">            <tr>
-            <th scope="col" className="px-6 py-3">
-              Entries
-            </th>
-            <th scope="col" className="px-6 py-3">
-              You gave
-            </th>
-            <th scope="col" className="px-6 py-3 text-right">
-              You got
-            </th>
-          </tr>
+      {/* <div className="table-div absolute top-24 h-[70%] border border-gray-500 shadow-inner-custom w-full bg-gray-400 relative px-2 ">
+      <table className="w-full  border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-gray-400">
+          <thead className="sticky top-0 fixed border  shadow-inner-custom  top-0 bg-gray-50 dark:bg-gray-200 text-xs text-gray-400 uppercase dark:text-gray-800"> */}
+      <div
+        onClick={() => {
+          if (isCommentSectionOpen) {
+            setIsCommentSetionOpen(false);
+          }
+        }}
+        class="table-division border border-gray-400 w-full h-[76.8%] bg-gray-400  absolute top-24 border-gray-500 shadow-inner-custom scrollable px-2  "
+      >
+        <table className="w-full border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-gray-400">
+          <thead className="sticky top-0 fixed border  shadow-inner-custom  top-0 bg-gray-100  text-xs text-gray-400 uppercase dark:text-gray-800">
+            <tr>
+              <th scope="col" className="px-6 py-3">
+                Entries
+              </th>
+              <th scope="col" className="px-6 py-3">
+                You gave
+              </th>
+              <th scope="col" className="px-6 py-3 text-right">
+                You got
+              </th>
+            </tr>
           </thead>
           <tbody>
             {transactionsDto.map((transactionDto, index) => {
@@ -140,11 +203,15 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
               return (
                 <tr
                   key={transactionDto.transaction.transId}
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                  className={`bg-white border-b border-1 shadow-inner-custom rounded-sm  dark:border-gray-100 cursor-pointer ${
+                    selectedRowId === transactionDto.transaction.transId
+                    ? "bg-gray-300 dark:bg-gray-300" 
+                    : "bg-gray-100 dark:bg-gray-100" 
+                  }`}
                   onClick={() => {
+                    handleRowClick(transactionDto.transaction.transId); // Set the selected row's ID on click
                     setCommentTransaction(transactionDto.transaction);
                     toggleCommentSection();
-                    setIsRowClicked(!isRowClicked);
                   }}
                 >
                   <td
@@ -152,11 +219,11 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
                   >
                     <div className="flex flex-col">
-                      <span className="font-medium text-white">
-                        Closing Balance: <span>$</span>{" "}
+                      <span className="font-medium text-gray-900">
+                        Closing Balance: <span>₹</span>{" "}
                         <span>{transactionDto.lastClosingBalance}</span>
                       </span>
-                      <span className="text-xs text-white mt-1">
+                      <span className="text-xs text-gray-900 mt-1">
                         {transactionDto.transaction.transDate}
                       </span>
                     </div>
@@ -166,7 +233,7 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
                     {isUserGave && (
                       <div className="flex flex-col">
                         <span className="font-medium text-rose-500">
-                          {transactionDto.transaction.amount} <span>$</span>
+                          <span>₹</span> {transactionDto.transaction.amount}
                         </span>
                       </div>
                     )}
@@ -175,8 +242,8 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
                   <td className="px-6 py-4 text-right pr-[25px]">
                     {!isUserGave && (
                       <div className="flex flex-col">
-                        <span className="font-medium text-green-500">
-                          {transactionDto.transaction.amount} <span>$</span>
+                        <span className="font-medium text-green-500 ">
+                          <span>₹</span> {transactionDto.transaction.amount}
                         </span>
                       </div>
                     )}
@@ -187,42 +254,38 @@ function FriendTranscationDetail({ user, selectedFriend, refreshFriendTransactio
           </tbody>
         </table>
       </div>
-      <div className="left-side-lower w-full gap-4 bg-slate-200 p-2 bottom-4 absolute h-[50px] flex items-center justify-center">
-        <div className="w-full bg-slate-400 bottom-4 absolute h-[50px] flex items-center justify-center gap-12 p-4">
-          <button
-            className="text-white text-lg h-[40px] w-40 rounded bg-rose-500"
-            onClick={handleGiveButtonClick}
-          >
-            You Gave : <span>$</span>
-          </button>
-          <button
-            className="text-white text-lg h-[40px] w-40 rounded bg-green-500"
-            onClick={handleGotButtonClick}
-          >
-            You Got : <span>$</span>
-          </button>
-          <GiveGotModal
-            userId={user.userId}
-            isOpen={isModalOpen}
-            toggleModal={toggleModal}
-            transactionType={transactionType}
-            friendId={selectedFriend.userId}
-            refreshFriendTransaction={refreshFriendTransaction}
-            setRefreshFriendTransaction={setRefreshFriendTransaction}
-          />
-        </div>
+      <div className="right-side-lower border border-gray-400 shadow-inner-custom w-full gap-4 bg-gray-300 p-2 bottom-4 absolute h-[50px] flex items-center justify-center">
+        <button
+          className="w-1/3 shadow-inner-custom h-full bg-rose-600 text-sm text-white 600    hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+          onClick={handleGiveButtonClick}
+        >
+          You Gave : <span>₹</span>
+        </button>
+        <button
+          className="w-1/3 shadow-inner-custom h-full bg-emerald-600 text-sm text-white 600    hover:bg-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+          onClick={handleGotButtonClick}
+        >
+          You Got : <span>₹</span>
+        </button>
+        <GiveGotModal
+          userId={user.userId}
+          isOpen={isModalOpen}
+          toggleModal={toggleModal}
+          transactionType={transactionType}
+          friendId={selectedFriend.userId}
+          refreshFriendTransaction={refreshFriendTransaction}
+          setRefreshFriendTransaction={setRefreshFriendTransaction}
+        />
       </div>
 
-      {commentTransaction != null &&<CommentSection
+      <CommentSection
         isOpen={isCommentSectionOpen}
         isRowClicked={isRowClicked}
         setIsRowClicked={setIsRowClicked}
         user={user}
-        commentTransaction={commentTransaction} setCommentTransaction={setCommentTransaction}
+        commentTransaction={commentTransaction}
         toggleCommentSection={toggleCommentSection}
-        refreshFriendTransaction={refreshFriendTransaction}
-        setRefreshFriendTransaction={setRefreshFriendTransaction}
-      />}
+      />
     </>
   );
 }

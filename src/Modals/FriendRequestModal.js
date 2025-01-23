@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ProfileCircle from "../utils/ProfileCircle";
 import {
   acceptRequest,
   getAllPendingRequest,
@@ -7,10 +8,10 @@ import {
   unsendRequest
 } from "../Api/HisabKitabApi";
 
-const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
+const FriendRequestModal = ({ isOpen, toggleModal, user  }) => {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [sentRequests, setSentRequests] = useState([]);
-
+  
   useEffect(() => {
     if (!isOpen) return; // Avoid fetching if modal is closed
 
@@ -117,9 +118,12 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
                       className="requests shadow-inner-custom h-10 w-full bg-gray-100 mb-1 p-1.5 justify-between flex"
                     >
                       <div className="w-36 flex items-center gap-1 p-0.5">
-                        <div className="h-7 w-7 text-white text-xs rounded-full bg-cyan-600 flex justify-center items-center">
-                          {request.sender?.fullName?.[0]?.toUpperCase() || "N"}
-                        </div>
+                        
+                        <ProfileCircle
+                      className="h-7 w-7  text-white text-sm"
+                      name={request.sender?.fullName}
+                      color={request.sender?.colorHexValue}
+                    />
                         <h4 className="px-2 ">
                           {request.sender?.fullName?.length > 10
                             ? request.sender.fullName.slice(0, 10) + "..."
@@ -159,9 +163,12 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
                       className="requests shadow-inner-custom h-10 w-full bg-gray-100 mb-1 p-1.5 justify-between flex"
                     >
                       <div className="w-36 flex items-center gap-1 p-0.5">
-                        <div className="h-7 w-7 text-xs text-white rounded-full bg-teal-600 flex justify-center items-center">
-                          {request.receiver?.fullName?.[0]?.toUpperCase() || "O"}
-                        </div>
+                        
+                        <ProfileCircle
+                      className="h-7 w-7  text-white text-sm"
+                      name={request.receiver?.fullName}
+                      color={request.receiver?.colorHexValue}
+                    />
                         <h4 className="px-2 ">
                           {request.receiver?.fullName?.length > 10
                             ? request.receiver.fullName.slice(0, 10) + "..."
@@ -172,7 +179,7 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
                       <div className="w-36 flex justify-center items-center p-0.5">
                         <button
                           onClick={() => handleUnsend(request.id)}
-                          className="w-16 text-xs h-full text-sm text-yellow-600 border border-yellow-600 hover:text-white hover:bg-yellow-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                          className="w-16 text-xs h-full text-sm text-yellow-600 border border-yellow-600 hover:text-white hover:bg-yellow-600 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                         >
                           Unsend
                         </button>

@@ -15,7 +15,8 @@ const ForgetPasswordForm = () => {
   const navigate = useNavigate();
   const [timer, setTimer] = useState(60); // State for timer
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // State for disabling button
-
+  const [isClicked, setClicked] = useState(false); // State to handle error prompt
+  
   useEffect(() => {
     let interval;
 
@@ -33,6 +34,7 @@ const ForgetPasswordForm = () => {
 
   
   const handleTimeAndOtp = (e) => {
+    
     if(email!==""){
     handleOtpRequest(e); // Send OTP request
     setIsButtonDisabled(true); // Disable button after OTP is sent
@@ -62,6 +64,7 @@ const ForgetPasswordForm = () => {
   };
 
   const handleOtpVerify = (e) => {
+    setClicked(true);
     e.preventDefault();
 
     if (otpEntered.trim() !== otp.toString().trim()) {
@@ -187,6 +190,9 @@ const ForgetPasswordForm = () => {
             </div>)}
             <h5 className="text-green-500 font-sm">
               {otpVerified && `OTP verified successfully. `}
+            </h5>
+            <h5 className="text-rose-500 font-sm">
+              {!otpVerified &&  isClicked && (` !!! incorrect OTP  `)}
             </h5>
            
             {otpVerified && (

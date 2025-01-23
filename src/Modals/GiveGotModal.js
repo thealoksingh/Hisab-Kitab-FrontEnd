@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { createTransaction } from "../Api/HisabKitabApi";
-
+import "../CssStyle/GroupDashboard.css";
 const GiveGotModal = ({
   isOpen,
   toggleModal,
@@ -8,7 +8,7 @@ const GiveGotModal = ({
   transactionType,
   friendId,
   refreshFriendTransaction,
-  setRefreshFriendTransaction
+  setRefreshFriendTransaction,
 }) => {
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
@@ -36,12 +36,12 @@ const GiveGotModal = ({
       setAmount("");
       setDate("");
       setDescription("");
-      refreshFriendTransaction?setRefreshFriendTransaction(false):setRefreshFriendTransaction(true);
+      refreshFriendTransaction
+        ? setRefreshFriendTransaction(false)
+        : setRefreshFriendTransaction(true);
     } catch (error) {
       console.error("Error creating transaction", error);
     }
-
-    
   };
 
   if (!isOpen) return null;
@@ -55,15 +55,23 @@ const GiveGotModal = ({
         isOpen ? "" : "hidden"
       }`}
     >
-      <div className="relative p-4 w-full max-w-md">
-        <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-          <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+      <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
+        <div className="form-add-frnd border border-gray-400 shadow-inner-custom relative bg-white w-1/3 h-1/3 rounded-sm shadow dark:bg-gray-300">
+          <div
+            className={`flex items-center justify-between p-2 md:p-2 rounded-sm ${
+              transactionType === "give" ? "bg-rose-600" : "bg-emerald-600"
+            }`}
+          >
+            <h3 className="text-lg font-semibold text-gray-200">
               {transactionType === "give" ? "You Gave" : "You Got"}
             </h3>
             <button
               type="button"
-              className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              className={`text-gray-400 bg-transparent hover:${
+                transactionType === "give" ? "bg-rose-200" : "bg-emerald-200"
+              } hover:text-gray-900 rounded-sm text-sm w-6 h-6 ms-auto inline-flex dark:hover:${
+                transactionType === "give" ? "bg-rose-600" : "bg-emerald-600"
+              } justify-center items-center dark:hover:text-white`}
               onClick={toggleModal}
             >
               <svg
@@ -89,7 +97,7 @@ const GiveGotModal = ({
             <div className="mb-4">
               <label
                 htmlFor="amount"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-sm font-medium text-gray-900 "
               >
                 Amount
               </label>
@@ -98,7 +106,7 @@ const GiveGotModal = ({
                 id="amount"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="w-full input-field-shadow border border-gray-400 text-gray-600 rounded-sm p-2"
                 placeholder="Enter amount"
                 required
               />
@@ -107,7 +115,7 @@ const GiveGotModal = ({
             <div className="mb-4">
               <label
                 htmlFor="description"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-sm font-medium text-gray-900 "
               >
                 Description
               </label>
@@ -116,7 +124,7 @@ const GiveGotModal = ({
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="w-full input-field-shadow border border-gray-400 text-gray-600 rounded-sm p-2"
                 placeholder="Enter description"
                 required
               />
@@ -125,7 +133,7 @@ const GiveGotModal = ({
             <div className="mb-4">
               <label
                 htmlFor="date"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-sm font-medium text-gray-900 "
               >
                 Transaction Date
               </label>
@@ -134,7 +142,7 @@ const GiveGotModal = ({
                 id="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="w-full input-field-shadow border border-gray-400 text-gray-600 rounded-sm p-2"
                 required
               />
             </div>
@@ -143,13 +151,12 @@ const GiveGotModal = ({
   type="submit"
   className={`w-full text-white 
     ${transactionType === 'give' 
-      ? 'bg-[#be123c] hover:bg-[#9b0e35] border border-[#9b0e35]' 
-      : 'bg-[#16a34a] hover:bg-[#15803d] border border-[#15803d]'}
-    focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center`}
+      ? 'bg-[#be123c] hover:bg-[#9b0e35] border border-[#9b0e35] focus:ring-[#Ff007f]' 
+      : 'bg-[#10b981] hover:bg-[#059669] border border-[#059669] focus:ring-[#50c878]'}
+    focus:ring-4 focus:outline-none  font-medium rounded-sm text-sm px-5 py-2.5 text-center`}
 >
   {transactionType === 'give' ? 'Give Amount' : 'Receive Amount'}
 </button>
-
 
           </form>
         </div>

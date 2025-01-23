@@ -3,11 +3,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { getFriendList } from "../Api/HisabKitabApi";
 import LeftSideDashBoard from "./LeftSideDashboard";
 import RightSideDashBoard from "./RightSideDashboard";
+import logo from "../assets/logo-hisab-kitab.png";
+import HelpAndSupport from "../Modals/HelpAndSupport";
 // import GroupDashBoard from './GroupDashBoard';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faCalculator,
   faGear,
+  faClipboardQuestion,
   faPeoplePulling,
   faPeopleGroup,
   faBook,
@@ -21,20 +25,24 @@ const UserDashboard = () => {
   const location = useLocation();
   const [friends, setFriends] = useState([]);
   const [error, setError] = useState(null);
+  const [isHelpAndSupportOpen, setIsHelpAndSupportOpen] = useState(false);
   const user = location.state?.user;
   const [refreshFriendTransaction, setRefreshFriendTransaction] =
     useState(false);
+  const[friendRequestCount,setFriendRequestCount] = useState(0);
   const navigate = useNavigate();
- 
+
   useEffect(() => {
     const fetchFriends = async () => {
       if (!user) return;
 
       try {
-        console.log("friendlist api called");
+        // console.log("friendlist api called");
         const response = await getFriendList(user.userId);
         console.log(response.data);
         setFriends(response.data.friendList); // Assuming the data is in response.data.friendList
+        setFriendRequestCount(response.data.friendRequestCount)
+        
       } catch (err) {
         setError(err.message);
       }
@@ -42,6 +50,10 @@ const UserDashboard = () => {
 
     fetchFriends();
   }, [user, refreshFriendTransaction]);
+
+  const toggleHelpAndSupport = () => {
+    setIsHelpAndSupportOpen(!isHelpAndSupportOpen);
+  };
 
   return (
     <>
@@ -77,18 +89,16 @@ const UserDashboard = () => {
         <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
           <ul class="space-y-2 font-medium">
             <li>
-              <a class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                <FontAwesomeIcon
-                  className="text-white "
-                  style={{ fontSize: "25px " }}
-                  icon={faCalculator}
+              <a className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <img
+                  src={logo}
+                  alt="Hisab Kitab Logo"
+                  className="w-6 h-6" // Adjust width and height as per your design
                 />
-                <span class="ms-3">Hisab Kitab</span>
-                <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                  6
-                </span>
+                <span className="ms-3">Hisab Kitab</span>
               </a>
             </li>
+
             <li>
               <a class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                 <FontAwesomeIcon
@@ -160,24 +170,30 @@ const UserDashboard = () => {
                 <span class="flex-1 ms-3 whitespace-nowrap">Settings</span>
               </a>
             </li>
+            <li onClick={toggleHelpAndSupport}>
+              <a className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <FontAwesomeIcon
+                  className="text-white"
+                  style={{ fontSize: "25px" }}
+                  icon={faClipboardQuestion}
+                />
+                <span className="flex-1 ms-3 whitespace-nowrap">
+                  Help & Support
+                </span>
+              </a>
+            </li>
             <li
-               onClick={() => {
+              onClick={() => {
                 // Clear user state (example assumes user is managed in state or context)
-               try{
-                user=null;
-               
-               }
-               catch(error){
-                navigate("/")
-          
-               }
-                 
+                try {
+                  user = null;
+                } catch (error) {
+                  navigate("/");
+                }
               }}
             >
               <a
                 href="/"
-
-                
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <FontAwesomeIcon
@@ -188,6 +204,7 @@ const UserDashboard = () => {
                 <span className="flex-1 ms-3 whitespace-nowrap">Sign Out</span>
               </a>
             </li>
+            
           </ul>
         </div>
       </aside>
@@ -197,6 +214,7 @@ const UserDashboard = () => {
       <div class="h-[100]  whole-dashboard  p-2 ml-64 ">
         <div class="flex gap-2 ">
           <LeftSideDashBoard
+          friendRequestCount={friendRequestCount}
             user={user} // Pass user data
             friends={friends} // Pass friends data
             isFriendSelected={isFriendSelected}
@@ -215,6 +233,12 @@ const UserDashboard = () => {
             setRefreshFriendTransaction={setRefreshFriendTransaction}
           />
         </div>
+        <HelpAndSupport
+        user={user}
+          isOpen={isHelpAndSupportOpen}
+          toggleModal={toggleHelpAndSupport}
+        />
+
         {/* <GroupDashBoard/> */}
         {/* <FriendRequestModal isOpen={isOpenFriendRequestModal} toggleModal={closeFriendRequestModal}/> */}
       </div>
