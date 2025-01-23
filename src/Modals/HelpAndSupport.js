@@ -30,9 +30,11 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
         "Ticket created successfully! With Ticket ID: " + response.data.ticketId
       );
       setFormData({ userId: user.userId, title: "", description: "" });
-      toggleModal();
+      handleClose();
+     
     } catch (error) {
       alert("Failed to create ticket. Please try again.");
+      handleClose();
     }
   };
   const fetchAllTickets = async () => {

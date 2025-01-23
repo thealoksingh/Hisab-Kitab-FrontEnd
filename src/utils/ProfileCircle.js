@@ -2,7 +2,7 @@ import React from 'react';
 
 const ProfileCircle = ({ name, className, color }) => {
   const styles = {
-    backgroundColor: color, // Set the background color dynamically
+    backgroundColor: color, 
     borderRadius: '50%',
     display: 'flex',
     alignItems: 'center',
@@ -11,7 +11,7 @@ const ProfileCircle = ({ name, className, color }) => {
     textTransform: 'uppercase',
     boxShadow: 'inset 0px 1px 3px rgba(0, 0, 0, 0.2)', 
     border: '1px solid #E5E7EB', 
-    backgroundColor: '#E5E7EB', 
+   
   };
   
 

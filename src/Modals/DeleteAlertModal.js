@@ -1,22 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import "../CssStyle/GroupDashboard.css";
 import { deleteTransactionById } from "../Api/HisabKitabApi";
 
-const DeleteAlertModal = ({ isOpen,toggleCommentSection,setIsCommentOpen, toggleModal, transId, refreshFriendTransaction, setRefreshFriendTransaction }) => {
-  
+const DeleteAlertModal = ({
+  isOpen,
+  toggleCommentSection,
+  setIsCommentOpen,
+  toggleModal,
+  transId,
+  refreshFriendTransaction,
+  setRefreshFriendTransaction,
+}) => {
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxChange = (e) => {
+    setIsChecked(e.target.checked);
+  };
+
   const handleDeleteTransaction = async (e) => {
     e.preventDefault(); // Prevent form submission
+    if (!isChecked) {
+      alert("Please confirm deletion by checking the checkbox.");
+      return;
+    }
     console.log("transId = " + transId);
     try {
       const response = await deleteTransactionById(transId);
-      console.log('Transaction deleted successfully: ', response.data);
+      console.log("Transaction deleted successfully: ", response.data);
       // Update state to refresh the transactions list
       setRefreshFriendTransaction(!refreshFriendTransaction);
       toggleModal();
       toggleCommentSection();
-
     } catch (error) {
-      console.error('Error deleting transaction:', error);
+      console.error("Error deleting transaction:", error);
     }
   };
 
@@ -27,12 +43,16 @@ const DeleteAlertModal = ({ isOpen,toggleCommentSection,setIsCommentOpen, toggle
       id="UpdateFriendTransaction-modal"
       tabIndex="-1"
       aria-hidden={!isOpen}
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-70 ${isOpen ? "" : "hidden"}`}
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-70 ${
+        isOpen ? "" : "hidden"
+      }`}
     >
       <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
-        <div className="form1 relative w-1/3 bg-white rounded-sm shadow dark:bg-gray-300 shadow-inner-custom ">
+        <div className="form1 relative w-1/3 bg-white rounded-sm shadow dark:bg-gray-300 shadow-inner-custom">
           <div className="flex items-center justify-between p-2 md:p-4 rounded-sm bg-rose-500 dark:border-gray-700">
-            <h4 className="text-lg font-semibold text-gray-900 dark:text-white">Delete Alert</h4>
+            <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Delete Alert
+            </h4>
             <button
               type="button"
               className="text-gray-400 bg-transparent hover:bg-rose-700 hover:text-rose-900 rounded-lg text-sm w-6 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-rose-600 dark:hover:text-white"
@@ -56,7 +76,7 @@ const DeleteAlertModal = ({ isOpen,toggleCommentSection,setIsCommentOpen, toggle
               <span className="sr-only">Close modal</span>
             </button>
           </div>
-          <form className="p-4 md:p-5" onSubmit={handleDeleteTransaction}>
+          <form className="p-4 md:p-5">
             <div className="mb-4">
               {/* Checkbox */}
               <div className="flex gap-3 mt-1 p-2 rounded border border-gray-300">
@@ -69,13 +89,13 @@ const DeleteAlertModal = ({ isOpen,toggleCommentSection,setIsCommentOpen, toggle
                 <input
                   type="checkbox"
                   id="delete-confirmation"
-                  name="transaction-type"
+                  name="delete-confirmation"
                   value="e"
                   className="form-radio-button-shadow mb-1 text-gray-400 dark:text-white"
-                  required
+                  onChange={handleCheckboxChange}
                 />
                 <label
-                  htmlFor="got"
+                  htmlFor="delete-confirmation"
                   className="ml-1 text-sm font-medium text-gray-900 dark:text-black"
                 >
                   Yes

@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear, faDownload } from "@fortawesome/free-solid-svg-icons";
+import {  faDownload } from "@fortawesome/free-solid-svg-icons";
 import CommentSection from "./CommentSection";
 import React, { useState, useEffect } from "react";
 import { getTransactionDetailsWithFriend } from "../Api/HisabKitabApi";
@@ -164,6 +164,8 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
             <UnfriendModal
             isOpen={isUnfriendModalOpen}
             toggleModal={toggleUnfriendModal}
+            userId={user.userId}
+            friendId={selectedFriend.userId}
             />
           </div>
         </div>

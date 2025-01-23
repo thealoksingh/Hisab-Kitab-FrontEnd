@@ -44,9 +44,9 @@ function CommentSection({
 
   useEffect(() => {
     if (isOpen) {
-      setWidth("60%"); // When isOpen is true, set width to 60%
+      setWidth("60%"); 
     } else {
-      setWidth("0"); // When isOpen is false, set width to 0%
+      setWidth("0");
     }
   }, [isOpen]);
 
@@ -56,13 +56,12 @@ function CommentSection({
       if (!isOpen) return;
 
       try {
-        console.log("getComment api called");
+       
         const response = await getAllCommentsByTransactionId(
           commentTransaction.transId
         );
         console.log(response.data);
-        console.log("above is comment response");
-
+       
         setComments(response.data); // Assuming the data is in response.data.friendList
         console.log(comments);
       } catch (err) {
@@ -85,8 +84,7 @@ function CommentSection({
 
     try {
       const response = await postNewCommentsByTransactionId(commentRequestDto);
-      console.log("Comment Posted");
-      setCommentText("");
+       setCommentText("");
       setIsRowClicked(!isRowClicked);
     } catch (error) {
       console.error("Error creating transaction", error);
@@ -110,7 +108,7 @@ function CommentSection({
       alert("Failed to delete the comment. Please try again.");
     }
   };
-
+ 
   return (
     <>
       {commentTransaction && (
