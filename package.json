@@ -11,6 +11,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.7",
+    "dotenv": "^16.4.7",
     "flowbite": "^2.5.2",
     "flowbite-react": "^0.10.2",
     "moment": "^2.30.1",
