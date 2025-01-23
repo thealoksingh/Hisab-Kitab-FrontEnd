@@ -97,7 +97,7 @@ const [isClicked, setClicked] = useState(false); // State to handle error prompt
       try {
         const response = await sendOtpEmail(email);
         setOtp(response.data); // Update state with OTP
-        console.log("OTP sent successfully:", response.data); // Log the OTP directly
+        // console.log("OTP sent successfully:", response.data); // Log the OTP directly
         setOtpSent(true);
       } catch (error) {
         console.error("Error sending OTP:", error);
