@@ -104,3 +104,7 @@ export const getAllTickets = (userId) => {
 export const unFriendApi = (userId,friendId) => {
   return apiClient.delete(`user/${userId}/friends/${friendId}`);
 };
+
+export const deleteTicketApi = (ticketId) => {
+  return apiClient.delete(`user/tickets/${ticketId}`);
+};

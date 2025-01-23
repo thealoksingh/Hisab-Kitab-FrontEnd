@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createTicket, getAllTickets } from "../Api/HisabKitabApi";
 import "../CssStyle/GroupDashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { deleteTicketApi } from "../Api/HisabKitabApi";
 function HelpAndSupport({ user, isOpen, toggleModal }) {
   const [choice, setChoice] = useState(null);
   const [tickets, setTickets] = useState([]);
-
+  const [isRefreshTicket, setRefreshTicket] = useState(false);
   const handleChoice = (value) => {
     setChoice(value);
+    if (value === "view") {
+      setRefreshTicket(!isRefreshTicket);
+    }
   };
 
   const [formData, setFormData] = useState({
@@ -31,28 +35,46 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
       );
       setFormData({ userId: user.userId, title: "", description: "" });
       handleClose();
-     
     } catch (error) {
       alert("Failed to create ticket. Please try again.");
       handleClose();
     }
   };
-  const fetchAllTickets = async () => {
-    try {
-      const response = await getAllTickets(user.userId);
-      setTickets(response.data);
-      // console.log("Tickets fetched successfully");
+  useEffect(() => {
+    if (choice !== "view") return;
+    const fetchAllTickets = async () => {
+      try {
+        const response = await getAllTickets(user.userId);
+        setTickets(response.data);
+        // console.log("Tickets fetched successfully");
 
-      console.log(tickets);
-    } catch (error) {
-      alert("Failed to fetch Tickets.");
-    }
-  };
+        console.log(tickets);
+      } catch (error) {
+        alert("Failed to fetch Tickets.");
+      }
+    };
+    fetchAllTickets();
+  }, [isRefreshTicket]);
 
   const handleClose = () => {
     setChoice(null);
     setFormData({ userId: user.userId, title: "", description: "" });
     toggleModal();
+  };
+
+  const handleDeleteTicket = async (ticketId) => {
+    const confirmation = window.confirm(
+      "Are you sure you want to delete this ticket?"
+    );
+    if (!confirmation) return;
+
+    try {
+      await deleteTicketApi(ticketId);
+      alert("Ticket deleted successfully");
+      setRefreshTicket(!isRefreshTicket);
+    } catch (error) {
+      alert("Failed to delete the Ticket. Please try again.");
+    }
   };
 
   return (
@@ -106,7 +128,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
                 <button
                   onClick={() => {
                     handleChoice("view");
-                    fetchAllTickets();
+                    // fetchAllTickets();
                   }}
                   type="button"
                   className="w-full border bg-gray-100 hover:bg-yellow-500 hover:text-white border-yellow-500 text-yellow-500 rounded-sm px-4 py-1 focus:outline-none focus:ring-4 focus:ring-yellow-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
@@ -130,6 +152,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
 
                       {ticket.status === "OPEN" && (
                         <FontAwesomeIcon
+                          onClick={() => handleDeleteTicket(ticket.ticketId)}
                           icon={faTrashCan}
                           className="text-rose-500 hover:text-rose-600 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                           style={{ fontSize: "25px" }}
@@ -143,9 +166,11 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
                           <strong>Title:</strong> {ticket.issueTitle}
                         </p>
                         <div className=" input-field-shadow rounded-sm  border border-gray-200  p-1 mb-1 max-w-56 max-h-24 overflow-y-auto">
-                        <p ><strong>Description:</strong>
-                       
-                             {ticket.description}</p>
+                          <p>
+                            <strong>Description:</strong>
+
+                            {ticket.description}
+                          </p>
                         </div>
                         <p className="mb-1">
                           <strong>Status: </strong>
