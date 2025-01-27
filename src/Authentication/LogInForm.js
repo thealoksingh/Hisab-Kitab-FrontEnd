@@ -9,10 +9,11 @@ const LogInForm = () => {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("user"); // default to user role
   const [error, setError] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(false);
   
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true)
     setError(null); // Reset error before login attempt
 
     // Hardcoded admin credentials
@@ -28,27 +29,48 @@ const LogInForm = () => {
     // User login via API
 
     try {
-      const response = await loginApi(email, password);
+      const response = await loginApi(email, password); 
       const user = response.data;
       if (user) {
-        navigate("/user-dashboard", { state: { user } }); // Pass user data to the dashboard
+        navigate("/user-dashboard", { state: { user } }); 
       } else {
         setError("Invalid login credentials");
       }
     } catch (error) {
       setError("Invalid login credentials");
+    } finally {
+      setIsLoading(false); 
     }
   };
 
   return (
     <div
-      id="SignIn-modal"
-      tabIndex="-1"
-      aria-hidden="false"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-0"
-    >
-      <div className="main-form relative p-4 w-[60%] h-[55%] max-w-5xl flex gap-4 justify-center">
-        <div className="form-signIn shadow-inner-custom border border-gray-400 relative bg-white w-1/2 rounded-sm shadow dark:bg-gray-300">
+    id="SignIn-modal"
+    tabIndex="-1"
+    aria-hidden="false"
+    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-0"
+  >
+    <div className=" flex flex-col items-center justify-center w-[40%] h-[90%]  rounded-lg ">
+    <div className="alert-div bg-white relative p-4 w-full h-auto border-rose-500 border max-w-5xl rounded-md shadow-lg">
+          <h2 className="text-sm font-semibold text-rose-600 mb-2">Note:</h2>
+          <p className="text-gray-700 text-xs mb-2">
+            Dear user, we are sorry 🥹! This service is using a free server,
+            which may cause it to run slower than expected, especially during
+            the first time when the backend is starting.
+            <span className="font-semibold text-xs">
+              {" "}
+              After that, it will run fluently.
+            </span>{" "}
+            Thank you for your patience.
+          </p>
+          <p className="text-gray-700 font-semibold text-xs">
+            For the best experience, please use a desktop-sized screen with
+            Chrome or Brave browsers. Your patience is appreciated. 🙏
+          </p>
+        </div>
+      <div className="main-form relative p-4 w-full h-auto flex gap-4 justify-center  rounded-md">
+       
+        <div className="form-signIn shadow-inner-custom border border-gray-400 relative bg-white w-[70%] rounded-sm shadow dark:bg-gray-300">
           <div className="flex items-center justify-between p-2 md:p-2 rounded-sm bg-gray-600">
             <h4 className="text-lg font-semibold text-gray-200">Log in to Hisabkitab</h4>
           </div>
@@ -117,9 +139,15 @@ const LogInForm = () => {
             <div className="mb-2 mt-1 flex gap-4">
               <button
                 type="submit"
-                className="w-1/3 bg-teal-600 text-sm text-white px-4 py-1 hover:bg-teal-500 focus:outline-none focus:ring-4 focus:ring-emerald-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                className="w-1/3 rounded-sm bg-teal-600 text-sm text-white px-4 py-1 hover:bg-teal-500 focus:outline-none focus:ring-4 focus:ring-emerald-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
               >
-                Sign In
+                {isLoading ? (<div className="flex ">
+                    <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
+                    <div className="font-semibold ml-2">loading..</div>
+                    </div>
+                  ) : (
+                    "Sign In"
+                  )}
               </button>
               <span className="text-gray-800">New user?</span>
               <span
@@ -132,7 +160,14 @@ const LogInForm = () => {
           </form>
         </div>
       </div>
+    
+    
     </div>
+  
+  
+  </div>
+  
+  
   );
 };
 
