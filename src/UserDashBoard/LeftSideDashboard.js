@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import AddFriendModal from "../Modals/AddFriendModal";
 import moment from "moment";
 import "../CssStyle/GroupDashboard.css";
+
 import FriendRequestModal from "../Modals/FriendRequestModal";
 import { apiClient } from "../Api/ApiClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -268,6 +269,7 @@ const [userId, setUserId] = useState("");
   return (
     <>
       <div   className="left-side rounded h-screen w-[50%]  relative overflow-hidden  ">
+    
         <div  className="left-upper  h-36 w-full">
           <div className="flex  px-2 shadow-inner-custom items-center gap-1 justify-between border border-gray-300 h-12 bg-gray-400">
             <div className="p-2 flex-shrink font-semibold">

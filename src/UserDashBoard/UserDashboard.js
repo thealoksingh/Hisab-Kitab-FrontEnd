@@ -4,6 +4,8 @@ import { getFriendList } from "../Api/HisabKitabApi";
 import LeftSideDashBoard from "./LeftSideDashboard";
 import RightSideDashBoard from "./RightSideDashboard";
 import logo from "../assets/logo-hisab-kitab.png";
+import "../CssStyle/LoaderStyle.css";
+
 import HelpAndSupport from "../Modals/HelpAndSupport";
 // import GroupDashBoard from './GroupDashBoard';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -31,19 +33,22 @@ const UserDashboard = () => {
     useState(false);
   const[friendRequestCount,setFriendRequestCount] = useState(0);
   const[refreshFriendTable, setRefreshFriendTable] = useState(false); 
+  const[loader, setLoader] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFriends = async () => {
+      setLoader(true);
       if (!user) return;
 
       try {
         // console.log("friendlist api called");
         const response = await getFriendList(user.userId);
         console.log(response.data);
+
         setFriends(response.data.friendList); // Assuming the data is in response.data.friendList
         setFriendRequestCount(response.data.friendRequestCount)
-        
+        setLoader(false);
       } catch (err) {
         setError(err.message);
       }
@@ -213,6 +218,12 @@ const UserDashboard = () => {
       {/* navigation ended  */}
 
       <div class=" whole-dashboard h-[100]   p-2 ml-64 ">
+          {/* <!-- Preloader --> */}
+   { loader && <div id="loader-wrapper">
+      <div id="loader"></div>
+      <div class="loader-section "></div>
+    </div>}
+    {/* <!-- End Preloader --> */}
         <div class="flex gap-2 ">
           <LeftSideDashBoard
           friendRequestCount={friendRequestCount}
