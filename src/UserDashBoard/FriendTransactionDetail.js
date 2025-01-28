@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {  faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import CommentSection from "./CommentSection";
 import React, { useState, useEffect } from "react";
 import { getTransactionDetailsWithFriend } from "../Api/HisabKitabApi";
@@ -25,11 +25,11 @@ function FriendTranscationDetail({
   const [isReportModalOpen, setReportModalOpen] = useState(false);
   const [selectedRowId, setSelectedRowId] = useState(null);
   const [isCommentSectionOpen, setIsCommentSetionOpen] = useState(false);
-const [isUnfriendModalOpen, setIsUnfriendModalOpen]= useState(false);
+  const [isUnfriendModalOpen, setIsUnfriendModalOpen] = useState(false);
 
- const toggleUnfriendModal=() =>{
-setIsUnfriendModalOpen(!isUnfriendModalOpen);
- }
+  const toggleUnfriendModal = () => {
+    setIsUnfriendModalOpen(!isUnfriendModalOpen);
+  };
   const handleRowClick = (transactionId) => {
     setSelectedRowId(transactionId);
   };
@@ -40,8 +40,10 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
   const toggleCommentSection = () => {
     if (isCommentSectionOpen) {
       setSelectedRowId(null);
+      setCommentTransaction(null); 
     }
     setIsCommentSetionOpen(!isCommentSectionOpen); // Toggle the state when the button is clicked
+    
   };
 
   const toggleModal = () => {
@@ -90,8 +92,8 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
             setIsCommentSetionOpen(false);
           }
         }}
-        className="right-header p-2 absolute top-0  border border-gray-400 shadow-inner-custom justify-between h-24 bg-gray-300 w-full  p-[10px] flex gap-[10px] flex items-center "
-      >
+
+        className="right-header p-2 absolute top-0  border border-gray-400 shadow-inner-custom justify-between h-24 bg-gray-300 w-full  p-[10px] flex gap-[10px] flex items-center ">
         <div className=" flex gap-2">
           <ProfileCircle
             className="h-12 w-12 mr-4 text-white text-lg"
@@ -139,7 +141,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
           </h2>
         </div>
 
-        <div className="report-settings  flex gap-2 flex items-center justify-between">
+        <div className="report-unfriend  flex gap-2 flex items-center justify-between">
           <button
             onClick={toggleReportModal}
             className="report h-[35px] text-white px-3 font-semibold  bg-rose-600 rounded-sm flex items-center justify-center   hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm  shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
@@ -155,17 +157,20 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
             selectedFriend={selectedFriend}
             user={user}
           />
-          <div onClick={toggleUnfriendModal} className="settings h-10 w-10 rounded-full border border-white flex items-center justify-center bg-cyan-600">
+          <div
+            onClick={toggleUnfriendModal}
+            className="settings h-10 w-10 rounded-full border border-white flex items-center justify-center bg-cyan-600"
+          >
             <img
               src={unFriendImage}
               alt="Settings"
               className="h-8 w-8 object-contain filter invert brightness-0"
             />
             <UnfriendModal
-            isOpen={isUnfriendModalOpen}
-            toggleModal={toggleUnfriendModal}
-            userId={user.userId}
-            friendId={selectedFriend.userId}
+              isOpen={isUnfriendModalOpen}
+              toggleModal={toggleUnfriendModal}
+              userId={user.userId}
+              friendId={selectedFriend.userId}
             />
           </div>
         </div>
@@ -179,8 +184,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
             setIsCommentSetionOpen(false);
           }
         }}
-        class="table-division border border-gray-400 w-full h-[76.8%] bg-gray-400  absolute top-24 border-gray-500 shadow-inner-custom scrollable px-2  "
-      >
+        class="table-division border border-gray-400 w-full h-[76.8%] bg-gray-400  absolute top-24 border-gray-500 shadow-inner-custom scrollable px-2  ">
         <table className="w-full border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="sticky top-0 fixed border  shadow-inner-custom  top-0 bg-gray-100  text-xs text-gray-400 uppercase dark:text-gray-800">
             <tr>
@@ -205,8 +209,8 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
                   key={transactionDto.transaction.transId}
                   className={`bg-white border-b border-1 shadow-inner-custom rounded-sm  dark:border-gray-100 cursor-pointer ${
                     selectedRowId === transactionDto.transaction.transId
-                    ? "bg-gray-300 dark:bg-gray-300" 
-                    : "bg-gray-100 dark:bg-gray-100" 
+                      ? "bg-gray-300 dark:bg-gray-300"
+                      : "bg-gray-100 dark:bg-gray-100"
                   }`}
                   onClick={() => {
                     handleRowClick(transactionDto.transaction.transId); // Set the selected row's ID on click
@@ -285,6 +289,8 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
         user={user}
         commentTransaction={commentTransaction}
         toggleCommentSection={toggleCommentSection}
+        refreshFriendTransaction= {refreshFriendTransaction}
+        setRefreshFriendTransaction={setRefreshFriendTransaction}
       />
     </>
   );

@@ -212,7 +212,7 @@ const UserDashboard = () => {
 
       {/* navigation ended  */}
 
-      <div class="h-[100]  whole-dashboard  p-2 ml-64 ">
+      <div class=" whole-dashboard h-[100]   p-2 ml-64 ">
         <div class="flex gap-2 ">
           <LeftSideDashBoard
           friendRequestCount={friendRequestCount}
@@ -237,15 +237,14 @@ const UserDashboard = () => {
             setRefreshFriendTransaction={setRefreshFriendTransaction}
           />
         </div>
+        
         <HelpAndSupport
         user={user}
           isOpen={isHelpAndSupportOpen}
           toggleModal={toggleHelpAndSupport}
         />
 
-        {/* <GroupDashBoard/> */}
-        {/* <FriendRequestModal isOpen={isOpenFriendRequestModal} toggleModal={closeFriendRequestModal}/> */}
-      </div>
+          </div>
     </>
   );
 };
