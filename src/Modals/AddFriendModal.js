@@ -10,7 +10,7 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
   const [successMessage, setSuccessMessage] = useState(null);
   const [timer, setTimer] = useState(30); // State for timer
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // State for disabling button
-
+const [isLoading, setIsLoading] = useState(false);
 // const [loading, setLoading] = useState(false);
 
 useEffect(() => {
@@ -41,45 +41,53 @@ useEffect(() => {
 
   const handleAddFriend = async (e) => {
     e.preventDefault();
-    if (contactNo !== "") {
-      await addFriend(user.userId, contactNo)
-        .then((data) => {
-          console.log("Friend request sent successfully:", data);
-          setAddFriendErrorMessage("Friend request sent successfully");
-          setContactNo(""); // Reset the contact number
-          
-        })
-        .catch((error) => {
-          console.error("Error adding friend:", error);
+    setIsLoading(true);
   
-          // Handle specific error messages from the backend
-          if (error.response && error.response.data) {
-            const errorMessage = error.response.data;
-             console.log("🥹"+errorMessage);
-            if (errorMessage === "You cannot send a friend request to yourself.") {
+    if (contactNo.trim() !== "") {
+      try {
+        const data = await addFriend(user.userId, contactNo);
+        console.log("Friend request sent successfully:", data);
+        setAddFriendErrorMessage("Friend request sent successfully");
+        setContactNo(""); // Reset the contact number
+      } catch (error) {
+        console.error("Error adding friend:", error);
+  
+        // Handle specific error messages from the backend
+        if (error.response && error.response.data) {
+          const errorMessage = error.response.data;
+          console.log("🥹" + errorMessage);
+          switch (errorMessage) {
+            case "You cannot send a friend request to yourself.":
               setAddFriendErrorMessage("You cannot send a friend request to yourself.");
-            } else if (errorMessage === "You are already friends.") {
+              break;
+            case "You are already friends.":
               setAddFriendErrorMessage("You are already friends.");
-            } else if (errorMessage === "Friend request already sent.") {
+              break;
+            case "Friend request already sent.":
               setAddFriendErrorMessage("Friend request already sent.");
-            } else if (errorMessage === "User not exist") {
+              break;
+            case "User not exist":
               setIsAddButtonVisible(false); // Switch to invite mode
               setAddFriendErrorMessage("The user does not exist.");
-            } else {
+              break;
+            default:
               setAddFriendErrorMessage("An unexpected error occurred. Please try again.");
-            }
-          } else {
-            // Handle other generic errors
-            setAddFriendErrorMessage("Failed to send friend request. Please check your network or try again later.");
           }
+        } else {
+          // Handle other generic errors
+          setAddFriendErrorMessage("Failed to send friend request. Please check your network or try again later.");
+        }
   
-         
-          setContactNo(""); // Reset the contact number
-        });
+        setContactNo(""); // Reset the contact number
+      } finally {
+        setIsLoading(false); // Ensure loading state is reset
+      }
     } else {
       setAddFriendErrorMessage("Please enter a valid mobile number.");
+      setIsLoading(false); // Also reset the loading state for invalid input
     }
   };
+  
   
 
   const handleInvite = async (e) => {
@@ -196,14 +204,20 @@ useEffect(() => {
             <div className="mb-2 flex gap-4">
               <button
                 type="submit"
-                className={`${isAddButtonVisible ? "block" : "hidden"} w-1/3 bg-cyan-600 text-white px-4 py-1 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
+                className={`${isAddButtonVisible ? "block" : "hidden"} min-w-[100px] bg-cyan-600 text-white px-4 py-1 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
                 onClick={handleAddFriend}
               >
-                Add
+               {isLoading ? (<div className="flex ">
+                    <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
+                    <div className="font-semibold ml-2">Sending..</div>
+                    </div>
+                  ) : (
+                    "Send Request"
+                  )}
               </button>
               <button
                 type="submit"
-                className={`${!isAddButtonVisible ? "block" : "hidden"} w-1/3 bg-teal-600 text-white px-4 py-1 focus:outline-none focus:ring-4 focus:ring-teal-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
+                className={`${!isAddButtonVisible ? "block" : "hidden"} min-w-[100px] bg-teal-600 text-white px-4 py-1 focus:outline-none focus:ring-4 focus:ring-teal-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
                 onClick={handleInviteRequest}
                 disabled={isButtonDisabled} // Disable button when timer is active
                 style={{
@@ -218,7 +232,7 @@ useEffect(() => {
                   setIsAddButtonVisible(true); // Reset to Add mode
                   setAddFriendErrorMessage(null);
                 }}
-                className="w-1/3 bg-rose-600 text-white px-4 py-1 focus:outline-none focus:ring-4 focus:ring-rose-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 "
+                className="min-w-[100px] bg-rose-600 text-white px-4 py-1 focus:outline-none focus:ring-4 focus:ring-rose-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 "
               
               >
                 Cancel

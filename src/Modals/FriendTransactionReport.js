@@ -143,7 +143,13 @@ const FriendTransactionReport= ({isOpen, toggleModal,selectedFriend, user}) => {
                 type="submit"
                 className=" bg-cyan-600 rounded-sm font-semibold text-white px-4 py-1 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
               disabled={loading}>
-                  {loading ? "Downloading..." : "Download Report"}
+                 {loading ? (<div className="flex gap-2">
+                    <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
+                    <div className="font-semibold ml-1">Downloading..</div>
+                    </div>
+                  ) : (
+                    "Download"
+                  )} 
               </button>
               
             </div>

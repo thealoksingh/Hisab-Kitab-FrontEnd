@@ -34,7 +34,8 @@ function CommentSection({
   const [error, setError] = useState(null);
   const [isUpdateFormOpen, setIsUpdateFormOpen] = useState(false);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
-
+ const [isLoading, setIsLoading] = useState(false);
+ 
   const toggleDeleteAlert = () => {
     setIsDeleteAlertOpen(!isDeleteAlertOpen);
   };
@@ -73,23 +74,34 @@ function CommentSection({
   }, [user, isRowClicked, commentTransaction]);
 
   if (commentTransaction == null) return;
+
+
   const handleCommentSubmit = async (e) => {
-    e.preventDefault();
-
-    const commentRequestDto = {
-      transactionId: commentTransaction.transId,
-      userId: user.userId,
-      comment: commentText,
-    };
-
-    try {
-      const response = await postNewCommentsByTransactionId(commentRequestDto);
-       setCommentText("");
-      setIsRowClicked(!isRowClicked);
-    } catch (error) {
-      console.error("Error creating transaction", error);
-    }
+  e.preventDefault();
+  
+  if (!commentText.trim()) {
+    alert("Comment cannot be empty.");
+    return;
+  }
+  
+  setIsLoading(true);
+  const commentRequestDto = {
+    transactionId: commentTransaction.transId,
+    userId: user.userId,
+    comment: commentText.trim(),
   };
+
+  try {
+    const response = await postNewCommentsByTransactionId(commentRequestDto);
+    setCommentText("");
+    setIsRowClicked(!isRowClicked);
+  } catch (error) {
+    console.error("Error in creating Comment", error);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   const handleDeleteComment = async (commentId) => {
     const confirmation = window.confirm("Are you sure you want to delete this comment?");
@@ -300,7 +312,12 @@ function CommentSection({
                 onClick={handleCommentSubmit}
                 className="bg-teal-600 text-white text-sm px-4 py-1 rounded-sm hover:bg-teal-700 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
               >
-                Send
+              {isLoading ? (<div className="flex ">
+                       <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
+                      </div>
+                  ) : (
+                    "Send"
+                  )}
               </button>
             </div>
           </div>

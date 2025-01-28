@@ -13,7 +13,7 @@ const LogInForm = () => {
   
   const handleLogin = async (e) => {
     e.preventDefault();
-    setIsLoading(true)
+    setIsLoading(true);
     setError(null); // Reset error before login attempt
 
     // Hardcoded admin credentials
@@ -139,11 +139,11 @@ const LogInForm = () => {
             <div className="mb-2 mt-1 flex gap-4">
               <button
                 type="submit"
-                className="w-1/3 rounded-sm bg-teal-600 text-sm text-white px-4 py-1 hover:bg-teal-500 focus:outline-none focus:ring-4 focus:ring-emerald-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                className="w-auto rounded-sm bg-teal-600 text-sm text-white px-4 py-1 hover:bg-teal-500 focus:outline-none focus:ring-4 focus:ring-emerald-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
               >
                 {isLoading ? (<div className="flex ">
                     <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
-                    <div className="font-semibold ml-2">loading..</div>
+                    <div className="font-semibold ml-2">Signing In..</div>
                     </div>
                   ) : (
                     "Sign In"

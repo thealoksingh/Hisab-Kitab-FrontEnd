@@ -8,7 +8,7 @@ import {
   unsendRequest
 } from "../Api/HisabKitabApi";
 
-const FriendRequestModal = ({ isOpen, toggleModal, user  }) => {
+const FriendRequestModal = ({ isOpen, toggleModal, user ,setRefreshFriendTable,refreshFriendTable }) => {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [sentRequests, setSentRequests] = useState([]);
   
@@ -39,7 +39,7 @@ const FriendRequestModal = ({ isOpen, toggleModal, user  }) => {
         prev.filter((request) => request.id !== requestId)
       );
       console.log("Request accepted successfully");
-     
+      setRefreshFriendTable(!refreshFriendTable);
     } catch (error) {
       console.error("Error accepting request:", error);
     }

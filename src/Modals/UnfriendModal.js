@@ -7,14 +7,15 @@ import { unFriendApi } from "../Api/HisabKitabApi";
 
 const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
   const [isChecked, setIsChecked] = useState(false);
-
+const [isLoading, setIsLoading] = useState(false);
+ 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
 
   const handleUnfriend = async (e) => {
     e.preventDefault(); // Prevent form submission
-
+    setIsLoading(true);
     if (!isChecked) {
       alert("Please confirm by checking the box.");
       return;
@@ -27,6 +28,7 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
     } catch (error) {
       console.error("Error while unfriending", error);
     }
+    finally{ setIsLoading(false);}
   };
 
   return (
@@ -104,9 +106,15 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
               <button
                 onClick={(e) => handleUnfriend(e)}
                 type="button"
-                className="w-1/3 text-sm text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-4 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                className="w-auto text-sm text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-4 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
               >
-                UnFriend
+                {isLoading ? (<div className="flex ">
+                    <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
+                    <div className="font-semibold ml-2">Processing..</div>
+                    </div>
+                  ) : (
+                    "Unfriend"
+                  )}
               </button>
               <button
                 onClick={(e) => {

@@ -30,6 +30,7 @@ const UserDashboard = () => {
   const [refreshFriendTransaction, setRefreshFriendTransaction] =
     useState(false);
   const[friendRequestCount,setFriendRequestCount] = useState(0);
+  const[refreshFriendTable, setRefreshFriendTable] = useState(false); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,7 +50,7 @@ const UserDashboard = () => {
     };
 
     fetchFriends();
-  }, [user, refreshFriendTransaction]);
+  }, [user, refreshFriendTransaction,refreshFriendTable]);
 
   const toggleHelpAndSupport = () => {
     setIsHelpAndSupportOpen(!isHelpAndSupportOpen);
@@ -223,6 +224,9 @@ const UserDashboard = () => {
             setSelectedFriend={setSelectedFriend}
             refreshFriendTransaction={refreshFriendTransaction}
             setRefreshFriendTransaction={setRefreshFriendTransaction}
+            setRefreshFriendTable={setRefreshFriendTable}
+            refreshFriendTable={refreshFriendTable}
+        
           />
 
           <RightSideDashBoard

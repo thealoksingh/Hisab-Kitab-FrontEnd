@@ -15,8 +15,9 @@ function LeftSideDashBoard({
   setSelectedFriend,
   refreshFriendTransaction,
   setRefreshFriendTransaction,
-  friendRequestCount
- 
+  friendRequestCount,
+  setRefreshFriendTable,
+  refreshFriendTable
 })
 
 
@@ -533,7 +534,9 @@ const [userId, setUserId] = useState("");
             user={user}
             isOpen={isFriendRequestModalOpen}
             toggleModal={toggleFriendRequestModal}
-            
+            setRefreshFriendTable={setRefreshFriendTable}
+            refreshFriendTable={refreshFriendTable}
+        
           />
         </div>
       </div>
