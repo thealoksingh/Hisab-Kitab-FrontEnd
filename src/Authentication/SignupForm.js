@@ -95,7 +95,7 @@ const SignUpForm = () => {
     e.preventDefault();
     if (email !== "") {
       try {
-        const response = await sendOtpEmail(email);
+        const response = await sendOtpEmail(email, "sign-up");
         setOtp(response.data); // Update state with OTP
         // console.log("OTP sent successfully:", response.data); // Log the OTP directly
         setOtpSent(true);

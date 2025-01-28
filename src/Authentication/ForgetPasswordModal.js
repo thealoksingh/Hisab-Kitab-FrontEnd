@@ -52,7 +52,7 @@ const ForgetPasswordForm = () => {
     }
 
     try {
-      const response = await sendOtpEmail(email);
+      const response = await sendOtpEmail(email, "forget-password");
       setOtp(response.data);
       setOtpSent(true);
       setMessage("OTP sent successfully.");
