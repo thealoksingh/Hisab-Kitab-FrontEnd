@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { getFriendList } from "../Api/HisabKitabApi";
-import LeftSideDashBoard from "./LeftSideDashboard";
-import RightSideDashBoard from "./RightSideDashboard";
-import logo from "../assets/logo-hisab-kitab.png";
-import HelpAndSupport from "../Modals/HelpAndSupport";
-// import GroupDashBoard from './GroupDashBoard';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import React, { useEffect, useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
+import { getFriendList } from "../Api/HisabKitabApi"
+import LeftSideDashBoard from "./LeftSideDashboard"
+import RightSideDashBoard from "./RightSideDashboard"
+import logo from "../assets/logo-hisab-kitab.png"
+import HelpAndSupport from "../Modals/HelpAndSupport"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faCalculator,
   faGear,
@@ -17,232 +15,212 @@ import {
   faBook,
   faUser,
   faArrowRightFromBracket,
-} from "@fortawesome/free-solid-svg-icons";
+  faBars,
+} from "@fortawesome/free-solid-svg-icons"
 
 const UserDashboard = () => {
-  const [isFriendSelected, setIsFriendSelected] = useState(false);
-  const [selectedFriend, setSelectedFriend] = useState(null);
-  const location = useLocation();
-  const [friends, setFriends] = useState([]);
-  const [error, setError] = useState(null);
-  const [isHelpAndSupportOpen, setIsHelpAndSupportOpen] = useState(false);
-  const user = location.state?.user;
-  const [refreshFriendTransaction, setRefreshFriendTransaction] =
-    useState(false);
-  const[friendRequestCount,setFriendRequestCount] = useState(0);
-  const navigate = useNavigate();
+  const [isFriendSelected, setIsFriendSelected] = useState(false)
+  const [selectedFriend, setSelectedFriend] = useState(null)
+  const location = useLocation()
+  const [friends, setFriends] = useState([])
+  const [error, setError] = useState(null)
+  const [isHelpAndSupportOpen, setIsHelpAndSupportOpen] = useState(false)
+  const user = location.state?.user
+  const [refreshFriendTransaction, setRefreshFriendTransaction] = useState(false)
+  const [friendRequestCount, setFriendRequestCount] = useState(0)
+  const navigate = useNavigate()
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(true)
+  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false)
 
   useEffect(() => {
     const fetchFriends = async () => {
-      if (!user) return;
+      if (!user) return
 
       try {
-        // console.log("friendlist api called");
-        const response = await getFriendList(user.userId);
-        console.log(response.data);
-        setFriends(response.data.friendList); // Assuming the data is in response.data.friendList
+        const response = await getFriendList(user.userId)
+        setFriends(response.data.friendList)
         setFriendRequestCount(response.data.friendRequestCount)
-        
       } catch (err) {
-        setError(err.message);
+        setError(err.message)
       }
-    };
+    }
 
-    fetchFriends();
-  }, [user, refreshFriendTransaction]);
+    fetchFriends()
+  }, [user])
+
+  useEffect(() => {
+    const handleResize = () => {
+      const isLargeScreen = window.innerWidth >= 1024
+      setIsSidebarOpen(isLargeScreen)
+      setIsLeftSidebarOpen(true)
+      setIsRightSidebarOpen(isLargeScreen)
+    }
+
+    handleResize()
+    window.addEventListener("resize", handleResize)
+
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
 
   const toggleHelpAndSupport = () => {
-    setIsHelpAndSupportOpen(!isHelpAndSupportOpen);
-  };
+    setIsHelpAndSupportOpen(!isHelpAndSupportOpen)
+  }
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen)
+  }
+
+  const toggleLeftSidebar = () => {
+    setIsLeftSidebarOpen(!isLeftSidebarOpen)
+    if (!isLeftSidebarOpen && window.innerWidth < 1024) {
+      setIsRightSidebarOpen(false)
+    }
+  }
+
+  const toggleRightSidebar = () => {
+    setIsRightSidebarOpen(!isRightSidebarOpen)
+    if (!isRightSidebarOpen && window.innerWidth < 1024) {
+      setIsLeftSidebarOpen(false)
+    }
+  }
+
+  const handleFriendSelect = (friend) => {
+    setSelectedFriend(friend)
+    setIsFriendSelected(true)
+    if (window.innerWidth < 1024) {
+      setIsRightSidebarOpen(true)
+      setIsLeftSidebarOpen(false)
+    }
+  }
 
   return (
-    <>
-      {/* navigation started  */}
-      <button
-        data-drawer-target="default-sidebar"
-        data-drawer-toggle="default-sidebar"
-        aria-controls="default-sidebar"
-        type="button"
-        className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-      >
-        <span className="sr-only">Open sidebar</span>
-        <svg
-          className="w-6 h-6"
-          aria-hidden="true"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clip-rule="evenodd"
-            fill-rule="evenodd"
-            d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
-          ></path>
-        </svg>
-      </button>
-
+    <div className="flex h-screen overflow-hidden">
       <aside
-        id="default-sidebar"
-        class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
-        aria-label="Sidebar"
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 text-white transition-transform duration-300 ease-in-out transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:relative lg:translate-x-0`}
       >
-        <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-          <ul class="space-y-2 font-medium">
+        <div className="h-full px-3 py-4 overflow-y-auto">
+          <ul className="space-y-2 font-medium">
             <li>
-              <a className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                <img
-                  src={logo}
-                  alt="Hisab Kitab Logo"
-                  className="w-6 h-6" // Adjust width and height as per your design
-                />
+              <a className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-gray-700 group">
+                <img src={logo || "/placeholder.svg"} alt="Hisab Kitab Logo" className="w-6 h-6" />
                 <span className="ms-3">Hisab Kitab</span>
               </a>
             </li>
-
             <li>
-              <a class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                <FontAwesomeIcon
-                  icon={faUser}
-                  className="text-white "
-                  style={{ fontSize: "25px " }}
-                />
-                <span class="flex-1 ms-3 whitespace-nowrap">
-                  {user.fullName}
-                </span>
-                <span class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300"></span>
+              <a className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-gray-700 group">
+                <FontAwesomeIcon icon={faUser} className="text-gray-300" style={{ fontSize: "25px" }} />
+                <span className="flex-1 ms-3 whitespace-nowrap">{user.fullName}</span>
               </a>
             </li>
             <li>
               <a
                 href="/user-dashboard"
-                class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-gray-700 group"
               >
-                <FontAwesomeIcon
-                  icon={faPeoplePulling}
-                  className="text-white "
-                  style={{ fontSize: "25px " }}
-                />
-                <span class="flex-1 ms-3 whitespace-nowrap">Friends</span>
-                <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                <FontAwesomeIcon icon={faPeoplePulling} className="text-gray-300" style={{ fontSize: "25px" }} />
+                <span className="flex-1 ms-3 whitespace-nowrap">Friends</span>
+                <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full">
                   {friends.length}
                 </span>
               </a>
             </li>
             <li>
-              <a
-                href="/under-dev"
-                class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <FontAwesomeIcon
-                  icon={faPeopleGroup}
-                  className="text-white "
-                  style={{ fontSize: "25px " }}
-                />
-                <span class="flex-1 ms-3 whitespace-nowrap">Group</span>
+              <a href="/under-dev" className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-gray-700 group">
+                <FontAwesomeIcon icon={faPeopleGroup} className="text-gray-300" style={{ fontSize: "25px" }} />
+                <span className="flex-1 ms-3 whitespace-nowrap">Group</span>
               </a>
             </li>
             <li>
-              <a
-                href="/under-dev"
-                class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <FontAwesomeIcon
-                  icon={faBook}
-                  className="text-white "
-                  style={{ fontSize: "25px " }}
-                />
-
-                <span class="flex-1 ms-3 whitespace-nowrap">
-                  Personal Spend
-                </span>
+              <a href="/under-dev" className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-gray-700 group">
+                <FontAwesomeIcon icon={faBook} className="text-gray-300" style={{ fontSize: "25px" }} />
+                <span className="flex-1 ms-3 whitespace-nowrap">Personal Spend</span>
               </a>
             </li>
             <li>
-              <a
-                href="/under-dev"
-                class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <FontAwesomeIcon
-                  icon={faGear}
-                  className="text-white "
-                  style={{ fontSize: "25px " }}
-                />
-                <span class="flex-1 ms-3 whitespace-nowrap">Settings</span>
+              <a href="/under-dev" className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-gray-700 group">
+                <FontAwesomeIcon icon={faGear} className="text-gray-300" style={{ fontSize: "25px" }} />
+                <span className="flex-1 ms-3 whitespace-nowrap">Settings</span>
               </a>
             </li>
             <li onClick={toggleHelpAndSupport}>
-              <a className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                <FontAwesomeIcon
-                  className="text-white"
-                  style={{ fontSize: "25px" }}
-                  icon={faClipboardQuestion}
-                />
-                <span className="flex-1 ms-3 whitespace-nowrap">
-                  Help & Support
-                </span>
+              <a className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-gray-700 group cursor-pointer">
+                <FontAwesomeIcon icon={faClipboardQuestion} className="text-gray-300" style={{ fontSize: "25px" }} />
+                <span className="flex-1 ms-3 whitespace-nowrap">Help & Support</span>
               </a>
             </li>
-            <li
-              onClick={() => {
-                // Clear user state (example assumes user is managed in state or context)
-                try {
-                  user = null;
-                } catch (error) {
-                  navigate("/");
-                }
-              }}
-            >
+            <li>
               <a
                 href="/"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                onClick={() => {
+                  // Handle sign out logic here
+                }}
+                className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-gray-700 group"
               >
                 <FontAwesomeIcon
-                  className="text-white"
-                  style={{ fontSize: "25px" }}
                   icon={faArrowRightFromBracket}
+                  className="text-gray-300"
+                  style={{ fontSize: "25px" }}
                 />
                 <span className="flex-1 ms-3 whitespace-nowrap">Sign Out</span>
               </a>
             </li>
-            
           </ul>
         </div>
       </aside>
 
-      {/* navigation ended  */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Header visible only on sm and md screens */}
+        <header className="bg-white shadow-sm lg:hidden">
+          <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 md:px-8 flex justify-between items-center">
+            <button onClick={toggleSidebar} className="text-gray-500 hover:text-gray-600">
+              <FontAwesomeIcon icon={faBars} className="h-6 w-6" />
+            </button>
+            <h1 className="text-lg font-semibold text-gray-900">Hisab Kitab</h1>
+            <div className="w-6"></div> {/* Placeholder for layout balance */}
+          </div>
+        </header>
 
-      <div class="h-[100]  whole-dashboard  p-2 ml-64 ">
-        <div class="flex gap-2 ">
-          <LeftSideDashBoard
-          friendRequestCount={friendRequestCount}
-            user={user} // Pass user data
-            friends={friends} // Pass friends data
-            isFriendSelected={isFriendSelected}
-            setIsFriendSelected={setIsFriendSelected}
-            selectedFriend={selectedFriend}
-            setSelectedFriend={setSelectedFriend}
-            refreshFriendTransaction={refreshFriendTransaction}
-            setRefreshFriendTransaction={setRefreshFriendTransaction}
-          />
-
-          <RightSideDashBoard
-            user={user}
-            isFriendSelected={isFriendSelected}
-            selectedFriend={selectedFriend}
-            refreshFriendTransaction={refreshFriendTransaction}
-            setRefreshFriendTransaction={setRefreshFriendTransaction}
-          />
-        </div>
-        <HelpAndSupport
-        user={user}
-          isOpen={isHelpAndSupportOpen}
-          toggleModal={toggleHelpAndSupport}
-        />
-
-        {/* <GroupDashBoard/> */}
-        {/* <FriendRequestModal isOpen={isOpenFriendRequestModal} toggleModal={closeFriendRequestModal}/> */}
+        <main className="flex-1 overflow-x-hidden sm:w-fill sm:h-[100%] gap-3  overflow-y-hidden   bg-gray-100">
+          <div className="max-w-7xl  sm:overflow-y-auto py-6 ">
+            <div className="flex flex-col lg:flex-row">
+              <div className={`lg:w-1/2 mr-0 sm:mr-2 ${isLeftSidebarOpen ? "block" : "hidden"} lg:block`}>
+                <LeftSideDashBoard
+                  user={user}
+                  friends={friends}
+                  setIsFriendSelected={setIsFriendSelected}
+                  setSelectedFriend={handleFriendSelect}
+                  refreshFriendTransaction={refreshFriendTransaction}
+                  setRefreshFriendTransaction={setRefreshFriendTransaction}
+                  friendRequestCount={friendRequestCount}
+                  isOpen={isLeftSidebarOpen}
+                  toggleSidebar={toggleLeftSidebar}
+                />
+              </div>
+              <div className={`lg:w-1/2 h-[63%] ${isRightSidebarOpen ? "block" : "hidden"} lg:block`}>
+                <RightSideDashBoard
+                  user={user}
+                  isFriendSelected={isFriendSelected}
+                  selectedFriend={selectedFriend}
+                  refreshFriendTransaction={refreshFriendTransaction}
+                  setRefreshFriendTransaction={setRefreshFriendTransaction}
+                  isOpen={isRightSidebarOpen}
+                  toggleSidebar={toggleRightSidebar}
+                  setIsFriendSelected={setIsFriendSelected}
+                  setSelectedFriend={setSelectedFriend}
+                />
+              </div>
+            </div>
+          </div>
+        </main>
       </div>
-    </>
-  );
-};
-export default UserDashboard;
+
+      <HelpAndSupport user={user} isOpen={isHelpAndSupportOpen} toggleModal={toggleHelpAndSupport} />
+    </div>
+  )
+}
+
+export default UserDashboard
+

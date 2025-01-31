@@ -71,7 +71,7 @@ const FriendTransactionReport= ({isOpen, toggleModal,selectedFriend, user}) => {
       aria-hidden={!isOpen}
       className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 ${isOpen ? "" : "hidden"}`}
     >
-      <div className="main-form relative p-4 w-1/2 max-w-5xl flex gap-4 justify-center">
+      <div className="main-form relative  w-full   max-w-5xl flex gap-4 justify-center">
         <div className="form-signup shadow-inner-custom relative bg-white w-1/2 rounded-sm border border-gray-400 shadow dark:bg-gray-300">
           <div className="flex items-center justify-between p-2 md:p-2 rounded-sm bg-cyan-600">
             <h4 className="text-lg font-semibold text-gray-200">Transaction Report</h4>
@@ -141,7 +141,7 @@ const FriendTransactionReport= ({isOpen, toggleModal,selectedFriend, user}) => {
             <div className="mb-2 mt-2">
               <button
                 type="submit"
-                className=" bg-cyan-600 rounded-sm font-semibold text-white px-4 py-1 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                className=" bg-cyan-600 rounded-sm font-Poppins font-semibold text-xs sm:text-md text-white px-4 py-1 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
               disabled={loading}>
                   {loading ? "Downloading..." : "Download Report"}
               </button>

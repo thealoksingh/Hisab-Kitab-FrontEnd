@@ -1,22 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ProfileCircle from "../utils/ProfileCircle";
-import { deleteComment } from "../Api/HisabKitabApi";
-import moment from 'moment';
+import React, { useEffect, useState } from "react"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import ProfileCircle from "../utils/ProfileCircle"
+import { deleteComment } from "../Api/HisabKitabApi"
+import moment from "moment"
 
-import {
-  faShareFromSquare,
-  faPenToSquare,
-  faList,
-  faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
-import "../CssStyle/GroupDashboard.css";
-import {
-  getAllCommentsByTransactionId,
-  postNewCommentsByTransactionId,
-} from "../Api/HisabKitabApi";
-import UpdateFriendTransaction from "../Modals/UpdateFriendTransactionModel";
-import DeleteAlertModal from "../Modals/DeleteAlertModal";
+import { faShareFromSquare, faPenToSquare, faList, faTrashCan } from "@fortawesome/free-solid-svg-icons"
+import "../CssStyle/GroupDashboard.css"
+import { getAllCommentsByTransactionId, postNewCommentsByTransactionId } from "../Api/HisabKitabApi"
+import UpdateFriendTransaction from "../Modals/UpdateFriendTransactionModel"
+import DeleteAlertModal from "../Modals/DeleteAlertModal"
 function CommentSection({
   isOpen,
   toggleCommentSection,
@@ -28,87 +20,100 @@ function CommentSection({
   refreshFriendTransaction,
   setRefreshFriendTransaction,
 }) {
-  const [width, setWidth] = useState("0"); // Initially set width to 0%
-  const [comments, setComments] = useState([]);
-  const [commentText, setCommentText] = useState("");
-  const [error, setError] = useState(null);
-  const [isUpdateFormOpen, setIsUpdateFormOpen] = useState(false);
-  const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+  const [width, setWidth] = useState("0") // Initially set width to 0%
+  const [comments, setComments] = useState([])
+  const [commentText, setCommentText] = useState("")
+  const [error, setError] = useState(null)
+  const [isUpdateFormOpen, setIsUpdateFormOpen] = useState(false)
+  const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false)
 
   const toggleDeleteAlert = () => {
-    setIsDeleteAlertOpen(!isDeleteAlertOpen);
-  };
+    setIsDeleteAlertOpen(!isDeleteAlertOpen)
+  }
   const toggleUpdateForm = () => {
-    setIsUpdateFormOpen(!isUpdateFormOpen);
-  };
+    setIsUpdateFormOpen(!isUpdateFormOpen)
+  }
 
   useEffect(() => {
     if (isOpen) {
-      setWidth("60%"); 
+      setWidth("100%") // Set to 100% for all screen sizes initially
     } else {
-      setWidth("0");
+      setWidth("0")
     }
-  }, [isOpen]);
+  }, [isOpen])
 
   useEffect(() => {
-    if (commentTransaction == null) return;
+    const handleResize = () => {
+      if (isOpen) {
+        if (window.innerWidth >= 1024) {
+          // lg breakpoint
+          setWidth("60%")
+        } else {
+          setWidth("100%")
+        }
+      }
+    }
+
+    window.addEventListener("resize", handleResize)
+    handleResize() // Call once to set initial state
+
+    return () => window.removeEventListener("resize", handleResize)
+  }, [isOpen])
+
+  useEffect(() => {
+    if (commentTransaction == null) return
     const fetchComments = async () => {
-      if (!isOpen) return;
+      if (!isOpen) return
 
       try {
-       
-        const response = await getAllCommentsByTransactionId(
-          commentTransaction.transId
-        );
-        console.log(response.data);
-       
-        setComments(response.data); // Assuming the data is in response.data.friendList
-        console.log(comments);
+        const response = await getAllCommentsByTransactionId(commentTransaction.transId)
+        console.log(response.data)
+
+        setComments(response.data) // Assuming the data is in response.data.friendList
+        console.log(comments)
       } catch (err) {
-        setError(err.message);
+        setError(err.message)
       }
-    };
+    }
 
-    fetchComments();
-  }, [user, isRowClicked, commentTransaction]);
+    fetchComments()
+  }, [user, isRowClicked, commentTransaction])
 
-  if (commentTransaction == null) return;
+  if (commentTransaction == null) return
   const handleCommentSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     const commentRequestDto = {
       transactionId: commentTransaction.transId,
       userId: user.userId,
       comment: commentText,
-    };
+    }
 
     try {
-      const response = await postNewCommentsByTransactionId(commentRequestDto);
-       setCommentText("");
-      setIsRowClicked(!isRowClicked);
+      const response = await postNewCommentsByTransactionId(commentRequestDto)
+      setCommentText("")
+      setIsRowClicked(!isRowClicked)
     } catch (error) {
-      console.error("Error creating transaction", error);
+      console.error("Error creating transaction", error)
     }
-  };
+  }
 
   const handleDeleteComment = async (commentId) => {
-    const confirmation = window.confirm("Are you sure you want to delete this comment?");
-    if (!confirmation) return;
-   
+    const confirmation = window.confirm("Are you sure you want to delete this comment?")
+    if (!confirmation) return
+
     try {
-      console.log("Delete Comment api called");
-      await deleteComment(commentId);
-      alert("Comment deleted successfully");
+      console.log("Delete Comment api called")
+      await deleteComment(commentId)
+      alert("Comment deleted successfully")
       // Optionally, update the UI to reflect the deleted comment
-      setComments((prevComments) =>
-        prevComments.filter((comment) => comment.commentId !== commentId)
-      );
+      setComments((prevComments) => prevComments.filter((comment) => comment.commentId !== commentId))
     } catch (error) {
-      console.error("Error deleting comment:", error);
-      alert("Failed to delete the comment. Please try again.");
+      console.error("Error deleting comment:", error)
+      alert("Failed to delete the comment. Please try again.")
     }
-  };
- 
+  }
+
   return (
     <>
       {commentTransaction && (
@@ -116,8 +121,8 @@ function CommentSection({
           className="Details h-full shadow-inner-custom bg-gray-100 z-50 absolute right-0 p-2"
           style={{
             width: width,
-            visibility: width === "0" ? "hidden" : "visible", // Hide when width is 0%
-            transition: "width 0.3s ease, visibility 0.1s ease", // Smooth transition for both width and visibility
+            visibility: width === "0" ? "hidden" : "visible",
+            transition: "width 0.3s ease, visibility 0.1s ease",
           }}
         >
           <div className="h-10 shadow-inner-custom w-full bg-gray-300 p-5 flex items-center">
@@ -172,9 +177,7 @@ function CommentSection({
                 </span>{" "}
                 Update Entry
               </button>
-              {console.log(
-                "transaction created by = " + commentTransaction.createdBy
-              )}
+              {console.log("transaction created by = " + commentTransaction.createdBy)}
 
               <UpdateFriendTransaction
                 user={user}
@@ -191,23 +194,14 @@ function CommentSection({
 
           <div className="transaction-amount h-[8%] w-full p-[10px] flex gap-[10px] flex items-center">
             <div className="give-got-icon">
-              <FontAwesomeIcon
-                icon={faShareFromSquare}
-                className="h-[15px] text-gray-700"
-              />
+              <FontAwesomeIcon icon={faShareFromSquare} className="h-[15px] text-gray-700" />
             </div>
             <div className="net-balance">
               <h4 className="text-sm text-gray-800">
-                You{" "}
-                {commentTransaction.fromUserId === user.userId
-                  ? " Gave "
-                  : " Got "}{" "}
-                :
+                You {commentTransaction.fromUserId === user.userId ? " Gave " : " Got "} :
                 <span
                   className={`text-sm font-semibold ${
-                    commentTransaction.fromUserId === user.userId
-                      ? "text-red-600"
-                      : "text-green-600"
+                    commentTransaction.fromUserId === user.userId ? "text-red-600" : "text-green-600"
                   }`}
                 >
                   ₹ <span> {commentTransaction.amount}</span>
@@ -218,17 +212,12 @@ function CommentSection({
 
           <div className="transaction-Description w-full p-[10px] flex gap-[10px] flex">
             <div className="give-got-icon">
-              <FontAwesomeIcon
-                icon={faList}
-                className="h-[15px] text-gray-700"
-              />
+              <FontAwesomeIcon icon={faList} className="h-[15px] text-gray-700" />
             </div>
             <div className="net-balance">
               <h4 className="text-sm text-gray-800">Description:</h4>
             </div>
-            <p className="text-sm text-gray-600">
-              {commentTransaction.description}{" "}
-            </p>
+            <p className="text-sm text-gray-600">{commentTransaction.description} </p>
           </div>
 
           <div className="comment-section w-full h-[50%]  flex flex-col">
@@ -259,29 +248,28 @@ function CommentSection({
                     <div className="flex-1">
                       <div className="user-name flex justify-between items-start">
                         {/* User Name */}
-                        <h2 className="text-sm text-gray-800 font-semibold">
-                          {comment.userFullName}
-                        </h2>
+                        <h2 className="text-sm text-gray-800 font-semibold">{comment.userFullName}</h2>
 
                         {/* Trash Bin */}
                         {comment.userId === user.userId && (
-                          <span onClick={()=>handleDeleteComment(comment.commentId)} className="text-rose-800 cursor-pointer">
+                          <span
+                            onClick={() => handleDeleteComment(comment.commentId)}
+                            className="text-rose-800 cursor-pointer"
+                          >
                             <FontAwesomeIcon icon={faTrashCan} />
                           </span>
                         )}
                       </div>
                       <div className="user-name flex justify-between items-start relative">
                         {/* Comment Text */}
-                        <p className="text-sm mb-4  text-gray-600 break-all overflow-hidden">
-                          {comment.comments}
-                        </p>
+                        <p className="text-sm mb-4  text-gray-600 break-all overflow-hidden">{comment.comments}</p>
                         <p className="text-xs font-semibold absolute bottom-0 right-1">
                           {moment(comment.commentTime).fromNow()}
                         </p>
                       </div>
                     </div>
                   </div>
-                );
+                )
               })}
             </div>
 
@@ -329,7 +317,8 @@ function CommentSection({
         </div>
       )}
     </>
-  );
+  )
 }
 
-export default CommentSection;
+export default CommentSection
+

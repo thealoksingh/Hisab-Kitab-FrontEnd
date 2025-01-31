@@ -112,7 +112,7 @@ useEffect(() => {
       className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20 ${isOpen ? "" : "hidden"}`}
     >
       <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
-        <div className="form-add-frnd border border-gray-400 shadow-inner-custom relative bg-white w-1/3 h-1/3 rounded-sm shadow dark:bg-gray-300">
+        <div className="form-add-frnd border border-gray-400 shadow-inner-custom relative bg-white w-[80%] h-full md:w-1/2 md:-1/2  sm:w-1/2 sm:-1/2 rounded-sm shadow dark:bg-gray-300">
           <div className="flex items-center justify-between p-2 md:p-2 rounded-sm bg-cyan-600">
             <h4 className="text-lg font-semibold text-gray-200">Add Friend</h4>
             <button
@@ -193,17 +193,17 @@ useEffect(() => {
             </h5>}
 
           
-            <div className="mb-2 flex gap-4">
+            <div className="mb-2 flex justyify-between gap-4 sm:gap-10">
               <button
                 type="submit"
-                className={`${isAddButtonVisible ? "block" : "hidden"} w-1/3 bg-cyan-600 text-white px-4 py-1 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
+                className={`${isAddButtonVisible ? "block" : "hidden"}  bg-cyan-600 text-white  px-3 py-1 sm:px-7 sm:py-2 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
                 onClick={handleAddFriend}
               >
                 Add
               </button>
               <button
                 type="submit"
-                className={`${!isAddButtonVisible ? "block" : "hidden"} w-1/3 bg-teal-600 text-white px-4 py-1 focus:outline-none focus:ring-4 focus:ring-teal-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
+                className={`${!isAddButtonVisible ? "block" : "hidden"}  bg-teal-600 text-white px-4 py-1 focus:outline-none focus:ring-4 focus:ring-teal-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
                 onClick={handleInviteRequest}
                 disabled={isButtonDisabled} // Disable button when timer is active
                 style={{
@@ -218,7 +218,7 @@ useEffect(() => {
                   setIsAddButtonVisible(true); // Reset to Add mode
                   setAddFriendErrorMessage(null);
                 }}
-                className="w-1/3 bg-rose-600 text-white px-4 py-1 focus:outline-none focus:ring-4 focus:ring-rose-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 "
+                className=" bg-rose-600 text-white text-xs sm:text-sm px-3 py-1 sm:px-7 sm:py-2 focus:outline-none focus:ring-4 focus:ring-rose-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 "
               
               >
                 Cancel

@@ -87,8 +87,8 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
       }`}
     >
       <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
-        <div className="form-add-frnd border border-gray-400 shadow-inner-custom relative bg-white w-1/2 h-1/3 rounded-sm shadow dark:bg-gray-300">
-          <div className="flex items-center justify-between p-2 md:p-2 rounded-sm bg-teal-600">
+        <div className="form-add-frnd border border-gray-400 shadow-inner-custom relative bg-white lg:w-1/2 lg:h-1/3 sm:w-full sm:h-full  rounded-sm shadow dark:bg-gray-300">
+          <div className="flex items-center justify-between p-2 md:p-2  sm:p-40 rounded-sm bg-teal-600">
             <h4 className="text-lg font-semibold text-gray-200">
               Help & Support
             </h4>
@@ -116,7 +116,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
             </button>
           </div>
           {choice === null && (
-            <div className="p-4 md:p-5">
+            <div className="p-4 sm:h-1/2 sm:h-1/2 md:p-5">
               <div className="mb-2 flex flex-col gap-2">
                 <button
                   onClick={() => handleChoice("create")}
@@ -210,7 +210,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
           {choice === "create" && (
             <form className="p-4 md:p-5" onSubmit={handleSubmit}>
               <div className="mb-4">
-                <label className="block mb-2 text-sm font-medium text-gray-900">
+                <label className="block mb-2 font-semibold font-Poppins    text-gray-900">
                   Title :
                 </label>
                 <input
@@ -224,7 +224,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
                 />
               </div>
               <div className="mb-4">
-                <label className="block mb-2 text-sm font-medium text-gray-900">
+                <label className="block font-Poppins mb-2 text-sm font-semibold  text-gray-900">
                   Description :
                 </label>
                 <textarea
@@ -235,20 +235,22 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
                   onChange={handleChange}
                 />
               </div>
-              <div className="mb-2 flex gap-4">
+              <div className="mb-2  font-Poppins justify-between sm:text-xs flex gap-4 sm:p-10 ">
                 <button
                   type="submit"
-                  className="w-1/3 bg-teal-600 text-white rounded-sm px-4 py-1 focus:outline-none focus:ring-4 focus:ring-teal-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                  className=" bg-teal-600 text-white rounded-sm px-6 py-1 focus:outline-none focus:ring-4 focus:ring-teal-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                 >
                   Submit
                 </button>
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="w-1/3 bg-rose-600 text-white rounded-sm px-4 py-1 focus:outline-none focus:ring-4 focus:ring-rose-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-                >
-                  Cancel
-                </button>
+                     className=" bg-rose-600 text-white rounded-sm px-4 py-2 
+                      focus:outline-none focus:ring-4 focus:ring-rose-300 shadow-md transition-all duration-300 
+                  ease-in-out transform hover:scale-105"
+                      >
+                     Cancel
+                  </button>
               </div>
             </form>
           )}

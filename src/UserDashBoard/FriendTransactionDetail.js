@@ -9,11 +9,17 @@ import FriendTransactionReport from "../Modals/FriendTransactionReport";
 import ProfileCircle from "../utils/ProfileCircle";
 import unFriendImage from "../assets/unFriend.png";
 import UnfriendModal from "../Modals/UnfriendModal";
+
+import { useNavigate, useLocation } from "react-router-dom";
 function FriendTranscationDetail({
   user,
   selectedFriend,
   refreshFriendTransaction,
   setRefreshFriendTransaction,
+  isOpen,
+  toggleSidebar,
+  setIsFriendSelected,
+  setSelectedFriend,
 }) {
   const [transactionsDto, setTransactionsDto] = useState([]);
   const [error, setError] = useState(null);
@@ -26,6 +32,11 @@ function FriendTranscationDetail({
   const [selectedRowId, setSelectedRowId] = useState(null);
   const [isCommentSectionOpen, setIsCommentSetionOpen] = useState(false);
 const [isUnfriendModalOpen, setIsUnfriendModalOpen]= useState(false);
+
+
+
+
+  
 
  const toggleUnfriendModal=() =>{
 setIsUnfriendModalOpen(!isUnfriendModalOpen);
@@ -78,6 +89,10 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
     fetchTransactions();
   }, [user, selectedFriend, refreshFriendTransaction]);
 
+  
+  
+
+
   useEffect(() => {
     console.log("commentTransaction updated in useffect:", commentTransaction);
   }, [commentTransaction]);
@@ -90,11 +105,11 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
             setIsCommentSetionOpen(false);
           }
         }}
-        className="right-header p-2 absolute top-0  border border-gray-400 shadow-inner-custom justify-between h-24 bg-gray-300 w-full  p-[10px] flex gap-[10px] flex items-center "
+        className="right-header p-0 sm:p-2   absolute top-0  border border-gray-400 shadow-inner-custom justify-between h-24 bg-gray-300 w-full  gap-[10px] flex items-center "
       >
         <div className=" flex gap-2">
           <ProfileCircle
-            className="h-12 w-12 mr-4 text-white text-lg"
+            className="h-12 w-12  text-white text-lg"
             name={selectedFriend.fullName}
             color={selectedFriend.colorHexValue}
           />
@@ -103,14 +118,14 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
             <h2 className="text-lg text-gray-800 line-clamp-1">
               {selectedFriend.fullName}
             </h2>
-            <p className="text-sm text-gray-600 line-clamp-1">
+            <p className="text-[8px] sm:text-sm text-green-600 line-clamp-2">
               +91 <span>{selectedFriend.contactNo}</span>
             </p>
           </div>
         </div>
 
         <div
-          className={`net-balance border p-1 h-10 w-40 rounded-sm flex items-center justify-center ml-5 ${
+          className={`net-balance border p-1 h-10 w-30 rounded-sm flex items-center justify-center ml-5 ${
             transactionsDto.length > 0 &&
             transactionsDto[0].lastClosingBalance >= 0
               ? "border-green-900 text-green-900"
@@ -118,7 +133,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
           }`}
         >
           <h2
-            className={`text-black line-clamp-1 ${
+            className={`text-black line-clamp-2  sm:line-clamp-1  text-xs sm:text-xs ${
               transactionsDto.length > 0 &&
               transactionsDto[0].lastClosingBalance >= 0
                 ? "border-green-900 text-green-900"
@@ -139,15 +154,15 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
           </h2>
         </div>
 
-        <div className="report-settings  flex gap-2 flex items-center justify-between">
+        <div className="report-settings  flex gap-1 sm:gap-1 md:gap-1  items-center justify-between">
           <button
             onClick={toggleReportModal}
-            className="report h-[35px] text-white px-3 font-semibold  bg-rose-600 rounded-sm flex items-center justify-center   hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm  shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+            className="report w-35 sm:w-full  h-8 sm:h-[35px]  text-white px-1 sm:px-3   bg-rose-600  flex items-center justify-center   hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm  shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
           >
             <span className="mr-1 ">
               <FontAwesomeIcon icon={faDownload} />
             </span>{" "}
-            <span className=" line-clamp-1">View Report</span>
+            <span className=" line-clamp-1 sm:text-sm  ">View Report</span>
           </button>
           <FriendTransactionReport
             isOpen={isReportModalOpen}
@@ -155,21 +170,25 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
             selectedFriend={selectedFriend}
             user={user}
           />
-          <div onClick={toggleUnfriendModal} className="settings h-10 w-10 rounded-full border border-white flex items-center justify-center bg-cyan-600">
-            <img
-              src={unFriendImage}
-              alt="Settings"
-              className="h-8 w-8 object-contain filter invert brightness-0"
-            />
-            <UnfriendModal
-            isOpen={isUnfriendModalOpen}
-            toggleModal={toggleUnfriendModal}
-            userId={user.userId}
-            friendId={selectedFriend.userId}
+         <div
+            onClick={toggleUnfriendModal}
+            className="settings h-7 w-9 sm:h-10 sm:w-10 right-0 rounded-full border border-white flex items-center justify-center bg-cyan-600 "
+           >
+          <img
+           src={unFriendImage}
+           alt="Settings"
+           className="w-4 h-10 sm:h-6 sm:w-6 object-contain filter invert brightness-0"
+          />
+          <UnfriendModal
+          isOpen={isUnfriendModalOpen}
+           toggleModal={toggleUnfriendModal}
+           userId={user.userId}
+           friendId={selectedFriend.userId}
             />
           </div>
-        </div>
-      </div>
+         </div>
+  </div>
+
       {/* <div className="table-div absolute top-24 h-[70%] border border-gray-500 shadow-inner-custom w-full bg-gray-400 relative px-2 ">
       <table className="w-full  border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="sticky top-0 fixed border  shadow-inner-custom  top-0 bg-gray-50 dark:bg-gray-200 text-xs text-gray-400 uppercase dark:text-gray-800"> */}
@@ -179,18 +198,18 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
             setIsCommentSetionOpen(false);
           }
         }}
-        class="table-division border border-gray-400 w-full h-[76.8%] bg-gray-400  absolute top-24 border-gray-500 shadow-inner-custom scrollable px-2  "
+        class="table-division border border-gray-400 sm:w-full  h-[76.8%] bg-gray-400  absolute top-24 scrollable  "
       >
-        <table className="w-full border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-gray-400">
-          <thead className="sticky top-0 fixed border  shadow-inner-custom  top-0 bg-gray-100  text-xs text-gray-400 uppercase dark:text-gray-800">
+        <table className="w-full  border-separate border-spacing-y-1 text-sm text-left text-black dark:text-black">
+          <thead className="sticky top-0 fixed border  shadow-inner-custom  top-0 bg-gray-100  text-xs text-gray-600 uppercase dark:text-gray-800">
             <tr>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-3 py-3 ">
                 Entries
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-3  py-3">
                 You gave
               </th>
-              <th scope="col" className="px-6 py-3 text-right">
+              <th scope="col" className="px-3 py-3  text-right">
                 You got
               </th>
             </tr>
@@ -254,15 +273,16 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
           </tbody>
         </table>
       </div>
-      <div className="right-side-lower border border-gray-400 shadow-inner-custom w-full gap-4 bg-gray-300 p-2 bottom-4 absolute h-[50px] flex items-center justify-center">
+
+      <div className="right-side-lower border pb-2 border-gray-400 shadow-inner-custom w-full gap-4 bg-gray-300 p-2 bottom-20 overflow-y-auto sm:bottom-6 absolute h-[50px] flex items-center justify-center">
         <button
-          className="w-1/3 shadow-inner-custom h-full bg-rose-600 text-sm text-white 600    hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+          className="w-1/3    shadow-inner-custom h-full bg-rose-600 text-sm text-white 600    hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
           onClick={handleGiveButtonClick}
         >
           You Gave : <span>₹</span>
         </button>
         <button
-          className="w-1/3 shadow-inner-custom h-full bg-emerald-600 text-sm text-white 600    hover:bg-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+          className="w-1/3    shadow-inner-custom h-full bg-green-800  text-sm text-white 600    hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
           onClick={handleGotButtonClick}
         >
           You Got : <span>₹</span>
