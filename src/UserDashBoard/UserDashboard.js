@@ -183,10 +183,10 @@ const UserDashboard = () => {
           </div>
         </header>
 
-        <main className="flex-1 overflow-x-hidden sm:w-fill sm:h-[100%] gap-3  overflow-y-hidden   bg-gray-100">
-          <div className="max-w-7xl  sm:overflow-y-auto py-6 ">
+        <main className="flex-1 overflow-x-hidden sm:w-full  sm:h-[100%]   overflow-y-hidden   bg-white">
+          <div className="max-w-7xl  sm:overflow-y-auto  ">
             <div className="flex flex-col lg:flex-row">
-              <div className={`lg:w-1/2 mr-0 sm:mr-2 ${isLeftSidebarOpen ? "block" : "hidden"} lg:block`}>
+              <div className={`lg:w-1/2 m-2   ${isLeftSidebarOpen ? "block" : "hidden"} lg:block`}>
                 <LeftSideDashBoard
                   user={user}
                   friends={friends}
@@ -199,7 +199,7 @@ const UserDashboard = () => {
                   toggleSidebar={toggleLeftSidebar}
                 />
               </div>
-              <div className={`lg:w-1/2 h-[63%] ${isRightSidebarOpen ? "block" : "hidden"} lg:block`}>
+              <div className={` sm:w-1/2 p-2 sm:pl-0  h-[68%] sm:h-[63%]   ${isRightSidebarOpen ? "block" : "hidden"} lg:block`}>
                 <RightSideDashBoard
                   user={user}
                   isFriendSelected={isFriendSelected}

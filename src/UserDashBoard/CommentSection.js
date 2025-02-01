@@ -118,7 +118,7 @@ function CommentSection({
     <>
       {commentTransaction && (
         <div
-          className="Details h-full shadow-inner-custom bg-gray-100 z-50 absolute right-0 p-2"
+          className="Details h-full  shadow-inner-custom bg-gray-100 z-50 absolute right-0 p-2"
           style={{
             width: width,
             visibility: width === "0" ? "hidden" : "visible",
@@ -297,7 +297,7 @@ function CommentSection({
             <div className="w-full flex items-center justify-center">
               <button
                 onClick={toggleDeleteAlert}
-                className="w-[80%] mt-4  h-[40px] border border-rose-800 text-sm text-rose-800 hover:text-white   hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                className="w-[80%] mt-0  sm:mt-4  h-[40px] border border-rose-800 text-sm text-rose-800 hover:text-white   hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
               >
                 <span className="mr-5">
                   <FontAwesomeIcon icon={faTrashCan} />

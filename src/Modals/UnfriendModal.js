@@ -36,8 +36,8 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
       aria-hidden={!isOpen}
       className={`fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-70 ${isOpen ? "" : "hidden"}`}
     >
-      <div className="main-form relative  w-full max-w-5xl flex gap-4 justify-center">
-        <div className="form1 relative w-1/2 sm:w-1/2 h-1/3 sm:h-1/3  rounded-sm shadow bg-gray-200 dark:bg-gray-300 shadow-inner-custom">
+      <div className="main-form relative  w-full max-w-5xl flex gap-4 justify-center text-center">
+        <div className="form1 relative w-[70%] md:w-[75%] sm:w-1/2 h-1/3 sm:h-1/3  rounded-sm shadow bg-gray-200 dark:bg-gray-300 shadow-inner-custom">
           <div className="flex border-black-400 items-center justify-between p-1 md:p-2 rounded-sm bg-rose-500 dark:border-gray-700">
             <h4 className="text-lg font-xs sm:font-medium  text-gray-900 dark:text-white">UnFriend Alert</h4>
             <button
@@ -73,7 +73,7 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
               />
             </div>
 
-            <div className="mb-2  justify-center align-center sm:mb-4">
+            <div className="mb-2  font-semibold justify-center align-center sm:mb-4">
               <div className="flex gap-3 mt-1 p-2   sm:border-none border-none">
                 <label
                   htmlFor="description"
@@ -93,7 +93,7 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
                   }} // Prevents the event from bubbling
                 />
                 <label
-                  className="ml-1  mt-3 font-Poppins  sm:mt-4 text-sm font-medium items-center text-white-900 dark:text-black"
+                  className="ml-5   font-Poppins   text-md font-medium items-center text-white-900 dark:text-black"
                 >
                   Yes
                 </label>

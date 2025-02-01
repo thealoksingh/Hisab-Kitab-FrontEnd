@@ -47,9 +47,9 @@ const DeleteAlertModal = ({
         isOpen ? "" : "hidden"
       }`}
     >
-      <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
-        <div className="form1 relative w-1/3 bg-white rounded-sm shadow dark:bg-gray-300 shadow-inner-custom">
-          <div className="flex items-center justify-between p-2 md:p-4 rounded-sm bg-rose-500 dark:border-gray-700">
+      <div className="main-form relative p-10 w-full max-w-5xl flex gap-4 justify-center">
+        <div className="form1 relative w-[70%]  bg-white rounded-sm shadow dark:bg-gray-300 shadow-inner-custom">
+          <div className="flex items-center justify-between p-4 md:p-4  rounded-sm bg-rose-500 dark:border-gray-700">
             <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
               Delete Alert
             </h4>
@@ -79,7 +79,7 @@ const DeleteAlertModal = ({
           <form className="p-4 md:p-5">
             <div className="mb-4">
               {/* Checkbox */}
-              <div className="flex gap-3 mt-1 p-2 rounded border border-gray-300">
+              <div className="flex gap-3 mt-1 p-2 rounded border border-gray-500">
                 <label
                   htmlFor="description"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
