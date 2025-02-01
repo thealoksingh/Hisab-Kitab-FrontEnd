@@ -87,7 +87,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
       }`}
     >
       <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
-        <div className="form-add-frnd border border-gray-400 shadow-inner-custom relative bg-white  w-[90%] h-[60%]  sm:w-1/2 sm:h-1/3 md:w-1/2 md:h-1/3  rounded-sm shadow dark:bg-gray-300">
+        <div className="form-add-frnd border border-gray-400 shadow-inner-custom relative bg-white  w-[100%] h-[60%]  sm:w-1/2 sm:h-1/3 md:w-1/2 md:h-1/3  rounded-sm shadow dark:bg-gray-300">
           <div className="flex items-center justify-between p-2 md:p-2  sm:p-40 rounded-sm bg-teal-600">
             <h4 className="text-lg font-semibold text-gray-200">
               Help & Support
@@ -140,7 +140,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
           )}
           {choice === "view" && (
             <div className="p-1 md:p-5">
-              <div className="scrollable shadow-inner-custom w-full p-2 max-h-96 border border-gray-400 bg-gray-100">
+              <div className=" scroll-auto overflow-y-scroll w-full p-2 max-h-96 border border-gray-400 bg-gray-100">
                 {/* repeat this  */}
                 {tickets.map((ticket) => (
                   <div
@@ -161,12 +161,12 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
                     </div>
 
                     <div className="flex justify-between mt-2">
-                      <div className="text-sm text-gray-700">
+                      <div className="text-sm mr-2 text-wrap text-gray-700">
                         <p className="mb-2">
                           <strong>Title:</strong> {ticket.issueTitle}
                         </p>
                         <div className=" input-field-shadow rounded-sm  border border-gray-200  p-1 mb-1 max-w-56 max-h-24 overflow-y-auto">
-                          <p>
+                          <p className="">
                             <strong>Description:</strong>
 
                             {ticket.description}
