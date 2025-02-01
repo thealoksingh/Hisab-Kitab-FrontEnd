@@ -87,7 +87,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
       }`}
     >
       <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
-        <div className="form-add-frnd border border-gray-400 shadow-inner-custom relative bg-white lg:w-1/2 lg:h-1/3 sm:w-full sm:h-full  rounded-sm shadow dark:bg-gray-300">
+        <div className="form-add-frnd border border-gray-400 shadow-inner-custom relative bg-white  w-[90%] h-[60%]  sm:w-1/2 sm:h-1/3 md:w-1/2 md:h-1/3  rounded-sm shadow dark:bg-gray-300">
           <div className="flex items-center justify-between p-2 md:p-2  sm:p-40 rounded-sm bg-teal-600">
             <h4 className="text-lg font-semibold text-gray-200">
               Help & Support

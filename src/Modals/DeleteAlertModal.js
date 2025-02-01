@@ -79,10 +79,10 @@ const DeleteAlertModal = ({
           <form className="p-4 md:p-5">
             <div className="mb-4">
               {/* Checkbox */}
-              <div className="flex gap-3 mt-1 p-2 rounded border border-gray-500">
+              <div className="flex items-center gap-3 mt-1 p-2 ">
                 <label
                   htmlFor="description"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                  className="block mb-2 text-nowrap text-md font-medium text-gray-900 dark:text-black"
                 >
                   Are You Sure:
                 </label>
@@ -96,25 +96,25 @@ const DeleteAlertModal = ({
                 />
                 <label
                   htmlFor="delete-confirmation"
-                  className="ml-1 text-sm font-medium text-gray-900 dark:text-black"
+                  className=" align-middle text-center pb-1  text-md font-medium text-gray-900 dark:text-black"
                 >
                   Yes
                 </label>
               </div>
             </div>
 
-            <div className="mb-2 flex gap-4">
+            <div className="mb-2 flex  gap-4">
               <button
                 onClick={(e) => handleDeleteTransaction(e)}
                 type="button"
-                className="w-1/3 text-sm text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-4 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                className="w-1/2 text-sm text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-4 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
               >
                 Delete
               </button>
               <button
                 onClick={toggleModal}
                 type="button"
-                className="w-1/3 text-sm text-white bg-cyan-500 hover:bg-cyan-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-4 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                className="w-1/2 text-sm text-white bg-cyan-500 hover:bg-cyan-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-4 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
               >
                 Cancel
               </button>

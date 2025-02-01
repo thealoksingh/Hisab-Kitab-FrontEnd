@@ -143,11 +143,11 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
             {transactionsDto.length > 0 && (
               <>
                 {transactionsDto[0].lastClosingBalance >= 0
-                  ? "You will get :"
-                  : "You will give :"}
+                  ? "You will get:"
+                  : "You will give:"}
                 <span>
                   {" "}
-                  ₹ {Math.abs(transactionsDto[0].lastClosingBalance)}
+                   ₹{Math.abs(transactionsDto[0].lastClosingBalance)}
                 </span>
               </>
             )}

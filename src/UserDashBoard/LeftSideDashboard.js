@@ -305,126 +305,126 @@ function LeftSideDashBoard({
               />
             </div>
 
-            {/* filter */}
-
-            <div className="filter-section w-[30%]  h-full   ">
-              <p className="p-1 font-semibold ">Filter</p>
-              <button
-                onClick={toggleFilterDropdown}
-                className=" sm:h-10  px-3 sm:gap-24 sm:mr-6  gap-4  h-10 border justify-between border-gray-700   text-white bg-gray-700 hover:bg-gray-600   font-medium rounded-sm text-sm py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
-                type="button"
-              >
-                {filterCriteria}
-                <svg
-                  className="w-2.5 h-2.5 ms-3"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 10 6"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 1 4 4 4-4"
-                  />
-                </svg>
-              </button>
-              {isFilterOpen && (
-                <div className="z-50 p-5  mt-1 absolute bg-white dark:bg-gray-700 shadow-lg rounded-sm">
-                <ul className="mt-2 text-gray-900 dark:text-gray-200">
-                  {["All", "You Will Get", "You Will Give", "Settled"].map((criteria) => (
-                    <li key={criteria} className="my-1">
-                      <button
-                        onClick={() => applyFilter(criteria)}
-                        className="block text-left w-full px-2 py-2 sm:px-5 sm:py-2 text-xs sm:text-smtext-left rounded-md transition-all duration-300 
-                                   bg-transparent hover:bg-gray-200 hover:shadow-md dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        {criteria}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              )}
-            </div>
+            <div className="filter-section w-[30%] text-gray-700 h-full">
+  <p className="p-1 font-semibold">Filter</p>
+  <button
+    onClick={toggleFilterDropdown}
+    className="sm:h-10 h-10 w-full justify-between px-5 sm:px-4 gap-4 border-gray-700 text-white bg-gray-700 hover:bg-gray-600 font-medium rounded-sm text-sm py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700"
+    type="button"
+  >
+    {filterCriteria}
+    <svg
+      className="w-2.5 h-2.5 ms-3"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 10 6"
+    >
+      <path
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="m1 1 4 4 4-4"
+      />
+    </svg>
+  </button>
+  {isFilterOpen && (
+    <div className="z-50 p-2 sm:p-5 md:p-5 bg-gray-100 mt-1 absolute dark:bg-gray-700 shadow-lg rounded-sm">
+      <ul className="mt-2 text-gray-700 font-Poppins font-semibold dark:text-gray-200">
+        {["All", "You Will Get", "You Will Give", "Settled"].map((criteria) => (
+          <li key={criteria} className="my-1">
+            <button
+              onClick={() => applyFilter(criteria)}
+              className="block w-full px-2 py-2 sm:px-5 sm:py-2 md:px-5 md:py-2 
+                         text-left text-xs sm:text-sm md:text-sm font-Poppins font-semibold 
+                         bg-transparent text-gray-700 dark:text-gray-200 
+                         rounded-md transition-all duration-300 
+                         hover:bg-gray-200 hover:shadow-md dark:hover:bg-gray-600 dark:hover:text-white"
+            >
+              {criteria}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+</div>
 
            {/* shortBy */}
 
-            <div className="sort-section  text-black h-full w-[30%] mr-2  ">
-              <p className="p-1 font-Poppins font-semibold ">Sort By</p>
+           <div className="sort-section text-gray-700 h-full w-[30%] mr-2">
+  <p className="p-1 font-Poppins font-semibold">Sort By</p>
+  <button
+    onClick={toggleSortDropdown}
+    className="sm:h-10 h-10 w-full justify-between px-5 sm:px-4 gap-4 border-gray-700 text-white bg-gray-700 hover:bg-gray-600 font-medium rounded-sm text-sm py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700"
+    type="button"
+  >
+    {sortCriteria}
+    <svg
+      className="w-4.5 h-4.5 ms-1 sm:w-2.5 sm:h-2.5 sm:ms-3"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 10 6"
+    >
+      <path
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="m1 1 4 4 4-4"
+      />
+    </svg>
+  </button>
 
-              <button
-                onClick={toggleSortDropdown}
-                className="w-full line-clamp-1 sm:h-10 h-10 justify-between   px-5 sm:px-4    border-gray-500    text-white bg-gray-700 hover:bg-gray-700   font-medium rounded-sm text-sm  py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
-                type="button"
-              >
-                {sortCriteria}
-                <svg
-                  className="w-4.5 h-4.5 ms-1 sm:w-2.5 sm:h-2.5 sm:ms-3 "
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 10 6"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 1 4 4 4-4"
-                  />
-                </svg>
-              </button>
-
-              {isSortOpen && (
-                <div className="z-50 mt-1  absolute bg-white divide-y divide-gray-100 rounded-sm shadow w-[90%] dark:bg-gray-700">
-                  <ul className="py-2 text-sm text-gray-00 dark:text-gray-200">
-                    <li>
-                      <p
-                        onClick={() => handleSort("Most Recent")}
-                         className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
-                      >
-                        Most Recent
-                      </p>
-                    </li>
-                    <li>
-                      <p
-                        onClick={() => handleSort("Oldest")}
-                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
-                      >
-                        Oldest
-                      </p>
-                    </li>
-                    <li>
-                      <p
-                        onClick={() => handleSort("Highest Amount")}
-                         className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
-                      >
-                        Highest Amount
-                      </p>
-                    </li>
-                    <li>
-                      <p
-                        onClick={() => handleSort("Lowest Amount")}
-                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
-                      >
-                        Lowest Amount
-                      </p>
-                    </li>
-                    <li>
-                      <p
-                        onClick={() => handleSort("By Name")}
-                         className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
-                      >
-                        By Name
-                      </p>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </div>
+  {isSortOpen && (
+    <div className="z-50 mt-1 p-1 sm:p-6 bg-slate-100 sm:bg-slate-100 absolute text-gray-700 divide-gray-100 rounded-sm shadow w-[90%]">
+      <ul className="py-2 text-sm text-gray-600 font-Poppins font-semibold dark:text-gray-200">
+        <li>
+          <p
+            onClick={() => handleSort("Most Recent")}
+            className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+          >
+            Most Recent
+          </p>
+        </li>
+        <li>
+          <p
+            onClick={() => handleSort("Oldest")}
+            className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+          >
+            Oldest
+          </p>
+        </li>
+        <li>
+          <p
+            onClick={() => handleSort("Highest Amount")}
+            className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+          >
+            Highest Amount
+          </p>
+        </li>
+        <li>
+          <p
+            onClick={() => handleSort("Lowest Amount")}
+            className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+          >
+            Lowest Amount
+          </p>
+        </li>
+        <li>
+          <p
+            onClick={() => handleSort("By Name")}
+            className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+          >
+            By Name
+          </p>
+        </li>
+      </ul>
+    </div>
+  )}
+</div>
           </div>
         </div>
 
