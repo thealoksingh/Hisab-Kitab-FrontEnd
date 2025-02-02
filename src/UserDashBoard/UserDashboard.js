@@ -6,6 +6,8 @@ import RightSideDashBoard from "./RightSideDashboard"
 import logo from "../assets/logo-hisab-kitab.png"
 import HelpAndSupport from "../Modals/HelpAndSupport"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import "../CssStyle/LoaderStyle.css";
+
 import {
   faCalculator,
   faGear,
@@ -32,15 +34,18 @@ const UserDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(true)
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false)
+  const[loader, setLoader] = useState(true);
 
   useEffect(() => {
     const fetchFriends = async () => {
+      setLoader(true);
       if (!user) return
 
       try {
         const response = await getFriendList(user.userId)
         setFriends(response.data.friendList)
         setFriendRequestCount(response.data.friendRequestCount)
+        setLoader(false);
       } catch (err) {
         setError(err.message)
       }
@@ -184,8 +189,11 @@ const UserDashboard = () => {
         </header>
 
         <main className="flex-1 overflow-x-hidden sm:w-full  sm:h-[100%]   overflow-y-hidden   bg-white">
+      
           <div className="max-w-7xl  sm:overflow-y-auto  ">
+            
             <div className="flex flex-col lg:flex-row">
+              
               <div className={`lg:w-1/2 m-2   ${isLeftSidebarOpen ? "block" : "hidden"} lg:block`}>
                 <LeftSideDashBoard
                   user={user}

@@ -156,17 +156,17 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
 
        {/* Report */}
 
-        <div className="report-settings  flex gap-1 sm:gap-1 md:gap-1  items-center justify-between">
+        <div className="report-unfriend    flex gap-3 sm:gap-1 md:gap-1  items-center justify-between">
         <button
        onClick={toggleReportModal}
-         className="report w-30 sm:w-36 h-8 sm:h-[35px] text-white px-1 sm:px-3 bg-rose-600 flex items-center justify-center hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+         className="report w-30 sm:w-36 h-8 sm:h-[35px] px-1 sm:px-3 bg-transparent   sm:bg-rose-600  md:bg-rose-600  flex items-center justify-center hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm shadow-none sm:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
         >
-         <span className="inline sm:hidden">
+         <span className="inline sm:hidden ">
           <FontAwesomeIcon icon={faDownload} />
          </span>
          <span className="hidden sm:flex items-center">
-          <FontAwesomeIcon icon={faDownload} className="mr-1" />
-          <span className="line-clamp-1 sm:text-sm">View Report</span>
+          <FontAwesomeIcon icon={faDownload} className="mr-1 text-black sm:text-white" />
+          <span className="line-clamp-1 text-white sm:text-sm">View Report</span>
           </span>
             </button>
           <FriendTransactionReport
@@ -177,7 +177,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
           />
          <div
             onClick={toggleUnfriendModal}
-            className="settings h-9 w-9 sm:h-10 sm:w-10 right-0 rounded-full border border-cyan-800  flex items-center justify-center bg-cyan-700 "
+            className="settings h-9 w-9 sm:h-10 sm:w-10 right-0 hover:scale-110 rounded-full border shadow-md  flex items-center justify-center bg-cyan-800 "
            >
           <img
            src={unFriendImage}
@@ -202,10 +202,10 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
             setIsCommentSetionOpen(false);
           }
         }}
-        class="table-division top-20  md:top-20 sm:top-24  border border-gray-400 sm:w-full  h-[75.3%] sm:h-[81.6%] bg-gray-400  absolute  scrollable  "
+        class="table-division top-20  md:top-20 sm:top-24  border border-gray-400 w-full md:w-full  sm:w-full  h-[78.3%] sm:h-[81.6%] bg-gray-400  absolute  scrollable  "
       >
         <table className="w-full p-0   sm:p-2  border-separate border-spacing-y-1 text-sm text-left text-black dark:text-black">
-          <thead className="sticky top-0 fixed border  shadow-inner-custom    bg-gray-100  text-xs text-gray-600 uppercase dark:text-gray-800">
+          <thead className="sticky top-0  border  shadow-inner-custom    bg-gray-100  text-xs text-gray-600 uppercase dark:text-gray-800">
             <tr className="border-b top0-0">
               <th scope="col" className="px-2 py-4 sm:px-3 sm:py-3 ">
                 Entries
@@ -226,7 +226,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
               return (
                 <tr
                   key={transactionDto.transaction.transId}
-                  className={`bg-white border-b border-1 shadow-inner-custom rounded-sm  dark:border-gray-100 cursor-pointer ${
+                  className={`bg-white border-b border-1 shadow-inner-custom rounded-sm dark:border-gray-100 cursor-pointer ${
                     selectedRowId === transactionDto.transaction.transId
                     ? "bg-gray-300 dark:bg-gray-300" 
                     : "bg-gray-100 dark:bg-gray-100" 
@@ -239,7 +239,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
                 >
                   <td
                     scope="row"
-                    className="px-2 py-2 sm:px-6 sm:py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
+                    className="px-2 py-2 sm:px-6 sm:py-4  font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
                   >
                     <div className="flex flex-col">
                       <span className="font-medium text-sm line-clamp-2 sm:line-clamp-0 text-gray-900">

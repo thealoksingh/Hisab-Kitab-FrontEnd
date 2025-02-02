@@ -11,10 +11,11 @@ const LogInForm = () => {
   const [role, setRole] = useState("user"); // default to user role
   const [error, setError] = useState(null);
   const [showDisclaimer, setShowDisclaimer] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
-  
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     setError(null); // Reset error before login attempt
 
     // Hardcoded admin credentials
@@ -36,6 +37,8 @@ const LogInForm = () => {
       }
     } catch (error) {
       setError("Invalid login credentials");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -48,7 +51,7 @@ const LogInForm = () => {
         className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
       >
         {showDisclaimer && (
-          <div className="absolute top-10 sm:top-16  lg:right-4  bg-green-50 border border-gray-400 text-gray-700 px-4 py-3 rounded-lg shadow-lg flex items-start w-full sm:w-2/3 lg:w-1/3">
+          <div className="absolute top-10 sm:top-16 lg:right-4 bg-green-50 border border-gray-400 text-gray-700 px-4 py-3 rounded-lg shadow-lg flex items-start w-full sm:w-2/3 lg:w-1/3">
             <p className="text-sm">
               “We’re currently using free services, so it may take a moment for the backend to start. For the best experience, please switch to desktop mode, as the website’s responsiveness is still under development. Thank you for your patience!”
             </p>
@@ -61,7 +64,7 @@ const LogInForm = () => {
           </div>
         )}
 
-        <div className="main-form relative    p-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] max-w-5xl flex gap-4 justify-center">
+        <div className="main-form relative p-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] max-w-5xl flex gap-4 justify-center">
           <div className="form-signIn shadow-inner-custom border border-gray-400 bg-white w-full rounded-md shadow dark:bg-gray-300">
             <div className="flex items-center justify-between p-3 bg-gray-600 rounded-t-md">
               <h4 className="text-lg font-semibold text-gray-200">
@@ -125,7 +128,7 @@ const LogInForm = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
-              <p className="text-sm text-rose-600">
+                <p className="text-sm text-rose-600">
                   Forgot password?{" "}
                   <a
                     href="/reset-password"
@@ -146,8 +149,16 @@ const LogInForm = () => {
                 <button
                   type="submit"
                   className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+                  disabled={isLoading}
                 >
-                  Log In
+                  {isLoading ? (
+                    <div className="flex items-center justify-center">
+                      <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
+                      <div className="font-semibold ml-2">Signing In..</div>
+                    </div>
+                  ) : (
+                    "Log In"
+                  )}
                 </button>
                 <a
                   href="/register"

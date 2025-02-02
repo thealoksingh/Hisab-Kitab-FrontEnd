@@ -220,14 +220,14 @@ function CommentSection({
             <p className="text-sm text-gray-600">{commentTransaction.description} </p>
           </div>
 
-          <div className="comment-section w-full h-[50%]  flex flex-col">
+          <div className="comment-section  w-full h-[50%]  flex flex-col">
             {/* Heading */}
             <div className="comment-heading shadow-inner-custom border border-gray-400 text-lg flex justify-center items-center bg-gray-200 border border-gray-300 py-2">
               Comments
             </div>
 
             {/* Comments Box */}
-            <div className="comment-box flex flex-col border border-gray-400 gap-2 bg-gray-300 shadow-inner-custom border border-gray-300 p-2  h-[70%] scrollable">
+            <div className="comment-box scroll-auto overflow-y-scroll flex flex-col border border-gray-400 gap-2 bg-gray-300 shadow-inner-custom border border-gray-300 p-2  h-[70%] scrollable">
               {/* Repeat User Comments */}
               {comments.map((comment, index) => {
                 // Calculate lastClosingAmount dynamically
@@ -235,7 +235,7 @@ function CommentSection({
                 return (
                   <div
                     key={index}
-                    className="user-comment border border-gray-400 flex shadow-inner-custom gap-2 p-2 pr-4 bg-white rounded-sm shadow-sm items-start"
+                    className="user-comment  border border-gray-400 flex shadow-inner-custom gap-2 p-2 pr-4 bg-white rounded-sm shadow-sm items-start"
                   >
                     {/* User Icon */}
                     <ProfileCircle
