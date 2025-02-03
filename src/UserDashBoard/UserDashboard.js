@@ -279,7 +279,9 @@ const UserDashboard = () => {
                   refreshFriendTransaction={refreshFriendTransaction}
                   setRefreshFriendTransaction={setRefreshFriendTransaction}
                   isOpen={isRightSidebarOpen}
-                  toggleSidebar={toggleRightSidebar}
+                  setIsRightSidebarOpen={setIsRightSidebarOpen}
+                  toggleRightSidebar={toggleRightSidebar}
+                  toggleLeftSidebar={toggleLeftSidebar}
                   setIsFriendSelected={setIsFriendSelected}
                   setSelectedFriend={setSelectedFriend}
                 />

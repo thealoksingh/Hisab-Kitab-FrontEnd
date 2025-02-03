@@ -9,6 +9,9 @@ import "../CssStyle/GroupDashboard.css"
 import { getAllCommentsByTransactionId, postNewCommentsByTransactionId } from "../Api/HisabKitabApi"
 import UpdateFriendTransaction from "../Modals/UpdateFriendTransactionModel"
 import DeleteAlertModal from "../Modals/DeleteAlertModal"
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../security/AuthContext";
+
 function CommentSection({
   isOpen,
   toggleCommentSection,
@@ -34,6 +37,8 @@ function CommentSection({
   const toggleUpdateForm = () => {
     setIsUpdateFormOpen(!isUpdateFormOpen)
   }
+
+
 
   useEffect(() => {
     if (isOpen) {

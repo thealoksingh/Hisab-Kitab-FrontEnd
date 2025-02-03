@@ -11,9 +11,11 @@ function RightSideDashBoard({
   refreshFriendTransaction,
   setRefreshFriendTransaction,
   isOpen,
-  toggleSidebar,
+  toggleLeftSidebar,
+  toggleRightSidebar,
   setIsFriendSelected,
   setSelectedFriend,
+  setIsRightSidebarOpen
 }) {
   // const navigate = useNavigate();
   // const location = useLocation();
@@ -47,9 +49,11 @@ function RightSideDashBoard({
             selectedFriend={selectedFriend}
             refreshFriendTransaction={refreshFriendTransaction}
             setRefreshFriendTransaction={setRefreshFriendTransaction}
-             toggleSidebar={toggleSidebar}
+            toggleLeftSidebar={toggleLeftSidebar}
+            toggleRightSidebar={toggleRightSidebar}
             setIsFriendSelected={setIsFriendSelected}
             setSelectedFriend={setSelectedFriend}
+            setIsRightSidebarOpen={setIsRightSidebarOpen}
           />
         ) : (
           <div className="default-right h-[97.5%] border border-gray-400 shadow-inner-custom w-full bg-gray-200 flex flex-col items-center justify-center p-2">

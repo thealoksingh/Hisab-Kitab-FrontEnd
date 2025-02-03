@@ -11,13 +11,15 @@ import unFriendImage from "../assets/unFriend.png";
 import UnfriendModal from "../Modals/UnfriendModal";
 
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../security/AuthContext";
 function FriendTranscationDetail({
   user,
   selectedFriend,
   refreshFriendTransaction,
   setRefreshFriendTransaction,
   isOpen,
-  toggleSidebar,
+  toggleLeftSidebar,
+  toggleRightSidebar,
   setIsFriendSelected,
   setSelectedFriend,
 }) {
@@ -33,7 +35,41 @@ function FriendTranscationDetail({
   const [isCommentSectionOpen, setIsCommentSetionOpen] = useState(false);
 const [isUnfriendModalOpen, setIsUnfriendModalOpen]= useState(false);
 
+const navigate = useNavigate();
+const { isAuthenticated } = useAuth();
 
+// Redirect if the user is not authenticated
+useEffect(() => {
+  if (!isAuthenticated) {
+    navigate("/"); // Redirect to login page if not authenticated
+  }
+}, [isAuthenticated, navigate]);
+
+// Prevent the user from going back to the previous page
+useEffect(() => {
+  const handlePopState = (e) => {
+    e.preventDefault(); // Prevent the default back navigation
+    console.log("isCommentSection:", isCommentSectionOpen);
+    if (isAuthenticated && isCommentSectionOpen===false) {
+      console.log("Navigating to /user-dashboard");
+      setIsFriendSelected(false);
+      setSelectedFriend(null);
+      toggleRightSidebar();
+      toggleLeftSidebar();
+      // setIsRightSidebarOpen(false);
+      navigate("/user-dashboard"); // Redirect to /user-dashboard if the user tries to go back
+    }else if(isAuthenticated && isCommentSectionOpen===true){
+      toggleCommentSection();
+  }};
+
+  // Listen for back button or history changes
+  window.history.pushState(null, document.title);
+  window.addEventListener('popstate', handlePopState);
+
+  return () => {
+    window.removeEventListener('popstate', handlePopState); // Clean up the event listener on unmount
+  };
+}, [isAuthenticated, navigate]);
 
 
   
@@ -51,8 +87,10 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
   const toggleCommentSection = () => {
     if (isCommentSectionOpen) {
       setSelectedRowId(null);
+      console.log("isCommentSectionOpen in toggele in if :", isCommentSectionOpen);
     }
     setIsCommentSetionOpen(!isCommentSectionOpen); // Toggle the state when the button is clicked
+    console.log("isCommentSectionOpen in toggele out if :", isCommentSectionOpen);
   };
 
   const toggleModal = () => {
