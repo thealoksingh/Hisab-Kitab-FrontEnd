@@ -10,24 +10,24 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
   const [successMessage, setSuccessMessage] = useState(null);
   const [timer, setTimer] = useState(30); // State for timer
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // State for disabling button
+  const [isLoading, setIsLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
-// const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    let interval;
 
-useEffect(() => {
-  let interval;
+    if (isButtonDisabled && timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1); // Decrease timer by 1 every second
+      }, 1000);
+    } else if (timer === 0) {
+      setIsButtonDisabled(false); // Enable the button when the timer reaches 0
+      setTimer(30); // Reset the timer
+      setError(null); // Clear the error message after 60 seconds
+    }
 
-  if (isButtonDisabled && timer > 0) {
-    interval = setInterval(() => {
-      setTimer((prevTimer) => prevTimer - 1); // Decrease timer by 1 every second
-    }, 1000);
-  } else if (timer === 0) {
-    setIsButtonDisabled(false); // Enable the button when the timer reaches 0
-    setTimer(30); // Reset the timer
-    setError(null); // Clear the error message after 60 seconds
-  }
-
-  return () => clearInterval(interval); // Cleanup the interval
-}, [isButtonDisabled, timer]); // Dependencies to watch
+    return () => clearInterval(interval); // Cleanup the interval
+  }, [isButtonDisabled, timer]); // Dependencies to watch
 
   const handleInviteRequest = (e) => {
     e.preventDefault();
@@ -41,51 +41,63 @@ useEffect(() => {
 
   const handleAddFriend = async (e) => {
     e.preventDefault();
-    if (contactNo !== "") {
-      await addFriend(user.userId, contactNo)
-        .then((data) => {
-          console.log("Friend request sent successfully:", data);
-          setAddFriendErrorMessage("Friend request sent successfully");
-          setContactNo(""); // Reset the contact number
-          
-        })
-        .catch((error) => {
-          console.error("Error adding friend:", error);
-  
-          // Handle specific error messages from the backend
-          if (error.response && error.response.data) {
-            const errorMessage = error.response.data;
-             console.log("🥹"+errorMessage);
-            if (errorMessage === "You cannot send a friend request to yourself.") {
-              setAddFriendErrorMessage("You cannot send a friend request to yourself.");
-            } else if (errorMessage === "You are already friends.") {
+    setIsLoading(true);
+
+    if (contactNo.trim() !== "") {
+      try {
+        const data = await addFriend(user.userId, contactNo);
+        console.log("Friend request sent successfully:", data);
+        setAddFriendErrorMessage("Friend request sent successfully");
+        setContactNo(""); // Reset the contact number
+      } catch (error) {
+        console.error("Error adding friend:", error);
+
+        // Handle specific error messages from the backend
+        if (error.response && error.response.data) {
+          const errorMessage = error.response.data;
+          console.log("🥹" + errorMessage);
+          switch (errorMessage) {
+            case "You cannot send a friend request to yourself.":
+              setAddFriendErrorMessage(
+                "You cannot send a friend request to yourself."
+              );
+              break;
+            case "You are already friends.":
               setAddFriendErrorMessage("You are already friends.");
-            } else if (errorMessage === "Friend request already sent.") {
+              break;
+            case "Friend request already sent.":
               setAddFriendErrorMessage("Friend request already sent.");
-            } else if (errorMessage === "User not exist") {
+              break;
+            case "User not exist":
               setIsAddButtonVisible(false); // Switch to invite mode
               setAddFriendErrorMessage("The user does not exist.");
-            } else {
-              setAddFriendErrorMessage("An unexpected error occurred. Please try again.");
-            }
-          } else {
-            // Handle other generic errors
-            setAddFriendErrorMessage("Failed to send friend request. Please check your network or try again later.");
+              break;
+            default:
+              setAddFriendErrorMessage(
+                "An unexpected error occurred. Please try again."
+              );
           }
-  
-         
-          setContactNo(""); // Reset the contact number
-        });
+        } else {
+          // Handle other generic errors
+          setAddFriendErrorMessage(
+            "Failed to send friend request. Please check your network or try again later."
+          );
+        }
+
+        setContactNo(""); // Reset the contact number
+      } finally {
+        setIsLoading(false); // Ensure loading state is reset
+      }
     } else {
       setAddFriendErrorMessage("Please enter a valid mobile number.");
+      setIsLoading(false); // Also reset the loading state for invalid input
     }
   };
-  
 
   const handleInvite = async (e) => {
     e.preventDefault();
     console.log("Invite button clicked");
-    
+
     if (email !== "") {
       await sendInvitationEmail(email, user.fullName)
         .then((data) => {
@@ -109,7 +121,9 @@ useEffect(() => {
       id="add-friend-modal"
       tabIndex="-1"
       aria-hidden={!isOpen}
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20 ${isOpen ? "" : "hidden"}`}
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20 ${
+        isOpen ? "" : "hidden"
+      }`}
     >
       <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
         <div className="form-add-frnd border border-gray-400 shadow-inner-custom relative bg-white w-[80%] h-full md:w-1/2 md:-1/2  sm:w-1/2 sm:-1/2 rounded-sm shadow dark:bg-gray-300">
@@ -175,51 +189,78 @@ useEffect(() => {
                 disabled={isAddButtonVisible}
               />
             </div>
-              {/* Display error or success message */}
-      {AddFriendErrorMessage && (
-    <p className={`mb-3 text-sm ${AddFriendErrorMessage.includes("successfully") ? "text-green-500" : "text-red-500"}`}>
-      {AddFriendErrorMessage}
-    </p>
-   )}
+            {/* Display error or success message */}
+            {AddFriendErrorMessage && (
+              <p
+                className={`mb-3 text-sm ${
+                  AddFriendErrorMessage.includes("successfully")
+                    ? "text-green-500"
+                    : "text-red-500"
+                }`}
+              >
+                {AddFriendErrorMessage}
+              </p>
+            )}
 
             {error && <p className="text-red-500">{error}</p>}
 
-            <h4 className={`${!isAddButtonVisible ? "block" : "hidden"} mb-2 text-rose-500 text-sm`}>
-              !!User Doesn't Exist.<span className="text-cyan-700"> Enter Email and Click below to Invite </span>
-            </h4>
+            <span
+              className={`${
+                !isAddButtonVisible ? "block" : "hidden"
+              } mb-2 text-cyan-600 text-sm`}
+            >
+              Enter Email , Click below to Invite
+            </span>
 
-            {isButtonDisabled && <h5 className="text-orange-500 font-sm">
-              {`Trying to send , Wait few Seconds`}<span className="text-rose-600 font-sm"> {isButtonDisabled && ` Resend in ${timer} sec`}</span>
-            </h5>}
+            {isButtonDisabled && (
+              <h5 className="text-orange-500 font-sm">
+                {`Trying to send , Wait few Seconds`}
+                <span className="text-rose-600 font-sm">
+                  {" "}
+                  {isButtonDisabled && ` Resend in ${timer} sec`}
+                </span>
+              </h5>
+            )}
 
-          
-            <div className="mb-2 flex justyify-between gap-4 sm:gap-10">
+            <div className="mb-2 flex justyify-between gap-1 sm:gap-3">
               <button
                 type="submit"
-                className={`${isAddButtonVisible ? "block" : "hidden"}  bg-cyan-600 text-white  px-3 py-1 sm:px-7 sm:py-2 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
+                className={`${
+                  isAddButtonVisible ? "block" : "hidden"
+                }  bg-cyan-600 text-white  px-3 py-1 sm:px-7 sm:py-2 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
                 onClick={handleAddFriend}
               >
-                Add
+                {isLoading ? (
+                  <div className="flex ">
+                    <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
+                    <div className="font-semibold ml-2">Sending..</div>
+                  </div>
+                ) : (
+                  "Send Request"
+                )}
               </button>
               <button
                 type="submit"
-                className={`${!isAddButtonVisible ? "block" : "hidden"}  bg-teal-600 text-white px-4 py-1 focus:outline-none focus:ring-4 focus:ring-teal-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
+                className={`${
+                  !isAddButtonVisible ? "block" : "hidden"
+                }  bg-teal-600 text-white px-4 py-1 focus:outline-none focus:ring-4 focus:ring-teal-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
                 onClick={handleInviteRequest}
                 disabled={isButtonDisabled} // Disable button when timer is active
                 style={{
-                  backgroundColor: isButtonDisabled ? "transparent" : "rgb(0, 150, 135)", // Change color when disabled
+                  backgroundColor: isButtonDisabled
+                    ? "transparent"
+                    : "rgb(0, 150, 135)", // Change color when disabled
                 }}
               >
                 Invite
               </button>
               <button
-                 onClick={() => {
+                onClick={() => {
                   toggleModal(); // Close modal
                   setIsAddButtonVisible(true); // Reset to Add mode
                   setAddFriendErrorMessage(null);
                 }}
                 className=" bg-rose-600 text-white text-xs sm:text-sm px-3 py-1 sm:px-7 sm:py-2 focus:outline-none focus:ring-4 focus:ring-rose-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 "
-              
               >
                 Cancel
               </button>

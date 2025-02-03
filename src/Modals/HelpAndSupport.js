@@ -8,6 +8,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
   const [choice, setChoice] = useState(null);
   const [tickets, setTickets] = useState([]);
   const [isRefreshTicket, setRefreshTicket] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const handleChoice = (value) => {
     setChoice(value);
     if (value === "view") {
@@ -27,9 +28,15 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    if (!formData.title.trim() || !formData.description.trim()) {
+      alert("Title and description cannot be empty.");
+      return;
+    }
+  
+    setLoading(true);
     try {
       const response = await createTicket(formData);
-
       alert(
         "Ticket created successfully! With Ticket ID: " + response.data.ticketId
       );
@@ -38,20 +45,24 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
     } catch (error) {
       alert("Failed to create ticket. Please try again.");
       handleClose();
+    } finally {
+      setLoading(false);
     }
   };
+  
   useEffect(() => {
     if (choice !== "view") return;
     const fetchAllTickets = async () => {
       try {
         const response = await getAllTickets(user.userId);
+        setLoading(true);
         setTickets(response.data);
         // console.log("Tickets fetched successfully");
 
         console.log(tickets);
       } catch (error) {
         alert("Failed to fetch Tickets.");
-      }
+      }finally{setLoading(false);}
     };
     fetchAllTickets();
   }, [isRefreshTicket]);
@@ -133,7 +144,13 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
                   type="button"
                   className="w-full border bg-gray-100 hover:bg-yellow-500 hover:text-white border-yellow-500 text-yellow-500 rounded-sm px-4 py-1 focus:outline-none focus:ring-4 focus:ring-yellow-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                 >
-                  View Tickets
+                 {isLoading ? (<div className="flex items-center ">
+                    <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
+                    <div className="font-semibold ml-2">Processing..</div>
+                    </div>
+                  ) : (
+                    "View Tickets"
+                  )}
                 </button>
               </div>
             </div>
@@ -235,12 +252,18 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
                   onChange={handleChange}
                 />
               </div>
-              <div className="mb-2  font-Poppins justify-between sm:text-xs flex gap-4 sm:p-10 ">
+              <div className="mb-2  font-Poppins  sm:text-xs flex gap-4  ">
                 <button
                   type="submit"
                   className=" bg-teal-600 text-white rounded-sm px-6 py-1 focus:outline-none focus:ring-4 focus:ring-teal-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                 >
-                  Submit
+                 {isLoading ? (<div className="flex items-center ">
+                    <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
+                    <div className="font-semibold ml-2">Processing..</div>
+                    </div>
+                  ) : (
+                    "Submit"
+                  )}
                 </button>
                 <button
                   type="button"

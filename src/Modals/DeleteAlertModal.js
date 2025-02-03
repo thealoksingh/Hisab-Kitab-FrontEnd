@@ -12,6 +12,7 @@ const DeleteAlertModal = ({
   setRefreshFriendTransaction,
 }) => {
   const [isChecked, setIsChecked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCheckboxChange = (e) => {
     setIsChecked(e.target.checked);
@@ -19,8 +20,11 @@ const DeleteAlertModal = ({
 
   const handleDeleteTransaction = async (e) => {
     e.preventDefault(); // Prevent form submission
+    setIsLoading(true);
+
     if (!isChecked) {
       alert("Please confirm deletion by checking the checkbox.");
+      setIsLoading(false)
       return;
     }
     console.log("transId = " + transId);
@@ -33,7 +37,7 @@ const DeleteAlertModal = ({
       toggleCommentSection();
     } catch (error) {
       console.error("Error deleting transaction:", error);
-    }
+    }finally{setIsLoading(false)}
   };
 
   if (!isOpen) return null;
@@ -109,7 +113,13 @@ const DeleteAlertModal = ({
                 type="button"
                 className="w-1/2 text-sm text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-4 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
               >
-                Delete
+                 {isLoading ? (<div className="flex gap-2 items-center">
+                    <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
+                    <div className="font-semibold ml-1">Deleting..</div>
+                    </div>
+                  ) : (
+                    "Delete"
+                  )} 
               </button>
               <button
                 onClick={toggleModal}

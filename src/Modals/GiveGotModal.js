@@ -13,10 +13,11 @@ const GiveGotModal = ({
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+ setIsLoading(true);
     // Set fromUserId and toUserId based on the transaction type
     const transactionData = {
       transId: 0,
@@ -41,6 +42,8 @@ const GiveGotModal = ({
         : setRefreshFriendTransaction(true);
     } catch (error) {
       console.error("Error creating transaction", error);
+    }finally {
+      setIsLoading(false);
     }
   };
 
@@ -147,16 +150,27 @@ const GiveGotModal = ({
               />
             </div>
 
-            <button
-  type="submit"
-  className={`w-full text-white 
-    ${transactionType === 'give' 
-      ? 'bg-[#be123c] hover:bg-[#9b0e35] border border-[#9b0e35] focus:ring-[#Ff007f]' 
-      : 'bg-[#10b981] hover:bg-[#059669] border border-[#059669] focus:ring-[#50c878]'}
+          <button
+              type="submit"
+              className={`w-full text-white 
+    ${
+      transactionType === "give"
+        ? "bg-[#be123c] hover:bg-[#9b0e35] border border-[#9b0e35] focus:ring-[#Ff007f]"
+        : "bg-[#10b981] hover:bg-[#059669] border border-[#059669] focus:ring-[#50c878]"
+    }
     focus:ring-4 focus:outline-none  font-medium rounded-sm text-sm px-5 py-2.5 text-center`}
->
-  {transactionType === 'give' ? 'Give Amount' : 'Receive Amount'}
-</button>
+            >
+              {isLoading ? (
+                <div className="flex gap-4 w-full justify-center">
+                  <div className="w-5 h-5 border-4 border-t-4 border-white rounded-sm animate-spin"></div>
+                  <div className="font-semibold ml-1">Loading...</div>
+                </div>
+              ) : transactionType === "give" ? (
+                "Give Amount"
+              ) : (
+                "Receive Amount"
+              )}
+            </button>
 
           </form>
         </div>

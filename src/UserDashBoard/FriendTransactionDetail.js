@@ -159,13 +159,13 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
         <div className="report-unfriend    flex gap-3 sm:gap-1 md:gap-1  items-center justify-between">
         <button
        onClick={toggleReportModal}
-         className="report w-30 sm:w-36 h-8 sm:h-[35px] px-1 sm:px-3 bg-transparent   sm:bg-rose-600  md:bg-rose-600  flex items-center justify-center hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm shadow-none sm:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+         className="report w-30 group sm:w-36 h-8 sm:h-[35px] px-1 sm:px-3 bg-transparent   sm:bg-rose-600  md:bg-rose-600  flex items-center justify-center hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm shadow-none sm:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
         >
          <span className="inline sm:hidden ">
-          <FontAwesomeIcon icon={faDownload} />
+          <FontAwesomeIcon className=" " icon={faDownload} />
          </span>
          <span className="hidden sm:flex items-center">
-          <FontAwesomeIcon icon={faDownload} className="mr-1 text-black sm:text-white" />
+          <FontAwesomeIcon icon={faDownload} className="mr-1 group-hover:animate-bounce  text-black  sm:text-white" />
           <span className="line-clamp-1 text-white sm:text-sm">View Report</span>
           </span>
             </button>
@@ -309,6 +309,8 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
         user={user}
         commentTransaction={commentTransaction}
         toggleCommentSection={toggleCommentSection}
+        refreshFriendTransaction={refreshFriendTransaction}
+        setRefreshFriendTransaction={setRefreshFriendTransaction}
       />
     </>
   );

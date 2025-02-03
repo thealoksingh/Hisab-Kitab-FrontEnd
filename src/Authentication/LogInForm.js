@@ -48,25 +48,38 @@ const LogInForm = () => {
         id="SignIn-modal"
         tabIndex="-1"
         aria-hidden="false"
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+        className="fixed inset-0  flex items-center justify-center p-4 sm:p-8"
       >
         {showDisclaimer && (
-          <div className="absolute top-10 sm:top-16 lg:right-4 bg-green-50 border border-gray-400 text-gray-700 px-4 py-3 rounded-lg shadow-lg flex items-start w-full sm:w-2/3 lg:w-1/3">
-            <p className="text-sm">
-              “We’re currently using free services, so it may take a moment for the backend to start. For the best experience, please switch to desktop mode, as the website’s responsiveness is still under development. Thank you for your patience!”
-            </p>
+          <div className="absolute flex z-50 top-2  border-lg  sm:top-16  lg:right-4 bg-rose-50 border border-rose-400 text-gray-700 px-4 py-3 rounded-sm shadow-lg  items-start w-full sm:w-2/3 lg:w-1/3">
+           <div>
+            <p className="text-gray-700 text-xs mb-2">
+            Dear user, we are sorry 🥹! This service is using a free server,
+            which may cause it to run slower than expected, especially during
+            the first time when the backend is starting.
+            <span className="font-semibold text-xs">
+              {" "}
+              After that, it will run fluently.
+            </span>{" "}
+            Thank you for your patience.
+          </p>
+          <p className="text-gray-700 text-xs">
+            For the best experience, please use a desktop-sized screen with
+            Chrome or Brave browsers. Your patience is appreciated. 🙏
+          </p>
+          </div>
             <button
               onClick={() => setShowDisclaimer(false)}
-              className="text-yellow-600 font-bold ml-4 hover:text-yellow-800 focus:outline-none"
+              className="text-greeb-600 font-bold ml-4 hover:text-yellow-800 focus:outline-none"
             >
               ✕
             </button>
           </div>
         )}
 
-        <div className="main-form relative p-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] max-w-5xl flex gap-4 justify-center">
-          <div className="form-signIn shadow-inner-custom border border-gray-400 bg-white w-full rounded-md shadow dark:bg-gray-300">
-            <div className="flex items-center justify-between p-3 bg-gray-600 rounded-t-md">
+        <div className="main-form relative  w-full max-md:w-94 max-w-3xl flex gap-4 justify-center">
+          <div className="form-signIn shadow-inner-custom border border-gray-400 bg-white w-full lg:w-[70%] sm:w-full md:w-full rounded-sm shadow dark:bg-gray-300">
+            <div className="flex items-center justify-between p-3 bg-gray-600 rounded-t-sm">
               <h4 className="text-lg font-semibold text-gray-200">
                 Log in to Hisabkitab
               </h4>
@@ -107,7 +120,7 @@ const LogInForm = () => {
                 <input
                   type="email"
                   id="email"
-                  className="w-full input-field-shadow border text-sm border-gray-400 text-gray-600 rounded-md p-2"
+                  className="w-full input-field-shadow border text-sm border-gray-400 text-gray-600 rounded-sm p-2"
                   placeholder="Enter Email Here"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -122,7 +135,7 @@ const LogInForm = () => {
                 <input
                   type="password"
                   id="password"
-                  className="w-full input-field-shadow border text-sm border-gray-400 text-gray-600 rounded-md p-2"
+                  className="w-full input-field-shadow border text-sm border-gray-400 text-gray-600 rounded-sm p-2"
                   placeholder="Enter Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -132,7 +145,7 @@ const LogInForm = () => {
                   Forgot password?{" "}
                   <a
                     href="/reset-password"
-                    className="text-blue-600 hover:underline"
+                    className="text-green-600 hover:underline"
                   >
                     Reset here
                   </a>
@@ -148,7 +161,7 @@ const LogInForm = () => {
               <div className="flex justify-between items-center">
                 <button
                   type="submit"
-                  className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+                  className="border text-white bg-cyan-600 hover:bg-cyan-500 hover:text-white border-cyan-500 text-cyan-500 rounded-sm px-4 py-1 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -157,12 +170,12 @@ const LogInForm = () => {
                       <div className="font-semibold ml-2">Signing In..</div>
                     </div>
                   ) : (
-                    "Log In"
+                    "Sign In"
                   )}
                 </button>
                 <a
-                  href="/register"
-                  className="text-sm text-blue-600 hover:underline"
+                  href="/signup"
+                  className="text-sm text-blue-600 hover:underline hover:scale-105"
                 >
                   Create an account
                 </a>
