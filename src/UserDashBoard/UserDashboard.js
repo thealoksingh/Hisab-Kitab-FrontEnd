@@ -7,7 +7,7 @@ import logo from "../assets/logo-hisab-kitab.png";
 import HelpAndSupport from "../Modals/HelpAndSupport";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../CssStyle/LoaderStyle.css";
-
+import { useAuth } from "../security/AuthContext";
 import {
   faCalculator,
   faGear,
@@ -27,15 +27,16 @@ const UserDashboard = () => {
   const [friends, setFriends] = useState([]);
   const [error, setError] = useState(null);
   const [isHelpAndSupportOpen, setIsHelpAndSupportOpen] = useState(false);
-  const user = location.state?.user;
-  const [refreshFriendTransaction, setRefreshFriendTransaction] =
-    useState(false);
+  // const user = location.state?.user;
+  const [refreshFriendTransaction, setRefreshFriendTransaction] = useState(false);
   const [friendRequestCount, setFriendRequestCount] = useState(0);
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(true);
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
   const [loader, setLoader] = useState(true);
+
+   const {user} = useAuth();
 
   useEffect(() => {
     const fetchFriends = async () => {

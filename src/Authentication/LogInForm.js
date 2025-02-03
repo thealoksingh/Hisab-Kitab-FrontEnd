@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginApi } from "../Api/HisabKitabApi"; // Assuming you have an API to check user credentials
+// import { loginApi } from "../Api/HisabKitabApi"; // Assuming you have an API to check user credentials
 import ForgetPasswordModal from "./ForgetPasswordModal";
 import "../CssStyle/GroupDashboard.css";
+import { useAuth } from "../security/AuthContext";
 
 const LogInForm = () => {
   const navigate = useNavigate();
+  const authContext = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("user"); // default to user role
@@ -13,6 +15,7 @@ const LogInForm = () => {
   const [showDisclaimer, setShowDisclaimer] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -28,10 +31,12 @@ const LogInForm = () => {
     }
 
     try {
-      const response = await loginApi(email, password);
-      const user = response.data;
-      if (user) {
-        navigate("/user-dashboard", { state: { user } });
+      // const response = await loginApi(email, password);
+      // const user = response.data;
+      if (await authContext.login(email,password)) {
+        console.log("Login successful");
+        navigate("/user-dashboard");
+        
       } else {
         setError("Invalid login credentials");
       }
