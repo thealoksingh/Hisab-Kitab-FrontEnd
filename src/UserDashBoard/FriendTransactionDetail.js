@@ -47,25 +47,25 @@ useEffect(() => {
 
 // Prevent the user from going back to the previous page
 useEffect(() => {
-  // if(!isRowClicked){ return;}
   const handlePopState = (e) => {
     e.preventDefault(); // Prevent the default back navigation
-    console.log("isCommentSection:", isCommentSectionOpen);
+    console.log("isCommentSection: open --->", isCommentSectionOpen);
 
-    if(isAuthenticated && isRowClicked===true){
-      console.log("toggle comment section in if :", isCommentSectionOpen);
-      toggleCommentSection();
-  }else
-    if (isAuthenticated && isCommentSectionOpen===false) {
-      console.log("Navigating to /user-dashboard");
-      setRefreshFriendTransaction(!refreshFriendTransaction);
-      setIsFriendSelected(false);
-      setSelectedFriend(null);
-      toggleRightSidebar();
-      toggleLeftSidebar();
-      // setIsRightSidebarOpen(false);
-      navigate("/user-dashboard"); // Redirect to /user-dashboard if the user tries to go back
-    }};
+    if (isAuthenticated) {
+      if (isCommentSectionOpen) {
+        console.log("toggle comment section in if :", isCommentSectionOpen);
+        toggleCommentSection(); // Close the comment section if it's open
+      } else {
+        console.log("Navigating to /user-dashboard");
+        setRefreshFriendTransaction(!refreshFriendTransaction);
+        setIsFriendSelected(false);
+        setSelectedFriend(null);
+        toggleRightSidebar();
+        toggleLeftSidebar();
+        navigate("/user-dashboard"); // Redirect to /user-dashboard if the user tries to go back
+      }
+    }
+  };
 
   // Listen for back button or history changes
   window.history.pushState(null, document.title);
@@ -74,10 +74,11 @@ useEffect(() => {
   return () => {
     window.removeEventListener('popstate', handlePopState); // Clean up the event listener on unmount
   };
-}, [isAuthenticated, navigate]);
+}, [isAuthenticated, isCommentSectionOpen, navigate]); // Add `isCommentSectionOpen` in dependency array
 
 
-  
+
+  // End of Prevent the user from going back to the previous page
 
  const toggleUnfriendModal=() =>{
 setIsUnfriendModalOpen(!isUnfriendModalOpen);
@@ -88,15 +89,21 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
   const toggleReportModal = () => {
     setReportModalOpen(!isReportModalOpen);
   };
+  
 
   const toggleCommentSection = () => {
-    if (isCommentSectionOpen) {
-      setSelectedRowId(null);
-      console.log("isCommentSectionOpen in toggele in if :", isCommentSectionOpen);
-    }
-    setIsCommentSetionOpen(!isCommentSectionOpen); // Toggle the state when the button is clicked
-    console.log("isCommentSectionOpen in toggele out if :", isCommentSectionOpen);
+    setIsCommentSetionOpen(prevState => {
+      if (prevState) {
+        setSelectedRowId(null);
+        
+      }
+  
+      return !prevState;
+    });
   };
+  
+  
+  
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -308,7 +315,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
                   <td className="px-3 py-2  sm:px-6 sm:py-4 pr-[25px]  sm:text-right  ">
                     {!isUserGave && (
                       <div className="flex flex-col">
-                        <span className="font-medium text-green-500 ">
+                        <span className="font-medium text-right text-green-500 ">
                           <span>₹</span> {transactionDto.transaction.amount}
                         </span>
                       </div>

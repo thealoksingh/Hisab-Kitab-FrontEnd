@@ -28,7 +28,8 @@ const UserDashboard = () => {
   const [error, setError] = useState(null);
   const [isHelpAndSupportOpen, setIsHelpAndSupportOpen] = useState(false);
   // const user = location.state?.user;
-  const [refreshFriendTransaction, setRefreshFriendTransaction] = useState(false);
+  const [refreshFriendTransaction, setRefreshFriendTransaction] =
+    useState(false);
   const [friendRequestCount, setFriendRequestCount] = useState(0);
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -36,7 +37,7 @@ const UserDashboard = () => {
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
   const [loader, setLoader] = useState(true);
 
-   const {user} = useAuth();
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -54,7 +55,7 @@ const UserDashboard = () => {
     };
 
     fetchFriends();
-  }, [user]);
+  }, [user, refreshFriendTransaction]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -76,6 +77,11 @@ const UserDashboard = () => {
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+  const globalNavToggler = () => {
+    if (isSidebarOpen) {
+      setIsSidebarOpen(!isSidebarOpen);
+    }
   };
 
   const toggleLeftSidebar = () => {
@@ -103,16 +109,15 @@ const UserDashboard = () => {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 text-white transition-transform duration-300 ease-in-out transform ${
+        className={`fixed  top-0 left-0 z-50 w-64 lg:bg-gray-800 bg-gray-50 border rounded-sm border-gray-800 text-white transition-transform duration-300 ease-in-out transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:relative lg:translate-x-0`}
+        } lg:relative lg:translate-x-0 h-auto lg:h-full `}
       >
         <div className="h-full px-3 py-4 overflow-y-auto">
           <ul className="space-y-2 font-medium">
             <li>
-              <a className="flex items-center p-2 text-gray-300 rounded-lg  hover:bg-gray-700 group">
+              <a className="flex items-center p-2 lg:text-gray-300 text-black   lg:hover:bg-gray-700 group">
                 <img
                   src={logo || "/placeholder.svg"}
                   alt="Hisab Kitab Logo"
@@ -122,10 +127,11 @@ const UserDashboard = () => {
               </a>
             </li>
             <li>
-              <a className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-gray-700 group">
+              <a 
+              className="flex items-center  p-2 lg:text-gray-300 lg:bg-transparent bg-teal-100 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
                 <FontAwesomeIcon
                   icon={faUser}
-                  className="text-gray-300"
+                  className="lg:text-gray-300 text-gray-600"
                   style={{ fontSize: "25px" }}
                 />
                 <span className="flex-1 ms-3 whitespace-nowrap">
@@ -136,11 +142,11 @@ const UserDashboard = () => {
             <li>
               <a
                 href="/user-dashboard"
-                className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-gray-700 group"
-              >
+                className="flex items-center p-2  lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
+               
                 <FontAwesomeIcon
                   icon={faPeoplePulling}
-                  className="text-gray-300"
+                  className="lg:text-gray-300 text-gray-600"
                   style={{ fontSize: "25px" }}
                 />
                 <span className="flex-1 ms-3 whitespace-nowrap">Friends</span>
@@ -152,11 +158,11 @@ const UserDashboard = () => {
             <li>
               <a
                 href="/under-dev"
-                className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-gray-700 group"
-              >
+                className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
+             
                 <FontAwesomeIcon
                   icon={faPeopleGroup}
-                  className="text-gray-300"
+                  className="lg:text-gray-300 text-gray-600"
                   style={{ fontSize: "25px" }}
                 />
                 <span className="flex-1 ms-3 whitespace-nowrap">Group</span>
@@ -165,11 +171,11 @@ const UserDashboard = () => {
             <li>
               <a
                 href="/under-dev"
-                className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-gray-700 group"
-              >
+                className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
+             
                 <FontAwesomeIcon
                   icon={faBook}
-                  className="text-gray-300"
+                   className="lg:text-gray-300 text-gray-600"
                   style={{ fontSize: "25px" }}
                 />
                 <span className="flex-1 ms-3 whitespace-nowrap">
@@ -180,11 +186,11 @@ const UserDashboard = () => {
             <li className="group">
               <a
                 href="/under-dev"
-                className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-gray-700"
-              >
+                className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
+             
                 <FontAwesomeIcon
                   icon={faGear}
-                  className="text-gray-300 group-hover:animate-spin"
+                  className="lg:text-gray-300 text-gray-600 group-hover:animate-spin"
                   style={{ fontSize: "25px" }}
                 />
                 <span className="flex-1 ms-3 whitespace-nowrap">Settings</span>
@@ -192,10 +198,11 @@ const UserDashboard = () => {
             </li>
 
             <li onClick={toggleHelpAndSupport}>
-              <a className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-gray-700 group cursor-pointer">
+              <a 
+              className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
                 <FontAwesomeIcon
                   icon={faClipboardQuestion}
-                  className="text-gray-300"
+                  className="lg:text-gray-300 text-gray-600"
                   style={{ fontSize: "25px" }}
                 />
                 <span className="flex-1 ms-3 whitespace-nowrap">
@@ -209,11 +216,11 @@ const UserDashboard = () => {
                 onClick={() => {
                   // Handle sign out logic here
                 }}
-                className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-gray-700 group"
-              >
+                className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
+                
                 <FontAwesomeIcon
                   icon={faArrowRightFromBracket}
-                  className="text-gray-300"
+                  className="lg:text-gray-300 text-gray-600"
                   style={{ fontSize: "25px" }}
                 />
                 <span className="flex-1 ms-3 whitespace-nowrap">Sign Out</span>
@@ -247,7 +254,10 @@ const UserDashboard = () => {
           </div>
         </header>
 
-        <main className="flex-1 overflow-x-hidden sm:w-full  sm:h-[100%]   overflow-y-hidden   bg-white">
+        <main
+          onClick={globalNavToggler}
+          className="flex-1 overflow-x-hidden sm:w-full  sm:h-[100%]   overflow-y-hidden   bg-white"
+        >
           <div className="max-w-7xl  sm:overflow-y-auto  ">
             <div className="flex flex-col lg:flex-row">
               <div
