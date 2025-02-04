@@ -47,20 +47,25 @@ useEffect(() => {
 
 // Prevent the user from going back to the previous page
 useEffect(() => {
+  // if(!isRowClicked){ return;}
   const handlePopState = (e) => {
     e.preventDefault(); // Prevent the default back navigation
     console.log("isCommentSection:", isCommentSectionOpen);
+
+    if(isAuthenticated && isRowClicked===true){
+      console.log("toggle comment section in if :", isCommentSectionOpen);
+      toggleCommentSection();
+  }else
     if (isAuthenticated && isCommentSectionOpen===false) {
       console.log("Navigating to /user-dashboard");
+      setRefreshFriendTransaction(!refreshFriendTransaction);
       setIsFriendSelected(false);
       setSelectedFriend(null);
       toggleRightSidebar();
       toggleLeftSidebar();
       // setIsRightSidebarOpen(false);
       navigate("/user-dashboard"); // Redirect to /user-dashboard if the user tries to go back
-    }else if(isAuthenticated && isCommentSectionOpen===true){
-      toggleCommentSection();
-  }};
+    }};
 
   // Listen for back button or history changes
   window.history.pushState(null, document.title);
