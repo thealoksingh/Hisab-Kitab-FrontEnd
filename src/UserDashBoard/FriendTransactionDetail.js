@@ -173,8 +173,8 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
             </p>
           </div>
         </div>
-
-        <div
+        
+       {transactionsDto.length>0 &&  <div 
           className={`net-balance border ml-2 font-medium sm:font-semibold sm:ml-2 p-1 sm:p-2 h-8 w-25 sm:h-9 sm:w-35 rounded-sm flex items-center justify-center   ${
             transactionsDto.length > 0 &&
             transactionsDto[0].lastClosingBalance >= 0
@@ -202,7 +202,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
               </>
             )}
           </h2>
-        </div>
+        </div>}
 
        {/* Report */}
 

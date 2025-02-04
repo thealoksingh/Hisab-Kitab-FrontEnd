@@ -149,7 +149,7 @@ const LogInForm = () => {
                 <p className="text-sm text-rose-600">
                   Forgot password?{" "}
                   <a
-                    href="/reset-password"
+                    href="/forget-password"
                     className="text-green-600 hover:underline"
                   >
                     Reset here

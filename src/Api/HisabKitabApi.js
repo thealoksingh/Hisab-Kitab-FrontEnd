@@ -80,8 +80,8 @@ export const sendInvitationEmail = (email, senderName) => {
 };
 
 //API for sending OTP Email
-export const sendOtpEmail = (email) => {
-  return apiClient.post(`/user/sendOTP?email=${email}`);
+export const sendOtpEmail = (email, type) => {
+  return apiClient.post(`/user/sendOTP?email=${email}&type=${type}`);
 };
 //forgot password /update password
 export const forgetPassword = (email, newPassword) => {

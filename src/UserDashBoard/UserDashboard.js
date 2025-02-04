@@ -48,9 +48,12 @@ const UserDashboard = () => {
         const response = await getFriendList(user.userId);
         setFriends(response.data.friendList);
         setFriendRequestCount(response.data.friendRequestCount);
-        setLoader(false);
+        
       } catch (err) {
         setError(err.message);
+      }finally {
+        setLoader(false);
+
       }
     };
 

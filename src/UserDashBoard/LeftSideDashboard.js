@@ -295,17 +295,17 @@ function LeftSideDashBoard({
               {/* View Report Button */}
               <button
                 onClick={handleDownload}
-                className="bg-rose-600 text-white py-1 px-7 flex items-center justify-between hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                className="bg-tranparent  sm:bg-rose-600  text-white py-1 px-7 flex items-center justify-between hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm shadow-none  sm:shadow-md  transition-all duration-300 ease-in-out transform hover:scale-105"
                 disabled={loading}
               >
                 {/* Icon (Always Visible) */}
 
                 {loading ? (
-                  <div className="w-5 h-5 mr-2 border-4 border-t-4 border-white rounded-sm animate-spin"></div>
+                  <div className="w-5 h-5 text-gra mr-2 border-4 border-t-4 border-white rounded-sm animate-spin"></div>
                 ) : (
                   <FontAwesomeIcon
                     icon={faDownload}
-                    className="mr-2 py-1 right-0  group-hover:animate-bounce "
+                    className="mr-2 py-1 right-0 text-gray-800  sm:text-white  md:text-white   group-hover:animate-bounce "
                   />
                 )}
                 {/* Text (Visible only on lg screens and above) */}
@@ -457,7 +457,7 @@ function LeftSideDashBoard({
         {/* centerbox */}
 
         <div className="h-[75%] sm:h-[76%]  border border-gray-500 shadow-inner-custom w-full bg-gray-400 relative  ">
-          <table className="w-full p-2 pt-0  border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-gray-400">
+          <table className="w-full p-2 pt-0  border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-white">
             <thead className="sticky  border  shadow-inner-custom  top-0 bg-gray-50 dark:bg-gray-100 text-xs text-gray-400 uppercase dark:text-gray-800">
               <tr>
                 <th scope="col" className="px-6 py-3">
@@ -481,7 +481,7 @@ function LeftSideDashBoard({
                 >
                   <td
                     scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
+                    className="px-6 py-4 font-medium text-gray-200 whitespace-nowrap dark:text-white flex items-center"
                   >
                     <ProfileCircle
                       className="h-8 w-8 mr-4"
