@@ -15,7 +15,7 @@ function UnderDevPage() {
       <h2 className="text-2xl font-bold text-gray-800 text-center mb-2">
         This page is under development.
       </h2>
-      <p className="text-lg text-gray-600 text-center mb-4">
+      <p className="text-lg text-gray-600 text-center mb-4 ">
         We are working hard to bring this feature to life!
       </p>
       <button

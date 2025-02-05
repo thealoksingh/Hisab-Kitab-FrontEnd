@@ -15,7 +15,6 @@ const LogInForm = () => {
   const [showDisclaimer, setShowDisclaimer] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-  
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -25,7 +24,11 @@ const LogInForm = () => {
     const adminEmail = "alokadmin@gmail.com";
     const adminPassword = "98765";
 
-    if (role === "admin" && email === adminEmail && password === adminPassword) {
+    if (
+      role === "admin" &&
+      email === adminEmail &&
+      password === adminPassword
+    ) {
       navigate("/admin-dashboard");
       return;
     }
@@ -33,10 +36,9 @@ const LogInForm = () => {
     try {
       // const response = await loginApi(email, password);
       // const user = response.data;
-      if (await authContext.login(email,password)) {
+      if (await authContext.login(email, password)) {
         console.log("Login successful");
         navigate("/user-dashboard");
-        
       } else {
         setError("Invalid login credentials");
       }
@@ -57,22 +59,22 @@ const LogInForm = () => {
       >
         {showDisclaimer && (
           <div className="absolute flex z-50 top-2  border-lg  sm:top-16  lg:right-4 bg-rose-50 border border-rose-400 text-gray-700 px-4 py-3 rounded-sm shadow-lg  items-start w-full sm:w-2/3 lg:w-1/3">
-           <div>
-            <p className="text-gray-700 text-xs mb-2">
-            Dear user, we are sorry 🥹! This service is using a free server,
-            which may cause it to run slower than expected, especially during
-            the first time when the backend is starting.
-            <span className="font-semibold text-xs">
-              {" "}
-              After that, it will run fluently.
-            </span>{" "}
-            Thank you for your patience.
-          </p>
-          <p className="text-gray-700 text-xs">
-            For the best experience, please use a desktop-sized screen with
-            Chrome or Brave browsers. Your patience is appreciated. 🙏
-          </p>
-          </div>
+            <div>
+              <p className="text-gray-700 text-xs mb-2">
+                Dear user, we are sorry 🥹! This service is using a free server,
+                which may cause it to run slower than expected, especially
+                during the first time when the backend is starting.
+                <span className="font-semibold text-xs">
+                  {" "}
+                  After that, it will run fluently.
+                </span>{" "}
+                Thank you for your patience.
+              </p>
+              <p className="text-gray-700 text-xs">
+                For the best experience, please use a desktop-sized screen with
+                Chrome or Brave browsers. Your patience is appreciated. 🙏
+              </p>
+            </div>
             <button
               onClick={() => setShowDisclaimer(false)}
               className="text-greeb-600 font-bold ml-4 hover:text-yellow-800 focus:outline-none"
@@ -146,11 +148,11 @@ const LogInForm = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
-                <p className="text-sm text-rose-600">
+                <p className="text-sm mt-2 text-rose-600">
                   Forgot password?{" "}
                   <a
-                    href="/reset-password"
-                    className="text-green-600 hover:underline"
+                    href="/forget-password"
+                    className=" text-green-600 font-semibold hover:underline hover:scale-105 inline-block transition-transform duration-300"
                   >
                     Reset here
                   </a>
@@ -158,9 +160,7 @@ const LogInForm = () => {
               </div>
 
               {error && (
-                <div className="text-sm text-red-600 mb-3">
-                  {error}
-                </div>
+                <div className="text-sm text-red-600 mb-3">{error}</div>
               )}
 
               <div className="flex justify-between items-center">

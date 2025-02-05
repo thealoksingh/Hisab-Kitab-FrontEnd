@@ -21,7 +21,7 @@ const Routing = () => {
     <AuthProvider> {/* ✅ Move AuthProvider OUTSIDE BrowserRouter */}
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LoginForm />} />
+          <Route path="/signin" element={<LoginForm />} />
           <Route path="/signup" element={<SignUpForm />} />
           <Route path="/forget-password" element={<ForgetPasswordModal />} />
           <Route path="/user-dashboard" element={<AuthenticatedRoute><UserDashboard /></AuthenticatedRoute>} />
