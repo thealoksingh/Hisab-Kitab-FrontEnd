@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate ,Link} from "react-router-dom";
 import { getFriendList } from "../Api/HisabKitabApi";
 import LeftSideDashBoard from "./LeftSideDashboard";
 import RightSideDashBoard from "./RightSideDashboard";
@@ -120,13 +120,13 @@ const UserDashboard = () => {
         <div className="h-full px-3 py-4 overflow-y-auto">
           <ul className="space-y-2 font-medium">
             <li>
-              <a className="flex items-center p-2 lg:text-gray-300 text-black   lg:hover:bg-gray-700 group">
+              <a href="/user-dashboard" className="flex items-center p-2 lg:text-gray-300 text-black   lg:hover:bg-gray-700 group">
                 <img
                   src={logo || "/placeholder.svg"}
                   alt="Hisab Kitab Logo"
                   className="w-6 h-6 "
                 />
-                <span className="ms-3">Hisab Kitab</span>
+                <span className="ms-3">Hisab Kitab </span>
               </a>
             </li>
             <li>
@@ -252,19 +252,19 @@ const UserDashboard = () => {
             >
               <FontAwesomeIcon icon={faBars} className="h-6 w-6" />
             </button>
-            <h1 className="text-lg font-semibold text-gray-900">Hisab Kitab</h1>
+            <a href="user-dashboard" to={"user-dashboard"} className="text-lg font-semibold text-gray-900">Hisab Kitab</a>
             <div className="w-6"></div> {/* Placeholder for layout balance */}
           </div>
         </header>
 
         <main
           onClick={globalNavToggler}
-          className="flex-1 overflow-x-hidden sm:w-full  sm:h-[100%]   overflow-y-hidden   bg-white"
+          className="flex-1 overflow-x-hidden  sm:w-full   sm:h-[100%]     overflow-y-hidden   bg-white"
         >
           <div className="max-w-7xl  sm:overflow-y-auto  ">
             <div className="flex flex-col lg:flex-row">
               <div
-                className={`lg:w-1/2 m-2   ${
+                className={`sm:w-1/2 md:w-[100%] m-2  ${
                   isLeftSidebarOpen ? "block" : "hidden"
                 } lg:block`}
               >
@@ -281,7 +281,7 @@ const UserDashboard = () => {
                 />
               </div>
               <div
-                className={` sm:w-1/2 p-2 sm:pl-0  h-[68%] sm:h-[63%]   ${
+                className={` sm:w-1/2 md:w-full p-2 sm:pl-0  h-[68%] sm:h-[63%]   md:h-[63%]  ${
                   isRightSidebarOpen ? "block" : "hidden"
                 } lg:block`}
               >

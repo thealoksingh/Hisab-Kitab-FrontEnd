@@ -130,13 +130,13 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
       id="signUp-modal"
       tabIndex="-1"
       aria-hidden={!isOpen}
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-0 ${
+      className={`fixed inset-0 z-50 flex items-center justify-center w-full h-screen bg-black bg-opacity-0 ${
         isOpen ? "" : "hidden"
       }`}
     >
 
 {showDisclaimer && (
-          <div className="absolute flex z-50 top-2 border border-lg border-rose-300 sm:top-16 lg:right-4 bg-rose-50 border border-gray-400 text-gray-700 px-4 py-3 rounded-sm shadow-lg  items-start w-full sm:w-2/3 lg:w-1/3">
+          <div className="absolute m-1 border-red-200 flex z-50 top-1 border border-lg border-rose-50 sm:top-16 lg:right-4   text-gray-700 px-4 py-3 rounded-sm shadow-lg  items-start w-full sm:w-2/3 lg:w-1/3">
            <div>
             <p className="text-gray-700 text-xs mb-2">
             Dear user, we are sorry 🥹! This service is using a free server,
@@ -162,7 +162,7 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
           </div>
         )}
 
-      <div className="items-center justify-center p-4 flex flex-col w-[40%] h-[90%]  rounded-lg ">
+      <div className="items-center justify-center  flex flex-col w-full h-[90%] sm:w-[40%] sm:h-[90%] rounded-lg ">
        
 
         <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
@@ -196,7 +196,7 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
             </div>
             <form className="p-4 md:p-5" onSubmit={handleSignup}>
               <div className="mb-1">
-                <label className="block mb-2 text-sm font-medium text-gray-900">
+                <label className="block font-Poppins mb-2  text-sm font-medium text-gray-900">
                   Full Name
                 </label>
                 <input
@@ -206,7 +206,7 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
                   required
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-1/2  input-field-shadow  border text-sm border-gray-400 text-gray-600 rounded-sm p-1"
+                  className=" w-[70%]  input-field-shadow   border text-sm border-gray-400 text-gray-600 rounded-sm   p-1"
                   placeholder="Enter your Full Name"
                 />
               </div>
@@ -222,7 +222,7 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   autoComplete="off"
-                  className="w-1/2 input-field-shadow border text-sm border-gray-400 text-gray-600 rounded-sm p-1"
+                  className=" input-field-shadow w-[70%]   border text-sm border-gray-400 text-gray-600 rounded-sm   p-1"
                   placeholder="Enter Mobile Number"
                 />
               </div>
@@ -240,12 +240,12 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     autoComplete="off"
-                    className="w-[65%] input-field-shadow text-sm border border-gray-400 text-gray-600 rounded-sm p-1"
+                    className="w-[60%] input-field-shadow text-sm border font-Poppins border-gray-400 text-gray-600 rounded-sm p-1"
                     placeholder="Enter email Address"
                   />
                   <button
                     type="submit"
-                    className="w-1/3 bg-sky-600 rounded-sm text-sm text-white px-4 py-1 hover:bg-sky-500 focus:outline-none focus:ring-4 focus:ring-sky-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                    className="w-[35%] bg-sky-600 rounded-sm shadow-inner  text-sm sm:text-sm font-Poppins text-white px-4 py-1 hover:bg-sky-500 focus:outline-none focus:ring-4 focus:ring-sky-300 transition-all duration-300 ease-in-out transform hover:scale-105"
                     onClick={handleTimeAndOtp}
                     disabled={isButtonDisabled} // Disable button when timer is active
                     style={{
@@ -275,14 +275,14 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
                       type="text"
                       id="otp"
                       onChange={(e) => setOtpEntered(e.target.value)}
-                      className="w-1/4 input-field-shadow text-sm border border-gray-400 text-gray-600 rounded-sm p-1"
+                      className="w-1/2 input-field-shadow text-sm border border-gray-400 text-gray-600 rounded-sm p-1"
                       placeholder="Enter OTP"
                       required
                     />
                     <button
                       type="submit"
                       onClick={handleOtpVerify}
-                      className="w-1/3 rounded-sm bg-cyan-700 text-sm text-white px-4 py-1 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                      className="w-1/2 rounded-sm bg-cyan-700 text-sm text-white px-4 py-1 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                     >
                       Verify OTP
                     </button>
@@ -344,14 +344,14 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
                   className="w-1/3 rounded-sm bg-cyan-600 text-sm text-white px-4 py-1 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                 >
                   {isLoading ? (<div className="flex ">
-                    <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
-                    <div className="font-semibold ml-2">Signing Up..</div>
+                    <div className="w-5 h-5 border-3 border-t-4  border-white rounded-full animate-spin"></div>
+                    <div className="font-semibold ml-2 shadow-md py-2">Signing Up..</div>
                     </div>
                   ) : (
                     "Sign Up"
                   )}
                 </button>
-                <span className="text-gray-800">Existing user?</span>
+                <span className="text-gray-800 ">Existing user?</span>
                 <span onClick={() => navigate("/")} className="text-sky-600">
                   SignIn
                 </span>

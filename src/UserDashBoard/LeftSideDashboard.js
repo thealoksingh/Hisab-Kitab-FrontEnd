@@ -264,7 +264,7 @@ function LeftSideDashBoard({
   return (
     <>
       <div
-        className={`left-side rounded h-screen lg:w-full relative overflow-hidden transition-all duration-300 ${
+        className={`left-side rounded h-screen w-full relative overflow-hidden transition-all duration-300 pr-0 md:pr-5  lg:pr-0  ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0`}
       >
@@ -275,8 +275,8 @@ function LeftSideDashBoard({
           </svg>
         </button> */}
 
-        <div className="left-upper sm:font-normal justify-between h-32   w-full">
-          <div className="flex px-2 right-0 shadow-inner-custom items-center gap-1 justify-between border border-gray-400 sm:h-10  h-12 bg-gray-300">
+        <div className="left-upper sm:font-normal justify-between h-32 right-0  w-full ">
+          <div className="flex px-2 right-0 shadow-inner-custom items-center gap-1 justify-between border border-gray-400 sm:h-10 md:h-10   h-12 bg-gray-300">
             <div className="p-2 flex-shrink sm:font-sm  font-semibold">
               You'll Give:
               <span className="text-rose-600 font-sm "> ₹{giveAmount}</span>
@@ -291,7 +291,7 @@ function LeftSideDashBoard({
 
             {/* p-0  sm:mt-0  pl-5  sm:pl-0  md:pl-5 */}
 
-            <div className="w-[32%] h-[100%] sm:h-[100%]   mt-3  sm:p-1 group md:mt-0 pl-5  ">
+            <div className="w-[32%] h-[100%] sm:h-[100%]   mt-3  sm:p-1 group md:mt-0 pl-5  "> 
               {/* View Report Button */}
               <button
                 onClick={handleDownload}
@@ -309,11 +309,11 @@ function LeftSideDashBoard({
                   />
                 )}
                 {/* Text (Visible only on lg screens and above) */}
-                <span className="hidden lg:inline-block ">View Report</span>
+                <span className="hidden lg:inline-block md:inline-block lg:ml-0 md:ml-6 ">View Report</span>
               </button>
             </div>
           </div>
-          <div className="text-sm  py-1 sm:py-3    bg-gray-300  flex h-32 relative gap-2 ">
+          <div className="text-sm  py-1 sm:py-3 md:py-3      bg-gray-300  flex h-32 relative gap-2 ">
             {/* searchfrined */}
             <div className="search-box w-[38%] ml-2 h-full mb-2  sm:mb-5">
               <p className="p-1 line-clamp-1  font-Poppins font-semibold  justify-center align-middle">
@@ -456,8 +456,8 @@ function LeftSideDashBoard({
 
         {/* centerbox */}
 
-        <div className="h-[75%] sm:h-[76%]  border border-gray-500 shadow-inner-custom w-full bg-gray-400 relative  ">
-          <table className="w-full p-2 pt-0  border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-white">
+        <div className="h-[70%] lg:h-[76%] md:h-[74.2%]   border border-gray-400 shadow-inner-custom w-full bg-gray-400 relative overflow-y-auto scrollbar-none ">
+          <table className="w-full p-2  pt-0  border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-white">
             <thead className="sticky  border  shadow-inner-custom  top-0 bg-gray-50 dark:bg-gray-100 text-xs text-gray-400 uppercase dark:text-gray-800">
               <tr>
                 <th scope="col" className="px-6 py-3">
@@ -529,7 +529,7 @@ function LeftSideDashBoard({
 
         {/* leftlower */}
 
-        <div className="left-side-lower font-Poppins   text-xs sm:text-sm gap-1 justify-evenly border-none whitespace-nowrap md:text-xs border-gray-400 w-full lg:gap-4  bg-gray-300 p-2 bottom-20 sm:bottom-4 absolute h-[50px] flex items-center">
+        <div className="left-side-lower font-Poppins   text-xs sm:text-sm md:text-sm gap-1 justify-evenly border-none whitespace-nowrap  border-gray-400 w-full lg:gap-4  bg-gray-300 p-2 bottom-20 lg:bottom-4  md:bottom-20  absolute h-[50px] flex items-center ">
           {/* Add Friend Button */}
           <button
             onClick={handleAddFriendClick}

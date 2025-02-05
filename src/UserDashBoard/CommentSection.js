@@ -37,6 +37,13 @@ function CommentSection({
   const toggleUpdateForm = () => {
     setIsUpdateFormOpen(!isUpdateFormOpen)
   }
+  // timestamp
+
+  // const newComment = {
+  //   text: "This is a comment",
+  //   commentTime: new Date().toISOString(), // Stores fixed timestamp
+  // };
+  // const formattedTime = moment(comment.commentTime).fromNow();
 
 
 
@@ -131,7 +138,7 @@ function CommentSection({
     <>
       {commentTransaction && (
         <div
-          className="Details h-full  shadow-inner-custom bg-gray-100 z-50 absolute right-0 p-2"
+          className="Details h-full   shadow-inner-custom bg-gray-100 z-50 absolute right-0 p-2"
           style={{
             width: width,
             visibility: width === "0" ? "hidden" : "visible",
@@ -164,7 +171,7 @@ function CommentSection({
             </button>
           </div>
 
-          <div className="friend-profile h-[10%] w-full p-[10px] flex gap-[10px] flex items-center">
+          <div className="friend-profile h-[10%] w-full p-[10px]  gap-[10px] flex items-center">
             <ProfileCircle
               className="h-10 w-10 mr-4 text-white text-lg"
               name={user.fullName}
@@ -205,7 +212,7 @@ function CommentSection({
             </div>
           )}
 
-          <div className="transaction-amount h-[8%] w-full p-[10px] flex gap-[10px] flex items-center">
+          <div className="transaction-amount h-[8%] w-full p-[10px]  gap-[10px] flex items-center">
             <div className="give-got-icon">
               <FontAwesomeIcon icon={faShareFromSquare} className="h-[15px] text-gray-700" />
             </div>
