@@ -90,14 +90,14 @@ const ForgetPasswordForm = () => {
     try {
       const response = await forgetPassword(email, newPassword);
       setMessage("Password updated successfully.");
-      navigate("/"); // Redirect to login after password reset
+      navigate("/signin"); // Redirect to login after password reset
     } catch (error) {
       setMessage("Error updating password. Please try again.");
     }
   };
 
   const handleClose = () => {
-    navigate("/");
+    navigate("/signin");
   };
 
   return (

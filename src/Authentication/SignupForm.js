@@ -75,7 +75,7 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
       await signUpUser(userData);
       setSuccessMessage("Signup successful! You can now log in.");
       setTimeout(() => {
-        navigate(`/`);
+        navigate(`/signin`);
       }, 2000);
     } catch (error) {
       setError(
@@ -88,7 +88,7 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
 
   const handleClose = () => {
     setIsOpen(false); // Close the modal
-    navigate("/"); // Redirect to the login page
+    navigate("/signin"); // Redirect to the login page
   };
 
   const handleOtpRequest = async (e) => {
@@ -351,8 +351,11 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
                     "Sign Up"
                   )}
                 </button>
-                <span className="text-gray-800 ">Existing user?</span>
-                <span onClick={() => navigate("/")} className="text-sky-600">
+
+                <span className="text-gray-800">Existing user?</span>
+                <span onClick={() => navigate("/signin")} className="text-sky-600">
+
+               
                   SignIn
                 </span>
               </div>
