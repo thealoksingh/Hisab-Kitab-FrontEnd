@@ -106,9 +106,9 @@ const UpdateFriendTransactionModel = ({
     }`}
   >
     <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
-      <div className="form1 relative w-1/3 bg-white rounded-sm shadow dark:bg-gray-300 shadow-inner-custom">
+      <div className="form1 relative w-full sm:w-1/2 bg-white rounded-sm shadow dark:bg-gray-300 shadow-inner-custom">
       <div
-            className={`flex items-center justify-between p-2 md:p-2 rounded-sm ${
+            className={`flex items-center  justify-between p-2 md:p-2 rounded-sm ${
               transactionType === "give" ? "bg-rose-600" : "bg-emerald-600"
             }`}
           >
@@ -221,7 +221,7 @@ const UpdateFriendTransactionModel = ({
 
             <button
               type="submit"
-              className={`w-full text-white ${
+              className={`w-full text-white pointer hover:scale-[1.02] shadow-md ${
                 transactionType === "give"
                 ? "bg-[#be123c] hover:bg-[#9b0e35] border border-[#9b0e35] focus:ring-[#Ff007f]"
                 : "bg-[#10b981] hover:bg-[#059669] border border-[#059669] focus:ring-[#50c878]"

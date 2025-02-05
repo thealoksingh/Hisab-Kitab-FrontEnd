@@ -126,7 +126,7 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
       }`}
     >
       <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
-        <div className="form-add-frnd border border-gray-400 shadow-inner-custom relative bg-white w-[80%] h-full md:w-1/2 md:-1/2  sm:w-1/2 sm:-1/2 rounded-sm shadow dark:bg-gray-300">
+        <div className="form-add-frnd border border-gray-400 shadow-inner-custom relative bg-white w-[80%] h-full md:w-1/2 md:-1/2  lg:w-[60%] sm:-1/2 rounded-sm shadow dark:bg-gray-300">
           <div className="flex items-center justify-between p-2 md:p-2 rounded-sm bg-cyan-600">
             <h4 className="text-lg font-semibold text-gray-200">Add Friend</h4>
             <button

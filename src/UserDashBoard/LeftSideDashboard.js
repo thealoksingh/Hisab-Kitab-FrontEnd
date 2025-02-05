@@ -264,7 +264,7 @@ function LeftSideDashBoard({
   return (
     <>
       <div
-        className={`left-side rounded h-screen lg:w-full relative overflow-hidden transition-all duration-300 ${
+        className={`left-side rounded h-screen w-full relative overflow-hidden transition-all duration-300 pr-0 md:pr-5  lg:pr-0  ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0`}
       >
@@ -275,8 +275,8 @@ function LeftSideDashBoard({
           </svg>
         </button> */}
 
-        <div className="left-upper sm:font-normal justify-between h-32   w-full">
-          <div className="flex px-2 right-0 shadow-inner-custom items-center gap-1 justify-between border border-gray-400 sm:h-10  h-12 bg-gray-300">
+        <div className="left-upper sm:font-normal justify-between h-32 right-0  w-full ">
+          <div className="flex px-2 right-0 shadow-inner-custom items-center gap-1 justify-between border border-gray-400 sm:h-10 md:h-10   h-12 bg-gray-300">
             <div className="p-2 flex-shrink sm:font-sm  font-semibold">
               You'll Give:
               <span className="text-rose-600 font-sm "> ₹{giveAmount}</span>
@@ -291,29 +291,29 @@ function LeftSideDashBoard({
 
             {/* p-0  sm:mt-0  pl-5  sm:pl-0  md:pl-5 */}
 
-            <div className="w-[32%] h-[100%] sm:h-[100%]   mt-3  sm:p-1 group md:mt-0 pl-5  ">
+            <div className="w-[32%] h-[100%] sm:h-[100%]   mt-3  sm:p-1 group md:mt-0 pl-5  "> 
               {/* View Report Button */}
               <button
                 onClick={handleDownload}
-                className="bg-rose-600 text-white py-1 px-7 flex items-center justify-between hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                className="bg-tranparent  sm:bg-rose-600  text-white py-1 px-7 flex items-center justify-between hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm shadow-none  sm:shadow-md  transition-all duration-300 ease-in-out transform hover:scale-105"
                 disabled={loading}
               >
                 {/* Icon (Always Visible) */}
 
                 {loading ? (
-                  <div className="w-5 h-5 mr-2 border-4 border-t-4 border-white rounded-sm animate-spin"></div>
+                  <div className="w-5 h-5 text-gra mr-2 border-4 border-t-4 border-white rounded-sm animate-spin"></div>
                 ) : (
                   <FontAwesomeIcon
                     icon={faDownload}
-                    className="mr-2 py-1 right-0  group-hover:animate-bounce "
+                    className="mr-2 py-1 right-0 text-gray-800  sm:text-white  md:text-white   group-hover:animate-bounce "
                   />
                 )}
                 {/* Text (Visible only on lg screens and above) */}
-                <span className="hidden lg:inline-block ">View Report</span>
+                <span className="hidden lg:inline-block md:inline-block lg:ml-0 md:ml-6 ">View Report</span>
               </button>
             </div>
           </div>
-          <div className="text-sm  py-1 sm:py-3    bg-gray-300  flex h-32 relative gap-2 ">
+          <div className="text-sm  py-1 sm:py-3 md:py-3      bg-gray-300  flex h-32 relative gap-2 ">
             {/* searchfrined */}
             <div className="search-box w-[38%] ml-2 h-full mb-2  sm:mb-5">
               <p className="p-1 line-clamp-1  font-Poppins font-semibold  justify-center align-middle">
@@ -361,7 +361,7 @@ function LeftSideDashBoard({
                         <li key={criteria} className="my-1">
                           <button
                             onClick={() => applyFilter(criteria)}
-                            className="block w-full px-2 py-2 sm:px-5 sm:py-2 md:px-5 md:py-2 
+                            className="block w-full px-2 py-2 lg:px-5 lg:py-2 md:px-11 md:py-2 
                          text-left text-xs sm:text-sm md:text-sm font-Poppins font-semibold 
                          bg-transparent text-gray-700 dark:text-gray-200 
                          rounded-md transition-all duration-300 
@@ -388,7 +388,7 @@ function LeftSideDashBoard({
               >
                 {sortCriteria}
                 <svg
-                  className="w-4.5 h-4.5 ms-1 sm:w-2.5 sm:h-2.5 sm:ms-3"
+                  className="sm:w-3 sm:h-3 md:w-4 md:h-4 w-6 h-6"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -456,8 +456,8 @@ function LeftSideDashBoard({
 
         {/* centerbox */}
 
-        <div className="h-[75%] sm:h-[76%]  border border-gray-500 shadow-inner-custom w-full bg-gray-400 relative  ">
-          <table className="w-full p-2 pt-0  border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-gray-400">
+        <div className="h-[70%] lg:h-[76%] md:h-[74.2%]   border border-gray-400 shadow-inner-custom w-full bg-gray-400 relative overflow-y-auto scrollbar-none ">
+          <table className="w-full p-2  pt-0  border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-white">
             <thead className="sticky  border  shadow-inner-custom  top-0 bg-gray-50 dark:bg-gray-100 text-xs text-gray-400 uppercase dark:text-gray-800">
               <tr>
                 <th scope="col" className="px-6 py-3">
@@ -481,7 +481,7 @@ function LeftSideDashBoard({
                 >
                   <td
                     scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
+                    className="px-6 py-4 font-medium text-gray-200 whitespace-nowrap dark:text-white flex items-center"
                   >
                     <ProfileCircle
                       className="h-8 w-8 mr-4"
@@ -529,7 +529,7 @@ function LeftSideDashBoard({
 
         {/* leftlower */}
 
-        <div className="left-side-lower font-Poppins   text-xs sm:text-sm gap-1 justify-evenly border-none whitespace-nowrap md:text-xs border-gray-400 w-full lg:gap-4  bg-gray-300 p-2 bottom-20 sm:bottom-4 absolute h-[50px] flex items-center">
+        <div className="left-side-lower font-Poppins   text-xs sm:text-sm md:text-sm gap-1 justify-evenly border-none whitespace-nowrap  border-gray-400 w-full lg:gap-4  bg-gray-300 p-2 bottom-20 lg:bottom-4  md:bottom-20  absolute h-[50px] flex items-center ">
           {/* Add Friend Button */}
           <button
             onClick={handleAddFriendClick}

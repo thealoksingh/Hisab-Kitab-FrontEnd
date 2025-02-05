@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { sendOtpEmail, forgetPassword } from "../Api/HisabKitabApi";
+import forget from "../assets/forget1.jpg";
 
 const ForgetPasswordForm = () => {
   const [email, setEmail] = useState("");
@@ -52,7 +53,7 @@ const ForgetPasswordForm = () => {
     }
 
     try {
-      const response = await sendOtpEmail(email);
+      const response = await sendOtpEmail(email, "forget-password");
       setOtp(response.data);
       setOtpSent(true);
       setMessage("OTP sent successfully.");
@@ -104,12 +105,13 @@ const ForgetPasswordForm = () => {
       id="SignIn-modal"
       tabIndex="-1"
       aria-hidden="false"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-0 "
+      className="fixed inset-0 z-50 flex h-screen w-full items-center justify-center bg-cover bg-center   bg-black bg-opacity-0 "
+      style={{ backgroundImage: `url(${forget})` }}
     >
-      <div className="main-form w-[60%] relative p-4 w-1/2 max-w-5xl flex gap-4 justify-center">
-        <div className="form-forget shadow-inner-custom border border-gray-400 relative bg-white w-1/2 rounded-sm shadow dark:bg-gray-300">
-          <div className="flex items-center justify-between p-2 md:p-2 rounded-sm bg-gray-600">
-            <h4 className="text-lg font-semibold text-gray-200">
+      <div className="main-form w-full relative max-w-5xl flex  justify-center">
+        <div className="form-forget shadow-inner-custom border border-gray-400 relative bg-white w-[90%] sm:w-1/2 md:w-1/2 rounded-sm shadow dark:bg-gray-300">
+          <div className="flex items-center justify-between  md:p-2 rounded-sm bg-gray-600">
+            <h4 className="text-lg p-2  sm:p-0 md:p-2 font-semibold text-gray-200">
               Forgot Password
             </h4>
             <button
@@ -132,19 +134,19 @@ const ForgetPasswordForm = () => {
                   d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
                 />
               </svg>
-              <span className="sr-only">Close modal</span>
+              <span className="sr-only ">Close modal</span>
             </button>
           </div>
           <form className="p-4 md:p-5">
             <div className="mb-1 mt-1">
-              <label className="block mb-2 text-sm font-medium text-gray-900">
+              <label className="block mt-5  font-Poppins sm:mt-2 text-md font-medium  text-gray-900">
                 Email address
               </label>
-              <div className="flex justify-between">
+              <div className="flex mt-5   justify-between">
                 <input
                   type="email"
                   id="email"
-                  className="w-[65%] input-field-shadow text-sm border border-gray-400 text-gray-600 rounded-sm p-1"
+                  className="w-[65%] py-2 input-field-shadow text-xs px-1  sm:text-sm border border-gray-400 text-gray-600 rounded-sm "
                   placeholder="Enter email Address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -152,7 +154,7 @@ const ForgetPasswordForm = () => {
                 />
                  <button
                   type="submit"
-                  className="w-1/3 text-sm text-white px-4 py-1 border border-gray-300 hover:bg-sky-500 focus:outline-none focus:ring-4 focus:ring-sky-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                  className="w-[30%] py-2 text-xs sm:text-sm text-white px-3 border border-gray-300 hover:bg-sky-500 focus:outline-none focus:ring-4 focus:ring-sky-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                   onClick={handleTimeAndOtp}
                   disabled={isButtonDisabled} // Disable button when timer is active
                   style={{
@@ -168,7 +170,7 @@ const ForgetPasswordForm = () => {
             </h5>}
            
 
-            {!otpVerified && otpSent &&(<div className="mb-2 mt-1">
+            {!otpVerified && otpSent &&(<div className="mb-2 mt-5">
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -196,15 +198,15 @@ const ForgetPasswordForm = () => {
             </h5>
            
             {otpVerified && (
-              <div className="set-new-pass-div  mb-4 mt-1">
-                <label className="block mb-2 text-sm font-medium text-gray-900">
-                  Enter a New Password
+              <div className="set-new-pass-div  mb-5 mt-1">
+                <label className="block mt-2 text-md font-Poppins  text-gray-900">
+                  Set  New Password
                 </label>
-                <div className="flex gap-2">
+                <div className="flex mt-5 gap-2">
                   <input
                     type="password"
                     id="new-password"
-                    className="w-1/2 input-field-shadow text-sm border border-gray-400 text-gray-600  rounded-sm p-1"
+                    className="w-[60%] input-field-shadow text-[12px] sm:text-md  border border-gray-400 text-gray-600  rounded-sm p-2"
                     placeholder="Enter New Password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
@@ -213,7 +215,7 @@ const ForgetPasswordForm = () => {
                   <input
                     type="password"
                     id="confirm-password"
-                    className="w-1/2 input-field-shadow text-sm border border-gray-400 text-gray-600  rounded-sm p-1"
+                    className="w-[70%] input-field-shadow text-[12px] sm:text-md   border border-gray-400 text-gray-600  rounded-sm   p-2"
                     placeholder="Confirm New Password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
@@ -223,11 +225,11 @@ const ForgetPasswordForm = () => {
               </div>
             )}
 
-            <div className="mb-2 mt-1 flex gap-4">
+            <div className="mt-5  flex gap-4">
               {otpVerified && (
                 <button
                   type="submit"
-                  className="w-1/3 bg-teal-600 text-sm text-white px-4 py-1   hover:bg-teal-500 focus:outline-none focus:ring-4 focus:ring-emerald-300   shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                  className="w-1/2 bg-teal-600 text-sm text-white px-5 py-2 rounded-sm   hover:bg-teal-500 focus:outline-none focus:ring-4 focus:ring-emerald-300   shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                   onClick={handleSubmit}
                 >
                   Submit

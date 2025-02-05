@@ -155,11 +155,11 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
             setIsCommentSetionOpen(false);
           }
         }}
-        className="right-header  gap-[8px]  sm:gap-[8px]  p-1   sm:p-2   absolute top-0  border border-gray-400 shadow-inner-custom justify-between h-20 sm:h-24 bg-gray-300 w-full  flex items-center "
+        className="right-header  gap-[8px]  sm:gap-[8px] md:gap-[7px]  p-1   lg:p-2  md:p-4   absolute top-0  border border-gray-400 shadow-inner-custom justify-between h-20 sm:h-24 md:h-24 bg-gray-300  w-full flex items-center "
       >
-        <div className=" flex gap-1 sm:gap-2">
+        <div className=" flex gap-1 sm:gap-2 md:gap-0">
           <ProfileCircle
-            className="h-10 w-10 sm:h-12 sm:w-12  text-white text-lg"
+            className="h-10 w-10 sm:h-12 sm:w-12 md:h-13 md:w-13  text-white text-lg"
             name={selectedFriend.fullName}
             color={selectedFriend.colorHexValue}
           />
@@ -168,14 +168,14 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
             <h2 className="text-lg text-gray-800 line-clamp-1">
               {selectedFriend.fullName}
             </h2>
-            <p className="text-[10px] sm:text-sm text-green-700 line-clamp-2">
+            <p className="text-[10px] sm:text-sm  md:text-sm text-green-700 line-clamp-2">
               +91 <span>{selectedFriend.contactNo}</span>
             </p>
           </div>
         </div>
-
-        <div
-          className={`net-balance border ml-2 font-medium sm:font-semibold sm:ml-2 p-1 sm:p-2 h-8 w-25 sm:h-9 sm:w-35 rounded-sm flex items-center justify-center   ${
+        
+       {transactionsDto.length>0 &&  <div 
+          className={`net-balance border ml-2 font-medium sm:font-semibold sm:ml-2 p-1 sm:p-2 h-8 w-25 sm:h-9 sm:w-35  md:h-9 md:w-35 rounded-sm flex items-center justify-center   ${
             transactionsDto.length > 0 &&
             transactionsDto[0].lastClosingBalance >= 0
               ? "border-green-900 text-green-900"
@@ -183,7 +183,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
           }`}
         >
           <h2
-            className={`text-black line-clamp-2  sm:line-clamp-1  text-xs sm:text-xs ${
+            className={`text-black line-clamp-2  sm:line-clamp-1  text-xs md:text-xs sm:text-xs ${
               transactionsDto.length > 0 &&
               transactionsDto[0].lastClosingBalance >= 0
                 ? "border-green-900 text-green-900"
@@ -202,14 +202,14 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
               </>
             )}
           </h2>
-        </div>
+        </div>}
 
        {/* Report */}
 
         <div className="report-unfriend    flex gap-3 sm:gap-1 md:gap-1  items-center justify-between">
         <button
        onClick={toggleReportModal}
-         className="report w-30 group sm:w-36 h-8 sm:h-[35px] px-1 sm:px-3 bg-transparent   sm:bg-rose-600  md:bg-rose-600  flex items-center justify-center hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm shadow-none sm:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+         className="report w-30 group sm:w-36 md:w-36  h-8 sm:h-[35px] md:h-[32px] px-1 sm:px-3 md:px-3 bg-transparent   sm:bg-rose-600  md:bg-rose-600  flex items-center justify-center hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm shadow-none sm:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
         >
          <span className="inline sm:hidden ">
           <FontAwesomeIcon className=" " icon={faDownload} />
@@ -227,7 +227,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
           />
          <div
             onClick={toggleUnfriendModal}
-            className="settings h-9 w-9 sm:h-10 sm:w-10 right-0 hover:scale-110 rounded-full border shadow-md  flex items-center justify-center bg-cyan-800 "
+            className="settings h-9 w-9 sm:h-10 sm:w-10 md:h-10 md:w-10 right-0 hover:scale-110 rounded-full border shadow-md  flex items-center justify-center bg-cyan-800 "
            >
           <img
            src={unFriendImage}
@@ -252,18 +252,18 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
             setIsCommentSetionOpen(false);
           }
         }}
-        class="table-division top-20  md:top-20 sm:top-24  border border-gray-400 w-full md:w-full  sm:w-full  h-[78.3%] sm:h-[81.6%] bg-gray-400  absolute  scrollable  "
+        class="table-division top-20  md:top-24 lg:top-24  border border-gray-400 w-full  h-[78.3%] lg:h-[79.8%] md:h-[77.3%] bg-gray-400  absolute  scrollable  "
       >
-        <table className="w-full p-0   sm:p-2  border-separate border-spacing-y-1 text-sm text-left text-black dark:text-black">
+        <table className="w-full p-0   sm:p-2 md:p-2   border-separate border-spacing-y-1 text-sm text-left text-black dark:text-black">
           <thead className="sticky top-0  border  shadow-inner-custom    bg-gray-100  text-xs text-gray-600 uppercase dark:text-gray-800">
-            <tr className="border-b top0-0">
-              <th scope="col" className="px-2 py-4 sm:px-3 sm:py-3 ">
+            <tr className="border-b ">
+              <th scope="col" className="px-2 py-4 lg:px-3 lg:py-3 md:px-4 md:py-3 ">
                 Entries
               </th>
-              <th scope="col" className="px-2 py-4 sm:px-3 sm:py-3">
+              <th scope="col" className="px-2 py-4 lg:px-3 lg:py-3 md:px-4 md:py-3">
                 You gave
               </th>
-              <th scope="col" className="px-2 py-4 sm:px-3 sm:py-3 text-right">
+              <th scope="col" className="px-2 py-4 lg:px-3 lg:py-3 md:px-4 md:py-3 text-right">
                 You got
               </th>
             </tr>
@@ -289,7 +289,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
                 >
                   <td
                     scope="row"
-                    className="px-2 py-2 sm:px-6 sm:py-4  font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
+                    className="px-2 py-2 lg:px-6 lg:py-4  md:px-4 md:py-4  font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
                   >
                     <div className="flex flex-col">
                       <span className="font-medium text-sm line-clamp-2 sm:line-clamp-0 text-gray-900">
@@ -302,7 +302,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
                     </div>
                   </td>
 
-                  <td className="px-3 py-2  sm:px-6 sm:py-4 pr-[25px]">
+                  <td className="px-3 py-2  lg:px-6 lg:py-4  md:px-4 md:py-4   pr-[25px]">
                     {isUserGave && (
                       <div className="flex flex-col">
                         <span className="font-medium text-rose-500">
@@ -312,7 +312,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
                     )}
                   </td>
 
-                  <td className="px-3 py-2  sm:px-6 sm:py-4 pr-[25px]  sm:text-right  ">
+                  <td className="px-3 py-2  lg:px-6 lg:py-4  md:px-4 md:py-4  pr-[25px]  sm:text-right  ">
                     {!isUserGave && (
                       <div className="flex flex-col">
                         <span className="font-medium text-right text-green-500 ">
@@ -328,7 +328,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
         </table>
       </div>
 
-      <div className="left-side-lower font-Poppins  rounded-sm   text-xs sm:text-sm gap-1 justify-evenly border-none whitespace-nowrap md:text-xs border-gray-400 w-full lg:gap-4  bg-gray-300 p-2 bottom-20 sm:bottom-4 absolute h-[50px] flex items-center">
+      <div className="left-side-lower font-Poppins  rounded-sm    text-xs sm:text-sm gap-1 justify-evenly border-none whitespace-nowrap md:text-xs border-gray-400 w-full lg:gap-4  bg-gray-300 p-2 bottom-20 lg:bottom-4 md:bottom-20   absolute h-[50px] flex items-center  ">
         <button
           className="w-[44%]  rounded-sm   shadow-inner-custom h-full bg-rose-600 text-sm text-white 600    hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
           onClick={handleGiveButtonClick}

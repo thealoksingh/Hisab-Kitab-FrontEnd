@@ -38,7 +38,7 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
       id="UpdateFriendTransaction-modal"
       tabIndex="-1"
       aria-hidden={!isOpen}
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-70 ${isOpen ? "" : "hidden"}`}
+      className={`fixed inset-0 z-50  flex items-center justify-center bg-gray-500 bg-opacity-70 ${isOpen ? "" : "hidden"}`}
     >
       <div className="main-form relative  w-full max-w-5xl flex gap-4 justify-center text-center">
         <div className="form1 relative w-[70%] md:w-[75%] sm:w-1/2 h-1/3 sm:h-1/3  rounded-sm shadow bg-gray-200 dark:bg-gray-300 shadow-inner-custom">

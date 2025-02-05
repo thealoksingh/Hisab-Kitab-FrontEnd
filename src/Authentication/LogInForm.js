@@ -152,6 +152,7 @@ const LogInForm = () => {
                   Forgot password?{" "}
                   <a
                     href="/forget-password"
+
                     className=" text-green-600 font-semibold hover:underline hover:scale-105 inline-block transition-transform duration-300"
                   >
                     Reset here

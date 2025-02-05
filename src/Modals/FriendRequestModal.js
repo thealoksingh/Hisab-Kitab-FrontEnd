@@ -78,10 +78,10 @@ const FriendRequestModal = ({ isOpen, toggleModal, user  }) => {
       aria-hidden={!isOpen}
       className="inset-0 z-50 fixed bg-gray-900 bg-opacity-30"
     >
-      <div className="z-50 main-form top-20 relative p-2  flex justify-center  items-center">
-        <div className="form1 w-[80%] h/3   sm:w-1/2 sm:h-1/2   md:w-1/2 md:h-1/2  bg-white rounded-sm shadow dark:bg-gray-300 form-custom-shadow-inner">
-          <div className="flex items-center justify-between p-2 md:p-2 rounded-sm bg-gray-600 dark:border-gray-700">
-            <h4 className="text-lg font-semibold text-white dark:text-white">
+      <div className="z-50 main-form relative p-2   flex justify-center  items-center ">
+        <div className="form1 absolute  overflow-y-scroll  font-Poppins   top-32  sm:top-40 w-[80%]   sm:w-1/2  md:w-1/2  bg-gray-300 rounded-sm shadow dark:bg-gray-300 form-custom-shadow-inner">
+          <div className="flex fo items-center justify-between  p-1 md:p-2 rounded-sm bg-gray-600 dark:border-gray-700">
+            <h4 className="text-lg font-semibold pl-3 text-white dark:text-white">
               Friend Requests
             </h4>
             <button
@@ -108,9 +108,9 @@ const FriendRequestModal = ({ isOpen, toggleModal, user  }) => {
             </button>
           </div>
           <div className="main-content h-full p-2">
-            <h4 className="font-xs sm:font-semibold text-gray-900">Take Action on Request</h4>
-            <div className="incoming-friend-request shadow-inner-custom h-56  w-full  bg-gray-300 mt-2 p-2">
-              <div className="scrollable shadow-inner-custom h-full w-full bg-gray-50 p-1">
+            <h4 className="font-xs font-bold  text-gray-800 pl-2 ">Take Action on Request</h4>
+            <div className="incoming-friend-request shadow-inner-custom h-48  w-full  bg-gray-300 mt-2 p-1">
+              <div className="scrollable shadow-inner-custom h-full  w-full bg-gray-50 p-1">
                 {pendingRequests.length > 0 ? (
                   pendingRequests.map((request) => (
                     <div
@@ -148,13 +148,13 @@ const FriendRequestModal = ({ isOpen, toggleModal, user  }) => {
                     </div>
                   ))
                 ) : (
-                  <p>No pending requests found.</p>
+                  <p className="text-center mt-16 text-gray-400 font-Poppins">No pending requests found.</p>
                 )}
               </div>
             </div>
 
-            <h4 className="font-semibold text-gray-900 mt-1">Sent Requests</h4>
-            <div className="pending-friend-request shadow-inner-custom h-64 w-full bg-gray-300 mt-2 p-2">
+            <h4 className="font-bold pl-2 text-gray-800  mt-1">Sent Requests</h4>
+            <div className="pending-friend-request shadow-inner-custom h-48 w-full bg-gray-300 mt-2 p-2">
               <div className="scrollable shadow-inner-custom h-full w-full p-1 bg-gray-50">
                 {sentRequests.length > 0 ? (
                   sentRequests.map((request) => (
@@ -187,7 +187,7 @@ const FriendRequestModal = ({ isOpen, toggleModal, user  }) => {
                     </div>
                   ))
                 ) : (
-                  <p>No sent requests found.</p>
+                  <p className="text-center mt-16 text-gray-400 font-Poppins">No sent requests found.</p>
                 )}
               </div>
             </div>

@@ -37,7 +37,7 @@ function RightSideDashBoard({
 
   return (
     <div
-      className={`right-side rounded h-screen lg:w-full relative overflow-hidden transition-all duration-300 ${
+      className={`right-side rounded h-screen lg:w-full relative overflow-hidden transition-all duration-300 pl-0 md:pl-2  lg:pl-0  ${
         isOpen ? "translate-x-0" : "translate-x-full"
       } lg:translate-x-0`}
     >
