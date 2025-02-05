@@ -9,11 +9,19 @@ import FriendTransactionReport from "../Modals/FriendTransactionReport";
 import ProfileCircle from "../utils/ProfileCircle";
 import unFriendImage from "../assets/unFriend.png";
 import UnfriendModal from "../Modals/UnfriendModal";
+
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../security/AuthContext";
 function FriendTranscationDetail({
   user,
   selectedFriend,
   refreshFriendTransaction,
   setRefreshFriendTransaction,
+  isOpen,
+  toggleLeftSidebar,
+  toggleRightSidebar,
+  setIsFriendSelected,
+  setSelectedFriend,
 }) {
   const [transactionsDto, setTransactionsDto] = useState([]);
   const [error, setError] = useState(null);
@@ -27,6 +35,51 @@ function FriendTranscationDetail({
   const [isCommentSectionOpen, setIsCommentSetionOpen] = useState(false);
 const [isUnfriendModalOpen, setIsUnfriendModalOpen]= useState(false);
 
+const navigate = useNavigate();
+const { isAuthenticated } = useAuth();
+
+// Redirect if the user is not authenticated
+useEffect(() => {
+  if (!isAuthenticated) {
+    navigate("/"); // Redirect to login page if not authenticated
+  }
+}, [isAuthenticated, navigate]);
+
+// Prevent the user from going back to the previous page
+useEffect(() => {
+  const handlePopState = (e) => {
+    e.preventDefault(); // Prevent the default back navigation
+    console.log("isCommentSection: open --->", isCommentSectionOpen);
+
+    if (isAuthenticated) {
+      if (isCommentSectionOpen) {
+        console.log("toggle comment section in if :", isCommentSectionOpen);
+        toggleCommentSection(); // Close the comment section if it's open
+      } else {
+        console.log("Navigating to /user-dashboard");
+        setRefreshFriendTransaction(!refreshFriendTransaction);
+        setIsFriendSelected(false);
+        setSelectedFriend(null);
+        toggleRightSidebar();
+        toggleLeftSidebar();
+        navigate("/user-dashboard"); // Redirect to /user-dashboard if the user tries to go back
+      }
+    }
+  };
+
+  // Listen for back button or history changes
+  window.history.pushState(null, document.title);
+  window.addEventListener('popstate', handlePopState);
+
+  return () => {
+    window.removeEventListener('popstate', handlePopState); // Clean up the event listener on unmount
+  };
+}, [isAuthenticated, isCommentSectionOpen, navigate]); // Add `isCommentSectionOpen` in dependency array
+
+
+
+  // End of Prevent the user from going back to the previous page
+
  const toggleUnfriendModal=() =>{
 setIsUnfriendModalOpen(!isUnfriendModalOpen);
  }
@@ -36,13 +89,21 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
   const toggleReportModal = () => {
     setReportModalOpen(!isReportModalOpen);
   };
+  
 
   const toggleCommentSection = () => {
-    if (isCommentSectionOpen) {
-      setSelectedRowId(null);
-    }
-    setIsCommentSetionOpen(!isCommentSectionOpen); // Toggle the state when the button is clicked
+    setIsCommentSetionOpen(prevState => {
+      if (prevState) {
+        setSelectedRowId(null);
+        
+      }
+  
+      return !prevState;
+    });
   };
+  
+  
+  
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -78,6 +139,10 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
     fetchTransactions();
   }, [user, selectedFriend, refreshFriendTransaction]);
 
+  
+  
+
+
   useEffect(() => {
     console.log("commentTransaction updated in useffect:", commentTransaction);
   }, [commentTransaction]);
@@ -90,27 +155,27 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
             setIsCommentSetionOpen(false);
           }
         }}
-        className="right-header p-2 absolute top-0  border border-gray-400 shadow-inner-custom justify-between h-24 bg-gray-300 w-full  p-[10px] flex gap-[10px] flex items-center "
+        className="right-header  gap-[8px]  sm:gap-[8px] md:gap-[7px]  p-1   lg:p-2  md:p-4   absolute top-0  border border-gray-400 shadow-inner-custom justify-between h-20 sm:h-24 md:h-24 bg-gray-300  w-full flex items-center "
       >
-        <div className=" flex gap-2">
+        <div className=" flex gap-1 sm:gap-2 md:gap-0">
           <ProfileCircle
-            className="h-12 w-12 mr-4 text-white text-lg"
+            className="h-10 w-10 sm:h-12 sm:w-12 md:h-13 md:w-13  text-white text-lg"
             name={selectedFriend.fullName}
             color={selectedFriend.colorHexValue}
           />
 
-          <div className="user-name-number ml-1  ">
+          <div className="user-name-number   ">
             <h2 className="text-lg text-gray-800 line-clamp-1">
               {selectedFriend.fullName}
             </h2>
-            <p className="text-sm text-gray-600 line-clamp-1">
+            <p className="text-[10px] sm:text-sm  md:text-sm text-green-700 line-clamp-2">
               +91 <span>{selectedFriend.contactNo}</span>
             </p>
           </div>
         </div>
-
-        <div
-          className={`net-balance border p-1 h-10 w-40 rounded-sm flex items-center justify-center ml-5 ${
+        
+       {transactionsDto.length>0 &&  <div 
+          className={`net-balance border ml-2 font-medium sm:font-semibold sm:ml-2 p-1 sm:p-2 h-8 w-25 sm:h-9 sm:w-35  md:h-9 md:w-35 rounded-sm flex items-center justify-center   ${
             transactionsDto.length > 0 &&
             transactionsDto[0].lastClosingBalance >= 0
               ? "border-green-900 text-green-900"
@@ -118,7 +183,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
           }`}
         >
           <h2
-            className={`text-black line-clamp-1 ${
+            className={`text-black line-clamp-2  sm:line-clamp-1  text-xs md:text-xs sm:text-xs ${
               transactionsDto.length > 0 &&
               transactionsDto[0].lastClosingBalance >= 0
                 ? "border-green-900 text-green-900"
@@ -128,69 +193,77 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
             {transactionsDto.length > 0 && (
               <>
                 {transactionsDto[0].lastClosingBalance >= 0
-                  ? "You will get :"
-                  : "You will give :"}
+                  ? "You will get:"
+                  : "You will give:"}
                 <span>
                   {" "}
-                  ₹ {Math.abs(transactionsDto[0].lastClosingBalance)}
+                   ₹{Math.abs(transactionsDto[0].lastClosingBalance)}
                 </span>
               </>
             )}
           </h2>
-        </div>
+        </div>}
 
-        <div className="report-settings  flex gap-2 flex items-center justify-between">
-          <button
-            onClick={toggleReportModal}
-            className="report h-[35px] text-white px-3 font-semibold  bg-rose-600 rounded-sm flex items-center justify-center   hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm  shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-          >
-            <span className="mr-1 ">
-              <FontAwesomeIcon icon={faDownload} />
-            </span>{" "}
-            <span className=" line-clamp-1">View Report</span>
-          </button>
+       {/* Report */}
+
+        <div className="report-unfriend    flex gap-3 sm:gap-1 md:gap-1  items-center justify-between">
+        <button
+       onClick={toggleReportModal}
+         className="report w-30 group sm:w-36 md:w-36  h-8 sm:h-[35px] md:h-[32px] px-1 sm:px-3 md:px-3 bg-transparent   sm:bg-rose-600  md:bg-rose-600  flex items-center justify-center hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm shadow-none sm:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+        >
+         <span className="inline sm:hidden ">
+          <FontAwesomeIcon className=" " icon={faDownload} />
+         </span>
+         <span className="hidden sm:flex items-center">
+          <FontAwesomeIcon icon={faDownload} className="mr-1 group-hover:animate-bounce  text-black  sm:text-white" />
+          <span className="line-clamp-1 text-white sm:text-sm">View Report</span>
+          </span>
+            </button>
           <FriendTransactionReport
             isOpen={isReportModalOpen}
             toggleModal={toggleReportModal}
             selectedFriend={selectedFriend}
             user={user}
           />
-          <div onClick={toggleUnfriendModal} className="settings h-10 w-10 rounded-full border border-white flex items-center justify-center bg-cyan-600">
-            <img
-              src={unFriendImage}
-              alt="Settings"
-              className="h-8 w-8 object-contain filter invert brightness-0"
-            />
-            <UnfriendModal
-            isOpen={isUnfriendModalOpen}
-            toggleModal={toggleUnfriendModal}
-            userId={user.userId}
-            friendId={selectedFriend.userId}
+         <div
+            onClick={toggleUnfriendModal}
+            className="settings h-9 w-9 sm:h-10 sm:w-10 md:h-10 md:w-10 right-0 hover:scale-110 rounded-full border shadow-md  flex items-center justify-center bg-cyan-800 "
+           >
+          <img
+           src={unFriendImage}
+           alt="Settings"
+           className="w-4 h-10 sm:h-6 sm:w-6 object-contain filter invert brightness-0"
+          />
+          <UnfriendModal
+          isOpen={isUnfriendModalOpen}
+           toggleModal={toggleUnfriendModal}
+           userId={user.userId}
+           friendId={selectedFriend.userId}
             />
           </div>
-        </div>
-      </div>
-      {/* <div className="table-div absolute top-24 h-[70%] border border-gray-500 shadow-inner-custom w-full bg-gray-400 relative px-2 ">
-      <table className="w-full  border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-gray-400">
-          <thead className="sticky top-0 fixed border  shadow-inner-custom  top-0 bg-gray-50 dark:bg-gray-200 text-xs text-gray-400 uppercase dark:text-gray-800"> */}
+         </div>
+  </div>
+
+     {/* middle section */}
+     
       <div
         onClick={() => {
           if (isCommentSectionOpen) {
             setIsCommentSetionOpen(false);
           }
         }}
-        class="table-division border border-gray-400 w-full h-[76.8%] bg-gray-400  absolute top-24 border-gray-500 shadow-inner-custom scrollable px-2  "
+        class="table-division top-20  md:top-24 lg:top-24  border border-gray-400 w-full  h-[78.3%] lg:h-[79.8%] md:h-[77.3%] bg-gray-400  absolute  scrollable  "
       >
-        <table className="w-full border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-gray-400">
-          <thead className="sticky top-0 fixed border  shadow-inner-custom  top-0 bg-gray-100  text-xs text-gray-400 uppercase dark:text-gray-800">
-            <tr>
-              <th scope="col" className="px-6 py-3">
+        <table className="w-full p-0   sm:p-2 md:p-2   border-separate border-spacing-y-1 text-sm text-left text-black dark:text-black">
+          <thead className="sticky top-0  border  shadow-inner-custom    bg-gray-100  text-xs text-gray-600 uppercase dark:text-gray-800">
+            <tr className="border-b ">
+              <th scope="col" className="px-2 py-4 lg:px-3 lg:py-3 md:px-4 md:py-3 ">
                 Entries
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-2 py-4 lg:px-3 lg:py-3 md:px-4 md:py-3">
                 You gave
               </th>
-              <th scope="col" className="px-6 py-3 text-right">
+              <th scope="col" className="px-2 py-4 lg:px-3 lg:py-3 md:px-4 md:py-3 text-right">
                 You got
               </th>
             </tr>
@@ -203,7 +276,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
               return (
                 <tr
                   key={transactionDto.transaction.transId}
-                  className={`bg-white border-b border-1 shadow-inner-custom rounded-sm  dark:border-gray-100 cursor-pointer ${
+                  className={`bg-white border-b border-1 shadow-inner-custom rounded-sm dark:border-gray-100 cursor-pointer ${
                     selectedRowId === transactionDto.transaction.transId
                     ? "bg-gray-300 dark:bg-gray-300" 
                     : "bg-gray-100 dark:bg-gray-100" 
@@ -216,11 +289,11 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
                 >
                   <td
                     scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
+                    className="px-2 py-2 lg:px-6 lg:py-4  md:px-4 md:py-4  font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
                   >
                     <div className="flex flex-col">
-                      <span className="font-medium text-gray-900">
-                        Closing Balance: <span>₹</span>{" "}
+                      <span className="font-medium text-sm line-clamp-2 sm:line-clamp-0 text-gray-900">
+                        Closing Balance:<span>₹</span>{" "}
                         <span>{transactionDto.lastClosingBalance}</span>
                       </span>
                       <span className="text-xs text-gray-900 mt-1">
@@ -229,7 +302,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
                     </div>
                   </td>
 
-                  <td className="px-6 py-4 pr-[25px]">
+                  <td className="px-3 py-2  lg:px-6 lg:py-4  md:px-4 md:py-4   pr-[25px]">
                     {isUserGave && (
                       <div className="flex flex-col">
                         <span className="font-medium text-rose-500">
@@ -239,10 +312,10 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
                     )}
                   </td>
 
-                  <td className="px-6 py-4 text-right pr-[25px]">
+                  <td className="px-3 py-2  lg:px-6 lg:py-4  md:px-4 md:py-4  pr-[25px]  sm:text-right  ">
                     {!isUserGave && (
                       <div className="flex flex-col">
-                        <span className="font-medium text-green-500 ">
+                        <span className="font-medium text-right text-green-500 ">
                           <span>₹</span> {transactionDto.transaction.amount}
                         </span>
                       </div>
@@ -254,15 +327,16 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
           </tbody>
         </table>
       </div>
-      <div className="right-side-lower border border-gray-400 shadow-inner-custom w-full gap-4 bg-gray-300 p-2 bottom-4 absolute h-[50px] flex items-center justify-center">
+
+      <div className="left-side-lower font-Poppins  rounded-sm    text-xs sm:text-sm gap-1 justify-evenly border-none whitespace-nowrap md:text-xs border-gray-400 w-full lg:gap-4  bg-gray-300 p-2 bottom-20 lg:bottom-4 md:bottom-20   absolute h-[50px] flex items-center  ">
         <button
-          className="w-1/3 shadow-inner-custom h-full bg-rose-600 text-sm text-white 600    hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+          className="w-[44%]  rounded-sm   shadow-inner-custom h-full bg-rose-600 text-sm text-white 600    hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
           onClick={handleGiveButtonClick}
         >
           You Gave : <span>₹</span>
         </button>
         <button
-          className="w-1/3 shadow-inner-custom h-full bg-emerald-600 text-sm text-white 600    hover:bg-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+          className="w-[44%]  rounded-sm    shadow-inner-custom h-full bg-green-800  text-sm text-white 600    hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
           onClick={handleGotButtonClick}
         >
           You Got : <span>₹</span>
@@ -285,6 +359,8 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
         user={user}
         commentTransaction={commentTransaction}
         toggleCommentSection={toggleCommentSection}
+        refreshFriendTransaction={refreshFriendTransaction}
+        setRefreshFriendTransaction={setRefreshFriendTransaction}
       />
     </>
   );

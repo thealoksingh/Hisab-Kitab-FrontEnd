@@ -8,6 +8,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
   const [choice, setChoice] = useState(null);
   const [tickets, setTickets] = useState([]);
   const [isRefreshTicket, setRefreshTicket] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const handleChoice = (value) => {
     setChoice(value);
     if (value === "view") {
@@ -27,9 +28,15 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    if (!formData.title.trim() || !formData.description.trim()) {
+      alert("Title and description cannot be empty.");
+      return;
+    }
+  
+    setLoading(true);
     try {
       const response = await createTicket(formData);
-
       alert(
         "Ticket created successfully! With Ticket ID: " + response.data.ticketId
       );
@@ -38,20 +45,24 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
     } catch (error) {
       alert("Failed to create ticket. Please try again.");
       handleClose();
+    } finally {
+      setLoading(false);
     }
   };
+  
   useEffect(() => {
     if (choice !== "view") return;
     const fetchAllTickets = async () => {
       try {
         const response = await getAllTickets(user.userId);
+        setLoading(true);
         setTickets(response.data);
         // console.log("Tickets fetched successfully");
 
         console.log(tickets);
       } catch (error) {
         alert("Failed to fetch Tickets.");
-      }
+      }finally{setLoading(false);}
     };
     fetchAllTickets();
   }, [isRefreshTicket]);
@@ -87,8 +98,8 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
       }`}
     >
       <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
-        <div className="form-add-frnd border border-gray-400 shadow-inner-custom relative bg-white w-1/2 h-1/3 rounded-sm shadow dark:bg-gray-300">
-          <div className="flex items-center justify-between p-2 md:p-2 rounded-sm bg-teal-600">
+        <div className="form-add-frnd border border-gray-400 shadow-inner-custom relative bg-white  w-[100%] h-[60%]  sm:w-1/2 sm:h-1/3 md:w-1/2 md:h-1/3  rounded-sm shadow dark:bg-gray-300">
+          <div className="flex items-center justify-between p-2 md:p-2  sm:p-40 rounded-sm bg-teal-600">
             <h4 className="text-lg font-semibold text-gray-200">
               Help & Support
             </h4>
@@ -116,7 +127,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
             </button>
           </div>
           {choice === null && (
-            <div className="p-4 md:p-5">
+            <div className="p-4 sm:h-1/2 sm:h-1/2 md:p-5">
               <div className="mb-2 flex flex-col gap-2">
                 <button
                   onClick={() => handleChoice("create")}
@@ -133,14 +144,20 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
                   type="button"
                   className="w-full border bg-gray-100 hover:bg-yellow-500 hover:text-white border-yellow-500 text-yellow-500 rounded-sm px-4 py-1 focus:outline-none focus:ring-4 focus:ring-yellow-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                 >
-                  View Tickets
+                 {isLoading ? (<div className="flex items-center ">
+                    <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
+                    <div className="font-semibold ml-2">Processing..</div>
+                    </div>
+                  ) : (
+                    "View Tickets"
+                  )}
                 </button>
               </div>
             </div>
           )}
           {choice === "view" && (
             <div className="p-1 md:p-5">
-              <div className="scrollable shadow-inner-custom w-full p-2 max-h-96 border border-gray-400 bg-gray-100">
+              <div className=" scroll-auto overflow-y-scroll w-full p-2 max-h-96 border border-gray-400 bg-gray-100">
                 {/* repeat this  */}
                 {tickets.map((ticket) => (
                   <div
@@ -161,12 +178,12 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
                     </div>
 
                     <div className="flex justify-between mt-2">
-                      <div className="text-sm text-gray-700">
+                      <div className="text-sm mr-2 text-wrap text-gray-700">
                         <p className="mb-2">
                           <strong>Title:</strong> {ticket.issueTitle}
                         </p>
                         <div className=" input-field-shadow rounded-sm  border border-gray-200  p-1 mb-1 max-w-56 max-h-24 overflow-y-auto">
-                          <p>
+                          <p className="">
                             <strong>Description:</strong>
 
                             {ticket.description}
@@ -210,7 +227,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
           {choice === "create" && (
             <form className="p-4 md:p-5" onSubmit={handleSubmit}>
               <div className="mb-4">
-                <label className="block mb-2 text-sm font-medium text-gray-900">
+                <label className="block mb-2 font-semibold font-Poppins    text-gray-900">
                   Title :
                 </label>
                 <input
@@ -224,7 +241,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
                 />
               </div>
               <div className="mb-4">
-                <label className="block mb-2 text-sm font-medium text-gray-900">
+                <label className="block font-Poppins mb-2 text-sm font-semibold  text-gray-900">
                   Description :
                 </label>
                 <textarea
@@ -235,20 +252,28 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
                   onChange={handleChange}
                 />
               </div>
-              <div className="mb-2 flex gap-4">
+              <div className="mb-2  font-Poppins  sm:text-xs flex gap-4  ">
                 <button
                   type="submit"
-                  className="w-1/3 bg-teal-600 text-white rounded-sm px-4 py-1 focus:outline-none focus:ring-4 focus:ring-teal-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                  className=" bg-teal-600 text-white rounded-sm px-6 py-1 focus:outline-none focus:ring-4 focus:ring-teal-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                 >
-                  Submit
+                 {isLoading ? (<div className="flex items-center ">
+                    <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
+                    <div className="font-semibold ml-2">Processing..</div>
+                    </div>
+                  ) : (
+                    "Submit"
+                  )}
                 </button>
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="w-1/3 bg-rose-600 text-white rounded-sm px-4 py-1 focus:outline-none focus:ring-4 focus:ring-rose-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-                >
-                  Cancel
-                </button>
+                     className=" bg-rose-600 text-white rounded-sm px-4 py-2 
+                      focus:outline-none focus:ring-4 focus:ring-rose-300 shadow-md transition-all duration-300 
+                  ease-in-out transform hover:scale-105"
+                      >
+                     Cancel
+                  </button>
               </div>
             </form>
           )}

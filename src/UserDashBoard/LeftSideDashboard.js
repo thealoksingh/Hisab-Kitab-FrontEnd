@@ -15,12 +15,10 @@ function LeftSideDashBoard({
   setSelectedFriend,
   refreshFriendTransaction,
   setRefreshFriendTransaction,
-  friendRequestCount
- 
-})
-
-
-{
+  friendRequestCount,
+  isOpen,
+  toggleSidebar,
+}) {
   const location = useLocation();
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -40,9 +38,9 @@ function LeftSideDashBoard({
     useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-const [error, setError] = useState("");
-const [loading, setLoading] = useState(false);
-const [userId, setUserId] = useState("");
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState("");
 
   const toggleFriendRequestModal = () => {
     setIsFriendRequestModalOpen(!isFriendRequestModalOpen);
@@ -118,7 +116,7 @@ const [userId, setUserId] = useState("");
   };
 
   const sortItems = (criteria) => {
-    let sorted = [...filteredFriends]; // Assuming `filteredFriends` is the filtered array
+    const sorted = [...filteredFriends]; // Assuming `filteredFriends` is the filtered array
 
     if (criteria === "Most Recent") {
       sorted.sort(
@@ -187,15 +185,17 @@ const [userId, setUserId] = useState("");
   const [selectedRowId, setSelectedRowId] = useState(null);
 
   const handleRowClick = (friend) => {
+    setSelectedFriend(friend.userEntity);
     setIsFriendSelected(true);
-    setSelectedFriend(friend);
-    setSelectedRowId(friend.userId); // Store the clicked row's ID
+    if (window.innerWidth < 1024) {
+      toggleSidebar(); // Close the left sidebar on mobile when a friend is selected
+    }
   };
 
   useEffect(() => {
     calculateAmount(friends);
     applyFilter(filterCriteria);
-  }, [user, friends, refreshFriendTransaction]); // Dependency array ensures the function runs whenever `friendList` changes
+  }, [user, friends, refreshFriendTransaction, filterCriteria]); // Added filterCriteria to dependencies
 
   function calculateAmount(friendList) {
     let totalGetAmount = 0;
@@ -212,9 +212,6 @@ const [userId, setUserId] = useState("");
     setGetAmount(totalGetAmount);
     setGiveAmount(totalGiveAmount);
   }
-
-  
-
   useEffect(() => {
     setUserId(user.userId);
   }, [user]);
@@ -266,57 +263,77 @@ const [userId, setUserId] = useState("");
 
   return (
     <>
-      <div   className="left-side rounded h-screen w-[50%]  relative overflow-hidden  ">
-        <div  className="left-upper  h-36 w-full">
-          <div className="flex  px-2 shadow-inner-custom items-center gap-1 justify-between border border-gray-300 h-12 bg-gray-400">
-            <div className="p-2 flex-shrink font-semibold">
+      <div
+        className={`left-side rounded h-screen w-full relative overflow-hidden transition-all duration-300 pr-0 md:pr-5  lg:pr-0  ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0`}
+      >
+        {/* Toggle button for mobile */}
+        {/* <button onClick={toggleSidebar} className="lg:hidden absolute top-2 right-2 bg-gray-200 p-2 rounded-full">
+          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button> */}
+
+        <div className="left-upper sm:font-normal justify-between h-32 right-0  w-full ">
+          <div className="flex px-2 right-0 shadow-inner-custom items-center gap-1 justify-between border border-gray-400 sm:h-10 md:h-10   h-12 bg-gray-300">
+            <div className="p-2 flex-shrink sm:font-sm  font-semibold">
               You'll Give:
-              <span className="text-rose-600 font-semibold">
-                {" "}
-                ₹ {giveAmount}
-              </span>
+              <span className="text-rose-600 font-sm "> ₹{giveAmount}</span>
             </div>
             <div className="p-2 flex-shrink font-semibold">
               You'll Get:
               <span className="text-green-900 font-semibold">
                 {" "}
-                ₹ {getAmount}
+                ₹{getAmount}
               </span>
             </div>
-            <div className="w-[30%] h-[100%] p-1">
-              {/* view report  */}
+
+            {/* p-0  sm:mt-0  pl-5  sm:pl-0  md:pl-5 */}
+
+            <div className="w-[32%] h-[100%] sm:h-[100%]   mt-3  sm:p-1 group md:mt-0 pl-5  "> 
+              {/* View Report Button */}
               <button
                 onClick={handleDownload}
-                className="bg-rose-600 mt-1 text-white font-bold py-1 px-4 rounded-sm flex items-center justify-center hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                className="bg-tranparent  sm:bg-rose-600  text-white py-1 px-7 flex items-center justify-between hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm shadow-none  sm:shadow-md  transition-all duration-300 ease-in-out transform hover:scale-105"
                 disabled={loading}
               >
-                <span className="mr-2">
-                  <FontAwesomeIcon icon={faDownload} />
-                </span>{" "}
-                <span className=" line-clamp-1">
-                  {" "}
-                  {loading ? "Downloading..." : "View Report"}{" "}
-                </span>
+                {/* Icon (Always Visible) */}
+
+                {loading ? (
+                  <div className="w-5 h-5 text-gra mr-2 border-4 border-t-4 border-white rounded-sm animate-spin"></div>
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faDownload}
+                    className="mr-2 py-1 right-0 text-gray-800  sm:text-white  md:text-white   group-hover:animate-bounce "
+                  />
+                )}
+                {/* Text (Visible only on lg screens and above) */}
+                <span className="hidden lg:inline-block md:inline-block lg:ml-0 md:ml-6 ">View Report</span>
               </button>
             </div>
           </div>
-          <div className=" py-2 shadow-inner-custom bg-gray-300 justify-between flex h-46 relative gap-2">
-            <div className="search-box w-[40%]  h-full p-2">
-              <p className="p-1 line-clamp-1">Search Friend</p>
+          <div className="text-sm  py-1 sm:py-3 md:py-3      bg-gray-300  flex h-32 relative gap-2 ">
+            {/* searchfrined */}
+            <div className="search-box w-[38%] ml-2 h-full mb-2  sm:mb-5">
+              <p className="p-1 line-clamp-1  font-Poppins font-semibold  justify-center align-middle">
+                Search Friend
+              </p>
 
               <input
                 type="text"
                 placeholder="Search..."
-                className="w-full shadow-inner-custom h-10 pb-1 px-3 border border-gray-400 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+                className="w-full  sm:h-10 h-10  px-3 border border-gray-500 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 "
                 value={searchQuery}
                 onChange={handleSearch}
               />
             </div>
-            <div className="filter-section w-[30%]  h-full  relative p-2 ">
-              <p className="p-1">Filter</p>
+
+            <div className="filter-section w-[30%] text-gray-700 h-full">
+              <p className="p-1 font-semibold">Filter</p>
               <button
                 onClick={toggleFilterDropdown}
-                className=" w-full h-10 border justify-between border-gray-500 shadow-inner-white-custom h-10 text-white bg-gray-200 hover:bg-gray-700   font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
+                className="sm:h-10 h-10 w-full justify-between px-5 sm:px-4 gap-4 border-gray-700 text-white bg-gray-700 hover:bg-gray-600 font-medium rounded-sm text-sm py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700"
                 type="button"
               >
                 {filterCriteria}
@@ -337,14 +354,18 @@ const [userId, setUserId] = useState("");
                 </svg>
               </button>
               {isFilterOpen && (
-                <div className="z-50 mt-1 absolute bg-white divide-y divide-gray-100 rounded-sm shadow w-[90%] dark:bg-gray-700">
-                  <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+                <div className="z-50 p-2 sm:p-5 md:p-5 bg-gray-100 mt-1 absolute dark:bg-gray-700 shadow-lg rounded-sm">
+                  <ul className="mt-2 text-gray-700 font-Poppins font-semibold dark:text-gray-200">
                     {["All", "You Will Get", "You Will Give", "Settled"].map(
                       (criteria) => (
-                        <li key={criteria}>
+                        <li key={criteria} className="my-1">
                           <button
                             onClick={() => applyFilter(criteria)}
-                            className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                            className="block w-full px-2 py-2 lg:px-5 lg:py-2 md:px-11 md:py-2 
+                         text-left text-xs sm:text-sm md:text-sm font-Poppins font-semibold 
+                         bg-transparent text-gray-700 dark:text-gray-200 
+                         rounded-md transition-all duration-300 
+                         hover:bg-gray-200 hover:shadow-md dark:hover:bg-gray-600 dark:hover:text-white"
                           >
                             {criteria}
                           </button>
@@ -355,17 +376,19 @@ const [userId, setUserId] = useState("");
                 </div>
               )}
             </div>
-            <div className="sort-section  h-full w-[30%]  relative p-2">
-              <p className="p-1">Sort By</p>
 
+            {/* shortBy */}
+
+            <div className="sort-section text-gray-700 h-full w-[30%] mr-2">
+              <p className="p-1 font-Poppins font-semibold">Sort By</p>
               <button
                 onClick={toggleSortDropdown}
-                className="w-full line-clamp-1 h-10 justify-between shadow-inner-white-custom border-gray-500 h-10 text-white bg-gray-200 hover:bg-gray-700   font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 "
+                className="sm:h-10 h-10 w-full justify-between px-5 sm:px-4 gap-4 border-gray-700 text-white bg-gray-700 hover:bg-gray-600 font-medium rounded-sm text-sm py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700"
                 type="button"
               >
                 {sortCriteria}
                 <svg
-                  className="w-2.5 h-2.5 ms-3"
+                  className="sm:w-3 sm:h-3 md:w-4 md:h-4 w-6 h-6"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -382,12 +405,12 @@ const [userId, setUserId] = useState("");
               </button>
 
               {isSortOpen && (
-                <div className="z-50 mt-1  absolute bg-white divide-y divide-gray-100 rounded-sm shadow w-[90%] dark:bg-gray-700">
-                  <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+                <div className="z-50 mt-1 p-1 sm:p-6 bg-slate-100 sm:bg-slate-100 absolute text-gray-700 divide-gray-100 rounded-sm shadow w-[90%]">
+                  <ul className="py-2 text-sm text-gray-600 font-Poppins font-semibold dark:text-gray-200">
                     <li>
                       <p
                         onClick={() => handleSort("Most Recent")}
-                        className="block line-clamp-1 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
                       >
                         Most Recent
                       </p>
@@ -395,7 +418,7 @@ const [userId, setUserId] = useState("");
                     <li>
                       <p
                         onClick={() => handleSort("Oldest")}
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
                       >
                         Oldest
                       </p>
@@ -403,7 +426,7 @@ const [userId, setUserId] = useState("");
                     <li>
                       <p
                         onClick={() => handleSort("Highest Amount")}
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
                       >
                         Highest Amount
                       </p>
@@ -411,7 +434,7 @@ const [userId, setUserId] = useState("");
                     <li>
                       <p
                         onClick={() => handleSort("Lowest Amount")}
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
                       >
                         Lowest Amount
                       </p>
@@ -419,7 +442,7 @@ const [userId, setUserId] = useState("");
                     <li>
                       <p
                         onClick={() => handleSort("By Name")}
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
                       >
                         By Name
                       </p>
@@ -431,9 +454,11 @@ const [userId, setUserId] = useState("");
           </div>
         </div>
 
-        <div className="h-[70%] border border-gray-500 shadow-inner-custom w-full bg-gray-400 relative px-2 scrollable">
-          <table className="w-full  border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="sticky fixed border  shadow-inner-custom  top-0 bg-gray-50 dark:bg-gray-100 text-xs text-gray-400 uppercase dark:text-gray-800">
+        {/* centerbox */}
+
+        <div className="h-[70%] lg:h-[76%] md:h-[74.2%]   border border-gray-400 shadow-inner-custom w-full bg-gray-400 relative overflow-y-auto scrollbar-none ">
+          <table className="w-full p-2  pt-0  border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-white">
+            <thead className="sticky  border  shadow-inner-custom  top-0 bg-gray-50 dark:bg-gray-100 text-xs text-gray-400 uppercase dark:text-gray-800">
               <tr>
                 <th scope="col" className="px-6 py-3">
                   Name
@@ -449,14 +474,14 @@ const [userId, setUserId] = useState("");
                   key={friend.userEntity.userId}
                   className={`bg-white border-b border-1 shadow-inner-custom rounded-sm  dark:border-gray-100 cursor-pointer ${
                     selectedRowId === friend.userEntity.userId
-                    ? "bg-gray-300 dark:bg-gray-300" 
-                    : "bg-gray-100 dark:bg-gray-100" 
+                      ? "bg-gray-300 dark:bg-gray-300"
+                      : "bg-gray-100 dark:bg-gray-100"
                   }`}
-                  onClick={() => handleRowClick(friend.userEntity)} // Pass `userEntity` here
+                  onClick={() => handleRowClick(friend)} // Pass `userEntity` here
                 >
                   <td
                     scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
+                    className="px-6 py-4 font-medium text-gray-200 whitespace-nowrap dark:text-white flex items-center"
                   >
                     <ProfileCircle
                       className="h-8 w-8 mr-4"
@@ -502,10 +527,13 @@ const [userId, setUserId] = useState("");
           </table>
         </div>
 
-        <div className="left-side-lower border border-gray-400 shadow-inner-custom w-full gap-4 bg-gray-300 p-2 bottom-4 absolute h-[50px] flex items-center justify-center">
+        {/* leftlower */}
+
+        <div className="left-side-lower font-Poppins   text-xs sm:text-sm md:text-sm gap-1 justify-evenly border-none whitespace-nowrap  border-gray-400 w-full lg:gap-4  bg-gray-300 p-2 bottom-20 lg:bottom-4  md:bottom-20  absolute h-[50px] flex items-center ">
+          {/* Add Friend Button */}
           <button
             onClick={handleAddFriendClick}
-            className="w-1/3 shadow-inner-custom h-full bg-cyan-600 text-sm text-white 600    hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+            className="w-[40%] h-full flex rounded-sm items-center justify-center shadow-inner-custom bg-cyan-700 text-sm text-white hover:bg-cyan-600 focus:outline-none focus:ring-4 focus:ring-cyan-300  px-2 py-1 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
           >
             Add Friend
           </button>
@@ -517,13 +545,21 @@ const [userId, setUserId] = useState("");
             refreshFriendTransaction={refreshFriendTransaction}
             setRefreshFriendTransaction={setRefreshFriendTransaction}
           />
+
+          {/* View Friend Request Button */}
           <button
             onClick={toggleFriendRequestModal}
-            className="relative w-1/3 h-full bg-teal-600 text-sm text-white hover:bg-teal-500 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+            className="relative w-[44%] h-full  flex items-center rounded-sm justify-center bg-teal-700 text-sm text-white hover:bg-teal-600 focus:outline-none focus:ring-4 focus:ring-emerald-300 px-2 py-1 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
           >
-            <div className="h-6 w-6 absolute -right-2 -top-2 border border-white flex items-center justify-center rounded-full bg-orange-500 text-white text-xs font-bold shadow-sm">
-            {friendRequestCount}
-            </div>
+            {/* Notification Badge */}
+            {friendRequestCount > 0 && (
+              <span class="flex size-6 absolute -right-2 -top-2 justify-center items-center">
+                <span class="absolute border border-white inline-flex h-full w-full animate-ping rounded-full bg-orange-500 opacity-75 justify-center items-center"></span>
+                <span class="relative border border-white inline-flex size-6 rounded-full bg-orange-500 justify-center items-center">
+                  {friendRequestCount}
+                </span>
+              </span>
+            )}
             View Friend Request
           </button>
 
@@ -533,7 +569,6 @@ const [userId, setUserId] = useState("");
             user={user}
             isOpen={isFriendRequestModalOpen}
             toggleModal={toggleFriendRequestModal}
-            
           />
         </div>
       </div>

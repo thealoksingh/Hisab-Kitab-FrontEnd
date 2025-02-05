@@ -13,10 +13,11 @@ const GiveGotModal = ({
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+ setIsLoading(true);
     // Set fromUserId and toUserId based on the transaction type
     const transactionData = {
       transId: 0,
@@ -41,6 +42,8 @@ const GiveGotModal = ({
         : setRefreshFriendTransaction(true);
     } catch (error) {
       console.error("Error creating transaction", error);
+    }finally {
+      setIsLoading(false);
     }
   };
 
@@ -55,8 +58,8 @@ const GiveGotModal = ({
         isOpen ? "" : "hidden"
       }`}
     >
-      <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
-        <div className="form-add-frnd border border-gray-400 shadow-inner-custom relative bg-white w-1/3 h-1/3 rounded-sm shadow dark:bg-gray-300">
+      <div className="main-form relative p-4 w-full sm:w-1/2 md:w-1/2 max-w-5xl flex gap-4 justify-center transform transition-transform duration-500">
+        <div className="form-add-frnd border border-gray-400 shadow-inner-custom relative bg-white w-full h-1/2 rounded-sm shadow dark:bg-gray-300">
           <div
             className={`flex items-center justify-between p-2 md:p-2 rounded-sm ${
               transactionType === "give" ? "bg-rose-600" : "bg-emerald-600"
@@ -67,8 +70,8 @@ const GiveGotModal = ({
             </h3>
             <button
               type="button"
-              className={`text-gray-400 bg-transparent hover:${
-                transactionType === "give" ? "bg-rose-200" : "bg-emerald-200"
+              className={`text-gray-300 bg-transparent hover:${
+                transactionType === "give" ? "bg-rose-100" : "bg-emerald-200"
               } hover:text-gray-900 rounded-sm text-sm w-6 h-6 ms-auto inline-flex dark:hover:${
                 transactionType === "give" ? "bg-rose-600" : "bg-emerald-600"
               } justify-center items-center dark:hover:text-white`}
@@ -89,7 +92,7 @@ const GiveGotModal = ({
                   d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
                 />
               </svg>
-              <span className="sr-only">Close modal</span>
+              <span className="sr-only text-slate-200">Close modal</span>
             </button>
           </div>
 
@@ -147,16 +150,27 @@ const GiveGotModal = ({
               />
             </div>
 
-            <button
-  type="submit"
-  className={`w-full text-white 
-    ${transactionType === 'give' 
-      ? 'bg-[#be123c] hover:bg-[#9b0e35] border border-[#9b0e35] focus:ring-[#Ff007f]' 
-      : 'bg-[#10b981] hover:bg-[#059669] border border-[#059669] focus:ring-[#50c878]'}
+          <button
+              type="submit"
+              className={`w-full text-white 
+    ${
+      transactionType === "give"
+        ? "bg-[#be123c] hover:bg-[#9b0e35] border border-[#9b0e35] focus:ring-[#Ff007f]"
+        : "bg-[#10b981] hover:bg-[#059669] border border-[#059669] focus:ring-[#50c878]"
+    }
     focus:ring-4 focus:outline-none  font-medium rounded-sm text-sm px-5 py-2.5 text-center`}
->
-  {transactionType === 'give' ? 'Give Amount' : 'Receive Amount'}
-</button>
+            >
+              {isLoading ? (
+                <div className="flex gap-4 w-full justify-center">
+                  <div className="w-5 h-5 border-4 border-t-4 border-white rounded-sm animate-spin"></div>
+                  <div className="font-semibold ml-1">Loading...</div>
+                </div>
+              ) : transactionType === "give" ? (
+                "Give Amount"
+              ) : (
+                "Receive Amount"
+              )}
+            </button>
 
           </form>
         </div>

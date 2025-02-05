@@ -1,22 +1,39 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import SignUpForm from '../Authentication/SignupForm';
 import UserDashboard from '../UserDashBoard/UserDashboard';
 import LoginForm from '../Authentication/LogInForm';
 import AdminDashboard from '../AdminDashboard/AdminDashboard';
 import ForgetPasswordModal from '../Authentication/ForgetPasswordModal';
 import UnderDevPage from '../UserDashBoard/UnderDevPage';
+import LeftSideDashboard from '../UserDashBoard/LeftSideDashboard';
+import ErrorComponent from './ErrorComponent';
+import AuthProvider, { useAuth } from '../security/AuthContext';
+import Home from "../LandingPage/Home";
+
+// ✅ Corrected AuthenticatedRoute
+function AuthenticatedRoute({ children }) {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? children : <Navigate to="/" />;
+}
 
 const Routing = () => {
   return (
-    <Routes>
-      <Route path="/" element={<LoginForm />} />
-      <Route path="/signup" element={<SignUpForm />} />
-      <Route path="/forget-password" element={<ForgetPasswordModal />} />
-      <Route path="/user-dashboard" element={<UserDashboard />} />
-      <Route path="/admin-dashboard" element={<AdminDashboard />} />
-      <Route path="/under-dev" element={<UnderDevPage />} />
-    </Routes>
+    <AuthProvider> {/* ✅ Move AuthProvider OUTSIDE BrowserRouter */}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home/>} />
+          <Route path="/signin" element={<LoginForm />} />
+          <Route path="/signup" element={<SignUpForm />} />
+          <Route path="/forget-password" element={<ForgetPasswordModal />} />
+          <Route path="/user-dashboard" element={<AuthenticatedRoute><UserDashboard /></AuthenticatedRoute>} />
+          <Route path="/admin-dashboard" element={<AuthenticatedRoute><AdminDashboard /></AuthenticatedRoute>} />
+          <Route path="/under-dev" element={<AuthenticatedRoute><UnderDevPage /></AuthenticatedRoute>} />
+          <Route path="/leftsection" element={<AuthenticatedRoute><LeftSideDashboard /></AuthenticatedRoute>} />
+          <Route path="*" element={<ErrorComponent />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 };
 

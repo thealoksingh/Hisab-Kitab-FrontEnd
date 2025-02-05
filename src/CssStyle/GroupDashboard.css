@@ -1,6 +1,6 @@
 /* Hide vertical scrollbar but keep scrolling functionality */
 .scrollable {
-  overflow-y: scroll; /* Enables vertical scrolling */
+  overflow-y: none; /* Enables vertical scrolling */
   scrollbar-width: none; /* Hides scrollbar in Firefox */
 }
 

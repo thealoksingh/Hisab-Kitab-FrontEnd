@@ -7,16 +7,19 @@ import { unFriendApi } from "../Api/HisabKitabApi";
 
 const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
   const [isChecked, setIsChecked] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
+ 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
 
   const handleUnfriend = async (e) => {
     e.preventDefault(); // Prevent form submission
+    setIsLoading(true);
 
     if (!isChecked) {
       alert("Please confirm by checking the box.");
+      setIsLoading(false)
       return;
     }
 
@@ -26,7 +29,8 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
       toggleModal();
     } catch (error) {
       console.error("Error while unfriending", error);
-    }
+    }finally{ setIsLoading(false)
+  }
   };
 
   return (
@@ -34,12 +38,12 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
       id="UpdateFriendTransaction-modal"
       tabIndex="-1"
       aria-hidden={!isOpen}
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-70 ${isOpen ? "" : "hidden"}`}
+      className={`fixed inset-0 z-50  flex items-center justify-center bg-gray-500 bg-opacity-70 ${isOpen ? "" : "hidden"}`}
     >
-      <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
-        <div className="form1 relative w-1/3 rounded-sm shadow dark:bg-gray-300 shadow-inner-custom">
-          <div className="flex items-center justify-between p-2 md:p-2 rounded-sm bg-rose-500 dark:border-gray-700">
-            <h4 className="text-lg font-semibold text-gray-900 dark:text-white">UnFriend Alert</h4>
+      <div className="main-form relative  w-full max-w-5xl flex gap-4 justify-center text-center">
+        <div className="form1 relative w-[70%] md:w-[75%] sm:w-1/2 h-1/3 sm:h-1/3  rounded-sm shadow bg-gray-200 dark:bg-gray-300 shadow-inner-custom">
+          <div className="flex border-black-400 items-center justify-between p-1 md:p-2 rounded-sm bg-rose-500 dark:border-gray-700">
+            <h4 className="text-lg font-xs sm:font-medium  text-gray-900 dark:text-white">UnFriend Alert</h4>
             <button
               type="button"
               className="text-gray-400 bg-transparent hover:bg-rose-700 hover:text-rose-900 rounded-lg text-sm w-6 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-rose-600 dark:hover:text-white"
@@ -60,7 +64,7 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
                   d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
                 />
               </svg>
-              <span className="sr-only">Close modal</span>
+              <span className="sr-only black ">Close modal</span>
             </button>
           </div>
           <form className="p-4 md:p-5">
@@ -73,11 +77,11 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
               />
             </div>
 
-            <div className="mb-4">
-              <div className="flex gap-3 mt-1 p-2 rounded border border-gray-300">
+            <div className="mb-2  font-semibold justify-center align-center sm:mb-4">
+              <div className="flex gap-3 mt-1 p-2   sm:border-none border-none">
                 <label
                   htmlFor="description"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                  className="block mb-2 font-Poppins text-sm font-medium text-gray-900 dark:text-black"
                 >
                   Are you sure ?
                 </label>
@@ -93,20 +97,26 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
                   }} // Prevents the event from bubbling
                 />
                 <label
-                  className="ml-1 text-sm font-medium text-gray-900 dark:text-black"
+                  className="ml-5   font-Poppins   text-md font-medium items-center text-white-900 dark:text-black"
                 >
                   Yes
                 </label>
               </div>
             </div>
 
-            <div className="mb-2 flex gap-4">
+            <div className="mb-2 flex font-Poppins sm:text-sm text-xs  gap-4"> 
               <button
                 onClick={(e) => handleUnfriend(e)}
                 type="button"
-                className="w-1/3 text-sm text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-4 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                className="  text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-rose-300  rounded-sm px-4 py-2 sm:px-4 sm:py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
               >
-                UnFriend
+                {isLoading ? (<div className="flex items-center">
+                    <div className="w-5 h-5 border-3  border-t-4 border-white rounded-full animate-spin"></div>
+                    <div className="font-semibold ml-2">Processing..</div>
+                    </div>
+                  ) : (
+                    "Unfriend"
+                  )}
               </button>
               <button
                 onClick={(e) => {
@@ -114,7 +124,7 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
                   toggleModal();
                 }}
                 type="button"
-                className="w-1/3 text-sm text-white bg-cyan-500 hover:bg-cyan-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-4 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                className="  text-white bg-cyan-500 hover:bg-cyan-600 focus:outline-none focus:ring-4 focus:ring-cyan-300    rounded-sm px-4 py-2 sm:px-4 sm:py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
               >
                 Cancel
               </button>

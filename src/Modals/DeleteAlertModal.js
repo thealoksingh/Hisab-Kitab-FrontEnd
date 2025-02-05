@@ -12,6 +12,7 @@ const DeleteAlertModal = ({
   setRefreshFriendTransaction,
 }) => {
   const [isChecked, setIsChecked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCheckboxChange = (e) => {
     setIsChecked(e.target.checked);
@@ -19,8 +20,11 @@ const DeleteAlertModal = ({
 
   const handleDeleteTransaction = async (e) => {
     e.preventDefault(); // Prevent form submission
+    setIsLoading(true);
+
     if (!isChecked) {
       alert("Please confirm deletion by checking the checkbox.");
+      setIsLoading(false)
       return;
     }
     console.log("transId = " + transId);
@@ -33,7 +37,7 @@ const DeleteAlertModal = ({
       toggleCommentSection();
     } catch (error) {
       console.error("Error deleting transaction:", error);
-    }
+    }finally{setIsLoading(false)}
   };
 
   if (!isOpen) return null;
@@ -47,9 +51,9 @@ const DeleteAlertModal = ({
         isOpen ? "" : "hidden"
       }`}
     >
-      <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
-        <div className="form1 relative w-1/3 bg-white rounded-sm shadow dark:bg-gray-300 shadow-inner-custom">
-          <div className="flex items-center justify-between p-2 md:p-4 rounded-sm bg-rose-500 dark:border-gray-700">
+      <div className="main-form relative p-10 w-full max-w-5xl flex gap-4 justify-center">
+        <div className="form1 relative w-[90%] sm:w-[70%]  md:w-[70%]   bg-white rounded-sm shadow dark:bg-gray-300 shadow-inner-custom">
+          <div className="flex items-center justify-between p-4 md:p-4  rounded-sm bg-rose-500 dark:border-gray-700">
             <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
               Delete Alert
             </h4>
@@ -79,10 +83,10 @@ const DeleteAlertModal = ({
           <form className="p-4 md:p-5">
             <div className="mb-4">
               {/* Checkbox */}
-              <div className="flex gap-3 mt-1 p-2 rounded border border-gray-300">
+              <div className="flex items-center gap-3 mt-1 p-2 ">
                 <label
                   htmlFor="description"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                  className="block mb-2 text-nowrap text-md font-medium text-gray-900 dark:text-black"
                 >
                   Are You Sure:
                 </label>
@@ -96,25 +100,31 @@ const DeleteAlertModal = ({
                 />
                 <label
                   htmlFor="delete-confirmation"
-                  className="ml-1 text-sm font-medium text-gray-900 dark:text-black"
+                  className=" align-middle text-center pb-1  text-md font-medium text-gray-900 dark:text-black"
                 >
                   Yes
                 </label>
               </div>
             </div>
 
-            <div className="mb-2 flex gap-4">
+            <div className="mb-2 flex  gap-4">
               <button
                 onClick={(e) => handleDeleteTransaction(e)}
                 type="button"
-                className="w-1/3 text-sm text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-4 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                className="w-1/2 text-sm text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm px-4 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
               >
-                Delete
+                 {isLoading ? (<div className="flex gap-2 items-center">
+                    <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
+                    <div className="font-semibold ml-1">Deleting..</div>
+                    </div>
+                  ) : (
+                    "Delete"
+                  )} 
               </button>
               <button
                 onClick={toggleModal}
                 type="button"
-                className="w-1/3 text-sm text-white bg-cyan-500 hover:bg-cyan-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-4 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                className="w-1/2 text-sm text-white bg-cyan-500 hover:bg-cyan-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-4 py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
               >
                 Cancel
               </button>

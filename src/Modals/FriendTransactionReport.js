@@ -71,8 +71,8 @@ const FriendTransactionReport= ({isOpen, toggleModal,selectedFriend, user}) => {
       aria-hidden={!isOpen}
       className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 ${isOpen ? "" : "hidden"}`}
     >
-      <div className="main-form relative p-4 w-1/2 max-w-5xl flex gap-4 justify-center">
-        <div className="form-signup shadow-inner-custom relative bg-white w-1/2 rounded-sm border border-gray-400 shadow dark:bg-gray-300">
+      <div className="main-form relative   w-full       max-w-5xl flex gap-4 justify-center">
+        <div className="form-signup   shadow-inner-custom relative bg-white w-[80%]  sm:w-[60%]  rounded-sm border border-gray-400 shadow dark:bg-gray-300">
           <div className="flex items-center justify-between p-2 md:p-2 rounded-sm bg-cyan-600">
             <h4 className="text-lg font-semibold text-gray-200">Transaction Report</h4>
             <button
@@ -128,22 +128,29 @@ const FriendTransactionReport= ({isOpen, toggleModal,selectedFriend, user}) => {
                 id="end_date"
                 name="endDate"
                 type="date"
+                
                 value={toDate}
             onChange={(e) => setToDate(e.target.value)}
                 required
                 
-                className="w-full  input-field-shadow  border text-sm border-gray-400 text-gray-600 rounded-sm p-1"
+                className="w-full   input-field-shadow  border text-sm font-Poppins border-gray-400 text-gray-600 rounded-sm p-1"
                 placeholder="Enter End date"
 
               />
             </div>      
      
-            <div className="mb-2 mt-2">
+            <div className="mb-2 mt-3">
               <button
                 type="submit"
-                className=" bg-cyan-600 rounded-sm font-semibold text-white px-4 py-1 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                className=" bg-cyan-600 rounded-sm font-Poppins font-semibold text-xs sm:text-md text-white px-6 py-2 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
               disabled={loading}>
-                  {loading ? "Downloading..." : "Download Report"}
+                  {loading ? (<div className="flex items-center gap-2">
+                    <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
+                    <div className="font-semibold font-Poppins ml-1">Downloading..</div>
+                    </div>
+                  ) : (
+                    "Download"
+                  )} 
               </button>
               
             </div>
