@@ -40,10 +40,10 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
       aria-hidden={!isOpen}
       className={`fixed inset-0 z-50  flex items-center justify-center bg-gray-500 bg-opacity-70 ${isOpen ? "" : "hidden"}`}
     >
-      <div className="main-form relative  w-full max-w-5xl flex gap-4 justify-center text-center">
-        <div className="form1 relative w-[70%] md:w-[75%] sm:w-1/2 h-1/3 sm:h-1/3  rounded-sm shadow bg-gray-200 dark:bg-gray-300 shadow-inner-custom">
-          <div className="flex border-black-400 items-center justify-between p-1 md:p-2 rounded-sm bg-rose-500 dark:border-gray-700">
-            <h4 className="text-lg font-xs sm:font-medium  text-gray-900 dark:text-white">UnFriend Alert</h4>
+   <div className="main-form relative p-4 w-full sm:w-1/2 md:w-1/2 max-w-5xl flex gap-4 justify-center transform transition-transform duration-500">
+        <div className="form-give-got border border-gray-400 shadow-inner-custom relative bg-white w-full h-1/2 rounded-sm shadow dark:bg-gray-300">
+             <div className="flex border-black-400 items-center justify-between p-1 md:p-2 rounded-sm bg-rose-500 dark:border-gray-700">
+            <h4 className="text-lg font-xs sm:font-medium  text-gray-900 dark:text-white">Alert !!!</h4>
             <button
               type="button"
               className="text-gray-400 bg-transparent hover:bg-rose-700 hover:text-rose-900 rounded-lg text-sm w-6 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-rose-600 dark:hover:text-white"
@@ -104,31 +104,33 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
               </div>
             </div>
 
-            <div className="mb-2 flex font-Poppins sm:text-sm text-xs  gap-4"> 
-              <button
-                onClick={(e) => handleUnfriend(e)}
-                type="button"
-                className="  text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-rose-300  rounded-sm px-4 py-2 sm:px-4 sm:py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-              >
-                {isLoading ? (<div className="flex items-center">
-                    <div className="w-5 h-5 border-3  border-t-4 border-white rounded-full animate-spin"></div>
-                    <div className="font-semibold ml-2">Processing..</div>
-                    </div>
-                  ) : (
-                    "Unfriend"
-                  )}
-              </button>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation(); // Ensure only the Cancel button triggers the modal
-                  toggleModal();
-                }}
-                type="button"
-                className="  text-white bg-cyan-500 hover:bg-cyan-600 focus:outline-none focus:ring-4 focus:ring-cyan-300    rounded-sm px-4 py-2 sm:px-4 sm:py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-              >
-                Cancel
-              </button>
-            </div>
+            <div className="mb-2 flex flex-wrap justify-center sm:justify-start font-Poppins sm:text-sm text-xs gap-2 sm:gap-4">
+  <button
+    onClick={(e) => handleUnfriend(e)}
+    type="button"
+    className="text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-rose-300 rounded-sm px-3 py-2 sm:px-4 sm:py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+  >
+    {isLoading ? (
+      <div className="flex items-center">
+        <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
+        <div className="font-semibold ml-2">Processing..</div>
+      </div>
+    ) : (
+      "Unfriend"
+    )}
+  </button>
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      toggleModal();
+    }}
+    type="button"
+    className="text-white bg-cyan-500 hover:bg-cyan-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 rounded-sm px-3 py-2 sm:px-4 sm:py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+  >
+    Cancel
+  </button>
+</div>
+
           </form>
         </div>
       </div>

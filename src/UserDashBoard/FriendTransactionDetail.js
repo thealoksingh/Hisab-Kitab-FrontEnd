@@ -157,7 +157,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
         }}
         className="right-header  gap-[8px]  sm:gap-[8px] md:gap-[7px]  p-1   lg:p-2  md:p-4   absolute top-0  border border-gray-400 shadow-inner-custom justify-between h-20 sm:h-24 md:h-24 bg-gray-300  w-full flex items-center "
       >
-        <div className=" flex gap-1 sm:gap-2 md:gap-0">
+        <div className=" flex gap-3 sm:gap-2 md:gap-2">
           <ProfileCircle
             className="h-10 w-10 sm:h-12 sm:w-12 md:h-13 md:w-13  text-white text-lg"
             name={selectedFriend.fullName}
@@ -234,15 +234,16 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
            alt="Settings"
            className="w-4 h-10 sm:h-6 sm:w-6 object-contain filter invert brightness-0"
           />
+         
+          </div>
           <UnfriendModal
           isOpen={isUnfriendModalOpen}
            toggleModal={toggleUnfriendModal}
            userId={user.userId}
            friendId={selectedFriend.userId}
             />
-          </div>
          </div>
-  </div>
+       </div>
 
      {/* middle section */}
      

@@ -59,7 +59,7 @@ const GiveGotModal = ({
       }`}
     >
       <div className="main-form relative p-4 w-full sm:w-1/2 md:w-1/2 max-w-5xl flex gap-4 justify-center transform transition-transform duration-500">
-        <div className="form-add-frnd border border-gray-400 shadow-inner-custom relative bg-white w-full h-1/2 rounded-sm shadow dark:bg-gray-300">
+        <div className="form-give-got border border-gray-400 shadow-inner-custom relative bg-white w-full h-1/2 rounded-sm shadow dark:bg-gray-300">
           <div
             className={`flex items-center justify-between p-2 md:p-2 rounded-sm ${
               transactionType === "give" ? "bg-rose-600" : "bg-emerald-600"
