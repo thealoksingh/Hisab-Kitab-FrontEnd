@@ -361,7 +361,7 @@ function LeftSideDashBoard({
                         <li key={criteria} className="my-1">
                           <button
                             onClick={() => applyFilter(criteria)}
-                            className="block w-full px-2 py-2 sm:px-5 sm:py-2 md:px-5 md:py-2 
+                            className="block w-full px-2 py-2 lg:px-5 lg:py-2 md:px-11 md:py-2 
                          text-left text-xs sm:text-sm md:text-sm font-Poppins font-semibold 
                          bg-transparent text-gray-700 dark:text-gray-200 
                          rounded-md transition-all duration-300 
@@ -388,7 +388,7 @@ function LeftSideDashBoard({
               >
                 {sortCriteria}
                 <svg
-                  className="w-4.5 h-4.5 ms-1 sm:w-2.5 sm:h-2.5 sm:ms-3"
+                  className="sm:w-3 sm:h-3 md:w-4 md:h-4 w-6 h-6"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
