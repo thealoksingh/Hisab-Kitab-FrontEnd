@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate ,Link} from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { getFriendList } from "../Api/HisabKitabApi";
 import LeftSideDashBoard from "./LeftSideDashboard";
 import RightSideDashBoard from "./RightSideDashboard";
@@ -8,6 +8,8 @@ import HelpAndSupport from "../Modals/HelpAndSupport";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../CssStyle/LoaderStyle.css";
 import { useAuth } from "../security/AuthContext";
+import hisabKitabBlack from "../assets/images/hisabkitab-black.png";
+
 import {
   faCalculator,
   faGear,
@@ -37,7 +39,7 @@ const UserDashboard = () => {
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
   const [loader, setLoader] = useState(true);
 
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -48,12 +50,10 @@ const UserDashboard = () => {
         const response = await getFriendList(user.userId);
         setFriends(response.data.friendList);
         setFriendRequestCount(response.data.friendRequestCount);
-        
       } catch (err) {
         setError(err.message);
-      }finally {
+      } finally {
         setLoader(false);
-
       }
     };
 
@@ -120,18 +120,27 @@ const UserDashboard = () => {
         <div className="h-full px-3 py-4 overflow-y-auto">
           <ul className="space-y-2 font-medium">
             <li>
-              <a href="/user-dashboard" className="flex items-center p-2 lg:text-gray-300 text-black   lg:hover:bg-gray-700 group">
+              <a
+                href="/user-dashboard"
+                className="flex items-center p-2 lg:text-gray-300 text-black   lg:hover:bg-gray-700 group"
+              >
                 <img
                   src={logo || "/placeholder.svg"}
                   alt="Hisab Kitab Logo"
                   className="w-6 h-6 "
                 />
-                <span className="ms-3">Hisab Kitab </span>
+                <span className="ms-3">
+                  {" "}
+                  <img
+                    src={hisabKitabBlack}
+                    alt="logo"
+                    className="h-8 max-w-md sm:max-w-lg md:max-w-xl filter lg:invert lg:brightness-200"
+                  />{" "}
+                </span>
               </a>
             </li>
             <li>
-              <a 
-              className="flex items-center  p-2 lg:text-gray-300 lg:bg-transparent bg-teal-100 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
+              <a className="flex items-center  p-2 lg:text-gray-300 lg:bg-transparent bg-teal-100 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
                 <FontAwesomeIcon
                   icon={faUser}
                   className="lg:text-gray-300 text-gray-600"
@@ -145,8 +154,8 @@ const UserDashboard = () => {
             <li>
               <a
                 href="/user-dashboard"
-                className="flex items-center p-2  lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
-               
+                className="flex items-center p-2  lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
+              >
                 <FontAwesomeIcon
                   icon={faPeoplePulling}
                   className="lg:text-gray-300 text-gray-600"
@@ -161,8 +170,8 @@ const UserDashboard = () => {
             <li>
               <a
                 href="/under-dev"
-                className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
-             
+                className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
+              >
                 <FontAwesomeIcon
                   icon={faPeopleGroup}
                   className="lg:text-gray-300 text-gray-600"
@@ -174,11 +183,11 @@ const UserDashboard = () => {
             <li>
               <a
                 href="/under-dev"
-                className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
-             
+                className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
+              >
                 <FontAwesomeIcon
                   icon={faBook}
-                   className="lg:text-gray-300 text-gray-600"
+                  className="lg:text-gray-300 text-gray-600"
                   style={{ fontSize: "25px" }}
                 />
                 <span className="flex-1 ms-3 whitespace-nowrap">
@@ -189,8 +198,8 @@ const UserDashboard = () => {
             <li className="group">
               <a
                 href="/under-dev"
-                className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
-             
+                className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
+              >
                 <FontAwesomeIcon
                   icon={faGear}
                   className="lg:text-gray-300 text-gray-600 group-hover:animate-spin"
@@ -201,8 +210,7 @@ const UserDashboard = () => {
             </li>
 
             <li onClick={toggleHelpAndSupport}>
-              <a 
-              className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
+              <a className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
                 <FontAwesomeIcon
                   icon={faClipboardQuestion}
                   className="lg:text-gray-300 text-gray-600"
@@ -213,14 +221,17 @@ const UserDashboard = () => {
                 </span>
               </a>
             </li>
-            <li>
-              <a
-                href="/"
-                onClick={() => {
-                  // Handle sign out logic here
-                }}
-                className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
-                
+            <li
+              onClick={() => {
+                // Clear user state (example assumes user is managed in state or context)
+                try {
+                  logout();
+                } catch (error) {
+                  navigate("/");
+                }
+              }}
+            >
+              <a className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
                 <FontAwesomeIcon
                   icon={faArrowRightFromBracket}
                   className="lg:text-gray-300 text-gray-600"
@@ -252,7 +263,17 @@ const UserDashboard = () => {
             >
               <FontAwesomeIcon icon={faBars} className="h-6 w-6" />
             </button>
-            <a href="user-dashboard" to={"user-dashboard"} className="text-lg font-semibold text-gray-900">Hisab Kitab</a>
+            <a
+              href="user-dashboard"
+              to={"user-dashboard"}
+              className="text-lg font-semibold text-gray-900"
+            >
+              <img
+                    src={hisabKitabBlack}
+                    alt="logo"
+                    className="h-8  "
+                  />
+            </a>
             <div className="w-6"></div> {/* Placeholder for layout balance */}
           </div>
         </header>

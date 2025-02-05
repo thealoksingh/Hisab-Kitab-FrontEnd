@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { sendOtpEmail, signUpUser } from "../Api/HisabKitabApi";
 import "../CssStyle/GroupDashboard.css";
+import forget from "../assets/forget1.jpg";
+
 const SignUpForm = () => {
   const [isOpen, setIsOpen] = useState(true); // State to control modal visibility
   const [otpSent, setOtpSent] = useState(false); // State to handle OTP sent status
@@ -99,9 +101,13 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
         setOtp(response.data); // Update state with OTP
         // console.log("OTP sent successfully:", response.data); // Log the OTP directly
         setOtpSent(true);
+        setError(null);
+        setSuccessMessage("Otp sent successfully");
       } catch (error) {
+        setError( error.response?.data ||"An error occurred");
         console.error("Error sending OTP:", error);
         setOtpSent(false);
+        setIsButtonDisabled(false); // Display
       }
     } else {
       alert("Please enter a valid email");
@@ -130,13 +136,14 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
       id="signUp-modal"
       tabIndex="-1"
       aria-hidden={!isOpen}
-      className={`fixed inset-0 z-50 flex items-center justify-center w-full h-screen bg-black bg-opacity-0 ${
+      style={{ backgroundImage: `url(${forget})` }}
+      className={`fixed inset-0 z-50 flex items-center bg-cover bg-center justify-center w-full h-screen bg-black bg-opacity-0 ${
         isOpen ? "" : "hidden"
       }`}
     >
 
 {showDisclaimer && (
-          <div className="absolute m-1 border-red-200 flex z-50 top-1 border border-lg border-rose-50 sm:top-16 lg:right-4   text-gray-700 px-4 py-3 rounded-sm shadow-lg  items-start w-full sm:w-2/3 lg:w-1/3">
+          <div className="absolute m-1 bg-rose-100 flex z-50 top-1 border border-lg border-rose-300 sm:top-16 lg:right-4   text-gray-700 px-4 py-3 rounded-sm shadow-lg  items-start w-full sm:w-2/3 lg:w-1/3">
            <div>
             <p className="text-gray-700 text-xs mb-2">
             Dear user, we are sorry 🥹! This service is using a free server,
@@ -260,7 +267,8 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
               </div>
               {isButtonDisabled && (
                 <h5 className="text-green-500 font-sm">
-                  {`OTP sent successfully. `}
+                    {successMessage && "OTP sent successfully. "}
+                  
                   <span className="text-rose-600 font-sm">
                     {" "}
                     {isButtonDisabled && ` Resend in ${timer} sec`}
@@ -337,7 +345,7 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
                   {successMessage}
                 </p>
               )}
-
+               {message &&  <p className="mt-1 py-1 mb-2 text-center text-sm text-green-500">{message}</p>}
               <div className="mb-2 flex gap-4">
                 <button
                   type="submit"

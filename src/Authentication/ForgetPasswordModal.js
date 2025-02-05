@@ -9,7 +9,7 @@ const ForgetPasswordForm = () => {
   const [otpEntered, setOtpEntered] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
-  const [message, setMessage] = useState(null); // For success or incorrect OTP message
+  const [successMessage, setSuccessMessage] = useState(null); // For success or incorrect OTP message
   const [newPassword, setNewPassword] = useState(""); // For new password
   const [confirmPassword, setConfirmPassword] = useState(""); // For confirm password
   const [showPasswordFields, setShowPasswordFields] = useState(false); // Hide/Show password fields
@@ -17,7 +17,7 @@ const ForgetPasswordForm = () => {
   const [timer, setTimer] = useState(60); // State for timer
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // State for disabling button
   const [isClicked, setClicked] = useState(false); // State to handle error prompt
-  
+  const [errorMessage, setErrorMessage] = useState(null);
   useEffect(() => {
     let interval;
 
@@ -40,7 +40,7 @@ const ForgetPasswordForm = () => {
     handleOtpRequest(e); // Send OTP request
     setIsButtonDisabled(true); // Disable button after OTP is sent
   }else{
-    setMessage("Please enter a valid email.");
+    setErrorMessage("Please enter a valid email.");
   }
 
 };
@@ -48,7 +48,7 @@ const ForgetPasswordForm = () => {
   const handleOtpRequest = async (e) => {
     e.preventDefault();
     if (email.trim() === "") {
-      setMessage("Please enter a valid email.");
+      setErrorMessage("Please enter a valid email.");
       return;
     }
 
@@ -56,11 +56,13 @@ const ForgetPasswordForm = () => {
       const response = await sendOtpEmail(email, "forget-password");
       setOtp(response.data);
       setOtpSent(true);
-      setMessage("OTP sent successfully.");
+      setSuccessMessage("OTP sent successfully.");
+      setErrorMessage(null);
       setIsButtonDisabled(true); // Disable button after OTP is sent
     } catch (error) {
       setOtpSent(false);
-      setMessage("Error sending OTP. Please try again.");
+      setIsButtonDisabled(false); // Disable
+      setErrorMessage( error.response?.data ||"An error occurred");
     }
   };
 
@@ -70,12 +72,12 @@ const ForgetPasswordForm = () => {
 
     if (otpEntered.trim() !== otp.toString().trim()) {
       setOtpVerified(false);
-      setMessage("Incorrect OTP");
+      setErrorMessage("Incorrect OTP");
       return;
     }
 
     setOtpVerified(true);
-    setMessage("OTP Verified Successfully");
+    setSuccessMessage("OTP Verified Successfully");
     setShowPasswordFields(true); // Show password fields after OTP is verified
     
   };
@@ -83,16 +85,16 @@ const ForgetPasswordForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      setMessage("Passwords do not match.");
+      setErrorMessage("Passwords do not match.");
       return;
     }
 
     try {
       const response = await forgetPassword(email, newPassword);
-      setMessage("Password updated successfully.");
+      setSuccessMessage("Password updated successfully.");
       navigate("/signin"); // Redirect to login after password reset
     } catch (error) {
-      setMessage("Error updating password. Please try again.");
+      setErrorMessage("Error updating password. Please try again.");
     }
   };
 
@@ -166,7 +168,7 @@ const ForgetPasswordForm = () => {
               </div>
             </div>
             {isButtonDisabled && <h5 className="text-green-500 font-sm">
-              {`OTP sent successfully. `}<span className="text-rose-600 font-sm"> {isButtonDisabled && ` Resend in ${timer} sec`}</span>
+            { successMessage && "OTP sent successfully."}<span className="text-rose-600 font-sm"> {isButtonDisabled && ` Resend in ${timer} sec`}</span>
             </h5>}
            
 
@@ -224,7 +226,7 @@ const ForgetPasswordForm = () => {
                 </div>
               </div>
             )}
-
+         {errorMessage && <p className="text-rose-500 font-semibold">{errorMessage}</p>}
             <div className="mt-5  flex gap-4">
               {otpVerified && (
                 <button

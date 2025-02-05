@@ -1,9 +1,11 @@
 import hisabKitabBlack from "../assets/images/hisabkitab-black.png";
 import { useNavigate } from "react-router-dom";
 import React from "react";
+import { useAuth } from "../security/AuthContext";
 
 export default function Home() {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   return (
     <div className="p-4 min-h-screen w-full bg-black">
@@ -17,25 +19,54 @@ export default function Home() {
           />
         </div>
         <div className="nav-items hidden lg:flex text-white gap-20">
-          <span  onClick={() => navigate("/")} className="">Home</span>
+          <span onClick={() => navigate("/")} className="">
+            Home
+          </span>
           <span className="">About</span>
-          <span  onClick={() => navigate("/user-dashboard")} className="">Friend</span>
+          <span onClick={() => navigate("/user-dashboard")} className="">
+            Friend
+          </span>
         </div>
-        <div className="button-signup">
-          <button
-            onClick={() => navigate("/signup")}
-            className=" text-white font-semibold text-sm px-4 py-2 rounded-sm shadow-md transition-all duration-300 ease-in-out transform hover:scale-105
+        <div className="button-signup flex justify-between gap-3">
+          {!user ? (
+            <button
+              onClick={() => navigate("/signup")}
+              className=" text-white font-semibold text-sm px-4 py-2 rounded-sm shadow-md transition-all duration-300 ease-in-out transform hover:scale-105
                 bg-[#9b1f53] "
-          >
-            Sign Up
-          </button>
+            >
+              Sign Up
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                try {
+                  logout();
+                } catch (error) {
+                  navigate("/");
+                }
+              }}
+              className=" text-white  font-semibold text-sm px-4 py-2 rounded-sm shadow-md transition-all duration-300 ease-in-out transform hover:scale-105
+                bg-[#9b1f53] "
+            >
+              Log out
+            </button>
+          )}
         </div>
       </div>
       <div className="its-line h-1 bg-white mt-4 mb-2"></div>
       <div className="main-content lg:flex">
         <div className="left lg:w-1/2 w-full">
           <div className="title mt-2 font-poppins lg:text-7xl text-5xl text-white font-bold">
-            Manage Your <span className="block">Finances</span> Here !
+            {user && (
+              <span className="text-white">
+                Hi!
+                <span className="text-[#9b1f53] ">
+                  {user.fullName.split(" ")[0]}
+                </span>
+              </span>
+            )}
+            <span className="block">Manage Your </span>
+            <span className="block">Finances</span> Here !
           </div>
 
           <div className="Description mt-4 w-full">
@@ -49,7 +80,9 @@ export default function Home() {
             </p>
           </div>
           <button
-            onClick={() => navigate("/user-dashboard")}
+            onClick={() =>
+              user ? navigate("/user-dashboard") : navigate("/signin")
+            }
             className="px-10 py-2 mt-8 text-white bg-[#9b1f53] font-semibold flex gap-4 items-center  rounded-full 
              hover:bg-[#b02561] hover:scale-105 transition-all duration-300 ease-in-out shadow-lg active:scale-95"
           >
@@ -86,7 +119,7 @@ export default function Home() {
             }}
           ></div>
           <div
-            className="w-[150px] h-[150px] rounded-full animate-spin  animate-bounce"
+            className="w-[150px] h-[150px] rounded-full  animate-bounce"
             style={{
               background: "linear-gradient(to bottom, #9b1f53, black)",
             }}

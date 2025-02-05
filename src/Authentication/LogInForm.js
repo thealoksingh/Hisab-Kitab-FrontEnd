@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 // import { loginApi } from "../Api/HisabKitabApi"; // Assuming you have an API to check user credentials
 import ForgetPasswordModal from "./ForgetPasswordModal";
 import "../CssStyle/GroupDashboard.css";
 import { useAuth } from "../security/AuthContext";
+import forget from "../assets/forget1.jpg";
 
 const LogInForm = () => {
   const navigate = useNavigate();
@@ -14,12 +15,20 @@ const LogInForm = () => {
   const [error, setError] = useState(null);
   const [showDisclaimer, setShowDisclaimer] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const { user } = useAuth();
+
+  // Check if user is already logged in and redirect to user dashboard if true
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null); // Reset error before login attempt
-
+ 
     // Hardcoded admin credentials
     const adminEmail = "alokadmin@gmail.com";
     const adminPassword = "98765";
@@ -55,10 +64,12 @@ const LogInForm = () => {
         id="SignIn-modal"
         tabIndex="-1"
         aria-hidden="false"
-        className="fixed inset-0  flex items-center justify-center p-4 sm:p-8"
+        style={{ backgroundImage: `url(${forget})` }}
+
+        className="fixed inset-0 bg-cover bg-center  flex items-center justify-center p-4 sm:p-8"
       >
         {showDisclaimer && (
-          <div className="absolute flex z-50 top-2  border-lg  sm:top-16  lg:right-4 bg-rose-50 border border-rose-400 text-gray-700 px-4 py-3 rounded-sm shadow-lg  items-start w-full sm:w-2/3 lg:w-1/3">
+          <div className="absolute flex z-50 top-2  border-lg  sm:top-16  lg:right-4 bg-rose-100 border border-rose-400 text-gray-700 px-4 py-3 rounded-sm shadow-lg  items-start w-full sm:w-2/3 lg:w-1/3">
             <div>
               <p className="text-gray-700 text-xs mb-2">
                 Dear user, we are sorry 🥹! This service is using a free server,
