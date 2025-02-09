@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import AddFriendModal from "../Modals/AddFriendModal";
-import moment from "moment";
+import moment from "moment-timezone";
 import "../CssStyle/GroupDashboard.css";
 import FriendRequestModal from "../Modals/FriendRequestModal";
 import { apiClient } from "../Api/ApiClient";
@@ -496,7 +496,7 @@ function LeftSideDashBoard({
                       </span>
                       <span className="text-xs text-gray-800">
                         {friend.lastTransactionDate
-                          ? moment(friend.lastTransactionDate).fromNow()
+                          ? moment(friend.lastTransactionDate).tz("Asia/Kolkata").fromNow()
                           : ""}
                       </span>
                     </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import ProfileCircle from "../utils/ProfileCircle"
 import { deleteComment } from "../Api/HisabKitabApi"
-import moment from "moment"
+import moment from "moment-timezone";
 
 import { faShareFromSquare, faPenToSquare, faList, faTrashCan } from "@fortawesome/free-solid-svg-icons"
 import "../CssStyle/GroupDashboard.css"
@@ -49,8 +49,11 @@ function CommentSection({
 
   useEffect(() => {
     if (isOpen) {
+      console.log("Comment Section Opened")
       setWidth("100%") // Set to 100% for all screen sizes initially
     } else {
+      console.log("Comment Section Closed")
+      // setComments([])// Clear comments when the sidebar is closed
       setWidth("0")
     }
   }, [isOpen])
@@ -76,8 +79,10 @@ function CommentSection({
   useEffect(() => {
     if (commentTransaction == null) return
     const fetchComments = async () => {
-      if (!isOpen) return
-
+      if (!isOpen) {
+        setComments([]); // Clear comments when the sidebar is closed
+        return;
+      }
       try {
         const response = await getAllCommentsByTransactionId(commentTransaction.transId)
         console.log(response.data)
@@ -90,11 +95,13 @@ function CommentSection({
     }
 
     fetchComments()
-  }, [user, isRowClicked, commentTransaction])
+  }, [user, isRowClicked, commentTransaction,isOpen])
 
   if (commentTransaction == null) return
+
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
+    console.log("Comment Cliked")
     if (!commentText.trim()) {
       alert("Comment cannot be empty.");
       return;
@@ -284,7 +291,9 @@ function CommentSection({
                         {/* Comment Text */}
                         <p className="text-sm mb-4  text-gray-600 break-all overflow-hidden">{comment.comments}</p>
                         <p className="text-xs font-semibold absolute bottom-0 right-1">
-                          {moment(comment.commentTime).fromNow()}
+                          
+                          {/* {comment.commentTime} */}
+                          {moment(comment.commentTime).tz("Asia/Kolkata").fromNow()}
                         </p>
                       </div>
                     </div>
