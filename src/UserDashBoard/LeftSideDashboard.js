@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import AddFriendModal from "../Modals/AddFriendModal";
-import moment from "moment";
+import moment from "moment-timezone";
 import "../CssStyle/GroupDashboard.css";
 import FriendRequestModal from "../Modals/FriendRequestModal";
 import { apiClient } from "../Api/ApiClient";
@@ -17,7 +17,7 @@ function LeftSideDashBoard({
   setRefreshFriendTransaction,
   friendRequestCount,
   isOpen,
-  toggleSidebar,
+  toggleLeftSidebar,
 }) {
   const location = useLocation();
   const [isModalOpen, setModalOpen] = useState(false);
@@ -41,6 +41,8 @@ function LeftSideDashBoard({
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState("");
+
+
 
   const toggleFriendRequestModal = () => {
     setIsFriendRequestModalOpen(!isFriendRequestModalOpen);
@@ -139,7 +141,7 @@ function LeftSideDashBoard({
     }
 
     setFilteredFriends(sorted);
-    console.log("Filter friend sorted on the basis of");
+    // console.log("Filter friend sorted on the basis of");
     // Update the filtered items with the sorted array
   };
   // let ListToApplySearch = [...filteredFriends];
@@ -188,7 +190,7 @@ function LeftSideDashBoard({
     setSelectedFriend(friend.userEntity);
     setIsFriendSelected(true);
     if (window.innerWidth < 1024) {
-      toggleSidebar(); // Close the left sidebar on mobile when a friend is selected
+      toggleLeftSidebar(); // Close the left sidebar on mobile when a friend is selected
     }
   };
 
@@ -268,15 +270,9 @@ function LeftSideDashBoard({
           isOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0`}
       >
-        {/* Toggle button for mobile */}
-        {/* <button onClick={toggleSidebar} className="lg:hidden absolute top-2 right-2 bg-gray-200 p-2 rounded-full">
-          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button> */}
-
-        <div className="left-upper sm:font-normal justify-between h-32 right-0  w-full ">
-          <div className="flex px-2 right-0 shadow-inner-custom items-center gap-1 justify-between border border-gray-400 sm:h-10 md:h-10   h-12 bg-gray-300">
+      
+        <div className="left-upper sm:font-normal justify-between h-32   w-full ">
+          <div className="flex px-2  shadow-inner-custom items-center gap-1 justify-between border border-gray-400 sm:h-10 md:h-10   h-12 bg-gray-300">
             <div className="p-2 flex-shrink sm:font-sm  font-semibold">
               You'll Give:
               <span className="text-rose-600 font-sm "> ₹{giveAmount}</span>
@@ -289,19 +285,18 @@ function LeftSideDashBoard({
               </span>
             </div>
 
-            {/* p-0  sm:mt-0  pl-5  sm:pl-0  md:pl-5 */}
-
-            <div className="w-[32%] h-[100%] sm:h-[100%]   mt-3  sm:p-1 group md:mt-0 pl-5  "> 
+        
+           
               {/* View Report Button */}
               <button
                 onClick={handleDownload}
-                className="bg-tranparent  sm:bg-rose-600  text-white py-1 px-7 flex items-center justify-between hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm shadow-none  sm:shadow-md  transition-all duration-300 ease-in-out transform hover:scale-105"
+                className="bg-tranparent  sm:bg-rose-600  text-white py-1 px-7 flex items-center justify-between lg:hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm shadow-none  sm:shadow-md  transition-all duration-300 ease-in-out transform hover:scale-105"
                 disabled={loading}
               >
                 {/* Icon (Always Visible) */}
 
                 {loading ? (
-                  <div className="w-5 h-5 text-gra mr-2 border-4 border-t-4 border-white rounded-sm animate-spin"></div>
+                  <div className="w-5 h-5 text-gra mr-2 border-4 border-t-4 lg:border-white border-black rounded-sm animate-spin"></div>
                 ) : (
                   <FontAwesomeIcon
                     icon={faDownload}
@@ -309,9 +304,9 @@ function LeftSideDashBoard({
                   />
                 )}
                 {/* Text (Visible only on lg screens and above) */}
-                <span className="hidden lg:inline-block md:inline-block lg:ml-0 md:ml-6 ">View Report</span>
+                <span className="hidden lg:inline-block md:inline-block lg:ml-0 md:ml-6 text-sm">Summary</span>
               </button>
-            </div>
+          
           </div>
           <div className="text-sm  py-1 sm:py-3 md:py-3      bg-gray-300  flex h-32 relative gap-2 ">
             {/* searchfrined */}
@@ -354,18 +349,14 @@ function LeftSideDashBoard({
                 </svg>
               </button>
               {isFilterOpen && (
-                <div className="z-50 p-2 sm:p-5 md:p-5 bg-gray-100 mt-1 absolute dark:bg-gray-700 shadow-lg rounded-sm">
-                  <ul className="mt-2 text-gray-700 font-Poppins font-semibold dark:text-gray-200">
-                    {["All", "You Will Get", "You Will Give", "Settled"].map(
+                 <div className="z-50 mt-1 p-1   bg-slate-100 lg:bg-gray-600 absolute  divide-gray-100 rounded-sm shadow w-[30%]">
+                 <ul className="py-2   font-Poppins font-semibold ">
+                  {["All", "You Will Get", "You Will Give", "Settled"].map(
                       (criteria) => (
-                        <li key={criteria} className="my-1">
+                        <li key={criteria} className="my-1 ">
                           <button
                             onClick={() => applyFilter(criteria)}
-                            className="block w-full px-2 py-2 lg:px-5 lg:py-2 md:px-11 md:py-2 
-                         text-left text-xs sm:text-sm md:text-sm font-Poppins font-semibold 
-                         bg-transparent text-gray-700 dark:text-gray-200 
-                         rounded-md transition-all duration-300 
-                         hover:bg-gray-200 hover:shadow-md dark:hover:bg-gray-600 dark:hover:text-white"
+                            className="block w-full px-2 py-2 text-xs  text-left lg:text-white text-gray-700 border border-gray-300 lg:border-gray-600  hover:bg-gray-700"
                           >
                             {criteria}
                           </button>
@@ -405,12 +396,12 @@ function LeftSideDashBoard({
               </button>
 
               {isSortOpen && (
-                <div className="z-50 mt-1 p-1 sm:p-6 bg-slate-100 sm:bg-slate-100 absolute text-gray-700 divide-gray-100 rounded-sm shadow w-[90%]">
-                  <ul className="py-2 text-sm text-gray-600 font-Poppins font-semibold dark:text-gray-200">
+                <div className="z-50 mt-1 p-1  bg-slate-100 lg:bg-gray-600 absolute text-gray-700 divide-gray-100 rounded-sm shadow w-[30%]">
+                  <ul className="py-2 text-sm text-gray-600 lg:text-white  font-Poppins font-semibold dark:text-gray-200">
                     <li>
                       <p
                         onClick={() => handleSort("Most Recent")}
-                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-700  border border-gray-300 lg:border-gray-600 mb-1  cursor-pointer"
                       >
                         Most Recent
                       </p>
@@ -418,32 +409,32 @@ function LeftSideDashBoard({
                     <li>
                       <p
                         onClick={() => handleSort("Oldest")}
-                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
-                      >
+                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-700  border border-gray-300 lg:border-gray-600 mb-1  cursor-pointer"
+                        >
                         Oldest
                       </p>
                     </li>
                     <li>
                       <p
                         onClick={() => handleSort("Highest Amount")}
-                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
-                      >
+                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-700  border border-gray-300 lg:border-gray-600 mb-1  cursor-pointer"
+                     >
                         Highest Amount
                       </p>
                     </li>
                     <li>
                       <p
                         onClick={() => handleSort("Lowest Amount")}
-                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
-                      >
+                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-700  border border-gray-300 lg:border-gray-600 mb-1  cursor-pointer"
+                        >
                         Lowest Amount
                       </p>
                     </li>
                     <li>
                       <p
                         onClick={() => handleSort("By Name")}
-                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
-                      >
+                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-700  border border-gray-300 lg:border-gray-600 mb-1  cursor-pointer"
+                        >
                         By Name
                       </p>
                     </li>
@@ -456,7 +447,7 @@ function LeftSideDashBoard({
 
         {/* centerbox */}
 
-        <div className="h-[70%] lg:h-[76%] md:h-[74.2%]   border border-gray-400 shadow-inner-custom w-full bg-gray-400 relative overflow-y-auto scrollbar-none ">
+        <div className="h-[68%] lg:h-[70%] mb-1 md:h-[68%]   border border-gray-400 shadow-inner-custom w-full bg-gray-400 relative overflow-y-auto scrollbar-none ">
           <table className="w-full p-2  pt-0  border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-white">
             <thead className="sticky  border  shadow-inner-custom  top-0 bg-gray-50 dark:bg-gray-100 text-xs text-gray-400 uppercase dark:text-gray-800">
               <tr>
@@ -496,7 +487,7 @@ function LeftSideDashBoard({
                       </span>
                       <span className="text-xs text-gray-800">
                         {friend.lastTransactionDate
-                          ? moment(friend.lastTransactionDate).fromNow()
+                          ? moment(friend.lastTransactionDate).tz("Asia/Kolkata").fromNow()
                           : ""}
                       </span>
                     </div>
@@ -529,7 +520,7 @@ function LeftSideDashBoard({
 
         {/* leftlower */}
 
-        <div className="left-side-lower font-Poppins   text-xs sm:text-sm md:text-sm gap-1 justify-evenly border-none whitespace-nowrap  border-gray-400 w-full lg:gap-4  bg-gray-300 p-2 bottom-20 lg:bottom-4  md:bottom-20  absolute h-[50px] flex items-center ">
+        <div className="left-side-lower font-Poppins   text-xs sm:text-sm md:text-sm gap-1 justify-evenly border-none whitespace-nowrap  border-gray-400 w-full lg:gap-4  bg-gray-300 p-2  h-[50px] flex items-center ">
           {/* Add Friend Button */}
           <button
             onClick={handleAddFriendClick}
@@ -563,14 +554,15 @@ function LeftSideDashBoard({
             View Friend Request
           </button>
 
-          <FriendRequestModal
+          
+        </div>
+        <FriendRequestModal
             refreshFriendTransaction={refreshFriendTransaction}
             setRefreshFriendTransaction={setRefreshFriendTransaction}
             user={user}
             isOpen={isFriendRequestModalOpen}
             toggleModal={toggleFriendRequestModal}
           />
-        </div>
       </div>
     </>
   );

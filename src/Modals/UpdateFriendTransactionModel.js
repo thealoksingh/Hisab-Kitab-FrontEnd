@@ -18,7 +18,14 @@ const UpdateFriendTransactionModel = ({
   const [fromUserId, setFromUserId] = useState(0);
   const [toUserId, setToUserId] = useState(0);
  const [isLoading, setIsLoading] = useState(false);
- 
+  
+
+   const maxChars = 50;
+   const [countText, setCountText] = useState(commentTransaction.description);
+
+   const handleChange = (e) => {
+    setCountText(e.target.value);
+  };
 
   useEffect(() => {
     if (commentTransaction) {
@@ -29,7 +36,7 @@ const UpdateFriendTransactionModel = ({
       setDate(commentTransaction.transDate || "");
       const initialTransactionType =
         commentTransaction.fromUserId === commentTransaction.createdBy ? "give" : "got";
-        console.log("initialTransactionType = ", initialTransactionType);
+        // console.log("initialTransactionType = ", initialTransactionType);
       setTransactionType(initialTransactionType);
       setFromUserId(
         commentTransaction.fromUserId 
@@ -42,7 +49,7 @@ const UpdateFriendTransactionModel = ({
 
   const handleTransactionTypeChange = (type) => {
      setTransactionType(type);
-     console.log("from = "+fromUserId+" to = "+ toUserId);
+    //  console.log("from = "+fromUserId+" to = "+ toUserId);
     // Swap user IDs based on the selected transaction type
     if (type === "give" && type === transactionType) {
       setFromUserId(commentTransaction.fromUserId);
@@ -52,16 +59,17 @@ const UpdateFriendTransactionModel = ({
       setToUserId(commentTransaction.fromUserId);
     }
 
-    console.log("cliked trans type = ", type);
-    console.log("transtype after click = ", transactionType);
-    console.log("from = "+fromUserId+" to = "+ toUserId);
   };
 
   const handleSubmit = async (e) => {
+    if (countText.length > maxChars) {
+      alert(`Description exceeds ${maxChars} characters!`);
+      return;
+    }
     e.preventDefault();
     setIsLoading(true);
-    console.log("transtype after submission = ", transactionType);
-    console.log("after sumbit from = "+fromUserId+" to = "+ toUserId);
+    // console.log("transtype after submission = ", transactionType);
+    // console.log("after sumbit from = "+fromUserId+" to = "+ toUserId);
     
     const updatedCommentTransaction = {
       transId: transId,
@@ -73,12 +81,12 @@ const UpdateFriendTransactionModel = ({
       createdBy: createdBy,
     };
 
-    console.log("submitted CommentTransaction = ", updatedCommentTransaction);
+    // console.log("submitted CommentTransaction = ", updatedCommentTransaction);
 
     try {
       const response = await updateFriendTransactionById(updatedCommentTransaction);
       setCommentTransaction(response.data);
-      console.log("Transaction updated successfully", response.data);
+      // console.log("Transaction updated successfully", response.data);
       toggleModal(); // Close the modal after submission
       setAmount("");
       setDate("");
@@ -88,7 +96,7 @@ const UpdateFriendTransactionModel = ({
       setToUserId(0);
       setRefreshFriendTransaction(prev => !prev); // Toggle refresh
     } catch (error) {
-      console.error("Error updating commentTransaction", error);
+      // console.error("Error updating commentTransaction", error);
     }finally {
       setIsLoading(false);
     }
@@ -106,7 +114,7 @@ const UpdateFriendTransactionModel = ({
     }`}
   >
     <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
-      <div className="form1 relative w-full sm:w-1/2 bg-white rounded-sm shadow dark:bg-gray-300 shadow-inner-custom">
+      <div className="form1 relative w-full sm:w-1/2 lg:w-[70%]  bg-white rounded-sm shadow dark:bg-gray-300 shadow-inner-custom">
       <div
             className={`flex items-center  justify-between p-2 md:p-2 rounded-sm ${
               transactionType === "give" ? "bg-rose-600" : "bg-emerald-600"
@@ -143,7 +151,7 @@ const UpdateFriendTransactionModel = ({
           </div>
 
           <form className="p-4" onSubmit={handleSubmit}>
-          <div className="mb-4">
+          <div className="mb-2">
               <label className="block mb-2 text-sm font-medium text-gray-900 ">
                 Transaction Type
               </label>
@@ -172,7 +180,7 @@ const UpdateFriendTransactionModel = ({
                 </label>
               </div>
             </div>
-            <div className="mb-4">
+            <div className="mb-2">
               <label html ="amount"
                className="block mb-2 text-sm font-medium text-gray-900 ">
                 Amount
@@ -188,22 +196,33 @@ const UpdateFriendTransactionModel = ({
               />
             </div>
 
-            <div className="mb-4">
+            <div className="mb-1">
               <label htmlFor="description"  className="block mb-2 text-sm font-medium text-gray-900 ">
                 Description
               </label>
-              <input
+              <textarea
                 type="text"
                 id="description"
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="w-full input-field-shadow border border-gray-400 text-gray-600 rounded-sm p-2"
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                  handleChange(e); // Pass the event instead of the value
+                }}
+                className="w-full text-xs input-field-shadow border border-gray-400 text-gray-600 rounded-sm p-2"
               placeholder="Enter description"
                 required
               />
             </div>
+            <span
+              className={`text-xs ${
+                maxChars - countText.length < 0
+                  ? "text-red-600"
+                  : "text-green-600"
+              }`}
+            >{maxChars - countText.length} chars left
+            </span>
 
-            <div className="mb-4">
+            <div className="mb-2">
               <label htmlFor="date" className="block mb-2 text-sm font-medium text-gray-900 ">
                 Transaction Date
               </label>

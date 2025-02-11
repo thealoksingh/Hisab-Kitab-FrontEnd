@@ -33,14 +33,15 @@ function RightSideDashBoard({
   //     window.removeEventListener("popstate", handleBackButton);
   //   };
   // }, [navigate, location, user]);
-
+  
 
   return (
     <div
-      className={`right-side rounded h-screen lg:w-full relative overflow-hidden transition-all duration-300 pl-0 md:pl-2  lg:pl-0  ${
-        isOpen ? "translate-x-0" : "translate-x-full"
-      } lg:translate-x-0`}
-    >
+    className={`right-side relative z-10 rounded h-screen lg:w-full overflow-hidden transition-all duration-300 pl-0 md:pl-2 lg:pl-0 ${
+      isOpen ? "translate-x-0" : "translate-x-full"
+    } lg:translate-x-0`}
+  >
+   
       {/* Content container with scrollable area for sm and md screens */}
       <div className="h-full overflow-y-auto lg:pt-0">
         {isFriendSelected ? (

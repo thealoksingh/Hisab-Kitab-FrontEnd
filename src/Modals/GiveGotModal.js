@@ -15,9 +15,22 @@ const GiveGotModal = ({
   const [date, setDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const maxChars = 50;
+  const [countText, setCountText] = useState("");
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    setCountText(e.target.value);
+  };
+
   const handleSubmit = async (e) => {
+    if (countText.length > maxChars) {
+      setError(`Description exceeds ${maxChars} characters!`);
+      return;
+    }
+    
     e.preventDefault();
- setIsLoading(true);
+    setIsLoading(true);
     // Set fromUserId and toUserId based on the transaction type
     const transactionData = {
       transId: 0,
@@ -31,7 +44,8 @@ const GiveGotModal = ({
 
     try {
       const response = await createTransaction(transactionData);
-      console.log("Transaction created successfully", response);
+      // console.log("Transaction created successfully", response);
+      setCountText("");
       toggleModal(); // Close the modal after submission
       // setTransactionsDto([...transactionsDto, transactionData]);
       setAmount("");
@@ -41,13 +55,14 @@ const GiveGotModal = ({
         ? setRefreshFriendTransaction(false)
         : setRefreshFriendTransaction(true);
     } catch (error) {
-      console.error("Error creating transaction", error);
-    }finally {
+      // console.error("Error creating transaction", error);
+      setError(error);
+    } finally {
       setIsLoading(false);
     }
   };
 
-  if (!isOpen) return null;
+
 
   return (
     <div
@@ -58,8 +73,8 @@ const GiveGotModal = ({
         isOpen ? "" : "hidden"
       }`}
     >
-      <div className="main-form relative p-4 w-full sm:w-1/2 md:w-1/2 max-w-5xl flex gap-4 justify-center transform transition-transform duration-500">
-        <div className="form-add-frnd border border-gray-400 shadow-inner-custom relative bg-white w-full h-1/2 rounded-sm shadow dark:bg-gray-300">
+      <div className="main-form relative p-4 w-full lg:w-[70%] sm:w-1/2 md:w-1/2 max-w-5xl flex gap-4 justify-center transform transition-transform duration-500">
+        <div className="form-give-got border border-gray-400 shadow-inner-custom relative bg-white w-full h-1/2 rounded-sm shadow dark:bg-gray-300">
           <div
             className={`flex items-center justify-between p-2 md:p-2 rounded-sm ${
               transactionType === "give" ? "bg-rose-600" : "bg-emerald-600"
@@ -97,7 +112,7 @@ const GiveGotModal = ({
           </div>
 
           <form className="p-4 md:p-5" onSubmit={handleSubmit}>
-            <div className="mb-4">
+            <div className="mb-2">
               <label
                 htmlFor="amount"
                 className="block mb-2 text-sm font-medium text-gray-900 "
@@ -115,24 +130,35 @@ const GiveGotModal = ({
               />
             </div>
 
-            <div className="mb-4">
+            <div className="mb-1">
               <label
                 htmlFor="description"
                 className="block mb-2 text-sm font-medium text-gray-900 "
               >
                 Description
               </label>
-              <input
+              <textarea
                 type="text"
                 id="description"
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                  handleChange(e); // Pass the event instead of the value
+                }}
                 className="w-full input-field-shadow border border-gray-400 text-gray-600 rounded-sm p-2"
                 placeholder="Enter description"
                 required
               />
             </div>
-
+            <span
+              className={`text-xs ${
+                maxChars - countText.length < 0
+                  ? "text-red-600"
+                  : "text-green-600"
+              }`}
+            >
+              {maxChars - countText.length} chars left
+            </span>
             <div className="mb-4">
               <label
                 htmlFor="date"
@@ -149,8 +175,10 @@ const GiveGotModal = ({
                 required
               />
             </div>
-
-          <button
+           {error && <div className="mb-2 text-rose-600">{error}</div>}
+           
+        
+            <button
               type="submit"
               className={`w-full text-white 
     ${
@@ -171,7 +199,6 @@ const GiveGotModal = ({
                 "Receive Amount"
               )}
             </button>
-
           </form>
         </div>
       </div>

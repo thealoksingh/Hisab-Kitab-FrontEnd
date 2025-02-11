@@ -45,65 +45,91 @@ useEffect(() => {
   }
 }, [isAuthenticated, navigate]);
 
-// Prevent the user from going back to the previous page
+// Prevent the user from going back to the previous page// and implemnt custom functionality
+// useEffect(() => {
+//   const handlePopState = (e) => {
+//     e.preventDefault(); // Prevent the default back navigation
+//     console.log("isCommentSection: open --->", isCommentSectionOpen);
+
+//     if (isAuthenticated) {
+//       if (isCommentSectionOpen) {
+//         console.log("toggle comment section in if :", isCommentSectionOpen);
+//         toggleCommentSection(); // Close the comment section if it's open
+//       } else {
+//         console.log("Navigating to /user-dashboard");
+//         setRefreshFriendTransaction(!refreshFriendTransaction);
+//         setIsFriendSelected(false);
+//         setSelectedFriend(null);
+//         toggleRightSidebar();
+//         toggleLeftSidebar();
+//         navigate("/user-dashboard"); // Redirect to /user-dashboard if the user tries to go back
+//       }
+//     }
+//   };
+
+//   // Listen for back button or history changes
+//   window.history.pushState(null, document.title);
+//   window.addEventListener('popstate', handlePopState);
+
+//   return () => {
+//     window.removeEventListener('popstate', handlePopState); // Clean up the event listener on unmount
+//   };
+// }, [isAuthenticated, isCommentSectionOpen, navigate]); // Add `isCommentSectionOpen` in dependency array
 useEffect(() => {
   const handlePopState = (e) => {
-    e.preventDefault(); // Prevent the default back navigation
-    console.log("isCommentSection: open --->", isCommentSectionOpen);
-
-    if (isAuthenticated) {
-      if (isCommentSectionOpen) {
-        console.log("toggle comment section in if :", isCommentSectionOpen);
-        toggleCommentSection(); // Close the comment section if it's open
-      } else {
-        console.log("Navigating to /user-dashboard");
-        setRefreshFriendTransaction(!refreshFriendTransaction);
-        setIsFriendSelected(false);
-        setSelectedFriend(null);
-        toggleRightSidebar();
-        toggleLeftSidebar();
-        navigate("/user-dashboard"); // Redirect to /user-dashboard if the user tries to go back
-      }
+    e.preventDefault();
+    
+    console.log("History state:", window.history.state);
+    
+    if (window.history.state?.commentOpen) {
+      console.log("Closing comment section via back button");
+      toggleCommentSection(); // Close comment section
+    } else {
+      console.log("Navigating to /user-dashboard");
+      setRefreshFriendTransaction((prev) => !prev);
+      setIsFriendSelected(false);
+      setSelectedFriend(null);
+      toggleRightSidebar();
+      toggleLeftSidebar();
+      navigate("/user-dashboard");
     }
   };
 
-  // Listen for back button or history changes
-  window.history.pushState(null, document.title);
-  window.addEventListener('popstate', handlePopState);
+  window.history.replaceState({ dashboard: true }, ""); // Ensure initial state is set
+  window.addEventListener("popstate", handlePopState);
 
   return () => {
-    window.removeEventListener('popstate', handlePopState); // Clean up the event listener on unmount
+    window.removeEventListener("popstate", handlePopState);
   };
-}, [isAuthenticated, isCommentSectionOpen, navigate]); // Add `isCommentSectionOpen` in dependency array
-
-
+}, [isAuthenticated, isCommentSectionOpen, navigate]);
 
   // End of Prevent the user from going back to the previous page
 
- const toggleUnfriendModal=() =>{
-setIsUnfriendModalOpen(!isUnfriendModalOpen);
- }
   const handleRowClick = (transactionId) => {
-    setSelectedRowId(transactionId);
+    //sets transaction Id when we open comment section for any transaction
+     setSelectedRowId(transactionId);
   };
+ 
+  const toggleCommentSection = () => {
+    setIsCommentSetionOpen((prevState) => {
+      if (!prevState) {
+        window.history.pushState({ commentOpen: true }, ""); // Push new history entry
+      } else {
+        window.history.replaceState({ dashboard: true }, ""); // Replace state when closing
+      }
+      return !prevState;
+    });
+  };
+  
   const toggleReportModal = () => {
     setReportModalOpen(!isReportModalOpen);
   };
   
 
-  const toggleCommentSection = () => {
-    setIsCommentSetionOpen(prevState => {
-      if (prevState) {
-        setSelectedRowId(null);
-        
-      }
-  
-      return !prevState;
-    });
-  };
-  
-  
-  
+  const toggleUnfriendModal=() =>{
+    setIsUnfriendModalOpen(!isUnfriendModalOpen);
+     }
+     
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -124,12 +150,11 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
       if (!transactionsDto) return;
 
       try {
-        console.log("getTransactionDetailsWithFriend api called ");
         const response = await getTransactionDetailsWithFriend(
           user.userId,
           selectedFriend.userId
         );
-        console.log("response = " + response.data);
+        
         setTransactionsDto(response.data); // Assuming the data is in response.data.friendList
       } catch (err) {
         setError(err.message);
@@ -144,7 +169,6 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
 
 
   useEffect(() => {
-    console.log("commentTransaction updated in useffect:", commentTransaction);
   }, [commentTransaction]);
 
   return (
@@ -155,9 +179,9 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
             setIsCommentSetionOpen(false);
           }
         }}
-        className="right-header  gap-[8px]  sm:gap-[8px] md:gap-[7px]  p-1   lg:p-2  md:p-4   absolute top-0  border border-gray-400 shadow-inner-custom justify-between h-20 sm:h-24 md:h-24 bg-gray-300  w-full flex items-center "
+        className="right-header  gap-[8px]  sm:gap-[8px] md:gap-[7px]  p-1   lg:p-2  md:p-4     border border-gray-400 shadow-inner-custom justify-between h-20 sm:h-24 md:h-24 bg-gray-300  w-full flex items-center "
       >
-        <div className=" flex gap-1 sm:gap-2 md:gap-0">
+        <div className=" flex gap-3 sm:gap-2 md:gap-2">
           <ProfileCircle
             className="h-10 w-10 sm:h-12 sm:w-12 md:h-13 md:w-13  text-white text-lg"
             name={selectedFriend.fullName}
@@ -209,7 +233,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
         <div className="report-unfriend    flex gap-3 sm:gap-1 md:gap-1  items-center justify-between">
         <button
        onClick={toggleReportModal}
-         className="report w-30 group sm:w-36 md:w-36  h-8 sm:h-[35px] md:h-[32px] px-1 sm:px-3 md:px-3 bg-transparent   sm:bg-rose-600  md:bg-rose-600  flex items-center justify-center hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm shadow-none sm:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+         className="report w-30 group sm:w-36 md:w-36  h-8 sm:h-[35px] md:h-[32px] px-1 sm:px-3 md:px-3 bg-transparent   sm:bg-rose-600  md:bg-rose-600  flex items-center justify-center lg:hover:bg-rose-500 focus:outline-none lg:focus:ring-4 lg:focus:ring-rose-300 font-medium rounded-sm shadow-none sm:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
         >
          <span className="inline sm:hidden ">
           <FontAwesomeIcon className=" " icon={faDownload} />
@@ -218,7 +242,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
           <FontAwesomeIcon icon={faDownload} className="mr-1 group-hover:animate-bounce  text-black  sm:text-white" />
           <span className="line-clamp-1 text-white sm:text-sm">View Report</span>
           </span>
-            </button>
+          </button>
           <FriendTransactionReport
             isOpen={isReportModalOpen}
             toggleModal={toggleReportModal}
@@ -234,15 +258,16 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
            alt="Settings"
            className="w-4 h-10 sm:h-6 sm:w-6 object-contain filter invert brightness-0"
           />
+         
+          </div>
           <UnfriendModal
           isOpen={isUnfriendModalOpen}
            toggleModal={toggleUnfriendModal}
            userId={user.userId}
            friendId={selectedFriend.userId}
             />
-          </div>
          </div>
-  </div>
+       </div>
 
      {/* middle section */}
      
@@ -252,7 +277,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
             setIsCommentSetionOpen(false);
           }
         }}
-        class="table-division top-20  md:top-24 lg:top-24  border border-gray-400 w-full  h-[78.3%] lg:h-[79.8%] md:h-[77.3%] bg-gray-400  absolute  scrollable  "
+        class="table-division mb-1  border border-gray-400 w-full  h-[74%] md:h-[72%] lg:h-[75%] bg-gray-400  overflow-y-scroll  scrollable  "
       >
         <table className="w-full p-0   sm:p-2 md:p-2   border-separate border-spacing-y-1 text-sm text-left text-black dark:text-black">
           <thead className="sticky top-0  border  shadow-inner-custom    bg-gray-100  text-xs text-gray-600 uppercase dark:text-gray-800">
@@ -292,9 +317,9 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
                     className="px-2 py-2 lg:px-6 lg:py-4  md:px-4 md:py-4  font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
                   >
                     <div className="flex flex-col">
-                      <span className="font-medium text-sm line-clamp-2 sm:line-clamp-0 text-gray-900">
-                        Closing Balance:<span>₹</span>{" "}
-                        <span>{transactionDto.lastClosingBalance}</span>
+                      <span className="font-medium text-xs  line-clamp-2 sm:line-clamp-0 text-cyan-700">
+                        Closing Balance :<span className="text-black"> ₹</span>{" "}
+                        <span className="text-black">{transactionDto.lastClosingBalance}</span>
                       </span>
                       <span className="text-xs text-gray-900 mt-1">
                         {transactionDto.transaction.transDate}
@@ -302,20 +327,20 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
                     </div>
                   </td>
 
-                  <td className="px-3 py-2  lg:px-6 lg:py-4  md:px-4 md:py-4   pr-[25px]">
+                  <td className="px-3 py-2    ">
                     {isUserGave && (
                       <div className="flex flex-col">
-                        <span className="font-medium text-rose-500">
+                        <span className="font-medium  text-xs lg:text-sm text-rose-500">
                           <span>₹</span> {transactionDto.transaction.amount}
                         </span>
                       </div>
                     )}
                   </td>
 
-                  <td className="px-3 py-2  lg:px-6 lg:py-4  md:px-4 md:py-4  pr-[25px]  sm:text-right  ">
+                  <td className="px-3 py-2    sm:text-right  ">
                     {!isUserGave && (
                       <div className="flex flex-col">
-                        <span className="font-medium text-right text-green-500 ">
+                        <span className="font-medium text-right text-xs lg:text-sm text-green-500 ">
                           <span>₹</span> {transactionDto.transaction.amount}
                         </span>
                       </div>
@@ -328,7 +353,7 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
         </table>
       </div>
 
-      <div className="left-side-lower font-Poppins  rounded-sm    text-xs sm:text-sm gap-1 justify-evenly border-none whitespace-nowrap md:text-xs border-gray-400 w-full lg:gap-4  bg-gray-300 p-2 bottom-20 lg:bottom-4 md:bottom-20   absolute h-[50px] flex items-center  ">
+      <div className="left-side-lower font-Poppins  rounded-sm    text-xs sm:text-sm gap-1 justify-evenly border-none whitespace-nowrap md:text-xs border-gray-400 w-full lg:gap-4  bg-gray-300 p-2  h-[50px] flex items-center  ">
         <button
           className="w-[44%]  rounded-sm   shadow-inner-custom h-full bg-rose-600 text-sm text-white 600    hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
           onClick={handleGiveButtonClick}

@@ -30,7 +30,7 @@ const DeleteAlertModal = ({
     console.log("transId = " + transId);
     try {
       const response = await deleteTransactionById(transId);
-      console.log("Transaction deleted successfully: ", response.data);
+      // console.log("Transaction deleted successfully: ", response.data);
       // Update state to refresh the transactions list
       setRefreshFriendTransaction(!refreshFriendTransaction);
       toggleModal();
