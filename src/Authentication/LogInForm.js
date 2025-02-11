@@ -44,11 +44,8 @@ const LogInForm = () => {
     }
 
     try {
-      // const response = await loginApi(email, password);
-      // const user = response.data;
       if (await authContext.login(email, password)) {
-        console.log("Login successful");
-        navigate("/user-dashboard");
+         navigate("/user-dashboard");
       } else {
         setError("Invalid login credentials");
       }

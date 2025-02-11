@@ -36,7 +36,7 @@ const UpdateFriendTransactionModel = ({
       setDate(commentTransaction.transDate || "");
       const initialTransactionType =
         commentTransaction.fromUserId === commentTransaction.createdBy ? "give" : "got";
-        console.log("initialTransactionType = ", initialTransactionType);
+        // console.log("initialTransactionType = ", initialTransactionType);
       setTransactionType(initialTransactionType);
       setFromUserId(
         commentTransaction.fromUserId 
@@ -49,7 +49,7 @@ const UpdateFriendTransactionModel = ({
 
   const handleTransactionTypeChange = (type) => {
      setTransactionType(type);
-     console.log("from = "+fromUserId+" to = "+ toUserId);
+    //  console.log("from = "+fromUserId+" to = "+ toUserId);
     // Swap user IDs based on the selected transaction type
     if (type === "give" && type === transactionType) {
       setFromUserId(commentTransaction.fromUserId);
@@ -59,9 +59,6 @@ const UpdateFriendTransactionModel = ({
       setToUserId(commentTransaction.fromUserId);
     }
 
-    console.log("cliked trans type = ", type);
-    console.log("transtype after click = ", transactionType);
-    console.log("from = "+fromUserId+" to = "+ toUserId);
   };
 
   const handleSubmit = async (e) => {
@@ -71,8 +68,8 @@ const UpdateFriendTransactionModel = ({
     }
     e.preventDefault();
     setIsLoading(true);
-    console.log("transtype after submission = ", transactionType);
-    console.log("after sumbit from = "+fromUserId+" to = "+ toUserId);
+    // console.log("transtype after submission = ", transactionType);
+    // console.log("after sumbit from = "+fromUserId+" to = "+ toUserId);
     
     const updatedCommentTransaction = {
       transId: transId,
@@ -84,12 +81,12 @@ const UpdateFriendTransactionModel = ({
       createdBy: createdBy,
     };
 
-    console.log("submitted CommentTransaction = ", updatedCommentTransaction);
+    // console.log("submitted CommentTransaction = ", updatedCommentTransaction);
 
     try {
       const response = await updateFriendTransactionById(updatedCommentTransaction);
       setCommentTransaction(response.data);
-      console.log("Transaction updated successfully", response.data);
+      // console.log("Transaction updated successfully", response.data);
       toggleModal(); // Close the modal after submission
       setAmount("");
       setDate("");
@@ -99,7 +96,7 @@ const UpdateFriendTransactionModel = ({
       setToUserId(0);
       setRefreshFriendTransaction(prev => !prev); // Toggle refresh
     } catch (error) {
-      console.error("Error updating commentTransaction", error);
+      // console.error("Error updating commentTransaction", error);
     }finally {
       setIsLoading(false);
     }

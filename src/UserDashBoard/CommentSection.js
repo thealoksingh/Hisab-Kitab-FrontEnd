@@ -55,12 +55,9 @@ function CommentSection({
 
   useEffect(() => {
     if (isOpen) {
-      console.log("Comment Section Opened");
-      setWidth("100%"); // Set to 100% for all screen sizes initially
+       setWidth("100%"); // Set to 100% for all screen sizes initially
     } else {
-      console.log("Comment Section Closed");
-      // setComments([])// Clear comments when the sidebar is closed
-      setWidth("0");
+        setWidth("0");
     }
   }, [isOpen]);
 
@@ -113,7 +110,7 @@ function CommentSection({
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
-    console.log("Comment Cliked");
+    // console.log("Comment Cliked");
     if (!commentText.trim()) {
       alert("Comment cannot be empty.");
       return;
@@ -131,7 +128,7 @@ function CommentSection({
       setCommentText("");
       setIsRowClicked(!isRowClicked);
     } catch (error) {
-      console.error("Error creating transaction", error);
+      // console.error("Error creating transaction", error);
     } finally {
       setIsLoading(false);
     }
@@ -152,7 +149,7 @@ function CommentSection({
         prevComments.filter((comment) => comment.commentId !== commentId)
       );
     } catch (error) {
-      console.error("Error deleting comment:", error);
+      // console.error("Error deleting comment:", error);
       alert("Failed to delete the comment. Please try again.");
     }
   };

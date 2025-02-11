@@ -22,10 +22,10 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
 
     try {
       const response = await unFriendApi(userId, friendId);
-      console.log("Unfriend successful ", response.data);
+      // console.log("Unfriend successful ", response.data);
       toggleModal();
     } catch (error) {
-      console.error("Error while unfriending", error);
+      // console.error("Error while unfriending", error);
     } finally {
       setIsLoading(false);
     }

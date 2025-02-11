@@ -46,11 +46,11 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
     if (contactNo.trim() !== "") {
       try {
         const data = await addFriend(user.userId, contactNo);
-        console.log("Friend request sent successfully:", data);
+        // console.log("Friend request sent successfully:", data);
         setAddFriendErrorMessage("Friend request sent successfully");
         setContactNo(""); // Reset the contact number
       } catch (error) {
-        console.error("Error adding friend:", error);
+        // console.error("Error adding friend:", error);
 
         // Handle specific error messages from the backend
         if (error.response && error.response.data) {
@@ -96,19 +96,19 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
 
   const handleInvite = async (e) => {
     e.preventDefault();
-    console.log("Invite button clicked");
+    // console.log("Invite button clicked");
 
     if (email !== "") {
       await sendInvitationEmail(email, user.fullName)
         .then((data) => {
-          console.log("Invite email sent:", email);
+          // console.log("Invite email sent:", email);
           setAddFriendErrorMessage("Invitation sent successfully");
           alert("Invitation sent successfully");
           setEmail(""); // Reset the email
           toggleModal(); // Close the modal
         })
         .catch((error) => {
-          console.error("Error sending invitation email:", error);
+          // console.error("Error sending invitation email:", error);
           setError(error.message || "An unexpected error occurred");
           setEmail(""); // Reset the email
         });

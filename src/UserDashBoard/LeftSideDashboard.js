@@ -42,9 +42,6 @@ function LeftSideDashBoard({
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState("");
 
- useEffect(() => {
-    console.log("isopen left side:", isOpen);
-    }, [isOpen]); 
 
 
   const toggleFriendRequestModal = () => {
@@ -144,7 +141,7 @@ function LeftSideDashBoard({
     }
 
     setFilteredFriends(sorted);
-    console.log("Filter friend sorted on the basis of");
+    // console.log("Filter friend sorted on the basis of");
     // Update the filtered items with the sorted array
   };
   // let ListToApplySearch = [...filteredFriends];

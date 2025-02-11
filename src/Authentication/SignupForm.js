@@ -100,7 +100,6 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
       try {
         const response = await sendOtpEmail(email, "sign-up");
         setOtp(response.data); // Update state with OTP
-        // console.log("OTP sent successfully:", response.data); // Log the OTP directly
         setOtpSent(true);
         setError(null);
         setSuccessMessage("Otp sent successfully");

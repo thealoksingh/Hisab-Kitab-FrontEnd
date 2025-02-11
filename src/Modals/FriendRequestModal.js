@@ -21,14 +21,14 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
       try {
         const pendingResponse = await getAllPendingRequest(user.userId);
         setPendingRequests(pendingResponse?.data || []);
-        console.log("Pending requests fetched:", pendingResponse.data);
+        // console.log("Pending requests fetched:", pendingResponse.data);
 
         const sentResponse = await getAllSentRequest(user.userId);
         setSentRequests(sentResponse?.data || []);
-        console.log("Sent requests fetched:", sentResponse.data);
+        // console.log("Sent requests fetched:", sentResponse.data);
         setRequestLoading(false);
       } catch (error) {
-        console.error("Error fetching requests:", error);
+        // console.error("Error fetching requests:", error);
       } finally {
         setRequestLoading(false);
       }
@@ -44,10 +44,10 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
       setPendingRequests((prev) =>
         prev.filter((request) => request.id !== requestId)
       );
-      console.log("Request accepted successfully");
+      // console.log("Request accepted successfully");
       setRequestLoading(false);
     } catch (error) {
-      console.error("Error accepting request:", error);
+      // console.error("Error accepting request:", error);
     }
     finally{setRequestLoading(false);}
   };
@@ -59,10 +59,10 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
       setPendingRequests((prev) =>
         prev.filter((request) => request.id !== requestId)
       );
-      console.log("Request rejected successfully");
+      // console.log("Request rejected successfully");
       setRequestLoading(false);
     } catch (error) {
-      console.error("Error rejecting request:", error);
+      // console.error("Error rejecting request:", error);
     }finally{setRequestLoading(false);}
   };
 
@@ -73,10 +73,10 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
       setSentRequests((prev) =>
         prev.filter((request) => request.id !== requestId)
       );
-      console.log("Request unsent successfully");
+      // console.log("Request unsent successfully");
       setRequestLoading(false);
     } catch (error) {
-      console.error("Error unsending request:", error);
+      // console.error("Error unsending request:", error);
     }finally{setRequestLoading(false);}
   };
 

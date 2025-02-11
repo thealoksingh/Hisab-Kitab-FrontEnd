@@ -44,7 +44,7 @@ const GiveGotModal = ({
 
     try {
       const response = await createTransaction(transactionData);
-      console.log("Transaction created successfully", response);
+      // console.log("Transaction created successfully", response);
       setCountText("");
       toggleModal(); // Close the modal after submission
       // setTransactionsDto([...transactionsDto, transactionData]);
@@ -55,7 +55,7 @@ const GiveGotModal = ({
         ? setRefreshFriendTransaction(false)
         : setRefreshFriendTransaction(true);
     } catch (error) {
-      console.error("Error creating transaction", error);
+      // console.error("Error creating transaction", error);
       setError(error);
     } finally {
       setIsLoading(false);

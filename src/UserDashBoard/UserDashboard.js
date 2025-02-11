@@ -66,10 +66,10 @@ const UserDashboard = () => {
   
     const handleResize = () => {
       const currentWidth = window.innerWidth;
-      console.log("handleResize executed");
+      // console.log("handleResize executed");
       // Only trigger if crossing the 1024px boundary
       if ((prevWidth < 1024 && currentWidth >= 1024) || (prevWidth >= 1024 && currentWidth < 1024)) {
-        console.log("handleResize executed at boundary");
+        // console.log("handleResize executed at boundary");
   
         if (currentWidth >= 1024) {
           setIsSidebarOpen(true);
@@ -133,7 +133,7 @@ const UserDashboard = () => {
   };
 
   const toggleLeftSidebar = () => {
-    console.log("toggle left called")
+    // console.log("toggle left called")
     setIsLeftSidebarOpen(!isLeftSidebarOpen);
     if (!isLeftSidebarOpen && window.innerWidth < 1024) {
       setIsRightSidebarOpen(true);
@@ -141,7 +141,7 @@ const UserDashboard = () => {
   };
 
   const toggleRightSidebar = () => {
-    console.log("toggle right side callled")
+    // console.log("toggle right side callled")
   
     setIsRightSidebarOpen(!isRightSidebarOpen);
     if (!isRightSidebarOpen && window.innerWidth < 1024) {
@@ -150,7 +150,7 @@ const UserDashboard = () => {
   };
 
   const handleFriendSelect = (friend) => {
-    console.log("handleFriendSelect called");
+    // console.log("handleFriendSelect called");
     setSelectedFriend(friend);
     setIsFriendSelected(true);
   
