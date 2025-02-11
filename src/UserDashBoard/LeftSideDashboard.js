@@ -266,7 +266,7 @@ function LeftSideDashBoard({
   return (
     <>
       <div
-        className={`left-side rounded h-screen w-full relative overflow-hidden transition-all duration-300 pr-0 md:pr-5  lg:pr-0  ${
+        className={`left-side rounded flex flex-col h-[90%] lg:h-[98%] w-full relative overflow-hidden transition-all duration-300 pr-0 md:pr-5  lg:pr-0  ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0`}
       >
@@ -447,7 +447,7 @@ function LeftSideDashBoard({
 
         {/* centerbox */}
 
-        <div className="h-[68%] lg:h-[70%] mb-1 md:h-[68%]   border border-gray-400 shadow-inner-custom w-full bg-gray-400 relative overflow-y-auto scrollbar-none ">
+        <div className="flex-1 overflow-auto border mb-1 border-gray-400 shadow-inner-custom w-full bg-gray-400 relative overflow-y-auto scrollbar-none ">
           <table className="w-full p-2  pt-0  border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-white">
             <thead className="sticky  border  shadow-inner-custom  top-0 bg-gray-50 dark:bg-gray-100 text-xs text-gray-400 uppercase dark:text-gray-800">
               <tr>
@@ -520,7 +520,7 @@ function LeftSideDashBoard({
 
         {/* leftlower */}
 
-        <div className="left-side-lower font-Poppins   text-xs sm:text-sm md:text-sm gap-1 justify-evenly border-none whitespace-nowrap  border-gray-400 w-full lg:gap-4  bg-gray-300 p-2  h-[50px] flex items-center ">
+        <div className="left-side-lower  font-Poppins   text-xs sm:text-sm md:text-sm gap-1 justify-evenly border-none whitespace-nowrap  border-gray-400 w-full lg:gap-4  bg-gray-300 p-2  h-[50px] flex items-center ">
           {/* Add Friend Button */}
           <button
             onClick={handleAddFriendClick}

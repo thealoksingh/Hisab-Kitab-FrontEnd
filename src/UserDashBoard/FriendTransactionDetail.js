@@ -277,7 +277,7 @@ useEffect(() => {
             setIsCommentSetionOpen(false);
           }
         }}
-        class="table-division mb-1  border border-gray-400 w-full  h-[74%] md:h-[72%] lg:h-[75%] bg-gray-400  overflow-y-scroll  scrollable  "
+        class="table-division mb-1  border border-gray-400 w-full  flex-1 overflow-auto  bg-gray-400  overflow-y-scroll  scrollable  "
       >
         <table className="w-full p-0   sm:p-2 md:p-2   border-separate border-spacing-y-1 text-sm text-left text-black dark:text-black">
           <thead className="sticky top-0  border  shadow-inner-custom    bg-gray-100  text-xs text-gray-600 uppercase dark:text-gray-800">
