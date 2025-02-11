@@ -90,7 +90,7 @@ const UserDashboard = () => {
   
     return () => window.removeEventListener("resize", handleResize);
   }, [refreshResize]); // Runs when refreshResize changes
-  
+   const forceResizeCheck = () => setRefreshResize(prev => !prev)
   // Function to manually trigger a refresh
 
 // const prevWidth = useRef(window.innerWidth);
