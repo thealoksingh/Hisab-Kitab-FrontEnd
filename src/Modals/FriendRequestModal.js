@@ -79,7 +79,7 @@ const FriendRequestModal = ({ isOpen, toggleModal, user  }) => {
       className="inset-0 z-50 fixed bg-gray-900 bg-opacity-30"
     >
       <div className="z-50 main-form relative p-2   flex justify-center  items-center ">
-        <div className="form1 absolute    font-Poppins   top-32 lg:top-32   sm:top-40 w-[80%]   W-1/2 lg:w-1/2  bg-gray-300 rounded-sm shadow dark:bg-gray-300 form-custom-shadow-inner">
+        <div className="form1 absolute    font-Poppins   top-32 lg:top-20   sm:top-40 w-[80%]   W-1/2 lg:w-1/2  bg-gray-300 rounded-sm shadow dark:bg-gray-300 form-custom-shadow-inner">
           <div className="flex fo items-center justify-between  p-1 md:p-2 rounded-sm bg-gray-600 dark:border-gray-700">
             <h4 className="text-lg font-semibold pl-3 text-white dark:text-white">
               Friend Requests
@@ -108,7 +108,7 @@ const FriendRequestModal = ({ isOpen, toggleModal, user  }) => {
             </button>
           </div>
           <div className="main-content h-full p-2">
-            <h4 className="font-xs font-bold  text-gray-800 pl-2 ">Take Action on Request</h4>
+            <h4 className="text-sm font-semibold  text-gray-800  ">Take Action on Request</h4>
             <div className="incoming-friend-request shadow-inner-custom h-48  w-full  bg-gray-300 mt-2 p-1">
               <div className="scrollable shadow-inner-custom h-full  w-full bg-gray-50 p-1">
                 {pendingRequests.length > 0 ? (
@@ -153,7 +153,7 @@ const FriendRequestModal = ({ isOpen, toggleModal, user  }) => {
               </div>
             </div>
 
-            <h4 className="font-bold pl-2 text-gray-800  mt-1">Sent Requests</h4>
+            <h4 className="ftext-sm font-semibold  text-gray-800    mt-1">Sent Requests</h4>
             <div className="pending-friend-request shadow-inner-custom h-48 w-full bg-gray-300 mt-2 p-2">
               <div className="scrollable shadow-inner-custom h-full w-full p-1 bg-gray-50">
                 {sentRequests.length > 0 ? (

@@ -154,7 +154,7 @@ useEffect(() => {
           user.userId,
           selectedFriend.userId
         );
-        console.log("response = " + response.data);
+        
         setTransactionsDto(response.data); // Assuming the data is in response.data.friendList
       } catch (err) {
         setError(err.message);
@@ -233,7 +233,7 @@ useEffect(() => {
         <div className="report-unfriend    flex gap-3 sm:gap-1 md:gap-1  items-center justify-between">
         <button
        onClick={toggleReportModal}
-         className="report w-30 group sm:w-36 md:w-36  h-8 sm:h-[35px] md:h-[32px] px-1 sm:px-3 md:px-3 bg-transparent   sm:bg-rose-600  md:bg-rose-600  flex items-center justify-center hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm shadow-none sm:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+         className="report w-30 group sm:w-36 md:w-36  h-8 sm:h-[35px] md:h-[32px] px-1 sm:px-3 md:px-3 bg-transparent   sm:bg-rose-600  md:bg-rose-600  flex items-center justify-center lg:hover:bg-rose-500 focus:outline-none lg:focus:ring-4 lg:focus:ring-rose-300 font-medium rounded-sm shadow-none sm:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
         >
          <span className="inline sm:hidden ">
           <FontAwesomeIcon className=" " icon={faDownload} />
@@ -242,7 +242,7 @@ useEffect(() => {
           <FontAwesomeIcon icon={faDownload} className="mr-1 group-hover:animate-bounce  text-black  sm:text-white" />
           <span className="line-clamp-1 text-white sm:text-sm">View Report</span>
           </span>
-            </button>
+          </button>
           <FriendTransactionReport
             isOpen={isReportModalOpen}
             toggleModal={toggleReportModal}
@@ -277,7 +277,7 @@ useEffect(() => {
             setIsCommentSetionOpen(false);
           }
         }}
-        class="table-division top-20  md:top-24 lg:top-24  border border-gray-400 w-full  h-[78.3%] lg:h-[79.8%] md:h-[77.3%] bg-gray-400  absolute  scrollable  "
+        class="table-division top-20  md:top-24 lg:top-24  border border-gray-400 w-full  h-[78.3%] lg:h-[79.8%] md:h-[77.3%] bg-gray-400  absolute overflow-y-scroll  scrollable  "
       >
         <table className="w-full p-0   sm:p-2 md:p-2   border-separate border-spacing-y-1 text-sm text-left text-black dark:text-black">
           <thead className="sticky top-0  border  shadow-inner-custom    bg-gray-100  text-xs text-gray-600 uppercase dark:text-gray-800">

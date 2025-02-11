@@ -18,7 +18,14 @@ const UpdateFriendTransactionModel = ({
   const [fromUserId, setFromUserId] = useState(0);
   const [toUserId, setToUserId] = useState(0);
  const [isLoading, setIsLoading] = useState(false);
- 
+  
+
+   const maxChars = 50;
+   const [countText, setCountText] = useState(commentTransaction.description);
+
+   const handleChange = (e) => {
+    setCountText(e.target.value);
+  };
 
   useEffect(() => {
     if (commentTransaction) {
@@ -58,6 +65,10 @@ const UpdateFriendTransactionModel = ({
   };
 
   const handleSubmit = async (e) => {
+    if (countText.length > maxChars) {
+      alert(`Description exceeds ${maxChars} characters!`);
+      return;
+    }
     e.preventDefault();
     setIsLoading(true);
     console.log("transtype after submission = ", transactionType);
@@ -106,7 +117,7 @@ const UpdateFriendTransactionModel = ({
     }`}
   >
     <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
-      <div className="form1 relative w-full sm:w-1/2 bg-white rounded-sm shadow dark:bg-gray-300 shadow-inner-custom">
+      <div className="form1 relative w-full sm:w-1/2 lg:w-[70%]  bg-white rounded-sm shadow dark:bg-gray-300 shadow-inner-custom">
       <div
             className={`flex items-center  justify-between p-2 md:p-2 rounded-sm ${
               transactionType === "give" ? "bg-rose-600" : "bg-emerald-600"
@@ -188,7 +199,7 @@ const UpdateFriendTransactionModel = ({
               />
             </div>
 
-            <div className="mb-2">
+            <div className="mb-1">
               <label htmlFor="description"  className="block mb-2 text-sm font-medium text-gray-900 ">
                 Description
               </label>
@@ -196,12 +207,23 @@ const UpdateFriendTransactionModel = ({
                 type="text"
                 id="description"
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="w-full input-field-shadow border border-gray-400 text-gray-600 rounded-sm p-2"
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                  handleChange(e); // Pass the event instead of the value
+                }}
+                className="w-full text-xs input-field-shadow border border-gray-400 text-gray-600 rounded-sm p-2"
               placeholder="Enter description"
                 required
               />
             </div>
+            <span
+              className={`text-xs ${
+                maxChars - countText.length < 0
+                  ? "text-red-600"
+                  : "text-green-600"
+              }`}
+            >{maxChars - countText.length} chars left
+            </span>
 
             <div className="mb-2">
               <label htmlFor="date" className="block mb-2 text-sm font-medium text-gray-900 ">

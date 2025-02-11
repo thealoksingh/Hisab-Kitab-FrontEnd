@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { sendOtpEmail, signUpUser } from "../Api/HisabKitabApi";
 import "../CssStyle/GroupDashboard.css";
 import forget from "../assets/forget1.jpg";
+import hisabKitabBlack from "../assets/images/hisabkitab-black.png";
 
 const SignUpForm = () => {
   const [isOpen, setIsOpen] = useState(true); // State to control modal visibility
@@ -170,14 +171,17 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
         )}
 
       <div className="items-center justify-center  flex flex-col w-full h-[90%] sm:w-[40%] sm:h-[90%] rounded-lg ">
-       
-
         <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
-          <div className="form-signup shadow-inner-custom relative bg-white w-[90%] rounded-sm border border-gray-400 shadow dark:bg-gray-300">
-            <div className="flex items-center justify-between p-2 md:p-2 rounded-sm bg-gray-600">
-              <h4 className="text-lg font-semibold text-gray-200">
-                Sign up as a New User
-              </h4>
+          <div className="form-signup shadow-inner-custom relative bg-white w-[100%] rounded-sm border border-gray-600 shadow dark:bg-gray-300">
+            <div className="flex items-center justify-between p-2 md:p-2 bg-gray-600">
+              <div className="text-lg font-semibold text-gray-200">
+               
+                <span> <img
+                    src={hisabKitabBlack}
+                    alt="logo"
+                    className="h-8 max-w-md sm:max-w-lg md:max-w-xl filter ml-2 invert brightness-200"
+                  /></span>
+              </div>
               <button
                 type="button"
                 className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-6 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"

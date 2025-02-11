@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { getFriendList } from "../Api/HisabKitabApi";
 import LeftSideDashBoard from "./LeftSideDashboard";
@@ -66,7 +66,7 @@ const UserDashboard = () => {
   
     const handleResize = () => {
       const currentWidth = window.innerWidth;
-  
+      console.log("handleResize executed");
       // Only trigger if crossing the 1024px boundary
       if ((prevWidth < 1024 && currentWidth >= 1024) || (prevWidth >= 1024 && currentWidth < 1024)) {
         console.log("handleResize executed at boundary");
@@ -92,7 +92,32 @@ const UserDashboard = () => {
   }, [refreshResize]); // Runs when refreshResize changes
   
   // Function to manually trigger a refresh
-  const forceResizeCheck = () => setRefreshResize(prev => !prev);
+
+// const prevWidth = useRef(window.innerWidth);
+
+// useEffect(() => {
+//   const handleResize = () => {
+//     const currentWidth = window.innerWidth;
+
+//     // Check if the screen width crosses the 1024px boundary
+//     if (
+//       (prevWidth.current < 1024 && currentWidth >= 1024) ||
+//       (prevWidth.current >= 1024 && currentWidth < 1024)
+//     ) {
+//       setRefreshResize(prev => !prev);
+//     }
+
+//     prevWidth.current = currentWidth; // Update previous width
+//   };
+
+//   window.addEventListener("resize", handleResize);
+
+//   return () => {
+//     window.removeEventListener("resize", handleResize);
+//   };
+// }, []); // Runs only once on mount
+
+
 
   const toggleHelpAndSupport = () => {
     setIsHelpAndSupportOpen(!isHelpAndSupportOpen);
