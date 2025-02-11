@@ -33,7 +33,9 @@ function RightSideDashBoard({
   //     window.removeEventListener("popstate", handleBackButton);
   //   };
   // }, [navigate, location, user]);
-
+  useEffect(() => {
+    console.log("isopen right side:", isOpen);
+    }, [isOpen]); 
 
   return (
     <div

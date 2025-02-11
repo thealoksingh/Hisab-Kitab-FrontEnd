@@ -38,6 +38,7 @@ const UserDashboard = () => {
   const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(true);
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
   const [loader, setLoader] = useState(true);
+  const [refreshResize, setRefreshResize] = useState(false); // State to trigger manual refresh
 
   const { user, logout } = useAuth();
 
@@ -61,18 +62,37 @@ const UserDashboard = () => {
   }, [user, refreshFriendTransaction]);
 
   useEffect(() => {
+    let prevWidth = window.innerWidth; // Store previous width
+  
     const handleResize = () => {
-      const isLargeScreen = window.innerWidth >= 1024;
-      setIsSidebarOpen(isLargeScreen);
-      setIsLeftSidebarOpen(true);
-      setIsRightSidebarOpen(isLargeScreen);
+      const currentWidth = window.innerWidth;
+  
+      // Only trigger if crossing the 1024px boundary
+      if ((prevWidth < 1024 && currentWidth >= 1024) || (prevWidth >= 1024 && currentWidth < 1024)) {
+        console.log("handleResize executed at boundary");
+  
+        if (currentWidth >= 1024) {
+          setIsSidebarOpen(true);
+          setIsLeftSidebarOpen(true);
+          setIsRightSidebarOpen(true);
+        } else {
+          setIsSidebarOpen(false);
+          setIsLeftSidebarOpen(true);
+          setIsRightSidebarOpen(false);
+        }
+  
+        prevWidth = currentWidth; // Update previous width
+      }
     };
-
-    handleResize();
+  
+    handleResize(); // Run on mount
     window.addEventListener("resize", handleResize);
-
+  
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [refreshResize]); // Runs when refreshResize changes
+  
+  // Function to manually trigger a refresh
+  const forceResizeCheck = () => setRefreshResize(prev => !prev);
 
   const toggleHelpAndSupport = () => {
     setIsHelpAndSupportOpen(!isHelpAndSupportOpen);
@@ -88,27 +108,34 @@ const UserDashboard = () => {
   };
 
   const toggleLeftSidebar = () => {
+    console.log("toggle left called")
     setIsLeftSidebarOpen(!isLeftSidebarOpen);
     if (!isLeftSidebarOpen && window.innerWidth < 1024) {
-      setIsRightSidebarOpen(false);
+      setIsRightSidebarOpen(true);
     }
   };
 
   const toggleRightSidebar = () => {
+    console.log("toggle right side callled")
+  
     setIsRightSidebarOpen(!isRightSidebarOpen);
     if (!isRightSidebarOpen && window.innerWidth < 1024) {
-      setIsLeftSidebarOpen(false);
+      setIsLeftSidebarOpen(true);
     }
   };
 
   const handleFriendSelect = (friend) => {
+    console.log("handleFriendSelect called");
     setSelectedFriend(friend);
     setIsFriendSelected(true);
-    if (window.innerWidth < 1024) {
+  
+    if (friend != null && window.innerWidth < 1024) {
       setIsRightSidebarOpen(true);
       setIsLeftSidebarOpen(false);
     }
+ 
   };
+  
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -298,7 +325,7 @@ const UserDashboard = () => {
                   setRefreshFriendTransaction={setRefreshFriendTransaction}
                   friendRequestCount={friendRequestCount}
                   isOpen={isLeftSidebarOpen}
-                  toggleSidebar={toggleLeftSidebar}
+                  toggleLeftSidebar={toggleLeftSidebar}
                 />
               </div>
               <div

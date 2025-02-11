@@ -122,7 +122,7 @@ const GiveGotModal = ({
               >
                 Description
               </label>
-              <input
+              <textarea
                 type="text"
                 id="description"
                 value={description}

@@ -45,65 +45,91 @@ useEffect(() => {
   }
 }, [isAuthenticated, navigate]);
 
-// Prevent the user from going back to the previous page
+// Prevent the user from going back to the previous page// and implemnt custom functionality
+// useEffect(() => {
+//   const handlePopState = (e) => {
+//     e.preventDefault(); // Prevent the default back navigation
+//     console.log("isCommentSection: open --->", isCommentSectionOpen);
+
+//     if (isAuthenticated) {
+//       if (isCommentSectionOpen) {
+//         console.log("toggle comment section in if :", isCommentSectionOpen);
+//         toggleCommentSection(); // Close the comment section if it's open
+//       } else {
+//         console.log("Navigating to /user-dashboard");
+//         setRefreshFriendTransaction(!refreshFriendTransaction);
+//         setIsFriendSelected(false);
+//         setSelectedFriend(null);
+//         toggleRightSidebar();
+//         toggleLeftSidebar();
+//         navigate("/user-dashboard"); // Redirect to /user-dashboard if the user tries to go back
+//       }
+//     }
+//   };
+
+//   // Listen for back button or history changes
+//   window.history.pushState(null, document.title);
+//   window.addEventListener('popstate', handlePopState);
+
+//   return () => {
+//     window.removeEventListener('popstate', handlePopState); // Clean up the event listener on unmount
+//   };
+// }, [isAuthenticated, isCommentSectionOpen, navigate]); // Add `isCommentSectionOpen` in dependency array
 useEffect(() => {
   const handlePopState = (e) => {
-    e.preventDefault(); // Prevent the default back navigation
-    console.log("isCommentSection: open --->", isCommentSectionOpen);
-
-    if (isAuthenticated) {
-      if (isCommentSectionOpen) {
-        console.log("toggle comment section in if :", isCommentSectionOpen);
-        toggleCommentSection(); // Close the comment section if it's open
-      } else {
-        console.log("Navigating to /user-dashboard");
-        setRefreshFriendTransaction(!refreshFriendTransaction);
-        setIsFriendSelected(false);
-        setSelectedFriend(null);
-        toggleRightSidebar();
-        toggleLeftSidebar();
-        navigate("/user-dashboard"); // Redirect to /user-dashboard if the user tries to go back
-      }
+    e.preventDefault();
+    
+    console.log("History state:", window.history.state);
+    
+    if (window.history.state?.commentOpen) {
+      console.log("Closing comment section via back button");
+      toggleCommentSection(); // Close comment section
+    } else {
+      console.log("Navigating to /user-dashboard");
+      setRefreshFriendTransaction((prev) => !prev);
+      setIsFriendSelected(false);
+      setSelectedFriend(null);
+      toggleRightSidebar();
+      toggleLeftSidebar();
+      navigate("/user-dashboard");
     }
   };
 
-  // Listen for back button or history changes
-  window.history.pushState(null, document.title);
-  window.addEventListener('popstate', handlePopState);
+  window.history.replaceState({ dashboard: true }, ""); // Ensure initial state is set
+  window.addEventListener("popstate", handlePopState);
 
   return () => {
-    window.removeEventListener('popstate', handlePopState); // Clean up the event listener on unmount
+    window.removeEventListener("popstate", handlePopState);
   };
-}, [isAuthenticated, isCommentSectionOpen, navigate]); // Add `isCommentSectionOpen` in dependency array
-
-
+}, [isAuthenticated, isCommentSectionOpen, navigate]);
 
   // End of Prevent the user from going back to the previous page
 
- const toggleUnfriendModal=() =>{
-setIsUnfriendModalOpen(!isUnfriendModalOpen);
- }
   const handleRowClick = (transactionId) => {
-    setSelectedRowId(transactionId);
+    //sets transaction Id when we open comment section for any transaction
+     setSelectedRowId(transactionId);
   };
+ 
+  const toggleCommentSection = () => {
+    setIsCommentSetionOpen((prevState) => {
+      if (!prevState) {
+        window.history.pushState({ commentOpen: true }, ""); // Push new history entry
+      } else {
+        window.history.replaceState({ dashboard: true }, ""); // Replace state when closing
+      }
+      return !prevState;
+    });
+  };
+  
   const toggleReportModal = () => {
     setReportModalOpen(!isReportModalOpen);
   };
   
 
-  const toggleCommentSection = () => {
-    setIsCommentSetionOpen(prevState => {
-      if (prevState) {
-        setSelectedRowId(null);
-        
-      }
-  
-      return !prevState;
-    });
-  };
-  
-  
-  
+  const toggleUnfriendModal=() =>{
+    setIsUnfriendModalOpen(!isUnfriendModalOpen);
+     }
+     
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -124,7 +150,6 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
       if (!transactionsDto) return;
 
       try {
-        console.log("getTransactionDetailsWithFriend api called ");
         const response = await getTransactionDetailsWithFriend(
           user.userId,
           selectedFriend.userId
@@ -144,7 +169,6 @@ setIsUnfriendModalOpen(!isUnfriendModalOpen);
 
 
   useEffect(() => {
-    console.log("commentTransaction updated in useffect:", commentTransaction);
   }, [commentTransaction]);
 
   return (

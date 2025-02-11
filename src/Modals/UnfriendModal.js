@@ -104,7 +104,7 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
               </div>
             </div>
 
-            <div className="mb-2 flex flex-wrap justify-center sm:justify-start font-Poppins sm:text-sm text-xs gap-2 sm:gap-4">
+            <div className="mb-2 flex flex-wrap  sm:justify-start font-Poppins sm:text-sm text-xs gap-2 sm:gap-4">
   <button
     onClick={(e) => handleUnfriend(e)}
     type="button"
@@ -113,7 +113,7 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
     {isLoading ? (
       <div className="flex items-center">
         <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
-        <div className="font-semibold ml-2">Processing..</div>
+        <div className="font-semibold ml-2 text-xs">Processing..</div>
       </div>
     ) : (
       "Unfriend"

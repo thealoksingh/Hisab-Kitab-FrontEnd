@@ -143,7 +143,7 @@ const UpdateFriendTransactionModel = ({
           </div>
 
           <form className="p-4" onSubmit={handleSubmit}>
-          <div className="mb-4">
+          <div className="mb-2">
               <label className="block mb-2 text-sm font-medium text-gray-900 ">
                 Transaction Type
               </label>
@@ -172,7 +172,7 @@ const UpdateFriendTransactionModel = ({
                 </label>
               </div>
             </div>
-            <div className="mb-4">
+            <div className="mb-2">
               <label html ="amount"
                className="block mb-2 text-sm font-medium text-gray-900 ">
                 Amount
@@ -188,11 +188,11 @@ const UpdateFriendTransactionModel = ({
               />
             </div>
 
-            <div className="mb-4">
+            <div className="mb-2">
               <label htmlFor="description"  className="block mb-2 text-sm font-medium text-gray-900 ">
                 Description
               </label>
-              <input
+              <textarea
                 type="text"
                 id="description"
                 value={description}
@@ -203,7 +203,7 @@ const UpdateFriendTransactionModel = ({
               />
             </div>
 
-            <div className="mb-4">
+            <div className="mb-2">
               <label htmlFor="date" className="block mb-2 text-sm font-medium text-gray-900 ">
                 Transaction Date
               </label>

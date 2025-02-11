@@ -17,7 +17,7 @@ function LeftSideDashBoard({
   setRefreshFriendTransaction,
   friendRequestCount,
   isOpen,
-  toggleSidebar,
+  toggleLeftSidebar,
 }) {
   const location = useLocation();
   const [isModalOpen, setModalOpen] = useState(false);
@@ -41,6 +41,11 @@ function LeftSideDashBoard({
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState("");
+
+ useEffect(() => {
+    console.log("isopen left side:", isOpen);
+    }, [isOpen]); 
+
 
   const toggleFriendRequestModal = () => {
     setIsFriendRequestModalOpen(!isFriendRequestModalOpen);
@@ -188,7 +193,7 @@ function LeftSideDashBoard({
     setSelectedFriend(friend.userEntity);
     setIsFriendSelected(true);
     if (window.innerWidth < 1024) {
-      toggleSidebar(); // Close the left sidebar on mobile when a friend is selected
+      toggleLeftSidebar(); // Close the left sidebar on mobile when a friend is selected
     }
   };
 
@@ -269,7 +274,7 @@ function LeftSideDashBoard({
         } lg:translate-x-0`}
       >
         {/* Toggle button for mobile */}
-        {/* <button onClick={toggleSidebar} className="lg:hidden absolute top-2 right-2 bg-gray-200 p-2 rounded-full">
+        {/* <button onClick={toggleLeftSidebar} className="lg:hidden absolute top-2 right-2 bg-gray-200 p-2 rounded-full">
           <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
