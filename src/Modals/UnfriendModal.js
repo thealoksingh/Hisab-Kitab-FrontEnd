@@ -1,14 +1,11 @@
-
 import "../CssStyle/GroupDashboard.css";
 import React, { useState } from "react";
 import { unFriendApi } from "../Api/HisabKitabApi";
 
-
-
 const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
- 
+
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
@@ -19,7 +16,7 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
 
     if (!isChecked) {
       alert("Please confirm by checking the box.");
-      setIsLoading(false)
+      setIsLoading(false);
       return;
     }
 
@@ -29,8 +26,9 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
       toggleModal();
     } catch (error) {
       console.error("Error while unfriending", error);
-    }finally{ setIsLoading(false)
-  }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -38,12 +36,16 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
       id="UpdateFriendTransaction-modal"
       tabIndex="-1"
       aria-hidden={!isOpen}
-      className={`fixed inset-0 z-50  flex items-center justify-center bg-gray-500 bg-opacity-70 ${isOpen ? "" : "hidden"}`}
+      className={`fixed inset-0 z-50  flex items-center justify-center bg-gray-500 bg-opacity-70 ${
+        isOpen ? "" : "hidden"
+      }`}
     >
-   <div className="main-form relative p-4 w-full sm:w-1/2 md:w-1/2 max-w-5xl flex gap-4 justify-center transform transition-transform duration-500">
+      <div className="main-form relative p-4 w-full sm:w-1/2 md:w-1/2 max-w-5xl flex gap-4 justify-center transform transition-transform duration-500">
         <div className="form-give-got border border-gray-400 shadow-inner-custom relative bg-white w-full h-1/2 rounded-sm shadow dark:bg-gray-300">
-             <div className="flex border-black-400 items-center justify-between p-1 md:p-2 rounded-sm bg-rose-500 dark:border-gray-700">
-            <h4 className="text-lg font-xs sm:font-medium  text-gray-900 dark:text-white">Alert !!!</h4>
+          <div className="flex border-black-400 items-center justify-between p-1 md:p-2 rounded-sm bg-rose-500 dark:border-gray-700">
+            <h4 className="text-lg font-xs sm:font-medium  text-white">
+              Alert !!!
+            </h4>
             <button
               type="button"
               className="text-gray-400 bg-transparent hover:bg-rose-700 hover:text-rose-900 rounded-lg text-sm w-6 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-rose-600 dark:hover:text-white"
@@ -81,7 +83,7 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
               <div className="flex gap-3 mt-1 p-2   sm:border-none border-none">
                 <label
                   htmlFor="description"
-                  className="block mb-2 font-Poppins text-sm font-medium text-gray-900 dark:text-black"
+                  className="block mb-2 font-Poppins text-xs font-medium text-gray-900 dark:text-black"
                 >
                   Are you sure ?
                 </label>
@@ -96,41 +98,40 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
                     handleCheckboxChange();
                   }} // Prevents the event from bubbling
                 />
-                <label
-                  className="ml-5   font-Poppins   text-md font-medium items-center text-white-900 dark:text-black"
-                >
+                <label className="ml-5   font-Poppins   text-xs font-medium items-center text-white-900 dark:text-black">
                   Yes
                 </label>
               </div>
             </div>
 
-            <div className="mb-2 flex flex-wrap  sm:justify-start font-Poppins sm:text-sm text-xs gap-2 sm:gap-4">
-  <button
-    onClick={(e) => handleUnfriend(e)}
-    type="button"
-    className="text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-rose-300 rounded-sm px-3 py-2 sm:px-4 sm:py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-  >
-    {isLoading ? (
-      <div className="flex items-center">
-        <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
-        <div className="font-semibold ml-2 text-xs">Processing..</div>
-      </div>
-    ) : (
-      "Unfriend"
-    )}
-  </button>
-  <button
-    onClick={(e) => {
-      e.stopPropagation();
-      toggleModal();
-    }}
-    type="button"
-    className="text-white bg-cyan-500 hover:bg-cyan-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 rounded-sm px-3 py-2 sm:px-4 sm:py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-  >
-    Cancel
-  </button>
-</div>
-
+            <div className="mb-2 flex flex-wrap  justify-start font-Poppins sm:text-xs text-xs gap-2 sm:gap-4">
+              <button
+                onClick={(e) => handleUnfriend(e)}
+                type="button"
+                className="text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-rose-300 rounded-sm px-3 py-2 sm:px-4 sm:py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+              >
+                {isLoading ? (
+                  <div className="flex items-center">
+                    <div className="w-4 h-4 border-3 border-t-4 border-white rounded-full animate-spin"></div>
+                    <div className="font-semibold ml-2 text-xs">
+                      loading..
+                    </div>
+                  </div>
+                ) : (
+                  "Unfriend"
+                )}
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleModal();
+                }}
+                type="button"
+                className="text-white bg-cyan-500 hover:bg-cyan-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 rounded-sm px-3 py-2 sm:px-4 sm:py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+              >
+                Cancel
+              </button>
+            </div>
           </form>
         </div>
       </div>

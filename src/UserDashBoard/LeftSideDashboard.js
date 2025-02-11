@@ -273,13 +273,7 @@ function LeftSideDashBoard({
           isOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0`}
       >
-        {/* Toggle button for mobile */}
-        {/* <button onClick={toggleLeftSidebar} className="lg:hidden absolute top-2 right-2 bg-gray-200 p-2 rounded-full">
-          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button> */}
-
+      
         <div className="left-upper sm:font-normal justify-between h-32   w-full ">
           <div className="flex px-2  shadow-inner-custom items-center gap-1 justify-between border border-gray-400 sm:h-10 md:h-10   h-12 bg-gray-300">
             <div className="p-2 flex-shrink sm:font-sm  font-semibold">
@@ -456,7 +450,7 @@ function LeftSideDashBoard({
 
         {/* centerbox */}
 
-        <div className="h-[70%] lg:h-[76%] md:h-[74.2%]   border border-gray-400 shadow-inner-custom w-full bg-gray-400 relative overflow-y-auto scrollbar-none ">
+        <div className="h-[68%] lg:h-[70%] mb-1 md:h-[68%]   border border-gray-400 shadow-inner-custom w-full bg-gray-400 relative overflow-y-auto scrollbar-none ">
           <table className="w-full p-2  pt-0  border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-white">
             <thead className="sticky  border  shadow-inner-custom  top-0 bg-gray-50 dark:bg-gray-100 text-xs text-gray-400 uppercase dark:text-gray-800">
               <tr>
@@ -529,7 +523,7 @@ function LeftSideDashBoard({
 
         {/* leftlower */}
 
-        <div className="left-side-lower font-Poppins   text-xs sm:text-sm md:text-sm gap-1 justify-evenly border-none whitespace-nowrap  border-gray-400 w-full lg:gap-4  bg-gray-300 p-2 bottom-20 lg:bottom-4  md:bottom-20  absolute h-[50px] flex items-center ">
+        <div className="left-side-lower font-Poppins   text-xs sm:text-sm md:text-sm gap-1 justify-evenly border-none whitespace-nowrap  border-gray-400 w-full lg:gap-4  bg-gray-300 p-2  h-[50px] flex items-center ">
           {/* Add Friend Button */}
           <button
             onClick={handleAddFriendClick}

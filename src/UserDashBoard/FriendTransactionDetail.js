@@ -179,7 +179,7 @@ useEffect(() => {
             setIsCommentSetionOpen(false);
           }
         }}
-        className="right-header  gap-[8px]  sm:gap-[8px] md:gap-[7px]  p-1   lg:p-2  md:p-4   absolute top-0  border border-gray-400 shadow-inner-custom justify-between h-20 sm:h-24 md:h-24 bg-gray-300  w-full flex items-center "
+        className="right-header  gap-[8px]  sm:gap-[8px] md:gap-[7px]  p-1   lg:p-2  md:p-4     border border-gray-400 shadow-inner-custom justify-between h-20 sm:h-24 md:h-24 bg-gray-300  w-full flex items-center "
       >
         <div className=" flex gap-3 sm:gap-2 md:gap-2">
           <ProfileCircle
@@ -277,7 +277,7 @@ useEffect(() => {
             setIsCommentSetionOpen(false);
           }
         }}
-        class="table-division top-20  md:top-24 lg:top-24  border border-gray-400 w-full  h-[78.3%] lg:h-[79.8%] md:h-[77.3%] bg-gray-400  absolute overflow-y-scroll  scrollable  "
+        class="table-division mb-1  border border-gray-400 w-full  h-[74%] md:h-[72%] lg:h-[75%] bg-gray-400  overflow-y-scroll  scrollable  "
       >
         <table className="w-full p-0   sm:p-2 md:p-2   border-separate border-spacing-y-1 text-sm text-left text-black dark:text-black">
           <thead className="sticky top-0  border  shadow-inner-custom    bg-gray-100  text-xs text-gray-600 uppercase dark:text-gray-800">
@@ -317,9 +317,9 @@ useEffect(() => {
                     className="px-2 py-2 lg:px-6 lg:py-4  md:px-4 md:py-4  font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
                   >
                     <div className="flex flex-col">
-                      <span className="font-medium text-sm line-clamp-2 sm:line-clamp-0 text-gray-900">
-                        Closing Balance:<span>₹</span>{" "}
-                        <span>{transactionDto.lastClosingBalance}</span>
+                      <span className="font-medium text-xs  line-clamp-2 sm:line-clamp-0 text-cyan-700">
+                        Closing Balance :<span className="text-black"> ₹</span>{" "}
+                        <span className="text-black">{transactionDto.lastClosingBalance}</span>
                       </span>
                       <span className="text-xs text-gray-900 mt-1">
                         {transactionDto.transaction.transDate}
@@ -327,20 +327,20 @@ useEffect(() => {
                     </div>
                   </td>
 
-                  <td className="px-3 py-2  lg:px-6 lg:py-4  md:px-4 md:py-4   pr-[25px]">
+                  <td className="px-3 py-2    ">
                     {isUserGave && (
                       <div className="flex flex-col">
-                        <span className="font-medium text-rose-500">
+                        <span className="font-medium  text-xs lg:text-sm text-rose-500">
                           <span>₹</span> {transactionDto.transaction.amount}
                         </span>
                       </div>
                     )}
                   </td>
 
-                  <td className="px-3 py-2  lg:px-6 lg:py-4  md:px-4 md:py-4  pr-[25px]  sm:text-right  ">
+                  <td className="px-3 py-2    sm:text-right  ">
                     {!isUserGave && (
                       <div className="flex flex-col">
-                        <span className="font-medium text-right text-green-500 ">
+                        <span className="font-medium text-right text-xs lg:text-sm text-green-500 ">
                           <span>₹</span> {transactionDto.transaction.amount}
                         </span>
                       </div>
@@ -353,7 +353,7 @@ useEffect(() => {
         </table>
       </div>
 
-      <div className="left-side-lower font-Poppins  rounded-sm    text-xs sm:text-sm gap-1 justify-evenly border-none whitespace-nowrap md:text-xs border-gray-400 w-full lg:gap-4  bg-gray-300 p-2 bottom-20 lg:bottom-4 md:bottom-20   absolute h-[50px] flex items-center  ">
+      <div className="left-side-lower font-Poppins  rounded-sm    text-xs sm:text-sm gap-1 justify-evenly border-none whitespace-nowrap md:text-xs border-gray-400 w-full lg:gap-4  bg-gray-300 p-2  h-[50px] flex items-center  ">
         <button
           className="w-[44%]  rounded-sm   shadow-inner-custom h-full bg-rose-600 text-sm text-white 600    hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
           onClick={handleGiveButtonClick}

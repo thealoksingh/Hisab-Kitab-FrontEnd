@@ -159,16 +159,16 @@ function CommentSection({
 
   return (
     <>
-      {commentTransaction && (
-        <div
-          className="Details h-full   shadow-inner-custom bg-gray-100 z-50 absolute right-0 p-2"
-          style={{
-            width: width,
-            visibility: width === "0" ? "hidden" : "visible",
-            transition: "width 0.3s ease, visibility 0.1s ease",
-          }}
-        >
-          <div className="h-10 shadow-inner-custom w-full bg-gray-300 p-5 flex items-center">
+    {commentTransaction && (
+  <div
+    className="Details absolute right-0 top-0 h-full shadow-inner-custom bg-gray-100 z-50 p-2"
+    style={{
+      width: width,
+      visibility: width === "0" ? "hidden" : "visible",
+      transition: "width 0.3s ease, visibility 0.1s ease",
+    }}
+  >
+   <div className="h-10 shadow-inner-custom w-full bg-gray-300 p-5 flex items-center">
             <h2>Entry Details</h2>
             <button
               type="button"
