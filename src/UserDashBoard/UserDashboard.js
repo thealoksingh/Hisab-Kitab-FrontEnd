@@ -337,7 +337,7 @@ const UserDashboard = () => {
           <div className="max-w-7xl  sm:overflow-y-auto  ">
             <div className="flex flex-col lg:flex-row">
               <div
-                className={`sm:w-1/2 md:w-[100%] m-2  ${
+                className={`sm:w-1/2 h-screen md:w-[100%] m-2  ${
                   isLeftSidebarOpen ? "block" : "hidden"
                 } lg:block`}
               >
@@ -354,7 +354,7 @@ const UserDashboard = () => {
                 />
               </div>
               <div
-                className={` sm:w-1/2 md:w-full p-2 sm:pl-0  h-[68%] sm:h-[63%]   md:h-[63%]  ${
+                className={` sm:w-1/2 md:w-full p-2 sm:pl-0  h-screen  ${
                   isRightSidebarOpen ? "block" : "hidden"
                 } lg:block`}
               >

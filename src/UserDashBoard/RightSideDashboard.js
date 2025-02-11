@@ -43,7 +43,7 @@ function RightSideDashBoard({
   >
    
       {/* Content container with scrollable area for sm and md screens */}
-      <div className="h-full overflow-y-auto lg:pt-0">
+      <div className="flex flex-col h-[90%] lg:h-[98%]  overflow-y-auto lg:pt-0">
         {isFriendSelected ? (
           <FriendTransactionDetail
             user={user}
