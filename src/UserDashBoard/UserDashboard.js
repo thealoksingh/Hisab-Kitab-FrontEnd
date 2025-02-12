@@ -37,24 +37,25 @@ const UserDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(true);
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
-  const [loader, setLoader] = useState(true);
+  const [friendAndTransloader, setFriendAndTransLoader] = useState(false);
   const [refreshResize, setRefreshResize] = useState(false); // State to trigger manual refresh
 
   const { user, logout } = useAuth();
 
   useEffect(() => {
     const fetchFriends = async () => {
-      setLoader(true);
+      setFriendAndTransLoader(true);
       if (!user) return;
 
       try {
         const response = await getFriendList(user.userId);
         setFriends(response.data.friendList);
         setFriendRequestCount(response.data.friendRequestCount);
+        setFriendAndTransLoader(false);
       } catch (err) {
         setError(err.message);
       } finally {
-        setLoader(false);
+        setFriendAndTransLoader(false);
       }
     };
 
@@ -298,12 +299,12 @@ const UserDashboard = () => {
 
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* <!-- Preloader --> */}
-        {loader && (
+        {/* {friendAndTransloader && (
           <div id="loader-wrapper">
             <div id="loader"></div>
             <div class="loader-section "></div>
           </div>
-        )}
+        )} */}
         {/* <!-- End Preloader --> */}
 
         {/* Header visible only on sm and md screens */}
@@ -351,6 +352,7 @@ const UserDashboard = () => {
                   friendRequestCount={friendRequestCount}
                   isOpen={isLeftSidebarOpen}
                   toggleLeftSidebar={toggleLeftSidebar}
+                  friendAndTransloader={friendAndTransloader}
                 />
               </div>
               <div
@@ -370,6 +372,7 @@ const UserDashboard = () => {
                   toggleLeftSidebar={toggleLeftSidebar}
                   setIsFriendSelected={setIsFriendSelected}
                   setSelectedFriend={setSelectedFriend}
+                  friendAndTransloader={friendAndTransloader}
                 />
               </div>
             </div>

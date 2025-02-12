@@ -15,7 +15,8 @@ function RightSideDashBoard({
   toggleRightSidebar,
   setIsFriendSelected,
   setSelectedFriend,
-  setIsRightSidebarOpen
+  setIsRightSidebarOpen,
+  friendAndTransloader,
 }) {
   // const navigate = useNavigate();
   // const location = useLocation();
@@ -55,9 +56,10 @@ function RightSideDashBoard({
             setIsFriendSelected={setIsFriendSelected}
             setSelectedFriend={setSelectedFriend}
             setIsRightSidebarOpen={setIsRightSidebarOpen}
+            friendAndTransloader={friendAndTransloader}
           />
         ) : (
-          <div className="default-right h-[97.5%] border border-gray-400 shadow-inner-custom w-full bg-gray-200 flex flex-col items-center justify-center p-2">
+          <div className="default-right h-screen border border-gray-400 shadow-inner-custom w-full bg-gray-200 flex flex-col items-center justify-center p-2">
             {/* Hide friend icon on sm and md screens */}
             <div className="mb-4 sm:hidden md:hidden hover:animate-bounce lg:block">
               <img src={friendicon || "/placeholder.svg"} alt="Friend Icon" className="w-24 h-24" />

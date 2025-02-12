@@ -8,7 +8,13 @@ import {
   unsendRequest,
 } from "../Api/HisabKitabApi";
 
-const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
+const FriendRequestModal = ({
+  isOpen,
+  toggleModal,
+  user,
+  setFriendRequestActivity,
+  friendRequestActivity,
+}) => {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [sentRequests, setSentRequests] = useState([]);
   const [requestLoading, setRequestLoading] = useState(false);
@@ -22,7 +28,6 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
         const pendingResponse = await getAllPendingRequest(user.userId);
         setPendingRequests(pendingResponse?.data || []);
         // console.log("Pending requests fetched:", pendingResponse.data);
-
         const sentResponse = await getAllSentRequest(user.userId);
         setSentRequests(sentResponse?.data || []);
         // console.log("Sent requests fetched:", sentResponse.data);
@@ -44,12 +49,14 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
       setPendingRequests((prev) =>
         prev.filter((request) => request.id !== requestId)
       );
+       setFriendRequestActivity(true);
       // console.log("Request accepted successfully");
       setRequestLoading(false);
     } catch (error) {
       // console.error("Error accepting request:", error);
+    } finally {
+      setRequestLoading(false);
     }
-    finally{setRequestLoading(false);}
   };
 
   const handleReject = async (requestId) => {
@@ -61,9 +68,12 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
       );
       // console.log("Request rejected successfully");
       setRequestLoading(false);
+      setFriendRequestActivity(true);
     } catch (error) {
       // console.error("Error rejecting request:", error);
-    }finally{setRequestLoading(false);}
+    } finally {
+      setRequestLoading(false);
+    }
   };
 
   const handleUnsend = async (requestId) => {
@@ -75,9 +85,12 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
       );
       // console.log("Request unsent successfully");
       setRequestLoading(false);
+      setFriendRequestActivity(true);
     } catch (error) {
       // console.error("Error unsending request:", error);
-    }finally{setRequestLoading(false);}
+    }finally {
+      setRequestLoading(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -157,18 +170,13 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
                             onClick={() => handleAccept(request.id)}
                             className="w-16  h-full  text-cyan-600 border border-cyan-600 hover:text-white hover:bg-cyan-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                           >
-                            
-                              Accept
-                          
+                            Accept
                           </button>
                           <button
                             onClick={() => handleReject(request.id)}
                             className="w-16 h-full  text-rose-600 border border-rose-600 hover:text-white hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                           >
-                          
-                            
-                              Reject
-                           
+                            Reject
                           </button>
                         </div>
                       </div>
@@ -220,9 +228,7 @@ const FriendRequestModal = ({ isOpen, toggleModal, user }) => {
                             onClick={() => handleUnsend(request.id)}
                             className="w-16 text-xs h-full  text-yellow-600 border border-yellow-600 hover:text-white hover:bg-yellow-600 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                           >
-                           
-                              "Unsend"
-                          
+                            "Unsend"
                           </button>
                         </div>
                       </div>
