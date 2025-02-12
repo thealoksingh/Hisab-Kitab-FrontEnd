@@ -270,8 +270,7 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
               </div>
               {isButtonDisabled && (
                 <h5 className="text-green-500 font-sm">
-                    {successMessage && "OTP sent successfully. "}
-                  
+                   
                   <span className="text-rose-600 font-sm">
                     {" "}
                     {isButtonDisabled && ` Resend in ${timer} sec`}

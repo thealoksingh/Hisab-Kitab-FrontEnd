@@ -22,6 +22,7 @@ function FriendTranscationDetail({
   toggleRightSidebar,
   setIsFriendSelected,
   setSelectedFriend,
+  friendAndTransloader,
 }) {
   const [transactionsDto, setTransactionsDto] = useState([]);
   const [error, setError] = useState(null);
@@ -265,6 +266,8 @@ useEffect(() => {
            toggleModal={toggleUnfriendModal}
            userId={user.userId}
            friendId={selectedFriend.userId}
+           refreshFriendTransaction={refreshFriendTransaction}
+           setRefreshFriendTransaction={setRefreshFriendTransaction}
             />
          </div>
        </div>
@@ -293,6 +296,20 @@ useEffect(() => {
               </th>
             </tr>
           </thead>
+          {friendAndTransloader? (
+            <tbody>
+            {[...Array(5)].map((_, index) => (
+              <tr
+                key={index}
+                className="bg-gray-200 animate-pulse mb-1  shadow-inner-custom rounded-sm dark:border-gray-100 cursor-pointer"
+              >
+                <td className="h-14"></td>
+                <td className="h-14"></td> 
+                <td className="h-14"></td> 
+              </tr>
+            ))}
+          </tbody>
+            ) : (
           <tbody>
             {transactionsDto.map((transactionDto, index) => {
               const isUserGave =
@@ -349,7 +366,7 @@ useEffect(() => {
                 </tr>
               );
             })}
-          </tbody>
+          </tbody>)}
         </table>
       </div>
 

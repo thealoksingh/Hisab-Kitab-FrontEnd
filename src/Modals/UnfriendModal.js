@@ -2,7 +2,14 @@ import "../CssStyle/GroupDashboard.css";
 import React, { useState } from "react";
 import { unFriendApi } from "../Api/HisabKitabApi";
 
-const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
+const UnfriendModal = ({
+  isOpen,
+  toggleModal,
+  userId,
+  friendId,
+  refreshFriendTransaction,
+  setRefreshFriendTransaction,
+}) => {
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -24,6 +31,7 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
       const response = await unFriendApi(userId, friendId);
       // console.log("Unfriend successful ", response.data);
       toggleModal();
+      setRefreshFriendTransaction(refreshFriendTransaction);
     } catch (error) {
       // console.error("Error while unfriending", error);
     } finally {
@@ -98,7 +106,7 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
                     handleCheckboxChange();
                   }} // Prevents the event from bubbling
                 />
-                <label className="ml-5   font-Poppins   text-xs font-medium items-center text-white-900 dark:text-black">
+                <label className="   font-Poppins   text-xs font-medium items-center text-white-900 dark:text-black">
                   Yes
                 </label>
               </div>
@@ -113,9 +121,7 @@ const UnfriendModal = ({ isOpen, toggleModal, userId, friendId }) => {
                 {isLoading ? (
                   <div className="flex items-center">
                     <div className="w-4 h-4 border-3 border-t-4 border-white rounded-full animate-spin"></div>
-                    <div className="font-semibold ml-2 text-xs">
-                      loading..
-                    </div>
+                    <div className="font-semibold ml-2 text-xs">loading..</div>
                   </div>
                 ) : (
                   "Unfriend"

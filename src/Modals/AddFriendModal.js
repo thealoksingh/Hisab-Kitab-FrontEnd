@@ -11,7 +11,7 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
   const [timer, setTimer] = useState(30); // State for timer
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // State for disabling button
   const [isLoading, setIsLoading] = useState(false);
-  // const [loading, setLoading] = useState(false);
+  const [inviteLoading, setInviteLoading] = useState(false);
 
   useEffect(() => {
     let interval;
@@ -96,22 +96,24 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
 
   const handleInvite = async (e) => {
     e.preventDefault();
-    // console.log("Invite button clicked");
+    setInviteLoading(true);
 
     if (email !== "") {
-      await sendInvitationEmail(email, user.fullName)
-        .then((data) => {
-          // console.log("Invite email sent:", email);
-          setAddFriendErrorMessage("Invitation sent successfully");
-          alert("Invitation sent successfully");
-          setEmail(""); // Reset the email
-          toggleModal(); // Close the modal
-        })
-        .catch((error) => {
-          // console.error("Error sending invitation email:", error);
-          setError(error.message || "An unexpected error occurred");
-          setEmail(""); // Reset the email
-        });
+      try {
+        await sendInvitationEmail(email, user.fullName);
+        // Success: Invite sent
+        setAddFriendErrorMessage("Invitation sent successfully");
+        setSuccessMessage("Invitation sent successfully");
+        setEmail(""); // Reset the email
+        toggleModal(); // Close the modal
+      } catch (error) {
+        // Error: Failed to send invite
+        setError(error.message || "An unexpected error occurred");
+        setEmail(""); // Reset the email
+      } finally {
+        // Reset loading state
+        setInviteLoading(false);
+      }
     } else {
       alert("Please enter a valid email");
     }
@@ -156,7 +158,7 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
               <span className="sr-only">Close modal</span>
             </button>
           </div>
-          <form className="p-4 md:p-5">
+          <form className="p-4 md:p-5 overflow-visible">
             <div className={`${isAddButtonVisible ? "block" : "hidden"} mb-4`}>
               <label className="block mb-2 text-sm font-medium text-gray-900">
                 Mobile number
@@ -190,39 +192,38 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
               />
             </div>
             {/* Display error or success message */}
-            {AddFriendErrorMessage && (
-              <p
-                className={`mb-3 text-sm ${
-                  AddFriendErrorMessage.includes("successfully")
-                    ? "text-green-500"
-                    : "text-red-500"
-                }`}
+            <div className="w-full text-wrap mb-2">
+              {AddFriendErrorMessage && (
+                <p
+                  className={`mb-3 text-xs break-words ${
+                    AddFriendErrorMessage.includes("successfully")
+                      ? "text-green-500"
+                      : "text-red-500"
+                  }`}
+                >
+                  {AddFriendErrorMessage}
+                </p>
+              )}
+              {successMessage && (
+                <p className="text-green-500 text-xs">{successMessage}</p>
+              )}
+
+              <span
+                className={`${
+                  !isAddButtonVisible ? "block" : "hidden"
+                } mb-2 text-cyan-600 text-xs`}
               >
-                {AddFriendErrorMessage}
-              </p>
-            )}
-
-            {error && <p className="text-red-500">{error}</p>}
-
-            <span
-              className={`${
-                !isAddButtonVisible ? "block" : "hidden"
-              } mb-2 text-cyan-600 text-sm`}
-            >
-              Enter Email , Click below to Invite
-            </span>
-
-            {isButtonDisabled && (
-              <h5 className="text-orange-500 font-sm">
-                {`Trying to send , Wait few Seconds`}
-                <span className="text-rose-600 font-sm">
+                Enter Email , Click below to Invite
+              </span>
+              {isButtonDisabled && (
+                <h5 className="text-teal-600 font-sm">
                   {" "}
                   {isButtonDisabled && ` Resend in ${timer} sec`}
-                </span>
-              </h5>
-            )}
+                </h5>
+              )}
+            </div>
 
-            <div className="mb-2 flex justyify-between gap-1 sm:gap-3">
+            <div className="mb-2 flex justyify-between gap-2 sm:gap-3">
               <button
                 type="submit"
                 className={`${
@@ -241,18 +242,22 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
               </button>
               <button
                 type="submit"
-                className={`${
-                  !isAddButtonVisible ? "block" : "hidden"
-                }  bg-teal-600 text-white px-4 py-1 focus:outline-none focus:ring-4 focus:ring-teal-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
+                className={`${!isAddButtonVisible ? "block" : "hidden"} ${
+                  isButtonDisabled
+                    ? "bg-transparent border border-gray-200   cursor-not-allowed" // Disabled state
+                    : "bg-teal-600 hover:scale-105 focus:ring-4 focus:ring-teal-300" // Enabled state
+                } text-white px-4 py-1 focus:outline-none shadow-md transition-all duration-300 ease-in-out`}
                 onClick={handleInviteRequest}
                 disabled={isButtonDisabled} // Disable button when timer is active
-                style={{
-                  backgroundColor: isButtonDisabled
-                    ? "transparent"
-                    : "rgb(0, 150, 135)", // Change color when disabled
-                }}
               >
-                Invite
+                {inviteLoading ? (
+                  <div className="flex ">
+                    <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
+                    <div className="font-semibold ml-2">Sending..</div>
+                  </div>
+                ) : (
+                  "Invite"
+                )}
               </button>
               <button
                 onClick={() => {

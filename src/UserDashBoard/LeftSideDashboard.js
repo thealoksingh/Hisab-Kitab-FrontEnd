@@ -18,6 +18,7 @@ function LeftSideDashBoard({
   friendRequestCount,
   isOpen,
   toggleLeftSidebar,
+  friendAndTransloader,
 }) {
   const location = useLocation();
   const [isModalOpen, setModalOpen] = useState(false);
@@ -41,13 +42,16 @@ function LeftSideDashBoard({
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState("");
-
-
+  const [friendRequestActivity, setFriendRequestActivity] = useState(false);
 
   const toggleFriendRequestModal = () => {
+    if (friendRequestActivity) {
+      setRefreshFriendTransaction(!refreshFriendTransaction);
+      setFriendRequestActivity(false);
+    }
     setIsFriendRequestModalOpen(!isFriendRequestModalOpen);
-    setRefreshFriendTransaction(!refreshFriendTransaction);
   };
+
   const applyFilter = (criteria) => {
     setFilteredFriends([]);
     setFilterCriteria(criteria);
@@ -270,43 +274,41 @@ function LeftSideDashBoard({
           isOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0`}
       >
-      
         <div className="left-upper sm:font-normal justify-between h-32   w-full ">
           <div className="flex px-2  shadow-inner-custom items-center gap-1 justify-between border border-gray-400 sm:h-10 md:h-10   h-12 bg-gray-300">
-            <div className="p-2 flex-shrink sm:font-sm  font-semibold">
+            <div className="p-2 flex-shrink sm:font-sm text-xs lg:text-sm  font-semibold">
               You'll Give:
-              <span className="text-rose-600 font-sm "> ₹{giveAmount}</span>
+              <span className="text-rose-600 sm:font-sm  "> ₹{giveAmount}</span>
             </div>
-            <div className="p-2 flex-shrink font-semibold">
+            <div className="p-2 flex-shrink text-xs lg:text-sm  font-semibold">
               You'll Get:
-              <span className="text-green-900 font-semibold">
+              <span className="text-green-900 text-xs lg:text-sm  font-semibold">
                 {" "}
                 ₹{getAmount}
               </span>
             </div>
 
-        
-           
-              {/* View Report Button */}
-              <button
-                onClick={handleDownload}
-                className="bg-tranparent  sm:bg-rose-600  text-white py-1 px-7 flex items-center justify-between lg:hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm shadow-none  sm:shadow-md  transition-all duration-300 ease-in-out transform hover:scale-105"
-                disabled={loading}
-              >
-                {/* Icon (Always Visible) */}
+            {/* View Report Button */}
+            <button
+              onClick={handleDownload}
+              className="bg-tranparent  sm:bg-rose-600  text-white py-1 px-7 flex items-center justify-between lg:hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium rounded-sm shadow-none  sm:shadow-md  transition-all duration-300 ease-in-out transform hover:scale-105"
+              disabled={loading}
+            >
+              {/* Icon (Always Visible) */}
 
-                {loading ? (
-                  <div className="w-5 h-5 text-gra mr-2 border-4 border-t-4 lg:border-white border-black rounded-sm animate-spin"></div>
-                ) : (
-                  <FontAwesomeIcon
-                    icon={faDownload}
-                    className="mr-2 py-1 right-0 text-gray-800  sm:text-white  md:text-white   group-hover:animate-bounce "
-                  />
-                )}
-                {/* Text (Visible only on lg screens and above) */}
-                <span className="hidden lg:inline-block md:inline-block lg:ml-0 md:ml-6 text-sm">Summary</span>
-              </button>
-          
+              {loading ? (
+                <div className="w-5 h-5 text-gra mr-2 border-4 border-t-4 lg:border-white border-black rounded-sm animate-spin"></div>
+              ) : (
+                <FontAwesomeIcon
+                  icon={faDownload}
+                  className="mr-2 py-1 right-0 text-gray-800  sm:text-white  md:text-white   group-hover:animate-bounce "
+                />
+              )}
+              {/* Text (Visible only on lg screens and above) */}
+              <span className="hidden lg:inline-block md:inline-block lg:ml-0 md:ml-6 text-sm">
+                Summary
+              </span>
+            </button>
           </div>
           <div className="text-sm  py-1 sm:py-3 md:py-3      bg-gray-300  flex h-32 relative gap-2 ">
             {/* searchfrined */}
@@ -349,9 +351,9 @@ function LeftSideDashBoard({
                 </svg>
               </button>
               {isFilterOpen && (
-                 <div className="z-50 mt-1 p-1   bg-slate-100 lg:bg-gray-600 absolute  divide-gray-100 rounded-sm shadow w-[30%]">
-                 <ul className="py-2   font-Poppins font-semibold ">
-                  {["All", "You Will Get", "You Will Give", "Settled"].map(
+                <div className="z-50 mt-1 p-1   bg-slate-100 lg:bg-gray-600 absolute  divide-gray-100 rounded-sm shadow w-[30%]">
+                  <ul className="py-2   font-Poppins font-semibold ">
+                    {["All", "You Will Get", "You Will Give", "Settled"].map(
                       (criteria) => (
                         <li key={criteria} className="my-1 ">
                           <button
@@ -379,7 +381,7 @@ function LeftSideDashBoard({
               >
                 {sortCriteria}
                 <svg
-                  className="sm:w-3 sm:h-3 md:w-4 md:h-4 w-6 h-6"
+                  className="w-2.5 h-2.5 ms-3"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -396,12 +398,12 @@ function LeftSideDashBoard({
               </button>
 
               {isSortOpen && (
-                <div className="z-50 mt-1 p-1  bg-slate-100 lg:bg-gray-600 absolute text-gray-700 divide-gray-100 rounded-sm shadow w-[30%]">
+                <div className="z-50 mt-1 p-1  bg-slate-100 lg:bg-gray-600 absolute lg:text-white text-gray-700 divide-gray-100 rounded-sm shadow w-[30%]">
                   <ul className="py-2 text-sm text-gray-600 lg:text-white  font-Poppins font-semibold dark:text-gray-200">
                     <li>
                       <p
                         onClick={() => handleSort("Most Recent")}
-                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-700  border border-gray-300 lg:border-gray-600 mb-1  cursor-pointer"
+                        className="block px-1 lg:text-white text-gray-700 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-700  border border-gray-300 lg:border-gray-600 mb-1  cursor-pointer"
                       >
                         Most Recent
                       </p>
@@ -409,32 +411,32 @@ function LeftSideDashBoard({
                     <li>
                       <p
                         onClick={() => handleSort("Oldest")}
-                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-700  border border-gray-300 lg:border-gray-600 mb-1  cursor-pointer"
-                        >
+                        className="block px-1 sm:px-2 py-2 lg:text-white text-gray-700 text-xs sm:text-sm hover:bg-gray-700  border border-gray-300 lg:border-gray-600 mb-1  cursor-pointer"
+                      >
                         Oldest
                       </p>
                     </li>
                     <li>
                       <p
                         onClick={() => handleSort("Highest Amount")}
-                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-700  border border-gray-300 lg:border-gray-600 mb-1  cursor-pointer"
-                     >
+                        className="block px-1 sm:px-2 py-2 lg:text-white text-gray-700 text-xs sm:text-sm hover:bg-gray-700  border border-gray-300 lg:border-gray-600 mb-1  cursor-pointer"
+                      >
                         Highest Amount
                       </p>
                     </li>
                     <li>
                       <p
                         onClick={() => handleSort("Lowest Amount")}
-                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-700  border border-gray-300 lg:border-gray-600 mb-1  cursor-pointer"
-                        >
+                        className="block px-1 sm:px-2 py-2 lg:text-white text-gray-700 text-xs sm:text-sm hover:bg-gray-700  border border-gray-300 lg:border-gray-600 mb-1  cursor-pointer"
+                      >
                         Lowest Amount
                       </p>
                     </li>
                     <li>
                       <p
                         onClick={() => handleSort("By Name")}
-                        className="block px-1 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-700  border border-gray-300 lg:border-gray-600 mb-1  cursor-pointer"
-                        >
+                        className="block px-1 sm:px-2 py-2 lg:text-white text-gray-700 text-xs sm:text-sm hover:bg-gray-700  border border-gray-300 lg:border-gray-600 mb-1  cursor-pointer"
+                      >
                         By Name
                       </p>
                     </li>
@@ -459,62 +461,78 @@ function LeftSideDashBoard({
                 </th>
               </tr>
             </thead>
+            {friendAndTransloader? (
             <tbody>
-              {filteredFriends.map((friend) => (
-                <tr
-                  key={friend.userEntity.userId}
-                  className={`bg-white border-b border-1 shadow-inner-custom rounded-sm  dark:border-gray-100 cursor-pointer ${
-                    selectedRowId === friend.userEntity.userId
-                      ? "bg-gray-300 dark:bg-gray-300"
-                      : "bg-gray-100 dark:bg-gray-100"
-                  }`}
-                  onClick={() => handleRowClick(friend)} // Pass `userEntity` here
-                >
-                  <td
-                    scope="row"
-                    className="px-6 py-4 font-medium text-gray-200 whitespace-nowrap dark:text-white flex items-center"
+            {[...Array(5)].map((_, index) => (
+              <tr
+                key={index}
+                className="bg-gray-200 animate-pulse mb-1  shadow-inner-custom rounded-sm dark:border-gray-100 cursor-pointer"
+              >
+                <td className="h-14"></td>
+                <td className="h-14"></td> 
+              </tr>
+            ))}
+          </tbody>
+            ) : (
+              <tbody>
+                {filteredFriends.map((friend) => ( 
+                  <tr
+                    key={friend.userEntity.userId}
+                    className={`bg-white border-b border-1 shadow-inner-custom rounded-sm  dark:border-gray-100 cursor-pointer ${
+                      selectedRowId === friend.userEntity.userId
+                        ? "bg-gray-300 dark:bg-gray-300"
+                        : "bg-gray-100 dark:bg-gray-100"
+                    }`}
+                    onClick={() => handleRowClick(friend)} // Pass `userEntity` here
                   >
-                    <ProfileCircle
-                      className="h-8 w-8 mr-4"
-                      key={friend.userEntity.userId}
-                      name={friend.userEntity.fullName}
-                      color={friend.userEntity.colorHexValue} // Pass the user's associated color
-                    />
+                    <td
+                      scope="row"
+                      className="px-6 py-4 font-medium text-gray-200 whitespace-nowrap dark:text-white flex items-center"
+                    >
+                      <ProfileCircle
+                        className="h-8 w-8 mr-4"
+                        key={friend.userEntity.userId}
+                        name={friend.userEntity.fullName}
+                        color={friend.userEntity.colorHexValue} // Pass the user's associated color
+                      />
 
-                    <div className="flex flex-col">
-                      <span className="font-medium text-gray-800">
-                        {friend.userEntity.fullName}
-                      </span>
-                      <span className="text-xs text-gray-800">
-                        {friend.lastTransactionDate
-                          ? moment(friend.lastTransactionDate).tz("Asia/Kolkata").fromNow()
-                          : ""}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-right pr-[25px]">
-                    <div className="flex flex-col">
-                      <span
-                        className={` font-semibold  ${
+                      <div className="flex flex-col">
+                        <span className="font-medium text-gray-800">
+                          {friend.userEntity.fullName}
+                        </span>
+                        <span className="text-xs text-gray-800">
+                          {friend.lastTransactionDate
+                            ? moment(friend.lastTransactionDate)
+                                .tz("Asia/Kolkata")
+                                .fromNow()
+                            : ""}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-right pr-[25px]">
+                      <div className="flex flex-col">
+                        <span
+                          className={` font-semibold  ${
+                            friend.closingBalance >= 0
+                              ? "text-green-500 "
+                              : "text-red-500"
+                          }`}
+                        >
+                          ₹ {Math.abs(friend.closingBalance)}
+                        </span>
+
+                        <span className="text-xs text-gray-800">
+                          {friend.closingBalance != null &&
                           friend.closingBalance >= 0
-                            ? "text-green-500 "
-                            : "text-red-500"
-                        }`}
-                      >
-                        ₹ {Math.abs(friend.closingBalance)}
-                      </span>
-
-                      <span className="text-xs text-gray-800">
-                        {friend.closingBalance != null &&
-                        friend.closingBalance >= 0
-                          ? "You will get"
-                          : "You will give"}
-                      </span>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+                            ? "You will get"
+                            : "You will give"}
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            )}
           </table>
         </div>
 
@@ -540,7 +558,7 @@ function LeftSideDashBoard({
           {/* View Friend Request Button */}
           <button
             onClick={toggleFriendRequestModal}
-            className="relative w-[44%] h-full  flex items-center rounded-sm justify-center bg-teal-700 text-sm text-white hover:bg-teal-600 focus:outline-none focus:ring-4 focus:ring-emerald-300 px-2 py-1 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+            className="relative w-[44%] px-2 h-full   flex items-center rounded-sm justify-center bg-teal-700 text-sm text-white hover:bg-teal-600 focus:outline-none focus:ring-4 focus:ring-emerald-300 px-2 py-1 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
           >
             {/* Notification Badge */}
             {friendRequestCount > 0 && (
@@ -553,16 +571,16 @@ function LeftSideDashBoard({
             )}
             View Friend Request
           </button>
-
-          
         </div>
         <FriendRequestModal
-            refreshFriendTransaction={refreshFriendTransaction}
-            setRefreshFriendTransaction={setRefreshFriendTransaction}
-            user={user}
-            isOpen={isFriendRequestModalOpen}
-            toggleModal={toggleFriendRequestModal}
-          />
+          refreshFriendTransaction={refreshFriendTransaction}
+          setRefreshFriendTransaction={setRefreshFriendTransaction}
+          user={user}
+          isOpen={isFriendRequestModalOpen}
+          toggleModal={toggleFriendRequestModal}
+          setFriendRequestActivity={setFriendRequestActivity}
+          friendRequestActivity={friendRequestActivity}
+        />
       </div>
     </>
   );
