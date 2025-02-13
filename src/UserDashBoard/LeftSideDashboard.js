@@ -34,7 +34,7 @@ function LeftSideDashBoard({
   const [filteredFriends, setFilteredFriends] = useState([]);
   const [filterCriteria, setFilterCriteria] = useState("All");
 
-  const [sortCriteria, setSortCriteria] = useState("Most Recent"); // e.g., "By Type", "By Date", "By Name"
+  const [sortCriteria, setSortCriteria] = useState("Recent"); // e.g., "By Type", "By Date", "By Name"
   const [isFriendRequestModalOpen, setIsFriendRequestModalOpen] =
     useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -106,9 +106,9 @@ function LeftSideDashBoard({
     // Function to reapply filter logic to search results
     const applyFilterLogic = (list) => {
       switch (filterCriteria) {
-        case "You Will Get":
+        case "You'll Get":
           return list.filter((friend) => friend.closingBalance > 0);
-        case "You Will Give":
+        case "You'll Give":
           return list.filter((friend) => friend.closingBalance < 0);
         case "Settled":
           return list.filter((friend) => friend.closingBalance === 0);
@@ -124,7 +124,7 @@ function LeftSideDashBoard({
   const sortItems = (criteria) => {
     const sorted = [...filteredFriends]; // Assuming `filteredFriends` is the filtered array
 
-    if (criteria === "Most Recent") {
+    if (criteria === "Recent") {
       sorted.sort(
         (a, b) =>
           new Date(b.lastTransactionDate) - new Date(a.lastTransactionDate)
@@ -134,9 +134,9 @@ function LeftSideDashBoard({
         (a, b) =>
           new Date(a.lastTransactionDate) - new Date(b.lastTransactionDate)
       ); // Sort by oldest date first
-    } else if (criteria === "Highest Amount") {
+    } else if (criteria === "Highest") {
       sorted.sort((a, b) => b.closingBalance - a.closingBalance); // Sort by highest amount first
-    } else if (criteria === "Lowest Amount") {
+    } else if (criteria === "Lowest") {
       sorted.sort((a, b) => a.closingBalance - b.closingBalance); // Sort by lowest amount first
     } else if (criteria === "By Name") {
       sorted.sort((a, b) =>
@@ -327,7 +327,7 @@ function LeftSideDashBoard({
             </div>
 
             <div className="filter-section w-[30%] text-gray-700 h-full">
-              <p className="p-1 font-semibold">Filter</p>
+              <p className="p-1 font-semibold lg:text-xs text-sm">Filter</p>
               <button
                 onClick={toggleFilterDropdown}
                 className="sm:h-10 h-10 w-full justify-between px-5 sm:px-4 gap-4 border-gray-700 text-white bg-gray-700 hover:bg-gray-600 font-medium rounded-sm text-sm py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700"
@@ -353,7 +353,7 @@ function LeftSideDashBoard({
               {isFilterOpen && (
                 <div className="z-50 mt-1 p-1   bg-slate-100 lg:bg-gray-600 absolute  divide-gray-100 rounded-sm shadow w-[30%]">
                   <ul className="py-2   font-Poppins font-semibold ">
-                    {["All", "You Will Get", "You Will Give", "Settled"].map(
+                    {["All", "You'll Get", "You'll Give", "Settled"].map(
                       (criteria) => (
                         <li key={criteria} className="my-1 ">
                           <button
@@ -373,7 +373,7 @@ function LeftSideDashBoard({
             {/* shortBy */}
 
             <div className="sort-section text-gray-700 h-full w-[30%] mr-2">
-              <p className="p-1 font-Poppins font-semibold">Sort By</p>
+              <p className="p-1 font-Poppins font-semibold lg:text-xs text-sm">Sort By</p>
               <button
                 onClick={toggleSortDropdown}
                 className="sm:h-10 h-10 w-full justify-between px-5 sm:px-4 gap-4 border-gray-700 text-white bg-gray-700 hover:bg-gray-600 font-medium rounded-sm text-sm py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700"
@@ -402,10 +402,10 @@ function LeftSideDashBoard({
                   <ul className="py-2 text-sm text-gray-600 lg:text-white  font-Poppins font-semibold dark:text-gray-200">
                     <li>
                       <p
-                        onClick={() => handleSort("Most Recent")}
+                        onClick={() => handleSort("Recent")}
                         className="block px-1 lg:text-white text-gray-700 sm:px-2 py-2 text-xs sm:text-sm hover:bg-gray-700  border border-gray-300 lg:border-gray-600 mb-1  cursor-pointer"
                       >
-                        Most Recent
+                        Recent
                       </p>
                     </li>
                     <li>
@@ -418,18 +418,18 @@ function LeftSideDashBoard({
                     </li>
                     <li>
                       <p
-                        onClick={() => handleSort("Highest Amount")}
+                        onClick={() => handleSort("Highest")}
                         className="block px-1 sm:px-2 py-2 lg:text-white text-gray-700 text-xs sm:text-sm hover:bg-gray-700  border border-gray-300 lg:border-gray-600 mb-1  cursor-pointer"
                       >
-                        Highest Amount
+                        Highest
                       </p>
                     </li>
                     <li>
                       <p
-                        onClick={() => handleSort("Lowest Amount")}
+                        onClick={() => handleSort("Lowest")}
                         className="block px-1 sm:px-2 py-2 lg:text-white text-gray-700 text-xs sm:text-sm hover:bg-gray-700  border border-gray-300 lg:border-gray-600 mb-1  cursor-pointer"
                       >
-                        Lowest Amount
+                        Lowest
                       </p>
                     </li>
                     <li>
@@ -451,7 +451,7 @@ function LeftSideDashBoard({
 
         <div className="flex-1 overflow-auto border mb-1 border-gray-400 shadow-inner-custom w-full bg-gray-400 relative overflow-y-auto scrollbar-none ">
           <table className="w-full p-2  pt-0  border-separate border-spacing-y-1 text-sm text-left text-gray-500 dark:text-white">
-            <thead className="sticky  border  shadow-inner-custom  top-0 bg-gray-50 dark:bg-gray-100 text-xs text-gray-400 uppercase dark:text-gray-800">
+            <thead className="sticky  border  shadow-inner-custom  top-0 bg-gray-50 dark:bg-gray-100 text-xs text-gray-400 uppercase lg:text-gray-600">
               <tr>
                 <th scope="col" className="px-6 py-3">
                   Name

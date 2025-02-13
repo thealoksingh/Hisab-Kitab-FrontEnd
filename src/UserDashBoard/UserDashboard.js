@@ -193,7 +193,7 @@ const UserDashboard = () => {
               </a>
             </li>
             <li>
-              <a className="flex items-center  p-2 lg:text-gray-300 lg:bg-transparent bg-teal-100 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
+              <a className="flex items-center  p-2 lg:text-gray-300 lg:bg-transparent  text-black rounded-sm  lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
                 <FontAwesomeIcon
                   icon={faUser}
                   className="lg:text-gray-300 text-gray-600"
@@ -223,11 +223,11 @@ const UserDashboard = () => {
             <li>
               <a
                 href="/under-dev"
-                className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
+                className="flex items-center text-gray-300 p-2 lg:text-gray-500 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
               >
                 <FontAwesomeIcon
                   icon={faPeopleGroup}
-                  className="lg:text-gray-300 text-gray-600"
+                  className="lg:text-gray-500 text-gray-300"
                   style={{ fontSize: "25px" }}
                 />
                 <span className="flex-1 ms-3 whitespace-nowrap">Group</span>
@@ -236,11 +236,11 @@ const UserDashboard = () => {
             <li>
               <a
                 href="/under-dev"
-                className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
+                className="flex items-center p-2 lg:text-gray-500 text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
               >
                 <FontAwesomeIcon
                   icon={faBook}
-                  className="lg:text-gray-300 text-gray-600"
+                  className="lg:text-gray-500 text-gray-300"
                   style={{ fontSize: "25px" }}
                 />
                 <span className="flex-1 ms-3 whitespace-nowrap">
@@ -251,11 +251,11 @@ const UserDashboard = () => {
             <li className="group">
               <a
                 href="/under-dev"
-                className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
+                className="flex items-center p-2 lg:text-gray-500 text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
               >
                 <FontAwesomeIcon
                   icon={faGear}
-                  className="lg:text-gray-300 text-gray-600 group-hover:animate-spin"
+                  className="lg:text-gray-500 text-gray-300 group-hover:animate-spin"
                   style={{ fontSize: "25px" }}
                 />
                 <span className="flex-1 ms-3 whitespace-nowrap">Settings</span>
