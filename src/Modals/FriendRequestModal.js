@@ -228,7 +228,7 @@ const FriendRequestModal = ({
                             onClick={() => handleUnsend(request.id)}
                             className="w-16 text-xs h-full  text-yellow-600 border border-yellow-600 hover:text-white hover:bg-yellow-600 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-sm px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                           >
-                            "Unsend"
+                            Unsend
                           </button>
                         </div>
                       </div>

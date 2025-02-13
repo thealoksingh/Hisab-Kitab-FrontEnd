@@ -35,6 +35,7 @@ function FriendTranscationDetail({
   const [selectedRowId, setSelectedRowId] = useState(null);
   const [isCommentSectionOpen, setIsCommentSetionOpen] = useState(false);
 const [isUnfriendModalOpen, setIsUnfriendModalOpen]= useState(false);
+const [isTransactionLoading ,setIsTransactionLoading] = useState(false);
 
 const navigate = useNavigate();
 const { isAuthenticated } = useAuth();
@@ -83,8 +84,7 @@ useEffect(() => {
     console.log("History state:", window.history.state);
     
     if (window.history.state?.commentOpen) {
-      console.log("Closing comment section via back button");
-      toggleCommentSection(); // Close comment section
+       toggleCommentSection(); // Close comment section
     } else {
       console.log("Navigating to /user-dashboard");
       setRefreshFriendTransaction((prev) => !prev);
@@ -148,6 +148,7 @@ useEffect(() => {
 
   useEffect(() => {
     const fetchTransactions = async () => {
+      setIsTransactionLoading(true);
       if (!transactionsDto) return;
 
       try {
@@ -156,10 +157,12 @@ useEffect(() => {
           selectedFriend.userId
         );
         
-        setTransactionsDto(response.data); // Assuming the data is in response.data.friendList
+        setTransactionsDto(response.data);
+        setIsTransactionLoading(false)
+       
       } catch (err) {
         setError(err.message);
-      }
+      }finally{setIsTransactionLoading(false);}
     };
 
     fetchTransactions();
@@ -296,7 +299,7 @@ useEffect(() => {
               </th>
             </tr>
           </thead>
-          {friendAndTransloader? (
+          {friendAndTransloader || isTransactionLoading? (
             <tbody>
             {[...Array(5)].map((_, index) => (
               <tr
