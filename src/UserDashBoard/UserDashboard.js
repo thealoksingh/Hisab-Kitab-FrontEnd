@@ -5,14 +5,17 @@ import LeftSideDashBoard from "./LeftSideDashboard";
 import RightSideDashBoard from "./RightSideDashboard";
 import logo from "../assets/logo-hisab-kitab.png";
 import HelpAndSupport from "../Modals/HelpAndSupport";
+import InviteModal from "../Modals/InviteModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../CssStyle/LoaderStyle.css";
 import { useAuth } from "../security/AuthContext";
+
 import hisabKitabBlack from "../assets/images/hisabkitab-black.png";
 
 import {
   faCalculator,
   faGear,
+faEnvelope,
   faClipboardQuestion,
   faPeoplePulling,
   faPeopleGroup,
@@ -39,7 +42,7 @@ const UserDashboard = () => {
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
   const [friendAndTransloader, setFriendAndTransLoader] = useState(false);
   const [refreshResize, setRefreshResize] = useState(false); // State to trigger manual refresh
-
+  const [isInviteOpen, setIsInviteOpen] = useState(false);
   const { user, logout } = useAuth();
 
   useEffect(() => {
@@ -161,7 +164,9 @@ const UserDashboard = () => {
     }
  
   };
-  
+   const toggleInvite=()=>{
+    setIsInviteOpen(!isInviteOpen);
+   };
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -261,7 +266,18 @@ const UserDashboard = () => {
                 <span className="flex-1 ms-3 whitespace-nowrap">Settings</span>
               </a>
             </li>
-
+            <li onClick={toggleInvite}>
+              <a className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
+                <FontAwesomeIcon
+                  icon={faEnvelope}
+                  className="lg:text-gray-300 text-gray-600"
+                  style={{ fontSize: "25px" }}
+                />
+                <span className="flex-1 ms-3 whitespace-nowrap">
+                  Invite
+                </span>
+              </a>
+            </li>
             <li onClick={toggleHelpAndSupport}>
               <a className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
                 <FontAwesomeIcon
@@ -379,7 +395,10 @@ const UserDashboard = () => {
           </div>
         </main>
       </div>
-
+        <InviteModal
+        isOpen={isInviteOpen}
+        user={user}
+        toggleModal={toggleInvite}/>
       <HelpAndSupport
         user={user}
         isOpen={isHelpAndSupportOpen}
