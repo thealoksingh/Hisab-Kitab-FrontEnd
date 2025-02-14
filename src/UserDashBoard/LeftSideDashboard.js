@@ -373,7 +373,9 @@ function LeftSideDashBoard({
             {/* shortBy */}
 
             <div className="sort-section text-gray-700 h-full w-[30%] mr-2">
-              <p className="p-1 font-Poppins font-semibold lg:text-xs text-sm">Sort By</p>
+              <p className="p-1 font-Poppins font-semibold lg:text-xs text-sm">
+                Sort By
+              </p>
               <button
                 onClick={toggleSortDropdown}
                 className="sm:h-10 h-10 w-full justify-between px-5 sm:px-4 gap-4 border-gray-700 text-white bg-gray-700 hover:bg-gray-600 font-medium rounded-sm text-sm py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700"
@@ -381,7 +383,7 @@ function LeftSideDashBoard({
               >
                 {sortCriteria}
                 <svg
-                  className="w-2.5 h-2.5 ms-3"
+                  className="w-2.5 h-2.5 ms-3 flex-shrink-0"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -461,21 +463,33 @@ function LeftSideDashBoard({
                 </th>
               </tr>
             </thead>
-            {friendAndTransloader? (
-            <tbody>
-            {[...Array(5)].map((_, index) => (
-              <tr
-                key={index}
-                className="bg-gray-200 animate-pulse mb-1  shadow-inner-custom rounded-sm dark:border-gray-100 cursor-pointer"
-              >
-                <td className="h-14"></td>
-                <td className="h-14"></td> 
-              </tr>
-            ))}
-          </tbody>
+            {friendAndTransloader ? (
+              <tbody>
+                {[...Array(5)].map((_, index) => (
+                  <tr
+                    key={index}
+                    className="bg-gray-200 animate-pulse mb-1  shadow-inner-custom rounded-sm dark:border-gray-100 cursor-pointer"
+                  >
+                   <td colSpan="2" className="h-14"></td>
+                  </tr>
+                ))}
+              </tbody>
             ) : (
               <tbody>
-                {filteredFriends.map((friend) => ( 
+                {!filteredFriends.length > 0 && (
+                  <tr>
+                  <td colSpan="2" className="h-96 w-full p-4 text-center">
+                    <p className="text-gray-300 text-xl font-bold">
+                      You don't have any friends yet. Start building your connections!  
+                      <span className="">Click below</span> to add an existing friend or invite new ones to join.  
+                      Don't worry, you can unfriend them anytime if you want.
+                    </p>
+                  </td>
+                </tr>
+                
+                )}
+
+                {filteredFriends.map((friend) => (
                   <tr
                     key={friend.userEntity.userId}
                     className={`bg-white border-b border-1 shadow-inner-custom rounded-sm  dark:border-gray-100 cursor-pointer ${

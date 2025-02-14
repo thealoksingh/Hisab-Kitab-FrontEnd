@@ -42,12 +42,14 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
   const handleAddFriend = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setAddFriendErrorMessage(null);
+    setSuccessMessage(null);
 
     if (contactNo.trim() !== "") {
       try {
         const data = await addFriend(user.userId, contactNo);
         // console.log("Friend request sent successfully:", data);
-        setAddFriendErrorMessage("Friend request sent successfully");
+        setSuccessMessage("Friend request sent successfully");
         setContactNo(""); // Reset the contact number
       } catch (error) {
         // console.error("Error adding friend:", error);
@@ -97,18 +99,19 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
   const handleInvite = async (e) => {
     e.preventDefault();
     setInviteLoading(true);
-
+    setAddFriendErrorMessage(null);
+    setSuccessMessage(null);
     if (email !== "") {
       try {
         await sendInvitationEmail(email, user.fullName);
         // Success: Invite sent
-        setAddFriendErrorMessage("Invitation sent successfully");
         setSuccessMessage("Invitation sent successfully");
+       
         setEmail(""); // Reset the email
-        toggleModal(); // Close the modal
+      
       } catch (error) {
         // Error: Failed to send invite
-        setError(error.message || "An unexpected error occurred");
+        setAddFriendErrorMessage(error.message || "An unexpected error occurred");
         setEmail(""); // Reset the email
       } finally {
         // Reset loading state
@@ -138,6 +141,7 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
                 toggleModal(); // Close modal
                 setIsAddButtonVisible(true); // Reset to Add mode
                 setAddFriendErrorMessage(null);
+                setSuccessMessage(null);
               }}
             >
               <svg
@@ -195,15 +199,13 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
             <div className="w-full text-wrap mb-2">
               {AddFriendErrorMessage && (
                 <p
-                  className={`mb-3 text-xs break-words ${
-                    AddFriendErrorMessage.includes("successfully")
-                      ? "text-green-500"
-                      : "text-red-500"
-                  }`}
+                  className="mb-3 text-xs break-words text-rose-500 "
+                  
                 >
                   {AddFriendErrorMessage}
                 </p>
               )}
+
               {successMessage && (
                 <p className="text-green-500 text-xs">{successMessage}</p>
               )}
@@ -228,7 +230,7 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
                 type="submit"
                 className={`${
                   isAddButtonVisible ? "block" : "hidden"
-                }  bg-cyan-600 text-white  px-3 py-1 sm:px-7 sm:py-2 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
+                }  bg-cyan-600 text-white rounded-sm  px-3 py-1 sm:px-7 sm:py-2 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 `}
                 onClick={handleAddFriend}
               >
                 {isLoading ? (
@@ -244,15 +246,15 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
                 type="submit"
                 className={`${!isAddButtonVisible ? "block" : "hidden"} ${
                   isButtonDisabled
-                    ? "bg-transparent border border-gray-200   cursor-not-allowed" // Disabled state
-                    : "bg-teal-600 hover:scale-105 focus:ring-4 focus:ring-teal-300" // Enabled state
-                } text-white px-4 py-1 focus:outline-none shadow-md transition-all duration-300 ease-in-out`}
+                  ? "bg-gray-100 border border-gray-300 text-gray-400   cursor-not-allowed" // Disabled state
+                  : "bg-teal-600 text-white hover:scale-105 focus:ring-4 focus:ring-teal-300" // Enabled state
+              }  px-4 py-1 rounded-sm focus:outline-none shadow-md transition-all duration-300 ease-in-out`}
                 onClick={handleInviteRequest}
                 disabled={isButtonDisabled} // Disable button when timer is active
               >
                 {inviteLoading ? (
                   <div className="flex ">
-                    <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
+                    <div className="w-5 h-5 border-3 border-t-4 border-gray-400 rounded-full animate-spin"></div>
                     <div className="font-semibold ml-2">Sending..</div>
                   </div>
                 ) : (
@@ -264,8 +266,9 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
                   toggleModal(); // Close modal
                   setIsAddButtonVisible(true); // Reset to Add mode
                   setAddFriendErrorMessage(null);
+                  setSuccessMessage(null);
                 }}
-                className=" bg-rose-600 text-white text-xs sm:text-sm px-3 py-1 sm:px-7 sm:py-2 focus:outline-none focus:ring-4 focus:ring-rose-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 "
+                className=" bg-rose-600 text-white rounded-sm text-xs sm:text-sm px-3 py-1 sm:px-7 sm:py-2 focus:outline-none focus:ring-4 focus:ring-rose-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 "
               >
                 Cancel
               </button>

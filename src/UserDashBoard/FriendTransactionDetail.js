@@ -306,14 +306,25 @@ useEffect(() => {
                 key={index}
                 className="bg-gray-200 animate-pulse mb-1  shadow-inner-custom rounded-sm dark:border-gray-100 cursor-pointer"
               >
-                <td className="h-14"></td>
-                <td className="h-14"></td> 
-                <td className="h-14"></td> 
+                <td colSpan="3" className="h-14"></td>
+                
               </tr>
             ))}
           </tbody>
             ) : (
           <tbody>
+
+           {!transactionsDto.length > 0 && (
+                <tr>
+                <td colSpan="3" className="h-96 w-full p-4 text-center">
+                  <p className="text-gray-300 text-xl font-bold">
+                    You don't have any transactions yet. Start managing your transactions, add real-time comments,  
+                    view reports, and access summaries.
+                  </p>
+                </td>
+              </tr>
+              
+                )}     
             {transactionsDto.map((transactionDto, index) => {
               const isUserGave =
                 user.userId === transactionDto.transaction.fromUserId;

@@ -103,7 +103,7 @@ const FriendRequestModal = ({
       className="inset-0 z-50 fixed bg-gray-900 bg-opacity-30"
     >
       <div className="z-50 main-form relative p-2   flex justify-center  items-center ">
-        <div className="form1 absolute    font-Poppins   top-32 lg:top-20   sm:top-40 w-[80%]   W-1/2 lg:w-[60%]  bg-gray-300 rounded-sm shadow dark:bg-gray-300 form-custom-shadow-inner">
+        <div className="form1 absolute    font-Poppins   top-32 lg:top-16   sm:top-40 w-[80%]   W-1/2 lg:w-[60%]  bg-gray-300 rounded-sm shadow dark:bg-gray-300 form-custom-shadow-inner">
           <div className="flex fo items-center justify-between  p-1 md:p-2 rounded-sm bg-gray-600 dark:border-gray-700">
             <h4 className="text-lg font-semibold pl-3 text-white dark:text-white">
               Friend Requests
@@ -183,7 +183,7 @@ const FriendRequestModal = ({
                     ))
                   ) : (
                     <p className="text-center mt-16 text-gray-400 font-Poppins">
-                      No pending requests found.
+                      Pending requests Not found.
                     </p>
                   )}
                 </div>
@@ -235,7 +235,7 @@ const FriendRequestModal = ({
                     ))
                   ) : (
                     <p className="text-center mt-16 text-gray-400 font-Poppins">
-                      No sent requests found.
+                      Sent requests Not found.
                     </p>
                   )}
                 </div>

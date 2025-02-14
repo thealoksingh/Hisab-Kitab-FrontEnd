@@ -79,7 +79,7 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
       setSuccessMessage("Signup successful! You can now log in.");
       setTimeout(() => {
         navigate(`/signin`);
-      }, 2000);
+      }, 3000);
     } catch (error) {
       setError(
         error.response?.data?.message || "User already exists or invalid input"
@@ -355,7 +355,7 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
                 >
                   {isLoading ? (<div className="flex ">
                     <div className="w-5 h-5 border-3 border-t-4  border-white rounded-full animate-spin"></div>
-                    <div className="font-semibold ml-2 shadow-md py-2">Signing Up..</div>
+                    <div className="font-semibold ml-2  py-2">Signing Up..</div>
                     </div>
                   ) : (
                     "Sign Up"
