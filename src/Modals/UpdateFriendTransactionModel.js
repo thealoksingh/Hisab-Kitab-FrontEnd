@@ -84,9 +84,10 @@ const UpdateFriendTransactionModel = ({
     // console.log("submitted CommentTransaction = ", updatedCommentTransaction);
 
     try {
+      console.log("Updating transaction...");
       const response = await updateFriendTransactionById(updatedCommentTransaction);
+      console.log("Transaction updated successfully", response.data);
       setCommentTransaction(response.data);
-      // console.log("Transaction updated successfully", response.data);
       toggleModal(); // Close the modal after submission
       setAmount("");
       setDate("");

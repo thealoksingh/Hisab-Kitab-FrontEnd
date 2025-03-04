@@ -153,7 +153,6 @@ useEffect(() => {
 
       try {
         const response = await getTransactionDetailsWithFriend(
-          user.userId,
           selectedFriend.userId
         );
         

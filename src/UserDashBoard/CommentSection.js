@@ -91,10 +91,10 @@ function CommentSection({
         const response = await getAllCommentsByTransactionId(
           commentTransaction.transId
         );
-        console.log(response.data);
+       
 
         setComments(response.data); // Assuming the data is in response.data.friendList
-        console.log(comments);
+       
         setIsCommentLoading(false);
       } catch (err) {
         setError(err.message);
@@ -217,9 +217,7 @@ function CommentSection({
                 </span>{" "}
                 Update Entry
               </button>
-              {console.log(
-                "transaction created by = " + commentTransaction.createdBy
-              )}
+              
 
               <UpdateFriendTransaction
                 user={user}

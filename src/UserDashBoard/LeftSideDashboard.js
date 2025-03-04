@@ -233,9 +233,6 @@ function LeftSideDashBoard({
 
     try {
       const response = await apiClient.get("/api/reports/whole-transaction", {
-        params: {
-          userId,
-        },
         responseType: "blob", // Ensures the response is handled as a binary file
       });
 

@@ -4,6 +4,7 @@ import "../CssStyle/GroupDashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { deleteTicketApi } from "../Api/HisabKitabApi";
+
 function HelpAndSupport({ user, isOpen, toggleModal }) {
   const [choice, setChoice] = useState(null);
   const [tickets, setTickets] = useState([]);
@@ -56,7 +57,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
     const fetchAllTickets = async () => {
       setTicketsLoading(true);
       try {
-        const response = await getAllTickets(user.userId);
+        const response = await getAllTickets();
         
         setTickets(response.data);
         // console.log("Tickets fetched successfully");
