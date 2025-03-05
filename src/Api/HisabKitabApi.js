@@ -1,16 +1,20 @@
-import { apiClient } from "./ApiClient"
+import apiClient,{ publicApiClient } from "./ApiClient"
 
 //Api for login user
 export const loginApi = (email, password) => {
-  return apiClient.post('/user/login', { email, password });
+  return publicApiClient.post('/user/login', { email, password });
 };
 
-export const refreshTokenApi = (refreshToken) => apiClient.post("/user/refreshtoken", { refreshToken });
+export const refreshTokenApi = (refreshToken) => publicApiClient.post("/user/refreshtoken", { refreshToken });
 
 
 // Api for register user
 export const signUpUser = (userData) => 
-    apiClient.post('/user/signup', userData);
+  publicApiClient.post('/user/signup', userData);
+
+// Api for Logout user
+export const logOutUser = () => 
+  apiClient.delete('/user/signout');
 
 // API to fetch the user's friend list
 export const getFriendList = () => {
@@ -101,7 +105,7 @@ export const createTicket = (ticketData) => {
   return apiClient.post(`/user/tickets`, ticketData);
 };
 export const getAllTickets = () => {
-  return apiClient.get(`/user/tickets/`);
+  return apiClient.get(`/user/tickets/all`);
 };
 
 export const unFriendApi = (friendId) => {

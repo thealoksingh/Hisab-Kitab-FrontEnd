@@ -4,7 +4,7 @@ import AddFriendModal from "../Modals/AddFriendModal";
 import moment from "moment-timezone";
 import "../CssStyle/GroupDashboard.css";
 import FriendRequestModal from "../Modals/FriendRequestModal";
-import { apiClient } from "../Api/ApiClient";
+import  apiClient  from "../Api/ApiClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import ProfileCircle from "../utils/ProfileCircle";
