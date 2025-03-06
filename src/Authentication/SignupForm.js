@@ -13,9 +13,7 @@ const SignUpForm = () => {
   const navigate = useNavigate();
   const [timer, setTimer] = useState(60); // State for timer
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // State for disabling button
-  const [message, setMessage] = useState(null); // For success or incorrect OTP message
   const [isClicked, setClicked] = useState(false); // State to handle error prompt
-
   //    const { role } = useParams();
   //   const navigate = useNavigate();
   const [fullName, setFullName] = useState("");
@@ -23,11 +21,51 @@ const SignUpForm = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
   const [otp, setOtp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 const [showDisclaimer, setShowDisclaimer] = useState(true);
+const[successMessage, setSuccessMessage] = useState("");
+const[errorMessage, setErrorMessage] = useState("");
+const [errors, setErrors] = useState({});
+
+const validate = () => {
+  let tempErrors = {};
+
+  // Full Name: Required, 1-50 characters, no special characters
+  if (!fullName.trim()) {
+    tempErrors.fullName = "Full Name is required";
+  } else if (!/^[a-zA-Z ]{1,50}$/.test(fullName)) {
+    tempErrors.fullName = "Full Name must be 1-50 letters (no special characters)";
+  }
+
+  // Email: Validate format
+  if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+    tempErrors.email = "Invalid email format";
+  }
+
+  // Phone Number: Exactly 10 digits
+  if (!/^\d{10}$/.test(phoneNumber)) {
+    tempErrors.number = "Number must be exactly 10 digits";
+  }
+
+  // Password: Min 8 characters, at least 1 uppercase, 1 lowercase, 1 number, 1 special character
+  if (!password) {
+    tempErrors.password = "Password is required";
+  } else if (
+    !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/.test(password)
+  ) {
+    tempErrors.password =
+      "Password must be 8+ chars with at least 1 uppercase, 1 lowercase, 1 number, and 1 special character.";
+  }
+
+  setErrors(tempErrors);
+  
+  return Object.keys(tempErrors).length === 0; // Returns true if no errors
+};
+
+
+
+
   useEffect(() => {
     let interval;
 
@@ -43,26 +81,24 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
   }, [isButtonDisabled, timer]); // Dependencies to trigger the timer logic
 
   const handleTimeAndOtp = (e) => {
-    if (email !== "") {
+    if (validate()) {
       handleOtpRequest(e); // Send OTP request
       setIsButtonDisabled(true); // Disable button after OTP is sent
-    } else {
-      setMessage("Please enter a valid email.");
     }
   };
 
-  const role = "user";
-  const handleSignup = async (e) => {
+    const role = "user";
+    const handleSignup = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError(null);
+  
+    setErrorMessage(null);
     if (!otpVerified) {
-      setError("Please verify OTP First");
+      setErrorMessage("Please verify OTP First");
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setErrorMessage("Passwords do not match");
       return;
     }
 
@@ -73,21 +109,22 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
       password,
       role,
     };
-
+    if (validate() && otpVerified) {
+      setIsLoading(true);
     try {
-      await signUpUser(userData);
+    await signUpUser(userData);
       setSuccessMessage("Signup successful! You can now log in.");
       setTimeout(() => {
         navigate(`/signin`);
       }, 3000);
     } catch (error) {
-      setError(
+      setErrorMessage(
         error.response?.data?.message || "User already exists or invalid input"
       );
     } finally {
       setIsLoading(false);
     }
-  };
+  }};
 
   const handleClose = () => {
     setIsOpen(false); // Close the modal
@@ -96,15 +133,15 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
 
   const handleOtpRequest = async (e) => {
     e.preventDefault();
-    if (email !== "") {
+    if (validate()) {
       try {
         const response = await sendOtpEmail(email, "sign-up");
         setOtp(response.data); // Update state with OTP
         setOtpSent(true);
-        setError(null);
+        setErrorMessage(null);
         setSuccessMessage("Otp sent successfully");
       } catch (error) {
-        setError( error.response?.data ||"An error occurred");
+        setErrorMessage( error.response?.data ||"An error occurred");
         console.error("Error sending OTP:", error);
         setOtpSent(false);
         setIsButtonDisabled(false); // Display
@@ -120,12 +157,12 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
 
     if (otpEntered.trim() !== otp.toString().trim()) {
       setOtpVerified(false);
-      setMessage("Incorrect OTP");
+      setErrorMessage("Incorrect OTP");
       return;
     }
 
     setOtpVerified(true);
-    setMessage("OTP Verified Successfully");
+    setSuccessMessage("OTP Verified Successfully");
     // Show password fields after OTP is verified
   };
 
@@ -220,6 +257,8 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
                   placeholder="Enter your Full Name"
                 />
               </div>
+              <span className="text-rose-600 text-xs">{errors.fullName}</span>
+             
               <div className="mb-1">
                 <label className="block mb-2 text-sm font-medium text-gray-900">
                   Mobile number
@@ -235,8 +274,9 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
                   className=" input-field-shadow w-[70%]   border text-sm border-gray-400 text-gray-600 rounded-sm   p-1"
                   placeholder="Enter Mobile Number"
                 />
+                
               </div>
-
+              <span className="text-rose-600 text-xs">{errors.number}</span>
               <div className="mb-1 mt-1">
                 <label className="block mb-2 text-sm font-medium text-gray-900">
                   Email address
@@ -260,13 +300,14 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
                     disabled={isButtonDisabled} // Disable button when timer is active
                     style={{
                       backgroundColor: isButtonDisabled
-                        ? "transparent"
+                        ? "rgb(197, 197, 197)"
                         : "rgb(0, 150, 135)", // Change color when disabled
                     }}
                   >
                     Send OTP
                   </button>
                 </div>
+                <span className="text-rose-600 text-xs">{errors.email}</span>
               </div>
               {isButtonDisabled && (
                 <h5 className="text-green-500 font-sm">
@@ -299,13 +340,15 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
                   </div>
                 </div>
               )}
-              {otpVerified && (
-                <h5 className="text-green-500 font-sm">OTP Verified</h5>
+
+              {/* {otpVerified && (
+                
+                <h5 className="text-green-500 font-sm">{successMessage}</h5>
               )}
 
               {!otpVerified && isClicked && (
-                <h5 className="text-rose-500 font-sm">!!! Incorrect OTP</h5>
-              )}
+                <h5 className="text-rose-500 font-sm">{errorMessage}</h5>
+              )} */}
 
               <div className="mb-4 mt-1">
                 <label className="block mb-2 text-sm font-medium text-gray-900">
@@ -336,18 +379,16 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
                   />
                 </div>
               </div>
-              {error && (
+              <span className="text-rose-600 text-xs">{errors.password}</span>
+           
+              {errorMessage && (
                 <p className="mt-1 py-1 mb-2 text-center text-sm text-red-500">
-                  {error}
+                  {errorMessage}
                 </p>
               )}
               {/* <p className="mt-1 py-1 mb-2 text-center text-sm text-red-500 ">Signup succesfu you can login now</p> */}
-              {successMessage && (
-                <p className="mt-1 py-1 mb-2 text-center text-sm text-green-500">
-                  {successMessage}
-                </p>
-              )}
-               {message &&  <p className="mt-1 py-1 mb-2 text-center text-sm text-green-500">{message}</p>}
+             
+               {successMessage &&  <p className="mt-1 py-1 mb-2 text-center text-sm text-green-500">{successMessage}</p>}
               <div className="mb-2 flex gap-4">
                 <button
                   type="submit"

@@ -70,11 +70,11 @@ function LeftSideDashBoard({
 
     let sortedFriends = [];
 
-    switch (criteria) {
-      case "You Will Get":
+    switch (criteria) {////All", "You'll Get", "You'll Give", "Settled
+      case "You'll Get":
         sortedFriends = calculateYouWillGet(friends);
         break;
-      case "You Will Give":
+      case "You'll Give":
         sortedFriends = calculateYouWillGive(friends);
         break;
       case "Settled":
@@ -227,6 +227,9 @@ function LeftSideDashBoard({
   }
 
   const handleDownload = async (e) => {
+    if(friends.length===0){
+      alert("You must have at least one friend to download the summary.");
+      return};
     e.preventDefault();
     setLoading(true);
     setError("");

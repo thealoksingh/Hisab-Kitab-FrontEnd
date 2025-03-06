@@ -92,7 +92,7 @@ export const sendOtpEmail = (email, type) => {
 };
 //forgot password /update password
 export const forgetPassword = (email, newPassword) => {
-  return apiClient.post(`/user/update-password?email=${email}&newPassword=${newPassword}`);
+  return publicApiClient.put(`/user/update-password`,{email:email,passWord:newPassword});
 };
 
 

@@ -18,12 +18,44 @@ const GiveGotModal = ({
   const maxChars = 50;
   const [countText, setCountText] = useState("");
   const [error, setError] = useState("");
+const [errors, setErrors] = useState({});
+
+  const validateTransaction = () => {
+    let tempErrors = {};
+  
+    // Amount: Must be a non-negative number
+    if (isNaN(amount) || Number(amount) < 0) {
+      tempErrors.amount = "Amount must be a non-negative number";
+    }
+  
+    // Description: Must be less than 50 characters
+    if (!description.trim()) {
+      tempErrors.description = "Description is required";
+    } else if (description.length > 50) {
+      tempErrors.description = "Description must be less than 50 characters";
+    }
+  
+    // Date: Cannot be in the future
+    const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD
+    if (!date) {
+      tempErrors.date = "Date is required";
+    } else if (date > today) {
+      tempErrors.date = "Date cannot be in the future";
+    }
+  
+    setErrors(tempErrors);
+    
+    return Object.keys(tempErrors).length === 0; // Returns true if no errors
+  };
+  
 
   const handleChange = (e) => {
     setCountText(e.target.value);
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    if(!validateTransaction()) return;
     if (countText.length > maxChars) {
       setError(`Description exceeds ${maxChars} characters!`);
       return;
@@ -129,7 +161,8 @@ const GiveGotModal = ({
                 required
               />
             </div>
-
+            <span className="text-rose-600 text-xs">{errors.amount}</span>
+           
             <div className="mb-1">
               <label
                 htmlFor="description"
@@ -150,6 +183,8 @@ const GiveGotModal = ({
                 required
               />
             </div>
+            <span className="text-rose-600 text-xs">{errors.description}</span>
+           
             <span
               className={`text-xs ${
                 maxChars - countText.length < 0
@@ -176,6 +211,7 @@ const GiveGotModal = ({
               />
             </div>
            {error && <div className="mb-2 text-rose-600">{error}</div>}
+           <div className="text-rose-600 text-xs mb-4">{errors.date}</div>
            
         
             <button

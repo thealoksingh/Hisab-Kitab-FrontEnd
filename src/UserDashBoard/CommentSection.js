@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProfileCircle from "../utils/ProfileCircle";
 import { deleteComment } from "../Api/HisabKitabApi";
@@ -21,6 +21,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../security/AuthContext";
 
 function CommentSection({
+  selectedFriend,
   isOpen,
   toggleCommentSection,
   commentTransaction,
@@ -39,6 +40,8 @@ function CommentSection({
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isCommentLoading, setIsCommentLoading] = useState(false);
+  const [creator, setCreator] = useState(null);
+
   const toggleDeleteAlert = () => {
     setIsDeleteAlertOpen(!isDeleteAlertOpen);
   };
@@ -54,10 +57,19 @@ function CommentSection({
   // const formattedTime = moment(comment.commentTime).fromNow();
 
   useEffect(() => {
+    if (commentTransaction) {
+      setCreator(
+        commentTransaction.createdBy === user.userId ? user : selectedFriend
+      );
+    }
+   
+  }, [commentTransaction, user, selectedFriend]);
+
+  useEffect(() => {
     if (isOpen) {
-       setWidth("100%"); // Set to 100% for all screen sizes initially
+      setWidth("100%"); // Set to 100% for all screen sizes initially
     } else {
-        setWidth("0");
+      setWidth("0");
     }
   }, [isOpen]);
 
@@ -91,10 +103,9 @@ function CommentSection({
         const response = await getAllCommentsByTransactionId(
           commentTransaction.transId
         );
-       
 
         setComments(response.data); // Assuming the data is in response.data.friendList
-       
+
         setIsCommentLoading(false);
       } catch (err) {
         setError(err.message);
@@ -141,7 +152,7 @@ function CommentSection({
     if (!confirmation) return;
 
     try {
-      console.log("Delete Comment api called");
+      // console.log("Delete Comment api called");
       await deleteComment(commentId);
       alert("Comment deleted successfully");
       // Optionally, update the UI to reflect the deleted comment
@@ -156,16 +167,16 @@ function CommentSection({
 
   return (
     <>
-    {commentTransaction && (
-  <div
-    className="Details absolute right-0 top-0 h-full shadow-inner-custom bg-gray-100 z-50 p-2"
-    style={{
-      width: width,
-      visibility: width === "0" ? "hidden" : "visible",
-      transition: "width 0.3s ease, visibility 0.1s ease",
-    }}
-  >
-   <div className="h-10 shadow-inner-custom w-full bg-gray-300 p-5 flex items-center">
+      {commentTransaction && (
+        <div
+          className="Details absolute right-0 top-0 h-full shadow-inner-custom bg-gray-100 z-50 p-2"
+          style={{
+            width: width,
+            visibility: width === "0" ? "hidden" : "visible",
+            transition: "width 0.3s ease, visibility 0.1s ease",
+          }}
+        >
+          <div className="h-10 shadow-inner-custom w-full bg-gray-300 p-5 flex items-center">
             <h2>Entry Details</h2>
             <button
               type="button"
@@ -194,14 +205,16 @@ function CommentSection({
           <div className="friend-profile h-[10%] w-full p-[10px]  gap-[10px] flex items-center">
             <ProfileCircle
               className="h-10 w-10 mr-4 text-white text-sm"
-              name={user.fullName}
-              color={user.colorHexValue}
+              name={creator?.fullName || "Unknown"}
+              color={creator?.colorHexValue || "#ccc"}
             />
 
             <div className="user-name">
-              <h2 className="text-lg text-gray-800">{user.fullName}</h2>
+              <h2 className="text-lg text-gray-800">
+                {creator?.fullName || "Unknown User"}
+              </h2>
               <p className="text-sm text-gray-600">
-                +91 <span>{user.contactNo}</span>
+                +91 <span>{creator?.contactNo || "N/A"}</span>
               </p>
             </div>
           </div>
@@ -217,7 +230,6 @@ function CommentSection({
                 </span>{" "}
                 Update Entry
               </button>
-              
 
               <UpdateFriendTransaction
                 user={user}
@@ -271,7 +283,6 @@ function CommentSection({
             </div>
             <div className="text-xs text-gray-600  h-8  p-1 mb-4  ">
               {commentTransaction.description}{" "}
-             
             </div>
           </div>
 
@@ -294,12 +305,14 @@ function CommentSection({
             ) : (
               <div className="comment-box scroll-auto overflow-y-scroll flex flex-col border border-gray-400 gap-2 bg-gray-300 shadow-inner-custom border border-gray-300 p-2  h-[70%] scrollable">
                 {/* Repeat User Comments */}
-                {!comments.length &&<div className="flex items-center justify-center  w-full h-full">
-                  <div className="text-xl text-gray-400">
-                  Comments Not Found
-                  
-                  </div></div>}
- 
+                {!comments.length && (
+                  <div className="flex items-center justify-center  w-full h-full">
+                    <div className="text-xl text-gray-400">
+                      Comments Not Found
+                    </div>
+                  </div>
+                )}
+
                 {comments.map((comment, index) => {
                   // Calculate lastClosingAmount dynamically
 
