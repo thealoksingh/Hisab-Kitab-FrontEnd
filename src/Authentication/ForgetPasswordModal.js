@@ -18,9 +18,24 @@ const ForgetPasswordForm = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // State for disabling button
   const [isClicked, setClicked] = useState(false); // State to handle error prompt
   const [errorMessage, setErrorMessage] = useState(null);
+  const [errors, setErrors] = useState({});
+    // Check if user is already logged in and redirect to user dashboard if true
+    const validate = () => {
+      let tempErrors = {};
+    
+    
+      // Email: Validate format
+      if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+        tempErrors.email = "Invalid email format";
+      }
+  
+      
+      setErrors(tempErrors);
+      
+      return Object.keys(tempErrors).length === 0; // Returns true if no errors
+    };
   useEffect(() => {
     let interval;
-
     if (isButtonDisabled && timer > 0) {
       interval = setInterval(() => {
         setTimer((prevTimer) => prevTimer - 1); // Correctly update timer using the previous value
@@ -35,17 +50,16 @@ const ForgetPasswordForm = () => {
 
   
   const handleTimeAndOtp = (e) => {
-    
+    if(!validate()) return; 
     if(email!==""){
     handleOtpRequest(e); // Send OTP request
     setIsButtonDisabled(true); // Disable button after OTP is sent
-  }else{
-    setErrorMessage("Please enter a valid email.");
   }
 
 };
 
   const handleOtpRequest = async (e) => {
+    if(!validate()) return; 
     e.preventDefault();
     if (email.trim() === "") {
       setErrorMessage("Please enter a valid email.");
@@ -92,7 +106,10 @@ const ForgetPasswordForm = () => {
     try {
       const response = await forgetPassword(email, newPassword);
       setSuccessMessage("Password updated successfully.");
-      navigate("/signin"); // Redirect to login after password reset
+      setTimeout(() => {
+        navigate(`/signin`);
+      }, 3000);
+     
     } catch (error) {
       setErrorMessage("Error updating password. Please try again.");
     }
@@ -160,7 +177,7 @@ const ForgetPasswordForm = () => {
                   onClick={handleTimeAndOtp}
                   disabled={isButtonDisabled} // Disable button when timer is active
                   style={{
-                    backgroundColor: isButtonDisabled ? "transparent" : "rgb(0, 150, 135)", // Change color when disabled
+                    backgroundColor: isButtonDisabled ? "rgb(197, 197, 197)" : "rgb(0, 150, 135)", // Change color when disabled
                   }}
                 >
                   Send OTP
@@ -170,6 +187,7 @@ const ForgetPasswordForm = () => {
             {isButtonDisabled && <h5 className="text-green-500 font-sm">
             { successMessage && "OTP sent successfully."}<span className="text-rose-600 font-sm"> {isButtonDisabled && ` Resend in ${timer} sec`}</span>
             </h5>}
+            <span className="text-rose-600 text-xs">{errors.email}</span>
            
 
             {!otpVerified && otpSent &&(<div className="mb-2 mt-5">

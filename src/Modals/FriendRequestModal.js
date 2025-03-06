@@ -25,10 +25,10 @@ const FriendRequestModal = ({
     setRequestLoading(true);
     const fetchRequests = async () => {
       try {
-        const pendingResponse = await getAllPendingRequest(user.userId);
+        const pendingResponse = await getAllPendingRequest();
         setPendingRequests(pendingResponse?.data || []);
         // console.log("Pending requests fetched:", pendingResponse.data);
-        const sentResponse = await getAllSentRequest(user.userId);
+        const sentResponse = await getAllSentRequest();
         setSentRequests(sentResponse?.data || []);
         // console.log("Sent requests fetched:", sentResponse.data);
         setRequestLoading(false);

@@ -29,7 +29,7 @@ function FriendTranscationDetail({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transactionType, setTransactionType] = useState(""); // Track the transaction type (Give or Got)
 
-  const [commentTransaction, setCommentTransaction] = useState([]);
+  const [commentTransaction, setCommentTransaction] = useState(null);
   const [isRowClicked, setIsRowClicked] = useState(false);
   const [isReportModalOpen, setReportModalOpen] = useState(false);
   const [selectedRowId, setSelectedRowId] = useState(null);
@@ -123,6 +123,12 @@ useEffect(() => {
   };
   
   const toggleReportModal = () => {
+    if(!isReportModalOpen){
+      if(transactionsDto.length==0){
+        alert("You must have at least one transaction to download Report");
+        return;
+      }
+    }
     setReportModalOpen(!isReportModalOpen);
   };
   
@@ -153,7 +159,6 @@ useEffect(() => {
 
       try {
         const response = await getTransactionDetailsWithFriend(
-          user.userId,
           selectedFriend.userId
         );
         
@@ -409,6 +414,7 @@ useEffect(() => {
       </div>
 
       <CommentSection
+        selectedFriend={selectedFriend}
         isOpen={isCommentSectionOpen}
         isRowClicked={isRowClicked}
         setIsRowClicked={setIsRowClicked}
@@ -417,6 +423,7 @@ useEffect(() => {
         toggleCommentSection={toggleCommentSection}
         refreshFriendTransaction={refreshFriendTransaction}
         setRefreshFriendTransaction={setRefreshFriendTransaction}
+        setCommentTransaction={setCommentTransaction}
       />
     </>
   );

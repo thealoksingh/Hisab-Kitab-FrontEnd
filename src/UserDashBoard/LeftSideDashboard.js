@@ -4,7 +4,7 @@ import AddFriendModal from "../Modals/AddFriendModal";
 import moment from "moment-timezone";
 import "../CssStyle/GroupDashboard.css";
 import FriendRequestModal from "../Modals/FriendRequestModal";
-import { apiClient } from "../Api/ApiClient";
+import  apiClient  from "../Api/ApiClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import ProfileCircle from "../utils/ProfileCircle";
@@ -70,11 +70,11 @@ function LeftSideDashBoard({
 
     let sortedFriends = [];
 
-    switch (criteria) {
-      case "You Will Get":
+    switch (criteria) {////All", "You'll Get", "You'll Give", "Settled
+      case "You'll Get":
         sortedFriends = calculateYouWillGet(friends);
         break;
-      case "You Will Give":
+      case "You'll Give":
         sortedFriends = calculateYouWillGive(friends);
         break;
       case "Settled":
@@ -227,15 +227,15 @@ function LeftSideDashBoard({
   }
 
   const handleDownload = async (e) => {
+    if(friends.length===0){
+      alert("You must have at least one friend to download the summary.");
+      return};
     e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
       const response = await apiClient.get("/api/reports/whole-transaction", {
-        params: {
-          userId,
-        },
         responseType: "blob", // Ensures the response is handled as a binary file
       });
 

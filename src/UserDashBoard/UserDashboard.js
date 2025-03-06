@@ -51,7 +51,7 @@ const UserDashboard = () => {
       if (!user) return;
 
       try {
-        const response = await getFriendList(user.userId);
+        const response = await getFriendList();
         setFriends(response.data.friendList);
         setFriendRequestCount(response.data.friendRequestCount);
         setFriendAndTransLoader(false);

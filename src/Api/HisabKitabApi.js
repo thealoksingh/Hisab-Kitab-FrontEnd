@@ -1,32 +1,39 @@
-import { apiClient } from "./ApiClient"
+import apiClient,{ publicApiClient } from "./ApiClient"
 
 //Api for login user
 export const loginApi = (email, password) => {
-  return apiClient.post('/user/login', new URLSearchParams({ email, password }));
+  return publicApiClient.post('/user/login', { email, password });
 };
+
+export const refreshTokenApi = (refreshToken) => publicApiClient.post("/user/refreshtoken", { refreshToken });
+
 
 // Api for register user
 export const signUpUser = (userData) => 
-    apiClient.post('/user/signup', userData);
+  publicApiClient.post('/user/signup', userData);
+
+// Api for Logout user
+export const logOutUser = () => 
+  apiClient.delete('/user/signout');
 
 // API to fetch the user's friend list
-export const getFriendList = (userId) => {
-    return apiClient.get(`/user/getAllFriendList/${userId}`);
+export const getFriendList = () => {
+    return apiClient.get(`/user/getAllFriendList`);
   };
 
 
 // API for sent a friend request
-export const addFriend = (userId, contactNo) => {
-    return apiClient.post(`/user/friend-request/send?senderId=${userId}&recieverContactNo=${contactNo}`);
+export const addFriend = (contactNo) => {
+    return apiClient.post(`/user/friend-request/send?recieverContactNo=${contactNo}`);
   };
 
 // API for getting all pending friend requests
-export const getAllPendingRequest = (userId) => {
-  return apiClient.get(`/user/friend-request/pending?receiverId=${userId}`);
+export const getAllPendingRequest = () => {
+  return apiClient.get(`/user/friend-request/pending`);
 };
 // API for getting all sent friend requests
-export const getAllSentRequest = (userId) => {
-  return apiClient.get(`/user/friend-request/sent?senderId=${userId}`);
+export const getAllSentRequest = () => {
+  return apiClient.get(`/user/friend-request/sent`);
 };
 // API for accepting a friend request
 export const acceptRequest = (requestId) => {
@@ -44,8 +51,8 @@ export const rejectRequest = (requestId) => {
 };
   
 // API for Get Friend Transaction Details
-export const getTransactionDetailsWithFriend = (userId, friendId) => {
-  return apiClient.get(`/user/getAllTransactionWithFriend?userId=${userId}&friendId=${friendId}`);
+export const getTransactionDetailsWithFriend = (friendId) => {
+  return apiClient.get(`/user/getAllTransactionWithFriend?friendId=${friendId}`);
 };
 
 
@@ -85,7 +92,7 @@ export const sendOtpEmail = (email, type) => {
 };
 //forgot password /update password
 export const forgetPassword = (email, newPassword) => {
-  return apiClient.post(`/user/update-password?email=${email}&newPassword=${newPassword}`);
+  return publicApiClient.put(`/user/update-password`,{email:email,passWord:newPassword});
 };
 
 
@@ -97,14 +104,14 @@ export const deleteComment = (commentId) => {
 export const createTicket = (ticketData) => {
   return apiClient.post(`/user/tickets`, ticketData);
 };
-export const getAllTickets = (userId) => {
-  return apiClient.get(`user/tickets/${userId}`);
+export const getAllTickets = () => {
+  return apiClient.get(`/user/tickets/all`);
 };
 
-export const unFriendApi = (userId,friendId) => {
-  return apiClient.delete(`user/${userId}/friends/${friendId}`);
+export const unFriendApi = (friendId) => {
+  return apiClient.delete(`/user/friends/${friendId}`);
 };
 
 export const deleteTicketApi = (ticketId) => {
-  return apiClient.delete(`user/tickets/${ticketId}`);
+  return apiClient.delete(`/user/tickets/${ticketId}`);
 };

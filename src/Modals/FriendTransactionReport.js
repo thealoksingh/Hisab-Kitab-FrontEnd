@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { apiClient } from "../Api/ApiClient";
+import  apiClient  from "../Api/ApiClient";
 import ProfileCircle from "../utils/ProfileCircle";
 const FriendTransactionReport= ({isOpen, toggleModal,selectedFriend, user}) => {
   const [friendId, setFriendId] = useState("");

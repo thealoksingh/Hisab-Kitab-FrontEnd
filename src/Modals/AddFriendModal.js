@@ -47,7 +47,7 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
 
     if (contactNo.trim() !== "") {
       try {
-        const data = await addFriend(user.userId, contactNo);
+        const data = await addFriend(contactNo);
         // console.log("Friend request sent successfully:", data);
         setSuccessMessage("Friend request sent successfully");
         setContactNo(""); // Reset the contact number

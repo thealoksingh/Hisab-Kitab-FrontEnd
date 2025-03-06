@@ -18,13 +18,42 @@ const UpdateFriendTransactionModel = ({
   const [fromUserId, setFromUserId] = useState(0);
   const [toUserId, setToUserId] = useState(0);
  const [isLoading, setIsLoading] = useState(false);
-  
+//  const [forceUpdate, setForceUpdate] = useState(false);
+const [errors, setErrors] = useState({});
 
    const maxChars = 50;
    const [countText, setCountText] = useState(commentTransaction.description);
 
    const handleChange = (e) => {
     setCountText(e.target.value);
+  };
+  
+  const validateTransaction = () => {
+    let tempErrors = {};
+  
+    // Amount: Must be a non-negative number
+    if (isNaN(amount) || Number(amount) < 0) {
+      tempErrors.amount = "Amount must be a non-negative number";
+    }
+  
+    // Description: Must be less than 50 characters
+    if (!description.trim()) {
+      tempErrors.description = "Description is required";
+    } else if (description.length > 50) {
+      tempErrors.description = "Description must be less than 50 characters";
+    }
+  
+    // Date: Cannot be in the future
+    const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD
+    if (!date) {
+      tempErrors.date = "Date is required";
+    } else if (date > today) {
+      tempErrors.date = "Date cannot be in the future";
+    }
+  
+    setErrors(tempErrors);
+    
+    return Object.keys(tempErrors).length === 0; // Returns true if no errors
   };
 
   useEffect(() => {
@@ -43,7 +72,9 @@ const UpdateFriendTransactionModel = ({
       );
       setToUserId(
          commentTransaction.toUserId 
+         
       );
+      
     }
   }, [commentTransaction]);
 
@@ -62,6 +93,8 @@ const UpdateFriendTransactionModel = ({
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    if(!validateTransaction()) return;
     if (countText.length > maxChars) {
       alert(`Description exceeds ${maxChars} characters!`);
       return;
@@ -84,10 +117,12 @@ const UpdateFriendTransactionModel = ({
     // console.log("submitted CommentTransaction = ", updatedCommentTransaction);
 
     try {
+      console.log("Updating transaction...");
       const response = await updateFriendTransactionById(updatedCommentTransaction);
-      setCommentTransaction(response.data);
-      // console.log("Transaction updated successfully", response.data);
-      toggleModal(); // Close the modal after submission
+      // console.log("Transaction updated successfully", response.data); 
+      setCommentTransaction((prev) => ({ ...prev, ...response.data }));
+      // console.log("after setting value...");
+      toggleModal();
       setAmount("");
       setDate("");
       setDescription("");
@@ -121,7 +156,7 @@ const UpdateFriendTransactionModel = ({
             }`}
           >
           
-           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Update Transaction</h3>
+           <h3 className="text-lg font-semibold  text-white">Update Transaction</h3>
            <button
               type="button"
               className={`text-gray-400 bg-transparent hover:${
@@ -195,7 +230,8 @@ const UpdateFriendTransactionModel = ({
                 required
               />
             </div>
-
+            <span className="text-rose-600 text-xs">{errors.amount}</span>
+          
             <div className="mb-1">
               <label htmlFor="description"  className="block mb-2 text-sm font-medium text-gray-900 ">
                 Description
@@ -221,7 +257,8 @@ const UpdateFriendTransactionModel = ({
               }`}
             >{maxChars - countText.length} chars left
             </span>
-
+            <div className="text-rose-600 text-xs">{errors.description}</div>
+          
             <div className="mb-2">
               <label htmlFor="date" className="block mb-2 text-sm font-medium text-gray-900 ">
                 Transaction Date
@@ -236,7 +273,8 @@ const UpdateFriendTransactionModel = ({
               />
             </div>
 
-            
+            <div className="text-rose-600 text-xs mb-4">{errors.date}</div>
+          
 
             <button
               type="submit"

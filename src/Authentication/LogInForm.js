@@ -17,8 +17,22 @@ const LogInForm = () => {
   const [showDisclaimer, setShowDisclaimer] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuth();
-
+const [errors, setErrors] = useState({});
   // Check if user is already logged in and redirect to user dashboard if true
+  const validate = () => {
+    let tempErrors = {};
+  
+  
+    // Email: Validate format
+    if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+      tempErrors.email = "Invalid email format";
+    }
+
+    
+    setErrors(tempErrors);
+    
+    return Object.keys(tempErrors).length === 0; // Returns true if no errors
+  };
   useEffect(() => {
     if (user) {
       navigate("/");
@@ -27,6 +41,7 @@ const LogInForm = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if(!validate())return;
     setIsLoading(true);
     setError(null); // Reset error before login attempt
  
@@ -173,6 +188,8 @@ const LogInForm = () => {
                   required
                 />
               </div>
+              <span className="text-rose-600 text-xs">{errors.email}</span>
+           
 
               <div className="mb-3">
                 <label className="block mb-2 text-sm font-medium text-gray-900">

@@ -4,6 +4,7 @@ import "../CssStyle/GroupDashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { deleteTicketApi } from "../Api/HisabKitabApi";
+
 function HelpAndSupport({ user, isOpen, toggleModal }) {
   const [choice, setChoice] = useState(null);
   const [tickets, setTickets] = useState([]);
@@ -29,12 +30,12 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!formData.title.trim() || !formData.description.trim()) {
       alert("Title and description cannot be empty.");
       return;
     }
-  
+
     setLoading(true);
     try {
       const response = await createTicket(formData);
@@ -50,21 +51,23 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
       setLoading(false);
     }
   };
-  
+
   useEffect(() => {
     if (choice !== "view") return;
     const fetchAllTickets = async () => {
       setTicketsLoading(true);
       try {
-        const response = await getAllTickets(user.userId);
-        
+        const response = await getAllTickets();
+
         setTickets(response.data);
         // console.log("Tickets fetched successfully");
 
         console.log(tickets);
       } catch (error) {
         alert("Failed to fetch Tickets.");
-      }finally{setTicketsLoading(false);}
+      } finally {
+        setTicketsLoading(false);
+      }
     };
     fetchAllTickets();
   }, [isRefreshTicket]);
@@ -146,87 +149,92 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
                   type="button"
                   className="w-full border bg-gray-100 hover:bg-yellow-500 hover:text-white border-yellow-500 text-yellow-500 rounded-sm px-4 py-1 focus:outline-none focus:ring-4 focus:ring-yellow-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                 >
-                View Tickets
+                  View Tickets
                 </button>
               </div>
             </div>
           )}
           {choice === "view" && (
-            <div className="p-1 md:p-5">
-              {isTicketsLoading ?(<div className=" scroll-auto overflow-y-scroll w-full p-2 h-96 border border-gray-400 bg-gray-100">
-                {[...Array(5)].map((_, index) => (
-                  <div
-                    key={index}
-                    className="Help-Tickets-loading bg-gray-300 animate-pulse mb-2 border border-gray-400 flex shadow-inner-custom gap-2 p-2 pr-4  h-24 rounded-sm shadow-sm items-start"
-                  ></div>
-                ))}
-                </div>):
-                
-               ( <div className=" scroll-auto overflow-y-scroll w-full p-2 max-h-96 border border-gray-400 bg-gray-100">
-                {/* repeat this  */}
-                {tickets.map((ticket) => (
-                  <div
-                    key={ticket.ticketId}
-                    className="ticket-card shadow-inner-custom  text-sm rounded-sm w-full h-auto border border-gray-300 bg-white p-4 mb-4"
-                  >
-                    <div className="flex justify-between items-center">
-                      <h2 className="text-sm  font-semibold text-gray-800">{`Ticket ID: ${ticket.ticketId}`}</h2>
+            <div className="p-1 md:p-5 ">
+              {isTicketsLoading ? (
+                <div className=" scroll-auto overflow-y-scroll w-full p-2 h-96 border border-gray-400 bg-gray-100">
+                  {[...Array(5)].map((_, index) => (
+                    <div
+                      key={index}
+                      className="Help-Tickets-loading bg-gray-300 animate-pulse mb-2 border border-gray-400 flex shadow-inner-custom gap-2 p-2 pr-4  h-24 rounded-sm shadow-sm items-start"
+                    ></div>
+                  ))}
+                </div>
+              ) : (
+                <div className=" scroll-auto overflow-y-scroll w-full p-2 min-h-64 max-h-96 border border-gray-400 bg-gray-100">
+                  {tickets.length==0 &&<div className="flex justify-center items-center h-64 w-full  text-lg text-gray-300">
+                    <h1>Tickets Not Found</h1>
+                  </div>}
 
-                      {ticket.status === "OPEN" && (
-                        <FontAwesomeIcon
-                          onClick={() => handleDeleteTicket(ticket.ticketId)}
-                          icon={faTrashCan}
-                          className="text-rose-500 hover:text-rose-600 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-                          style={{ fontSize: "18px" }}
-                        />
-                      )}
-                    </div>
+                  {tickets.map((ticket) => (
+                    <div
+                      key={ticket.ticketId}
+                      className="ticket-card shadow-inner-custom  text-sm rounded-sm w-full h-auto border border-gray-300 bg-white p-4 mb-4"
+                    >
+                      <div className="flex justify-between items-center">
+                        <h2 className="text-sm  font-semibold text-gray-800">{`Ticket ID: ${ticket.ticketId}`}</h2>
 
-                    <div className="flex justify-between mt-2">
-                      <div className="text-xs mr-2 text-wrap text-gray-700">
-                       
-                        <p className="mb-1">
-                          <strong>Status: </strong>
-                          <span
-                            className={`font-semibold ${
-                              ticket.status === "OPEN"
-                                ? "text-green-500"
-                                : "text-red-500"
-                            }`}
-                          >
-                            {ticket.status}
-                          </span>
-                        </p>
-                        <p className="mb-2 ">
-                          <strong>Priority:</strong> {ticket.priority || "None"}
-                        </p>
-                        <p className="mb-1">
-                          <strong>Title:</strong> {ticket.issueTitle}
-                        </p>
+                        {ticket.status === "OPEN" && (
+                          <FontAwesomeIcon
+                            onClick={() => handleDeleteTicket(ticket.ticketId)}
+                            icon={faTrashCan}
+                            className="text-rose-500 hover:text-rose-600 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                            style={{ fontSize: "18px" }}
+                          />
+                        )}
                       </div>
-                      <div className=" text-gray-700">
-                        <p className="text-xs text-gray-500">
-                          <strong>Created:</strong>{" "}
-                          {new Date(ticket.createdDate).toLocaleString()}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          <strong>Updated:</strong>{" "}
-                          {new Date(ticket.updatedDate).toLocaleString()}
-                        </p>
-                      </div>
-                    </div>
-                    <div className=" rounded-sm  text-xs text-gray-700">
-                          <p className="">
-                            <strong>Description : </strong>
 
-                            {ticket.description}
+                      <div className="flex justify-between mt-2">
+                        <div className="text-xs mr-2 text-wrap text-gray-700">
+                          <p className="mb-1">
+                            <strong>Status: </strong>
+                            <span
+                              className={`font-semibold ${
+                                ticket.status === "OPEN"
+                                  ? "text-green-500"
+                                  : "text-red-500"
+                              }`}
+                            >
+                              {ticket.status}
+                            </span>
                           </p>
-                    </div>
-                  </div>
-                ))}
+                          <p className="mb-2 ">
+                            <strong>Priority:</strong>{" "}
+                            {ticket.priority || "None"}
+                          </p>
+                          <p className="mb-1">
+                            <strong>Title:</strong> {ticket.issueTitle}
+                          </p>
+                        </div>
+                        <div className=" text-gray-700">
+                          <p className="text-xs text-gray-500">
+                            <strong>Created:</strong>{" "}
+                            {new Date(ticket.createdDate).toLocaleString()}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            <strong>Updated:</strong>{" "}
+                            {new Date(ticket.updatedDate).toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
+                      <div className=" rounded-sm  text-xs text-gray-700">
+                        <p className="">
+                          <strong>Description : </strong>
 
-                {/* .....  */}
-              </div>)}
+                          {ticket.description}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+
+                  {/* .....  */}
+                </div>
+              )}
             </div>
           )}
 
@@ -263,9 +271,10 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
                   type="submit"
                   className=" bg-teal-600 text-white rounded-sm px-6 py-1 focus:outline-none focus:ring-4 focus:ring-teal-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                 >
-                 {isLoading ? (<div className="flex items-center ">
-                    <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
-                    <div className="font-semibold ml-2">Processing..</div>
+                  {isLoading ? (
+                    <div className="flex items-center ">
+                      <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
+                      <div className="font-semibold ml-2">Processing..</div>
                     </div>
                   ) : (
                     "Submit"
@@ -274,12 +283,12 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
                 <button
                   type="button"
                   onClick={handleClose}
-                     className=" bg-rose-600 text-white rounded-sm px-4 py-2 
+                  className=" bg-rose-600 text-white rounded-sm px-4 py-2 
                       focus:outline-none focus:ring-4 focus:ring-rose-300 shadow-md transition-all duration-300 
                   ease-in-out transform hover:scale-105"
-                      >
-                     Cancel
-                  </button>
+                >
+                  Cancel
+                </button>
               </div>
             </form>
           )}

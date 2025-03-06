@@ -28,7 +28,7 @@ const UnfriendModal = ({
     }
 
     try {
-      const response = await unFriendApi(userId, friendId);
+      const response = await unFriendApi(friendId);
       // console.log("Unfriend successful ", response.data);
       toggleModal();
       setRefreshFriendTransaction(refreshFriendTransaction);
