@@ -121,6 +121,7 @@ function CommentSection({
       transactionId: commentTransaction.transId,
       userId: user.userId,
       comment: commentText,
+      commentTime: new Date().toISOString(),
     };
 
     try {
