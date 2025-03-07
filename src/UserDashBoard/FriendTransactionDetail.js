@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {  faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import CommentSection from "./CommentSection";
 import React, { useState, useEffect } from "react";
 import { getTransactionDetailsWithFriend } from "../Api/HisabKitabApi";
@@ -10,7 +10,7 @@ import ProfileCircle from "../utils/ProfileCircle";
 import unFriendImage from "../assets/unFriend.png";
 import UnfriendModal from "../Modals/UnfriendModal";
 
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../security/AuthContext";
 function FriendTranscationDetail({
   user,
@@ -34,83 +34,83 @@ function FriendTranscationDetail({
   const [isReportModalOpen, setReportModalOpen] = useState(false);
   const [selectedRowId, setSelectedRowId] = useState(null);
   const [isCommentSectionOpen, setIsCommentSetionOpen] = useState(false);
-const [isUnfriendModalOpen, setIsUnfriendModalOpen]= useState(false);
-const [isTransactionLoading ,setIsTransactionLoading] = useState(false);
+  const [isUnfriendModalOpen, setIsUnfriendModalOpen] = useState(false);
+  const [isTransactionLoading, setIsTransactionLoading] = useState(false);
 
-const navigate = useNavigate();
-const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
-// Redirect if the user is not authenticated
-useEffect(() => {
-  if (!isAuthenticated) {
-    navigate("/"); // Redirect to login page if not authenticated
-  }
-}, [isAuthenticated, navigate]);
-
-// Prevent the user from going back to the previous page// and implemnt custom functionality
-// useEffect(() => {
-//   const handlePopState = (e) => {
-//     e.preventDefault(); // Prevent the default back navigation
-//     console.log("isCommentSection: open --->", isCommentSectionOpen);
-
-//     if (isAuthenticated) {
-//       if (isCommentSectionOpen) {
-//         console.log("toggle comment section in if :", isCommentSectionOpen);
-//         toggleCommentSection(); // Close the comment section if it's open
-//       } else {
-//         console.log("Navigating to /user-dashboard");
-//         setRefreshFriendTransaction(!refreshFriendTransaction);
-//         setIsFriendSelected(false);
-//         setSelectedFriend(null);
-//         toggleRightSidebar();
-//         toggleLeftSidebar();
-//         navigate("/user-dashboard"); // Redirect to /user-dashboard if the user tries to go back
-//       }
-//     }
-//   };
-
-//   // Listen for back button or history changes
-//   window.history.pushState(null, document.title);
-//   window.addEventListener('popstate', handlePopState);
-
-//   return () => {
-//     window.removeEventListener('popstate', handlePopState); // Clean up the event listener on unmount
-//   };
-// }, [isAuthenticated, isCommentSectionOpen, navigate]); // Add `isCommentSectionOpen` in dependency array
-useEffect(() => {
-  const handlePopState = (e) => {
-    e.preventDefault();
-    
-    console.log("History state:", window.history.state);
-    
-    if (window.history.state?.commentOpen) {
-       toggleCommentSection(); // Close comment section
-    } else {
-      console.log("Navigating to /user-dashboard");
-      setRefreshFriendTransaction((prev) => !prev);
-      setIsFriendSelected(false);
-      setSelectedFriend(null);
-      toggleRightSidebar();
-      toggleLeftSidebar();
-      navigate("/user-dashboard");
+  // Redirect if the user is not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/"); // Redirect to login page if not authenticated
     }
-  };
+  }, [isAuthenticated, navigate]);
 
-  window.history.replaceState({ dashboard: true }, ""); // Ensure initial state is set
-  window.addEventListener("popstate", handlePopState);
+  // Prevent the user from going back to the previous page// and implemnt custom functionality
+  // useEffect(() => {
+  //   const handlePopState = (e) => {
+  //     e.preventDefault(); // Prevent the default back navigation
+  //     console.log("isCommentSection: open --->", isCommentSectionOpen);
 
-  return () => {
-    window.removeEventListener("popstate", handlePopState);
-  };
-}, [isAuthenticated, isCommentSectionOpen, navigate]);
+  //     if (isAuthenticated) {
+  //       if (isCommentSectionOpen) {
+  //         console.log("toggle comment section in if :", isCommentSectionOpen);
+  //         toggleCommentSection(); // Close the comment section if it's open
+  //       } else {
+  //         console.log("Navigating to /user-dashboard");
+  //         setRefreshFriendTransaction(!refreshFriendTransaction);
+  //         setIsFriendSelected(false);
+  //         setSelectedFriend(null);
+  //         toggleRightSidebar();
+  //         toggleLeftSidebar();
+  //         navigate("/user-dashboard"); // Redirect to /user-dashboard if the user tries to go back
+  //       }
+  //     }
+  //   };
+
+  //   // Listen for back button or history changes
+  //   window.history.pushState(null, document.title);
+  //   window.addEventListener('popstate', handlePopState);
+
+  //   return () => {
+  //     window.removeEventListener('popstate', handlePopState); // Clean up the event listener on unmount
+  //   };
+  // }, [isAuthenticated, isCommentSectionOpen, navigate]); // Add `isCommentSectionOpen` in dependency array
+  useEffect(() => {
+    const handlePopState = (e) => {
+      e.preventDefault();
+
+      console.log("History state:", window.history.state);
+
+      if (window.history.state?.commentOpen) {
+        toggleCommentSection(); // Close comment section
+      } else {
+        console.log("Navigating to /user-dashboard");
+        setRefreshFriendTransaction((prev) => !prev);
+        setIsFriendSelected(false);
+        setSelectedFriend(null);
+        toggleRightSidebar();
+        toggleLeftSidebar();
+        navigate("/user-dashboard");
+      }
+    };
+
+    window.history.replaceState({ dashboard: true }, ""); // Ensure initial state is set
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [isAuthenticated, isCommentSectionOpen, navigate]);
 
   // End of Prevent the user from going back to the previous page
 
   const handleRowClick = (transactionId) => {
     //sets transaction Id when we open comment section for any transaction
-     setSelectedRowId(transactionId);
+    setSelectedRowId(transactionId);
   };
- 
+
   const toggleCommentSection = () => {
     setIsCommentSetionOpen((prevState) => {
       if (!prevState) {
@@ -121,22 +121,22 @@ useEffect(() => {
       return !prevState;
     });
   };
-  
+
   const toggleReportModal = () => {
-    if(!isReportModalOpen){
-      if(transactionsDto.length==0){
+    if (!isReportModalOpen) {
+      if (transactionsDto.length === 0) {
         alert("You must have at least one transaction to download Report");
         return;
       }
     }
     setReportModalOpen(!isReportModalOpen);
   };
-  
 
-  const toggleUnfriendModal=() =>{
+
+  const toggleUnfriendModal = () => {
     setIsUnfriendModalOpen(!isUnfriendModalOpen);
-     }
-     
+  }
+
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -161,20 +161,20 @@ useEffect(() => {
         const response = await getTransactionDetailsWithFriend(
           selectedFriend.userId
         );
-        
+
         setTransactionsDto(response.data);
         setIsTransactionLoading(false)
-       
+
       } catch (err) {
         setError(err.message);
-      }finally{setIsTransactionLoading(false);}
+      } finally { setIsTransactionLoading(false); }
     };
 
     fetchTransactions();
   }, [user, selectedFriend, refreshFriendTransaction]);
 
-  
-  
+
+
 
 
   useEffect(() => {
@@ -206,22 +206,20 @@ useEffect(() => {
             </p>
           </div>
         </div>
-        
-       {transactionsDto.length>0 &&  <div 
-          className={`net-balance border ml-2 font-medium sm:font-semibold sm:ml-2 p-1 sm:p-2 h-8 w-25 sm:h-9 sm:w-35  md:h-9 md:w-35 rounded-sm flex items-center justify-center   ${
-            transactionsDto.length > 0 &&
-            transactionsDto[0].lastClosingBalance >= 0
+
+        {transactionsDto.length > 0 && <div
+          className={`net-balance border ml-2 font-medium sm:font-semibold sm:ml-2 p-1 sm:p-2 h-8 w-25 sm:h-9 sm:w-35  md:h-9 md:w-35 rounded-sm flex items-center justify-center   ${transactionsDto.length > 0 &&
+              transactionsDto[0].lastClosingBalance >= 0
               ? "border-green-900 text-green-900"
               : "border-red-900 text-red-900"
-          }`}
+            }`}
         >
           <h2
-            className={`text-black line-clamp-2  sm:line-clamp-1  text-xs md:text-xs sm:text-xs ${
-              transactionsDto.length > 0 &&
-              transactionsDto[0].lastClosingBalance >= 0
+            className={`text-black line-clamp-2  sm:line-clamp-1  text-xs md:text-xs sm:text-xs ${transactionsDto.length > 0 &&
+                transactionsDto[0].lastClosingBalance >= 0
                 ? "border-green-900 text-green-900"
                 : "border-red-900 text-red-900"
-            }`}
+              }`}
           >
             {transactionsDto.length > 0 && (
               <>
@@ -230,27 +228,27 @@ useEffect(() => {
                   : "You will give:"}
                 <span>
                   {" "}
-                   ₹{Math.abs(transactionsDto[0].lastClosingBalance)}
+                  ₹{Math.abs(transactionsDto[0].lastClosingBalance)}
                 </span>
               </>
             )}
           </h2>
         </div>}
 
-       {/* Report */}
+        {/* Report */}
 
         <div className="report-unfriend    flex gap-3 sm:gap-1 md:gap-1  items-center justify-between">
-        <button
-       onClick={toggleReportModal}
-         className="report w-30 group sm:w-36 md:w-36  h-8 sm:h-[35px] md:h-[32px] px-1 sm:px-3 md:px-3 bg-transparent   sm:bg-rose-600  md:bg-rose-600  flex items-center justify-center lg:hover:bg-rose-500 focus:outline-none lg:focus:ring-4 lg:focus:ring-rose-300 font-medium rounded-sm shadow-none sm:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-        >
-         <span className="inline sm:hidden ">
-          <FontAwesomeIcon className=" " icon={faDownload} />
-         </span>
-         <span className="hidden sm:flex items-center">
-          <FontAwesomeIcon icon={faDownload} className="mr-1 group-hover:animate-bounce  text-black  sm:text-white" />
-          <span className="line-clamp-1 text-white sm:text-sm">View Report</span>
-          </span>
+          <button
+            onClick={toggleReportModal}
+            className="report w-30 group sm:w-36 md:w-36  h-8 sm:h-[35px] md:h-[32px] px-1 sm:px-3 md:px-3 bg-transparent   sm:bg-rose-600  md:bg-rose-600  flex items-center justify-center lg:hover:bg-rose-500 focus:outline-none lg:focus:ring-4 lg:focus:ring-rose-300 font-medium rounded-sm shadow-none sm:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+          >
+            <span className="inline sm:hidden ">
+              <FontAwesomeIcon className=" " icon={faDownload} />
+            </span>
+            <span className="hidden sm:flex items-center">
+              <FontAwesomeIcon icon={faDownload} className="mr-1 group-hover:animate-bounce  text-black  sm:text-white" />
+              <span className="line-clamp-1 text-white sm:text-sm">View Report</span>
+            </span>
           </button>
           <FriendTransactionReport
             isOpen={isReportModalOpen}
@@ -258,30 +256,30 @@ useEffect(() => {
             selectedFriend={selectedFriend}
             user={user}
           />
-         <div
+          <div
             onClick={toggleUnfriendModal}
             className="settings h-9 w-9 sm:h-10 sm:w-10 md:h-10 md:w-10 right-0 hover:scale-110 rounded-full border shadow-md  flex items-center justify-center bg-cyan-800 "
-           >
-          <img
-           src={unFriendImage}
-           alt="Settings"
-           className="w-4 h-10 sm:h-6 sm:w-6 object-contain filter invert brightness-0"
-          />
-         
+          >
+            <img
+              src={unFriendImage}
+              alt="Settings"
+              className="w-4 h-10 sm:h-6 sm:w-6 object-contain filter invert brightness-0"
+            />
+
           </div>
           <UnfriendModal
-          isOpen={isUnfriendModalOpen}
-           toggleModal={toggleUnfriendModal}
-           userId={user.userId}
-           friendId={selectedFriend.userId}
-           refreshFriendTransaction={refreshFriendTransaction}
-           setRefreshFriendTransaction={setRefreshFriendTransaction}
-            />
-         </div>
-       </div>
+            isOpen={isUnfriendModalOpen}
+            toggleModal={toggleUnfriendModal}
+            userId={user.userId}
+            friendId={selectedFriend.userId}
+            refreshFriendTransaction={refreshFriendTransaction}
+            setRefreshFriendTransaction={setRefreshFriendTransaction}
+          />
+        </div>
+      </div>
 
-     {/* middle section */}
-     
+      {/* middle section */}
+
       <div
         onClick={() => {
           if (isCommentSectionOpen) {
@@ -304,88 +302,87 @@ useEffect(() => {
               </th>
             </tr>
           </thead>
-          {friendAndTransloader || isTransactionLoading? (
+          {friendAndTransloader || isTransactionLoading ? (
             <tbody>
-            {[...Array(5)].map((_, index) => (
-              <tr
-                key={index}
-                className="bg-gray-200 animate-pulse mb-1  shadow-inner-custom rounded-sm dark:border-gray-100 cursor-pointer"
-              >
-                <td colSpan="3" className="h-14"></td>
-                
-              </tr>
-            ))}
-          </tbody>
-            ) : (
-          <tbody>
-
-           {!transactionsDto.length > 0 && (
-                <tr>
-                <td colSpan="3" className="h-96 w-full p-4 text-center">
-                  <p className="text-gray-300 text-xl font-bold">
-                    You don't have any transactions yet. Start managing your transactions, add real-time comments,  
-                    view reports, and access summaries.
-                  </p>
-                </td>
-              </tr>
-              
-                )}     
-            {transactionsDto.map((transactionDto, index) => {
-              const isUserGave =
-                user.userId === transactionDto.transaction.fromUserId;
-
-              return (
+              {[...Array(5)].map((_, index) => (
                 <tr
-                  key={transactionDto.transaction.transId}
-                  className={`bg-white border-b border-1 shadow-inner-custom rounded-sm dark:border-gray-100 cursor-pointer ${
-                    selectedRowId === transactionDto.transaction.transId
-                    ? "bg-gray-300 dark:bg-gray-300" 
-                    : "bg-gray-100 dark:bg-gray-100" 
-                  }`}
-                  onClick={() => {
-                    handleRowClick(transactionDto.transaction.transId); // Set the selected row's ID on click
-                    setCommentTransaction(transactionDto.transaction);
-                    toggleCommentSection();
-                  }}
+                  key={index}
+                  className="bg-gray-200 animate-pulse mb-1  shadow-inner-custom rounded-sm dark:border-gray-100 cursor-pointer"
                 >
-                  <td
-                    scope="row"
-                    className="px-2 py-2 lg:px-6 lg:py-4  md:px-4 md:py-4  font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
-                  >
-                    <div className="flex flex-col">
-                      <span className="font-medium text-xs  line-clamp-2 sm:line-clamp-0 text-cyan-700">
-                        Closing Balance :<span className="text-black"> ₹</span>{" "}
-                        <span className="text-black">{transactionDto.lastClosingBalance}</span>
-                      </span>
-                      <span className="text-xs text-gray-900 mt-1">
-                        {transactionDto.transaction.transDate}
-                      </span>
-                    </div>
-                  </td>
+                  <td colSpan="3" className="h-14"></td>
 
-                  <td className="px-3 py-2    ">
-                    {isUserGave && (
-                      <div className="flex flex-col">
-                        <span className="font-medium  text-xs lg:text-sm text-rose-500">
-                          <span>₹</span> {transactionDto.transaction.amount}
-                        </span>
-                      </div>
-                    )}
-                  </td>
+                </tr>
+              ))}
+            </tbody>
+          ) : (
+            <tbody>
 
-                  <td className="px-3 py-2    sm:text-right  ">
-                    {!isUserGave && (
-                      <div className="flex flex-col">
-                        <span className="font-medium text-right text-xs lg:text-sm text-green-500 ">
-                          <span>₹</span> {transactionDto.transaction.amount}
-                        </span>
-                      </div>
-                    )}
+              {!transactionsDto.length > 0 && (
+                <tr>
+                  <td colSpan="3" className="h-96 w-full p-4 text-center">
+                    <p className="text-gray-300 text-xl font-bold">
+                      You don't have any transactions yet. Start managing your transactions, add real-time comments,
+                      view reports, and access summaries.
+                    </p>
                   </td>
                 </tr>
-              );
-            })}
-          </tbody>)}
+
+              )}
+              {transactionsDto.map((transactionDto, index) => {
+                const isUserGave =
+                  user.userId === transactionDto.transaction.fromUserId;
+
+                return (
+                  <tr
+                    key={transactionDto.transaction.transId}
+                    className={`bg-white border-b border-1 shadow-inner-custom rounded-sm dark:border-gray-100 cursor-pointer ${selectedRowId === transactionDto.transaction.transId
+                        ? "bg-gray-300 dark:bg-gray-300"
+                        : "bg-gray-100 dark:bg-gray-100"
+                      }`}
+                    onClick={() => {
+                      handleRowClick(transactionDto.transaction.transId); // Set the selected row's ID on click
+                      setCommentTransaction(transactionDto.transaction);
+                      toggleCommentSection();
+                    }}
+                  >
+                    <td
+                      scope="row"
+                      className="px-2 py-2 lg:px-6 lg:py-4  md:px-4 md:py-4  font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center"
+                    >
+                      <div className="flex flex-col">
+                        <span className="font-medium text-xs  line-clamp-2 sm:line-clamp-0 text-cyan-700">
+                          Closing Balance :<span className="text-black"> ₹</span>{" "}
+                          <span className="text-black">{transactionDto.lastClosingBalance}</span>
+                        </span>
+                        <span className="text-xs text-gray-900 mt-1">
+                          {transactionDto.transaction.transDate}
+                        </span>
+                      </div>
+                    </td>
+
+                    <td className="px-3 py-2    ">
+                      {isUserGave && (
+                        <div className="flex flex-col">
+                          <span className="font-medium  text-xs lg:text-sm text-rose-500">
+                            <span>₹</span> {transactionDto.transaction.amount}
+                          </span>
+                        </div>
+                      )}
+                    </td>
+
+                    <td className="px-3 py-2    sm:text-right  ">
+                      {!isUserGave && (
+                        <div className="flex flex-col">
+                          <span className="font-medium text-right text-xs lg:text-sm text-green-500 ">
+                            <span>₹</span> {transactionDto.transaction.amount}
+                          </span>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>)}
         </table>
       </div>
 

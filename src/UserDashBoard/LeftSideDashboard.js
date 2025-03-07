@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import AddFriendModal from "../Modals/AddFriendModal";
 import moment from "moment-timezone";
 import "../CssStyle/GroupDashboard.css";
@@ -20,7 +19,7 @@ function LeftSideDashBoard({
   toggleLeftSidebar,
   friendAndTransloader,
 }) {
-  const location = useLocation();
+  
   const [isModalOpen, setModalOpen] = useState(false);
 
   const [getAmount, setGetAmount] = useState(0);
@@ -28,8 +27,6 @@ function LeftSideDashBoard({
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
-
-  const [filterName, setFilterName] = useState("All");
 
   const [filteredFriends, setFilteredFriends] = useState([]);
   const [filterCriteria, setFilterCriteria] = useState("All");

@@ -167,7 +167,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
                 </div>
               ) : (
                 <div className=" scroll-auto overflow-y-scroll w-full p-2 min-h-64 max-h-96 border border-gray-400 bg-gray-100">
-                  {tickets.length==0 &&<div className="flex justify-center items-center h-64 w-full  text-lg text-gray-300">
+                  {tickets.length===0 &&<div className="flex justify-center items-center h-64 w-full  text-lg text-gray-300">
                     <h1>Tickets Not Found</h1>
                   </div>}
 

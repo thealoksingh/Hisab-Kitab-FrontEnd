@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect,  useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProfileCircle from "../utils/ProfileCircle";
 import { deleteComment } from "../Api/HisabKitabApi";
@@ -17,8 +17,8 @@ import {
 } from "../Api/HisabKitabApi";
 import UpdateFriendTransaction from "../Modals/UpdateFriendTransactionModel";
 import DeleteAlertModal from "../Modals/DeleteAlertModal";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../security/AuthContext";
+// import { useNavigate, useLocation } from "react-router-dom";
+// import { useAuth } from "../security/AuthContext";
 
 function CommentSection({
   selectedFriend,
@@ -48,13 +48,6 @@ function CommentSection({
   const toggleUpdateForm = () => {
     setIsUpdateFormOpen(!isUpdateFormOpen);
   };
-  // timestamp
-
-  // const newComment = {
-  //   text: "This is a comment",
-  //   commentTime: new Date().toISOString(), // Stores fixed timestamp
-  // };
-  // const formattedTime = moment(comment.commentTime).fromNow();
 
   useEffect(() => {
     if (commentTransaction) {
@@ -127,12 +120,16 @@ function CommentSection({
       return;
     }
     setIsLoading(true);
+    const commentTime = new Date().toLocaleString("en-IN", { hour12: false })
+  .replace(",", ""); 
+
+console.log("Sending commentTime:", commentTime);
 
     const commentRequestDto = {
       transactionId: commentTransaction.transId,
       userId: user.userId,
       comment: commentText,
-      commentTime: new Date().toISOString(),
+      commentTime: commentTime,
     };
 
     try {
@@ -356,9 +353,9 @@ function CommentSection({
                           </p>
                           <p className="text-xs font-semibold absolute bottom-0 right-1">
                             {/* {comment.commentTime} */}
-                            {moment(comment.commentTime)
-                              .tz("Asia/Kolkata")
-                              .fromNow()}
+                            {console.log("Received commentTime:", comment.commentTime)}
+
+                            {moment(comment.commentTime, "YYYY-MM-DD HH:mm:ss").fromNow()}
                           </p>
                         </div>
                       </div>
