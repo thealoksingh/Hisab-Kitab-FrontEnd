@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { sendOtpEmail, forgetPassword } from "../Api/HisabKitabApi";
 import forget from "../assets/forget1.jpg";
 
+
 const ForgetPasswordForm = () => {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
@@ -19,21 +20,46 @@ const ForgetPasswordForm = () => {
   const [isClicked, setClicked] = useState(false); // State to handle error prompt
   const [errorMessage, setErrorMessage] = useState(null);
   const [errors, setErrors] = useState({});
-    // Check if user is already logged in and redirect to user dashboard if true
-    const validate = () => {
-      let tempErrors = {};
-    
-    
-      // Email: Validate format
-      if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-        tempErrors.email = "Invalid email format";
-      }
-  
-      
-      setErrors(tempErrors);
-      
-      return Object.keys(tempErrors).length === 0; // Returns true if no errors
-    };
+  const [isLoading, setIsLoading] = useState(false); // State for loading spinner
+  // Check if user is already logged in and redirect to user dashboard if true
+  const validate = () => {
+    let tempErrors = {};
+
+
+    // Email: Validate format
+    if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+      tempErrors.email = "Invalid email format";
+    }
+
+    setErrors(tempErrors);
+
+    return Object.keys(tempErrors).length === 0; // Returns true if no errors
+  };
+  const validateAfterOtpVerified = () => {
+    let tempErrors = {};
+
+
+    // Email: Validate format
+    if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+      tempErrors.email = "Invalid email format";
+    }
+
+    // Password: Min 8 characters, at least 1 uppercase, 1 lowercase, 1 number, 1 special character
+    if (!newPassword || !confirmPassword) {
+      tempErrors.password = "Password is required";
+    } else if (
+      !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/.test(newPassword) ||
+      !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/.test(confirmPassword)
+    ) {
+      tempErrors.password =
+        "Password must be 8+ chars with at least 1 uppercase, 1 lowercase, 1 number, and 1 special character.";
+    }
+
+
+    setErrors(tempErrors);
+
+    return Object.keys(tempErrors).length === 0; // Returns true if no errors
+  };
   useEffect(() => {
     let interval;
     if (isButtonDisabled && timer > 0) {
@@ -48,18 +74,18 @@ const ForgetPasswordForm = () => {
   }, [isButtonDisabled, timer]); // Dependencies to trigger the timer logic
 
 
-  
-  const handleTimeAndOtp = (e) => {
-    if(!validate()) return; 
-    if(email!==""){
-    handleOtpRequest(e); // Send OTP request
-    setIsButtonDisabled(true); // Disable button after OTP is sent
-  }
 
-};
+  const handleTimeAndOtp = (e) => {
+    if (!validate()) return;
+    if (email !== "") {
+      handleOtpRequest(e); // Send OTP request
+      setIsButtonDisabled(true); // Disable button after OTP is sent
+    }
+
+  };
 
   const handleOtpRequest = async (e) => {
-    if(!validate()) return; 
+    if (!validate()) return;
     e.preventDefault();
     if (email.trim() === "") {
       setErrorMessage("Please enter a valid email.");
@@ -67,16 +93,18 @@ const ForgetPasswordForm = () => {
     }
 
     try {
-      const response = await sendOtpEmail(email, "forget-password");
-      setOtp(response.data);
-      setOtpSent(true);
-      setSuccessMessage("OTP sent successfully.");
-      setErrorMessage(null);
-      setIsButtonDisabled(true); // Disable button after OTP is sent
+
+        const response = await sendOtpEmail(email, "forget-password");
+        setOtp(response.data);
+        setOtpSent(true);
+        setSuccessMessage("OTP sent successfully.");
+        setErrorMessage(null);
+        setIsButtonDisabled(true); // Disable button after OTP is sent
+      
     } catch (error) {
       setOtpSent(false);
       setIsButtonDisabled(false); // Disable
-      setErrorMessage( error.response?.data ||"An error occurred");
+      setErrorMessage(error.response?.data || "An error occurred");
     }
   };
 
@@ -93,7 +121,7 @@ const ForgetPasswordForm = () => {
     setOtpVerified(true);
     setSuccessMessage("OTP Verified Successfully");
     setShowPasswordFields(true); // Show password fields after OTP is verified
-    
+
   };
 
   const handleSubmit = async (e) => {
@@ -104,14 +132,21 @@ const ForgetPasswordForm = () => {
     }
 
     try {
+
+      if (validateAfterOtpVerified()) {
+        setIsLoading(true);
       const response = await forgetPassword(email, newPassword);
       setSuccessMessage("Password updated successfully.");
+      alert("Password updated successfully. Redirecting to login page.");
       setTimeout(() => {
         navigate(`/signin`);
       }, 3000);
-     
+    }
+
     } catch (error) {
       setErrorMessage("Error updating password. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -171,7 +206,7 @@ const ForgetPasswordForm = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
-                 <button
+                <button
                   type="submit"
                   className="w-[30%] py-2 text-xs sm:text-sm text-white px-3 border border-gray-300 hover:bg-sky-500 focus:outline-none focus:ring-4 focus:ring-sky-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                   onClick={handleTimeAndOtp}
@@ -185,12 +220,12 @@ const ForgetPasswordForm = () => {
               </div>
             </div>
             {isButtonDisabled && <h5 className="text-green-500 font-sm">
-            { successMessage && "OTP sent successfully."}<span className="text-rose-600 font-sm"> {isButtonDisabled && ` Resend in ${timer} sec`}</span>
+              {successMessage && "OTP sent successfully."}<span className="text-rose-600 font-sm"> {isButtonDisabled && ` Resend in ${timer} sec`}</span>
             </h5>}
             <span className="text-rose-600 text-xs">{errors.email}</span>
-           
 
-            {!otpVerified && otpSent &&(<div className="mb-2 mt-5">
+
+            {!otpVerified && otpSent && (<div className="mb-2 mt-5">
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -214,9 +249,9 @@ const ForgetPasswordForm = () => {
               {otpVerified && `OTP verified successfully. `}
             </h5>
             <h5 className="text-rose-500 font-sm">
-              {!otpVerified &&  isClicked && (` !!! incorrect OTP  `)}
+              {!otpVerified && isClicked && (` !!! incorrect OTP  `)}
             </h5>
-           
+
             {otpVerified && (
               <div className="set-new-pass-div  mb-5 mt-1">
                 <label className="block mt-2 text-md font-Poppins  text-gray-900">
@@ -244,15 +279,24 @@ const ForgetPasswordForm = () => {
                 </div>
               </div>
             )}
-         {errorMessage && <p className="text-rose-500 font-semibold">{errorMessage}</p>}
+            <span className="text-rose-600 text-xs">{errors.password}</span>
+            {errorMessage && <p className="text-rose-500 font-semibold">{errorMessage}</p>}
             <div className="mt-5  flex gap-4">
+            
               {otpVerified && (
                 <button
                   type="submit"
                   className="w-1/2 bg-teal-600 text-sm text-white px-5 py-2 rounded-sm   hover:bg-teal-500 focus:outline-none focus:ring-4 focus:ring-emerald-300   shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                   onClick={handleSubmit}
                 >
-                  Submit
+                  {isLoading ? (<div className="flex ">
+                    <div className="w-5 h-5 border-3 border-t-4  border-white rounded-full animate-spin"></div>
+                    <div className="font-semibold ml-2  py-2">Submitting....</div>
+                    </div>
+                  ) : (
+                    "Submit"
+                  )}
+                  
                 </button>
               )}
             </div>

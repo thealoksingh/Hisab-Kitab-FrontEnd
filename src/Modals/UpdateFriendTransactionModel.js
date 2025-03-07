@@ -117,7 +117,7 @@ const [errors, setErrors] = useState({});
     // console.log("submitted CommentTransaction = ", updatedCommentTransaction);
 
     try {
-      console.log("Updating transaction...");
+      // console.log("Updating transaction...");
       const response = await updateFriendTransactionById(updatedCommentTransaction);
       // console.log("Transaction updated successfully", response.data); 
       setCommentTransaction((prev) => ({ ...prev, ...response.data }));
