@@ -57,7 +57,7 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
         // Handle specific error messages from the backend
         if (error.response && error.response.data) {
           const errorMessage = error.response.data;
-          console.log("🥹" + errorMessage);
+          // console.log("🥹" + errorMessage);
           switch (errorMessage) {
             case "You cannot send a friend request to yourself.":
               setAddFriendErrorMessage(

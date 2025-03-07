@@ -142,10 +142,9 @@ function LeftSideDashBoard({
     }
 
     setFilteredFriends(sorted);
-    // console.log("Filter friend sorted on the basis of");
-    // Update the filtered items with the sorted array
+   
   };
-  // let ListToApplySearch = [...filteredFriends];
+  
 
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();

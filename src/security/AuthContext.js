@@ -32,8 +32,6 @@ export default function AuthProvider({ children }) {
                 localStorage.setItem("user", JSON.stringify(userData));
                 localStorage.setItem("accessToken", response.data.data.accessToken);
                 localStorage.setItem("refreshToken", response.data.data.refreshToken);
-                console.log("response = ");
-                console.log(response.data);
                 return true;
             }
         } catch (error) {

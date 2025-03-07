@@ -62,7 +62,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
         setTickets(response.data);
         // console.log("Tickets fetched successfully");
 
-        console.log(tickets);
+        // console.log(tickets);
       } catch (error) {
         alert("Failed to fetch Tickets.");
       } finally {

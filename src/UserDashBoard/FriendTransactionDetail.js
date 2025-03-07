@@ -81,12 +81,10 @@ function FriendTranscationDetail({
     const handlePopState = (e) => {
       e.preventDefault();
 
-      console.log("History state:", window.history.state);
-
       if (window.history.state?.commentOpen) {
         toggleCommentSection(); // Close comment section
       } else {
-        console.log("Navigating to /user-dashboard");
+       
         setRefreshFriendTransaction((prev) => !prev);
         setIsFriendSelected(false);
         setSelectedFriend(null);

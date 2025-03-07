@@ -1,4 +1,4 @@
-import React, { useEffect,  useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProfileCircle from "../utils/ProfileCircle";
 import { deleteComment } from "../Api/HisabKitabApi";
@@ -55,7 +55,7 @@ function CommentSection({
         commentTransaction.createdBy === user.userId ? user : selectedFriend
       );
     }
-   
+
   }, [commentTransaction, user, selectedFriend]);
 
   useEffect(() => {
@@ -121,9 +121,9 @@ function CommentSection({
     }
     setIsLoading(true);
     const commentTime = new Date().toLocaleString("en-IN", { hour12: false })
-  .replace(",", ""); 
+      .replace(",", "");
 
-console.log("Sending commentTime:", commentTime);
+    // console.log("Sending commentTime:", commentTime);
 
     const commentRequestDto = {
       transactionId: commentTransaction.transId,
@@ -257,11 +257,10 @@ console.log("Sending commentTime:", commentTime);
                   : " Got "}{" "}
                 :
                 <span
-                  className={`text-sm font-semibold ${
-                    commentTransaction.fromUserId === user.userId
+                  className={`text-sm font-semibold ${commentTransaction.fromUserId === user.userId
                       ? "text-red-600"
                       : "text-green-600"
-                  }`}
+                    }`}
                 >
                   ₹ <span> {commentTransaction.amount}</span>
                 </span>
@@ -351,10 +350,7 @@ console.log("Sending commentTime:", commentTime);
                           <p className="text-sm mb-4  text-gray-600 break-all overflow-hidden">
                             {comment.comments}
                           </p>
-                          <p className="text-xs font-semibold absolute bottom-0 right-1">
-                            {/* {comment.commentTime} */}
-                            {console.log("Received commentTime:", comment.commentTime)}
-
+                          <p className="text-xs font-semibold absolute bottom-0 right-1">                 
                             {moment(comment.commentTime, "YYYY-MM-DD HH:mm:ss").fromNow()}
                           </p>
                         </div>

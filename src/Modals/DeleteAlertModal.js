@@ -27,7 +27,7 @@ const DeleteAlertModal = ({
       setIsLoading(false)
       return;
     }
-    console.log("transId = " + transId);
+   
     try {
       const response = await deleteTransactionById(transId);
       // console.log("Transaction deleted successfully: ", response.data);
