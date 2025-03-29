@@ -7,8 +7,9 @@ import forget from "../assets/forget1.jpg";
 const ForgetPasswordForm = () => {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
-  const [otpEntered, setOtpEntered] = useState("");
   const [otpSent, setOtpSent] = useState(false);
+  const [otpEntered, setOtpEntered] = useState("");
+  
   const [otpVerified, setOtpVerified] = useState(false);
   const [successMessage, setSuccessMessage] = useState(null); // For success or incorrect OTP message
   const [newPassword, setNewPassword] = useState(""); // For new password
@@ -22,6 +23,19 @@ const ForgetPasswordForm = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false); // State for loading spinner
   // Check if user is already logged in and redirect to user dashboard if true
+  const [otpExpireError, setOtpExpireError] = useState(false);
+
+  useEffect(() => {
+    if (otpSent) {
+      const timer = setTimeout(() => {
+        setOtp("");
+        setOtpExpireError(true);
+      }, 5 * 60 * 1000); // 5 minutes
+
+      return () => clearTimeout(timer); // Cleanup on unmount or re-trigger
+    }
+  }, [otpSent]);
+
   const validate = () => {
     let tempErrors = {};
 
@@ -83,8 +97,14 @@ const ForgetPasswordForm = () => {
     }
 
   };
+  const resetMessages = () => {
+    setOtpExpireError(false);
+    setErrorMessage(null);
+    setSuccessMessage(null);
+  }
 
   const handleOtpRequest = async (e) => {
+    resetMessages();
     if (!validate()) return;
     e.preventDefault();
     if (email.trim() === "") {
@@ -97,6 +117,7 @@ const ForgetPasswordForm = () => {
         const response = await sendOtpEmail(email, "forget-password");
         setOtp(response.data);
         setOtpSent(true);
+        
         setSuccessMessage("OTP sent successfully.");
         setErrorMessage(null);
         setIsButtonDisabled(true); // Disable button after OTP is sent
@@ -109,6 +130,7 @@ const ForgetPasswordForm = () => {
   };
 
   const handleOtpVerify = (e) => {
+    resetMessages();
     setClicked(true);
     e.preventDefault();
 
@@ -132,12 +154,11 @@ const ForgetPasswordForm = () => {
     }
 
     try {
-
       if (validateAfterOtpVerified()) {
         setIsLoading(true);
       const response = await forgetPassword(email, newPassword);
       setSuccessMessage("Password updated successfully.");
-      alert("Password updated successfully. Redirecting to login page.");
+     
       setTimeout(() => {
         navigate(`/signin`);
       }, 3000);
@@ -220,7 +241,7 @@ const ForgetPasswordForm = () => {
               </div>
             </div>
             {isButtonDisabled && <h5 className="text-green-500 font-sm">
-              {successMessage && "OTP sent successfully."}<span className="text-rose-600 font-sm"> {isButtonDisabled && ` Resend in ${timer} sec`}</span>
+             <span className="text-rose-600 font-sm"> {isButtonDisabled && ` Resend in ${timer} sec`}</span>
             </h5>}
             <span className="text-rose-600 text-xs">{errors.email}</span>
 
@@ -245,13 +266,14 @@ const ForgetPasswordForm = () => {
                 </button>
               </div>
             </div>)}
-            <h5 className="text-green-500 font-sm">
-              {otpVerified && `OTP verified successfully. `}
+           
+            <h5 className="text-rose-500 text-xs">
+              {otpExpireError && `Otp has expired`}
             </h5>
             <h5 className="text-rose-500 font-sm">
               {!otpVerified && isClicked && (` !!! incorrect OTP  `)}
             </h5>
-
+          
             {otpVerified && (
               <div className="set-new-pass-div  mb-5 mt-1">
                 <label className="block mt-2 text-md font-Poppins  text-gray-900">
@@ -280,8 +302,11 @@ const ForgetPasswordForm = () => {
               </div>
             )}
             <span className="text-rose-600 text-xs">{errors.password}</span>
-            {errorMessage && <p className="text-rose-500 font-semibold">{errorMessage}</p>}
+            {errorMessage && <p className="text-rose-500 text-sm">{errorMessage}</p>}
             <div className="mt-5  flex gap-4">
+            <h5 className="text-green-500 text-sm">
+              {successMessage}
+            </h5> 
             
               {otpVerified && (
                 <button
@@ -290,8 +315,8 @@ const ForgetPasswordForm = () => {
                   onClick={handleSubmit}
                 >
                   {isLoading ? (<div className="flex ">
-                    <div className="w-5 h-5 border-3 border-t-4  border-white rounded-full animate-spin"></div>
-                    <div className="font-semibold ml-2  py-2">Submitting....</div>
+                    <div className="w-3 h-3 border-3 border-t-4  border-white rounded-full animate-spin"></div>
+                    <div className="font-semibold ml-2  py-2">Submitting..</div>
                     </div>
                   ) : (
                     "Submit"

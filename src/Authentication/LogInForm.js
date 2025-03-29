@@ -98,8 +98,8 @@ const [errors, setErrors] = useState({});
                 Thank you for your patience.
               </p>
               <p className="text-gray-700 text-xs">
-                For the best experience, please use a desktop-sized screen with
-                Chrome or Brave browsers. Your patience is appreciated. 🙏
+                For the best experience,  <span className="font-semibold text-xs">please use a desktop-sized screen</span> 
+                with Chrome or Brave browsers. Your patience is appreciated. 🙏
               </p>
             </div>
             <button

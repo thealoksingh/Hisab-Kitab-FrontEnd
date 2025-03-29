@@ -9,6 +9,7 @@ import FriendTransactionReport from "../Modals/FriendTransactionReport";
 import ProfileCircle from "../utils/ProfileCircle";
 import unFriendImage from "../assets/unFriend.png";
 import UnfriendModal from "../Modals/UnfriendModal";
+import FooterSection from "./FooterSection";
 
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../security/AuthContext";
@@ -196,7 +197,7 @@ function FriendTranscationDetail({
           />
 
           <div className="user-name-number   ">
-            <h2 className="text-lg text-gray-800 line-clamp-1">
+            <h2 className="sm:text-sm  md:text-sm lg:text-lg text-gray-800 line-clamp-1">
               {selectedFriend.fullName}
             </h2>
             <p className="text-[10px] sm:text-sm  md:text-sm text-green-700 line-clamp-2">
@@ -206,7 +207,7 @@ function FriendTranscationDetail({
         </div>
 
         {transactionsDto.length > 0 && <div
-          className={`net-balance border ml-2 font-medium sm:font-semibold sm:ml-2 p-1 sm:p-2 h-8 w-25 sm:h-9 sm:w-35  md:h-9 md:w-35 rounded-sm flex items-center justify-center   ${transactionsDto.length > 0 &&
+          className={`net-balance border  text-xs ml-2 font-medium sm:font-semibold sm:ml-2 p-1 sm:p-2 h-8 w-25 sm:h-9 sm:w-35  md:h-9 md:w-35 rounded-sm flex flex-col justify-center   ${transactionsDto.length > 0 &&
               transactionsDto[0].lastClosingBalance >= 0
               ? "border-green-900 text-green-900"
               : "border-red-900 text-red-900"
@@ -218,19 +219,19 @@ function FriendTranscationDetail({
                 ? "border-green-900 text-green-900"
                 : "border-red-900 text-red-900"
               }`}
-          >
+          >  </h2>
             {transactionsDto.length > 0 && (
               <>
                 {transactionsDto[0].lastClosingBalance >= 0
-                  ? "You will get:"
-                  : "You will give:"}
-                <span>
-                  {" "}
+                  ? "You will get"
+                  : "You will give"}
+                <p className="text-center text-[10px]">
+                 
                   ₹{Math.abs(transactionsDto[0].lastClosingBalance)}
-                </span>
+                </p>
               </>
             )}
-          </h2>
+        
         </div>}
 
         {/* Report */}
@@ -272,6 +273,7 @@ function FriendTranscationDetail({
             friendId={selectedFriend.userId}
             refreshFriendTransaction={refreshFriendTransaction}
             setRefreshFriendTransaction={setRefreshFriendTransaction}
+            setIsFriendSelected={ setIsFriendSelected}
           />
         </div>
       </div>
@@ -407,6 +409,7 @@ function FriendTranscationDetail({
           setRefreshFriendTransaction={setRefreshFriendTransaction}
         />
       </div>
+      <FooterSection/>
 
       <CommentSection
         selectedFriend={selectedFriend}

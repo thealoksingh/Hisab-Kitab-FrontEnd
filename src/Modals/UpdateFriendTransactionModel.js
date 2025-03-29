@@ -44,17 +44,24 @@ const [errors, setErrors] = useState({});
     }
   
     // Date: Cannot be in the future
-    const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD
     if (!date) {
       tempErrors.date = "Date is required";
-    } else if (date > today) {
-      tempErrors.date = "Date cannot be in the future";
+    } else {
+      const today = new Date();
+      const selectedDate = new Date(date);
+  
+      today.setHours(0, 0, 0, 0);
+      selectedDate.setHours(0, 0, 0, 0);
+  
+      if (selectedDate > today) {
+        tempErrors.date = "Date cannot be in the future";
+      }
     }
   
     setErrors(tempErrors);
-    
     return Object.keys(tempErrors).length === 0; // Returns true if no errors
   };
+  
 
   useEffect(() => {
     if (commentTransaction) {
