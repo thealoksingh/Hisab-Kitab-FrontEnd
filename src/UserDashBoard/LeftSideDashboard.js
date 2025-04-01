@@ -5,8 +5,11 @@ import "../CssStyle/GroupDashboard.css";
 import FriendRequestModal from "../Modals/FriendRequestModal";
 import  apiClient  from "../Api/ApiClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faDownload, faCaretDown } from "@fortawesome/free-solid-svg-icons";
+
 import ProfileCircle from "../utils/ProfileCircle";
+import FooterSection from "./FooterSection";
+
 function LeftSideDashBoard({
   user,
   friends,
@@ -323,28 +326,14 @@ function LeftSideDashBoard({
             </div>
 
             <div className="filter-section w-[30%] text-gray-700 h-full">
-              <p className="p-1 font-semibold lg:text-xs text-sm">Filter</p>
+              <p className="p-1 font-semibold lg:text-sm text-sm">Filter</p>
               <button
                 onClick={toggleFilterDropdown}
                 className="sm:h-10 h-10 w-full justify-between px-5 sm:px-4 gap-4 border-gray-700 text-white bg-gray-700 hover:bg-gray-600 font-medium rounded-sm text-sm py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700"
                 type="button"
               >
                 {filterCriteria}
-                <svg
-                  className="w-2.5 h-2.5 ms-3"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 10 6"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 1 4 4 4-4"
-                  />
-                </svg>
+                <span><FontAwesomeIcon className="text-white" icon={faCaretDown} /></span>
               </button>
               {isFilterOpen && (
                 <div className="z-50 mt-1 p-1   bg-slate-100 lg:bg-gray-600 absolute  divide-gray-100 rounded-sm shadow w-[30%]">
@@ -369,7 +358,7 @@ function LeftSideDashBoard({
             {/* shortBy */}
 
             <div className="sort-section text-gray-700 h-full w-[30%] mr-2">
-              <p className="p-1 font-Poppins font-semibold lg:text-xs text-sm">
+              <p className="p-1 font-Poppins font-semibold lg:text-sm text-sm">
                 Sort By
               </p>
               <button
@@ -378,21 +367,7 @@ function LeftSideDashBoard({
                 type="button"
               >
                 {sortCriteria}
-                <svg
-                  className="w-2.5 h-2.5 ms-3 flex-shrink-0"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 10 6"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 1 4 4 4-4"
-                  />
-                </svg>
+             <span><FontAwesomeIcon className="text-white" icon={faCaretDown} /></span>
               </button>
 
               {isSortOpen && (
@@ -582,6 +557,7 @@ function LeftSideDashBoard({
             View Friend Request
           </button>
         </div>
+        <FooterSection/>
         <FriendRequestModal
           refreshFriendTransaction={refreshFriendTransaction}
           setRefreshFriendTransaction={setRefreshFriendTransaction}

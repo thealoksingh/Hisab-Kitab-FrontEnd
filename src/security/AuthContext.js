@@ -1,5 +1,4 @@
 import { createContext, useContext, useState } from "react";
-import apiClient from "../Api/ApiClient";
 import { loginApi, logOutUser } from "../Api/HisabKitabApi";
 
 export const AuthContext = createContext();
@@ -14,8 +13,6 @@ export default function AuthProvider({ children }) {
 
     async function login(email, password) {
         try {
-
-
             const response = await loginApi(email, password);
             if (response.status === 200) {
                 const userData = {
@@ -27,7 +24,7 @@ export default function AuthProvider({ children }) {
                 setUser(userData);
                 setAccessToken(response.data.data.accessToken);
                 setRefreshToken(response.data.data.refreshToken);
-
+    
                 localStorage.setItem("isAuthenticated", "true");
                 localStorage.setItem("user", JSON.stringify(userData));
                 localStorage.setItem("accessToken", response.data.data.accessToken);
@@ -35,19 +32,21 @@ export default function AuthProvider({ children }) {
                 return true;
             }
         } catch (error) {
+            // logout(); // Ensure user is logged out in case of an error
+           
             if (error.response?.status === 400) {
-                alert(error.response.data.message); // Invalid email or password
+                // throw new Error(error.response.data.message); // Invalid email or password
             } else {
-                alert("Something went wrong. Please try again later.");
+                // throw new Error("Something went wrong. Please try again later.");
             }
-            logout();
-            return false;
         }
     }
+    
 
 
-    function logout() {
-        logOutUser()
+    async function  logout() {
+      
+        await logOutUser()
         setIsAuthenticated(false);
         setUser(null);
         setAccessToken(null);

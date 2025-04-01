@@ -19,13 +19,13 @@ export default function Home() {
           />
         </div>
         <div className="nav-items hidden lg:flex text-white gap-20">
-          <span onClick={() => navigate("/")} className="">
+          {/* <span onClick={() => navigate("/")} className="">
             Home
           </span>
           <span className="">About</span>
           <span onClick={() => navigate("/user-dashboard")} className="">
             Friend
-          </span>
+          </span> */}
         </div>
         <div className="button-signup flex justify-between gap-3">
           {!user ? (

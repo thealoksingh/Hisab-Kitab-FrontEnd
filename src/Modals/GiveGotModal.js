@@ -20,34 +20,41 @@ const GiveGotModal = ({
   const [error, setError] = useState("");
 const [errors, setErrors] = useState({});
 
-  const validateTransaction = () => {
-    let tempErrors = {};
-  
-    // Amount: Must be a non-negative number
-    if (isNaN(amount) || Number(amount) < 0) {
-      tempErrors.amount = "Amount must be a non-negative number";
-    }
-  
-    // Description: Must be less than 50 characters
-    if (!description.trim()) {
-      tempErrors.description = "Description is required";
-    } else if (description.length > 50) {
-      tempErrors.description = "Description must be less than 50 characters";
-    }
-  
-    // Date: Cannot be in the future
-    const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD
-    if (!date) {
-      tempErrors.date = "Date is required";
-    } else if (date > today) {
+const validateTransaction = () => {
+  let tempErrors = {};
+
+  // Amount: Must be a non-negative number
+  if (isNaN(amount) || Number(amount) < 0) {
+    tempErrors.amount = "Amount must be a non-negative number";
+  }
+
+  // Description: Must be less than 50 characters
+  if (!description.trim()) {
+    tempErrors.description = "Description is required";
+  } else if (description.length > 50) {
+    tempErrors.description = "Description must be less than 50 characters";
+  }
+
+  // Date: Cannot be in the future
+  if (!date) {
+    tempErrors.date = "Date is required";
+  } else {
+    const today = new Date();
+    const selectedDate = new Date(date);
+
+    // Reset time to midnight for accurate date-only comparison
+    today.setHours(0, 0, 0, 0);
+    selectedDate.setHours(0, 0, 0, 0);
+
+    if (selectedDate > today) {
       tempErrors.date = "Date cannot be in the future";
     }
-  
-    setErrors(tempErrors);
-    
-    return Object.keys(tempErrors).length === 0; // Returns true if no errors
-  };
-  
+  }
+
+  setErrors(tempErrors);
+  return Object.keys(tempErrors).length === 0; // Returns true if no errors
+};
+
 
   const handleChange = (e) => {
     setCountText(e.target.value);
@@ -55,6 +62,7 @@ const [errors, setErrors] = useState({});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // console.log("amount before backend call"+amount);
     if(!validateTransaction()) return;
     if (countText.length > maxChars) {
       setError(`Description exceeds ${maxChars} characters!`);
@@ -73,9 +81,10 @@ const [errors, setErrors] = useState({});
       description: description,
       createdBy: userId,
     };
-
+    // console.log("Transaction submitted", transactionData);
     try {
       const response = await createTransaction(transactionData);
+   
       // console.log("Transaction created successfully", response);
       setCountText("");
       toggleModal(); // Close the modal after submission

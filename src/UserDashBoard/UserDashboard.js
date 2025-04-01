@@ -9,6 +9,7 @@ import InviteModal from "../Modals/InviteModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../CssStyle/LoaderStyle.css";
 import { useAuth } from "../security/AuthContext";
+import FooterSection from "./FooterSection";
 
 import hisabKitabBlack from "../assets/images/hisabkitab-black.png";
 
@@ -24,6 +25,8 @@ faEnvelope,
   faArrowRightFromBracket,
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
+
+
 
 const UserDashboard = () => {
   const [isFriendSelected, setIsFriendSelected] = useState(false);
@@ -394,6 +397,7 @@ const UserDashboard = () => {
             </div>
           </div>
         </main>
+     
       </div>
         <InviteModal
         isOpen={isInviteOpen}

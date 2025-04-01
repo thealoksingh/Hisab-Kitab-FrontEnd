@@ -9,6 +9,7 @@ const UnfriendModal = ({
   friendId,
   refreshFriendTransaction,
   setRefreshFriendTransaction,
+  setIsFriendSelected,
 }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +32,8 @@ const UnfriendModal = ({
       const response = await unFriendApi(friendId);
       // console.log("Unfriend successful ", response.data);
       toggleModal();
-      setRefreshFriendTransaction(refreshFriendTransaction);
+      setRefreshFriendTransaction(!refreshFriendTransaction);
+      setIsFriendSelected(null);
     } catch (error) {
       // console.error("Error while unfriending", error);
     } finally {

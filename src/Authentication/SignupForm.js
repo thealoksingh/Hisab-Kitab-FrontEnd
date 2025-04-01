@@ -27,6 +27,18 @@ const [showDisclaimer, setShowDisclaimer] = useState(true);
 const[successMessage, setSuccessMessage] = useState("");
 const[errorMessage, setErrorMessage] = useState("");
 const [errors, setErrors] = useState({});
+ const [otpExpireError, setOtpExpireError] = useState(false);
+
+  useEffect(() => {
+    if (otpSent ) {
+      const timer = setTimeout(() => {
+        setOtp("");
+        setOtpExpireError(true);
+      }, 5 * 60 * 1000); // 5 minutes
+
+      return () => clearTimeout(timer); // Cleanup on unmount or re-trigger
+    }
+  }, [otpSent]);
 
 const validate = () => {
   let tempErrors = {};
@@ -48,20 +60,38 @@ const validate = () => {
     tempErrors.number = "Number must be exactly 10 digits";
   }
 
-  // Password: Min 8 characters, at least 1 uppercase, 1 lowercase, 1 number, 1 special character
-  if (!password) {
-    tempErrors.password = "Password is required";
-  } else if (
-    !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/.test(password)
-  ) {
-    tempErrors.password =
-      "Password must be 8+ chars with at least 1 uppercase, 1 lowercase, 1 number, and 1 special character.";
-  }
-
+  
   setErrors(tempErrors);
   
   return Object.keys(tempErrors).length === 0; // Returns true if no errors
 };
+
+
+ const validateAfterOtpVerified = () => {
+    let tempErrors = {};
+
+
+    // Email: Validate format
+    if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+      tempErrors.email = "Invalid email format";
+    }
+
+    // Password: Min 8 characters, at least 1 uppercase, 1 lowercase, 1 number, 1 special character
+    if (!password || !confirmPassword) {
+      tempErrors.password = "Password is required";
+    } else if (
+      !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/.test(password) ||
+      !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/.test(confirmPassword)
+    ) {
+      tempErrors.password =
+        "Password must be 8+ chars with at least 1 uppercase, 1 lowercase, 1 number, and 1 special character.";
+    }
+
+
+    setErrors(tempErrors);
+
+    return Object.keys(tempErrors).length === 0; // Returns true if no errors
+  };
 
 
 
@@ -109,7 +139,7 @@ const validate = () => {
       password,
       role,
     };
-    if (validate() && otpVerified) {
+    if (validateAfterOtpVerified() && otpVerified) {
       setIsLoading(true);
     try {
     await signUpUser(userData);
@@ -130,13 +160,20 @@ const validate = () => {
     setIsOpen(false); // Close the modal
     navigate("/signin"); // Redirect to the login page
   };
+  const resetMessages = () => {
+    setOtpExpireError(false);
+    setErrorMessage(null);
+    setSuccessMessage(null);
+  }
 
   const handleOtpRequest = async (e) => {
+    resetMessages();
     e.preventDefault();
     if (validate()) {
       try {
         const response = await sendOtpEmail(email, "sign-up");
         setOtp(response.data); // Update state with OTP
+       
         setOtpSent(true);
         setErrorMessage(null);
         setSuccessMessage("Otp sent successfully");
@@ -152,6 +189,7 @@ const validate = () => {
   };
 
   const handleOtpVerify = (e) => {
+    resetMessages();
     setClicked(true);
     e.preventDefault();
 
@@ -310,9 +348,9 @@ const validate = () => {
                 <span className="text-rose-600 text-xs">{errors.email}</span>
               </div>
               {isButtonDisabled && (
-                <h5 className="text-green-500 font-sm">
+                <h5 className="text-green-500 text-sm">
                    
-                  <span className="text-rose-600 font-sm">
+                  <span className="text-rose-600 text-sm">
                     {" "}
                     {isButtonDisabled && ` Resend in ${timer} sec`}
                   </span>
@@ -320,7 +358,7 @@ const validate = () => {
               )}
 
               {otpSent && !otpVerified && (
-                <div className="mb-2 mt-1">
+                <div className="mb-2 mt-2">
                   <div className="flex gap-2">
                     <input
                       type="text"
@@ -333,7 +371,7 @@ const validate = () => {
                     <button
                       type="submit"
                       onClick={handleOtpVerify}
-                      className="w-1/2 rounded-sm bg-cyan-700 text-sm text-white px-4 py-1 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                      className=" rounded-sm bg-cyan-700 text-sm text-white px-2 py-1 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                     >
                       Verify OTP
                     </button>
@@ -349,8 +387,10 @@ const validate = () => {
               {!otpVerified && isClicked && (
                 <h5 className="text-rose-500 font-sm">{errorMessage}</h5>
               )} */}
-
-              <div className="mb-4 mt-1">
+             <h5 className="text-rose-500 text-xs">
+              {otpExpireError && `Otp has expired`}
+            </h5>
+             { otpVerified && <div className="mb-4 mt-1">
                 <label className="block mb-2 text-sm font-medium text-gray-900">
                   Enter Password
                 </label>
@@ -378,18 +418,18 @@ const validate = () => {
                     placeholder="Confirm Password"
                   />
                 </div>
-              </div>
+              </div>}
               <span className="text-rose-600 text-xs">{errors.password}</span>
            
               {errorMessage && (
-                <p className="mt-1 py-1 mb-2 text-center text-sm text-red-500">
+                <p className="mt-2 py-1 mb-2 text-center text-sm text-red-500">
                   {errorMessage}
                 </p>
               )}
               {/* <p className="mt-1 py-1 mb-2 text-center text-sm text-red-500 ">Signup succesfu you can login now</p> */}
              
                {successMessage &&  <p className="mt-1 py-1 mb-2 text-center text-sm text-green-500">{successMessage}</p>}
-              <div className="mb-2 flex gap-4">
+              <div className="mb-2 mt-2 flex gap-4">
                 <button
                   type="submit"
                   className="w-1/3 rounded-sm bg-cyan-600 text-sm text-white px-4 py-1 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"

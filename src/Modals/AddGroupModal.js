@@ -12,7 +12,7 @@ const AddGroupModal = ({ isOpen, toggleModal }) => {
       tabIndex="-1"
       aria-hidden={!isOpen}
       className={`fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-70 ${
-        isOpen ? "" : "hidden"
+      isOpen ? "" : "hidden"
       }`}
     >
       <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
