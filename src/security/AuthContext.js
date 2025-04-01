@@ -1,5 +1,4 @@
 import { createContext, useContext, useState } from "react";
-import apiClient from "../Api/ApiClient";
 import { loginApi, logOutUser } from "../Api/HisabKitabApi";
 
 export const AuthContext = createContext();
@@ -33,20 +32,21 @@ export default function AuthProvider({ children }) {
                 return true;
             }
         } catch (error) {
-            logout(); // Ensure user is logged out in case of an error
-    
+            // logout(); // Ensure user is logged out in case of an error
+           
             if (error.response?.status === 400) {
-                throw new Error(error.response.data.message); // Invalid email or password
+                // throw new Error(error.response.data.message); // Invalid email or password
             } else {
-                throw new Error("Something went wrong. Please try again later.");
+                // throw new Error("Something went wrong. Please try again later.");
             }
         }
     }
     
 
 
-    function logout() {
-        logOutUser()
+    async function  logout() {
+      
+        await logOutUser()
         setIsAuthenticated(false);
         setUser(null);
         setAccessToken(null);
