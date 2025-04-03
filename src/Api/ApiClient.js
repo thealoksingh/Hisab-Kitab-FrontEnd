@@ -71,6 +71,7 @@ apiClient.interceptors.response.use(
                 console.error("Refresh token error", err);
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('refreshToken');
+                localStorage.removeItem('user');
                 window.location.href = "/signin"; // Redirect to login if refresh fails
                 return Promise.reject(err);
             } finally {
