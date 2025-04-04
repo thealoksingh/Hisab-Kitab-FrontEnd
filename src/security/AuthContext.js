@@ -32,8 +32,7 @@ export default function AuthProvider({ children }) {
                 return true;
             }
         } catch (error) {
-            // logout(); // Ensure user is logged out in case of an error
-           
+
             if (error.response?.status === 400) {
                 // throw new Error(error.response.data.message); // Invalid email or password
             } else {
