@@ -81,8 +81,8 @@ const [errors, setErrors] = useState({});
         id="SignIn-modal"
         tabIndex="-1"
         aria-hidden="false"
-        style={{ backgroundImage: `url(${forget})` }}
-        className="fixed inset-0 bg-cover bg-center  flex items-center justify-center p-4 sm:p-8"
+        // style={{ backgroundImage: `url(${forget})` }}
+        className="fixed inset-0 bg-cover bg-center bg-gray-300  flex items-center justify-center p-4 sm:p-8"
       >
         {showDisclaimer && (
           <div className="absolute flex z-50 top-2  border-lg  sm:top-16  lg:right-4 bg-rose-100 border border-rose-400 text-gray-700 px-4 py-3 rounded-sm shadow-lg  items-start w-full sm:w-2/3 lg:w-1/3">
