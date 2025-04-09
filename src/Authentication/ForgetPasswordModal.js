@@ -180,8 +180,8 @@ const ForgetPasswordForm = () => {
       id="SignIn-modal"
       tabIndex="-1"
       aria-hidden="false"
-      className="fixed inset-0 z-50 flex h-screen w-full items-center justify-center bg-cover bg-center   bg-black bg-opacity-0 "
-      style={{ backgroundImage: `url(${forget})` }}
+      className="fixed inset-0 z-50 flex h-screen w-full items-center justify-center bg-cover bg-center   bg-gray-300  "
+      // style={{ backgroundImage: `url(${forget})` }}
     >
       <div className="main-form w-full relative max-w-5xl flex  justify-center">
         <div className="form-forget shadow-inner-custom border border-gray-400 relative bg-white w-[90%] sm:w-1/2 md:w-1/2 rounded-sm shadow dark:bg-gray-300">

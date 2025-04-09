@@ -1,28 +1,48 @@
-import { useState } from 'react';
-import { useNavigate, Outlet } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
-import Invite from './Invite';
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation, Outlet } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 import hisabKitabBlack from "../assets/images/hisabkitab-black.png";
 import logo from "../assets/logo-hisab-kitab.png";
-
-
 
 export default function Layout() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (
+      location.pathname === "/document" ||
+      location.pathname === "/document/"
+    ) {
+      navigate("/document/invite", { replace: true });
+    }
+  }, [location.pathname, navigate]);
+  const globalNavToggler = () => {
+    if (isOpen) {
+      setIsOpen(!isOpen);
+    }
+  };
+
+  const navLinks = [
+    { name: "Invite Friend", path: "/document/invite" },
+    { name: "Add Friend", path: "/document/addfriend" },
+    { name: "Transaction", path: "/document/transaction" },
+    { name: "Help & Support", path: "/document/help" },
+    { name: "Forget Password", path: "/document/forget" },
+  ];
 
   const handleNavigation = (path) => {
     navigate(path);
-    setIsOpen(false); // Close menu on mobile after click
+    setIsOpen(false);
   };
 
   return (
     <div className="flex w-full h-screen">
       {/* Toggle Button for Mobile */}
-      <div className="md:hidden fixed  top-4 left-4 z-50">
+      <div className="lg:hidden fixed top-6 left-4 z-50">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="text-white bg-gray-800 p-2 rounded-md"
+          className="text-gray-800 p-2 rounded-md"
         >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -30,68 +50,64 @@ export default function Layout() {
 
       {/* Sidebar */}
       <aside
-      
-        className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white p-4 transform transition-transform duration-300 z-40 
-        ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
-        md:translate-x-0 md:static md:block`}
-        >
-         <a
+        className={`fixed top-0 left-0 z-50 w-64 lg:bg-gray-800 bg-gray-50 border rounded-sm border-gray-800 text-white transition-transform duration-300 ease-in-out transform 
+        ${isOpen ? "translate-x-0" : "-translate-x-full"} 
+        lg:relative lg:translate-x-0 h-auto lg:h-full`}
+      >
+        <div className="h-full px-3 py-4 overflow-y-auto">
+          <ul className="space-y-2 font-medium">
+            <li>
+              <a
                 href="/user-dashboard"
-                className="flex items-center p-2 lg:text-gray-300 text-black   lg:hover:bg-gray-700 group"
+                className="flex items-center p-2 lg:text-gray-300 text-black lg:hover:bg-gray-700 group"
               >
                 <img
                   src={logo || "/placeholder.svg"}
                   alt="Hisab Kitab Logo"
-                  className="w-6 h-6 "
+                  className="w-6 h-6"
                 />
                 <span className="ms-3">
-                  {" "}
                   <img
                     src={hisabKitabBlack}
                     alt="logo"
                     className="h-8 max-w-md sm:max-w-lg md:max-w-xl filter lg:invert lg:brightness-200"
-                  />{" "}
+                  />
                 </span>
               </a>
-
-          <nav className="flex flex-col mt-12 gap-3">
-           <button
-           onClick={() => handleNavigation('/document/invite')}
-            className="text-left hover:bg-gray-500 py-1 px-4 rounded-md"
-            >
-           Invite Friend
-          </button>
-            <button
-           onClick={() => handleNavigation('/document/addfriend')}
-            className="text-left hover:bg-gray-500 py-1 px-4 rounded-md"
-            >
-           Add Friend
-          </button>
-           <button
-           onClick={() => handleNavigation('/document/transaction')}
-            className="text-left hover:bg-gray-500 py-1 px-4 rounded-md"
-            >
-           Transaction
-          </button>
-          <button
-           onClick={() => handleNavigation('/document/help')}
-            className="text-left hover:bg-gray-500 py-1 px-4 rounded-md"
-            >
-           Help & Support
-          </button>
-          <button
-           onClick={() => handleNavigation('/document/forget')}
-            className="text-left hover:bg-gray-500 py-1 px-4 rounded-md"
-            >
-           Forget Password
-          </button>
-          
-       
-        </nav>
+            </li>
+            {navLinks.map(({ name, path }) => (
+              <li key={path}>
+                <button
+                  onClick={() => handleNavigation(path)}
+                  className={`flex w-full items-center text-start p-2 rounded-sm border lg:border-0
+                  ${
+                    location.pathname === path
+                      ? "lg:bg-gray-700 bg-gray-200 font-semibold"
+                      : "lg:hover:bg-gray-700"
+                  }
+                  ${
+                    location.pathname === path
+                      ? "lg:text-gray-300 text-black"
+                      : "lg:text-gray-300 text-black"
+                  }`}
+                >
+                  <span className="flex-1 ms-3 whitespace-nowrap">{name}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 bg-gray-100 overflow-y-auto p-4">
+      <main
+        onClick={globalNavToggler}
+        className="flex-1 h-full   p-2 overflow-hidden"
+      >
+        <div className="sticky top-0 z-10 bg-white h-16 flex justify-center items-center font-Poppins font-semibold text-lg">
+          {navLinks.find((link) => location.pathname === link.path)?.name ||
+            "Dashboard"}
+        </div>
         <Outlet />
       </main>
     </div>

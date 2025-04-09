@@ -347,7 +347,7 @@ const UserDashboard = () => {
            className="flex items-center align-bottom   mt-4 px-4 py-1 font-semibold bg-red-500 text-white space-x-2 rounded-sm cursor-pointer"
            >
          <FontAwesomeIcon icon={faMapLocationDot} style={{ fontSize: "18px" }} />
-         <span className="pl-4">Tour</span>
+         <span className="pl-4">Take a Tour</span>
          </div>
           
         </div>

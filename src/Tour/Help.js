@@ -14,12 +14,11 @@ const images = [
 function Help() {
   return (
     <>
-    <span className='flex justify-center font-Poppins font-semibold text-xl'> Help & Support</span>
-    <div className="h-full overflow-y-auto mt-8 space-y-10 ">
+    <div className="h-full overflow-y-auto    ">
       {images.map((src, index) => (
         <div
           key={index}
-          className="sm:min-h-[90vh] min-h-[40vh] bg-white shadow-md rounded-2xl sm:p-4 p-2 flex items-center justify-center"
+          className="sm:min-h-[90vh] min-h-[40vh] bg-white shadow-md mb-4 rounded-2xl sm:p-4 p-2 flex items-center justify-center"
         >
           <img
             src={src}
