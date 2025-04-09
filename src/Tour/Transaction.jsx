@@ -18,7 +18,7 @@ function Transaction() {
   
   return (
     <>
-    <span className='flex justify-center font-Poppins font-semibold text-xl'>Transection</span>
+    <span className='flex justify-center font-Poppins font-semibold text-xl'>Transaction</span>
     <div className="h-full overflow-y-auto space-y-10mt-8 px-4 py-6">
       {images.map((src, index) => (
         <div
