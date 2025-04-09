@@ -187,8 +187,8 @@ const UserDashboard = () => {
         className={`fixed  top-0 left-0 z-50 w-64 lg:bg-gray-800 bg-gray-50 border rounded-sm border-gray-800 text-white transition-transform duration-300 ease-in-out transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } lg:relative lg:translate-x-0 h-auto lg:h-full `}
-      >
-        <div className="h-full px-3 py-4 overflow-y-auto">
+      > 
+        <div className="h-full px-3 py-4  overflow-y-auto">
           <ul className="space-y-2 font-medium">
             <li>
               <a
@@ -342,15 +342,16 @@ const UserDashboard = () => {
             </ul>
 
             {/* tour page */}
-        <div
+         <div
           onClick={() => navigate('/document')}
-            className="flex items-center justify-start mt-60 px-4 py-1 font-semibold bg-red-500 text-white space-x-2 rounded-sm cursor-pointer"
-             >
-           <FontAwesomeIcon icon={faMapLocationDot} style={{ fontSize: "18px" }} />
-           <span className="pl-4">Tour</span>
-           </div>
+           className="flex items-center align-bottom   mt-4 px-4 py-1 font-semibold bg-red-500 text-white space-x-2 rounded-sm cursor-pointer"
+           >
+         <FontAwesomeIcon icon={faMapLocationDot} style={{ fontSize: "18px" }} />
+         <span className="pl-4">Tour</span>
+         </div>
           
         </div>
+       
        
         </aside>
         
