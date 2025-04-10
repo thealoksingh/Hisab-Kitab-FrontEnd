@@ -59,9 +59,9 @@ export default function Home() {
           <div className="title mt-2 font-poppins lg:text-7xl text-5xl text-white font-bold">
             {user && (
               <span className="text-white">
-                Hi!
+                Hi! {" "}
                 <span className="text-[#9b1f53] ">
-                  {user.fullName.split(" ")[0]}
+                 {user.fullName.split(" ")[0]}
                 </span>
               </span>
             )}

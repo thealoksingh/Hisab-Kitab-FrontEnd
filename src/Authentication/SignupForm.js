@@ -211,8 +211,8 @@ const validate = () => {
       id="signUp-modal"
       tabIndex="-1"
       aria-hidden={!isOpen}
-      style={{ backgroundImage: `url(${forget})` }}
-      className={`fixed inset-0 z-50 flex items-center bg-cover bg-center justify-center w-full h-screen bg-black bg-opacity-0 ${
+      // style={{ backgroundImage: `url(${forget})` }}
+      className={`fixed inset-0 z-50 flex items-center bg-gray-300 bg-cover bg-center justify-center w-full h-screen  ${
         isOpen ? "" : "hidden"
       }`}
     >
@@ -291,7 +291,7 @@ const validate = () => {
                   required
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className=" w-[70%]  input-field-shadow   border text-sm border-gray-400 text-gray-600 rounded-sm   p-1"
+                  className=" w-[70%]  input-field-shadow   border text-sm border-gray-400 text-gray-600 rounded-sm   p-2"
                   placeholder="Enter your Full Name"
                 />
               </div>
@@ -309,7 +309,7 @@ const validate = () => {
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   autoComplete="off"
-                  className=" input-field-shadow w-[70%]   border text-sm border-gray-400 text-gray-600 rounded-sm   p-1"
+                  className=" input-field-shadow w-[70%]   border text-sm border-gray-400 text-gray-600 rounded-sm   p-2"
                   placeholder="Enter Mobile Number"
                 />
                 
@@ -328,7 +328,7 @@ const validate = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     autoComplete="off"
-                    className="w-[60%] input-field-shadow text-sm border font-Poppins border-gray-400 text-gray-600 rounded-sm p-1"
+                    className="w-[60%] input-field-shadow text-sm border font-Poppins border-gray-400 text-gray-600 rounded-sm p-2"
                     placeholder="Enter email Address"
                   />
                   <button
@@ -364,7 +364,7 @@ const validate = () => {
                       type="text"
                       id="otp"
                       onChange={(e) => setOtpEntered(e.target.value)}
-                      className="w-1/2 input-field-shadow text-sm border border-gray-400 text-gray-600 rounded-sm p-1"
+                      className="w-1/2 input-field-shadow text-sm border border-gray-400 text-gray-600 rounded-sm p-2"
                       placeholder="Enter OTP"
                       required
                     />
@@ -403,7 +403,7 @@ const validate = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     autoComplete="off"
-                    className="w-1/2 input-field-shadow text-sm border border-gray-400 text-gray-600 rounded-sm p-1"
+                    className="w-1/2 input-field-shadow text-sm border border-gray-400 text-gray-600 rounded-sm p-2"
                     placeholder="Enter Password"
                   />
                   <input
@@ -414,7 +414,7 @@ const validate = () => {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     autoComplete="off"
-                    className="w-1/2 input-field-shadow text-sm border border-gray-400 text-gray-600 rounded-sm p-1"
+                    className="w-1/2 input-field-shadow text-sm border border-gray-400 text-gray-600 rounded-sm p-2"
                     placeholder="Confirm Password"
                   />
                 </div>
@@ -429,10 +429,10 @@ const validate = () => {
               {/* <p className="mt-1 py-1 mb-2 text-center text-sm text-red-500 ">Signup succesfu you can login now</p> */}
              
                {successMessage &&  <p className="mt-1 py-1 mb-2 text-center text-sm text-green-500">{successMessage}</p>}
-              <div className="mb-2 mt-2 flex gap-4">
+              <div className="mb-2 mt-4 flex gap-4">
                 <button
                   type="submit"
-                  className="w-1/3 rounded-sm bg-cyan-600 text-sm text-white px-4 py-1 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                  className="w-1/3  rounded-sm bg-cyan-600 text-sm text-white px-4 py-2 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-300 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                 >
                   {isLoading ? (<div className="flex ">
                     <div className="w-5 h-5 border-3 border-t-4  border-white rounded-full animate-spin"></div>
@@ -443,8 +443,8 @@ const validate = () => {
                   )}
                 </button>
 
-                <span className="text-gray-800">Existing user?</span>
-                <span onClick={() => navigate("/signin")} className="text-sky-600">
+                <span className="text-gray-800 mt-1">Existing user?</span>
+                <span onClick={() => navigate("/signin")} className="text-sky-600 mt-1">
 
                
                   SignIn

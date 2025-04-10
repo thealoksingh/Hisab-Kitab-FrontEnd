@@ -7,9 +7,12 @@ import logo from "../assets/logo-hisab-kitab.png";
 import HelpAndSupport from "../Modals/HelpAndSupport";
 import InviteModal from "../Modals/InviteModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMapLocationDot } from "@fortawesome/free-solid-svg-icons";
 import "../CssStyle/LoaderStyle.css";
 import { useAuth } from "../security/AuthContext";
 import FooterSection from "./FooterSection";
+
+
 
 import hisabKitabBlack from "../assets/images/hisabkitab-black.png";
 
@@ -24,7 +27,9 @@ faEnvelope,
   faUser,
   faArrowRightFromBracket,
   faBars,
+  faAddressCard,
 } from "@fortawesome/free-solid-svg-icons";
+import About from "../Modals/About";
 
 
 
@@ -47,6 +52,11 @@ const UserDashboard = () => {
   const [refreshResize, setRefreshResize] = useState(false); // State to trigger manual refresh
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const { user, logout } = useAuth();
+
+//handle about page
+  const handleClick = () => {
+    navigate("/about");
+  };
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -177,8 +187,8 @@ const UserDashboard = () => {
         className={`fixed  top-0 left-0 z-50 w-64 lg:bg-gray-800 bg-gray-50 border rounded-sm border-gray-800 text-white transition-transform duration-300 ease-in-out transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } lg:relative lg:translate-x-0 h-auto lg:h-full `}
-      >
-        <div className="h-full px-3 py-4 overflow-y-auto">
+      > 
+        <div className="h-full px-3 py-4  overflow-y-auto">
           <ul className="space-y-2 font-medium">
             <li>
               <a
@@ -215,7 +225,7 @@ const UserDashboard = () => {
             <li>
               <a
                 href="/user-dashboard"
-                className="flex items-center p-2  lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
+                className="flex items-center p-2  lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400  lg:bg-gray-700 bg-gray-200 lg:hover:bg-gray-700 group"
               >
                 <FontAwesomeIcon
                   icon={faPeoplePulling}
@@ -231,7 +241,7 @@ const UserDashboard = () => {
             <li>
               <a
                 href="/under-dev"
-                className="flex items-center text-gray-300 p-2 lg:text-gray-500 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
+                className="flex items-center  p-2 lg:text-gray-500 text-gray-300 rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
               >
                 <FontAwesomeIcon
                   icon={faPeopleGroup}
@@ -244,7 +254,7 @@ const UserDashboard = () => {
             <li>
               <a
                 href="/under-dev"
-                className="flex items-center p-2 lg:text-gray-500 text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
+                className="flex items-center p-2 lg:text-gray-500 text-gray-300 rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
               >
                 <FontAwesomeIcon
                   icon={faBook}
@@ -259,7 +269,7 @@ const UserDashboard = () => {
             <li className="group">
               <a
                 href="/under-dev"
-                className="flex items-center p-2 lg:text-gray-500 text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
+                className="flex items-center p-2 lg:text-gray-500 text-gray-300 rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
               >
                 <FontAwesomeIcon
                   icon={faGear}
@@ -281,6 +291,23 @@ const UserDashboard = () => {
                 </span>
               </a>
             </li>
+            {/*about page*/}
+            <li onClick={() => navigate("/about")}
+                className="cursor-pointer">
+              <a className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
+                <FontAwesomeIcon
+                  icon={faAddressCard}
+                  className="lg:text-gray-300 text-gray-600"
+                  style={{ fontSize: "25px" }}
+                />
+                <span className="flex-1 ms-3 whitespace-nowrap">
+                 About
+                </span>
+              </a>
+            </li>
+
+            {/* help and Support */}
+            
             <li onClick={toggleHelpAndSupport}>
               <a className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group">
                 <FontAwesomeIcon
@@ -312,9 +339,22 @@ const UserDashboard = () => {
                 <span className="flex-1 ms-3 whitespace-nowrap">Sign Out</span>
               </a>
             </li>
-          </ul>
+            </ul>
+
+            {/* tour page */}
+         <div
+          onClick={() => navigate('/document')}
+           className="flex items-center align-bottom   mt-4 px-4 py-1 font-semibold bg-red-500 text-white space-x-2 rounded-sm cursor-pointer"
+           >
+         <FontAwesomeIcon icon={faMapLocationDot} style={{ fontSize: "18px" }} />
+         <span className="pl-4">Take a Tour</span>
+         </div>
+          
         </div>
-      </aside>
+       
+       
+        </aside>
+        
 
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* <!-- Preloader --> */}
@@ -343,7 +383,7 @@ const UserDashboard = () => {
               <img
                     src={hisabKitabBlack}
                     alt="logo"
-                    className="h-8  "
+                    className="h-8 "
                   />
             </a>
             <div className="w-6"></div> {/* Placeholder for layout balance */}
