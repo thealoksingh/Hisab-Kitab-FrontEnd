@@ -225,7 +225,7 @@ const UserDashboard = () => {
             <li>
               <a
                 href="/user-dashboard"
-                className="flex items-center p-2  lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
+                className="flex items-center p-2  lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400  lg:bg-gray-700 bg-gray-200 lg:hover:bg-gray-700 group"
               >
                 <FontAwesomeIcon
                   icon={faPeoplePulling}
@@ -241,7 +241,7 @@ const UserDashboard = () => {
             <li>
               <a
                 href="/under-dev"
-                className="flex items-center  p-2 lg:text-gray-500 text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
+                className="flex items-center  p-2 lg:text-gray-500 text-gray-300 rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
               >
                 <FontAwesomeIcon
                   icon={faPeopleGroup}
@@ -254,7 +254,7 @@ const UserDashboard = () => {
             <li>
               <a
                 href="/under-dev"
-                className="flex items-center p-2 lg:text-gray-500  text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
+                className="flex items-center p-2 lg:text-gray-500 text-gray-300 rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
               >
                 <FontAwesomeIcon
                   icon={faBook}
@@ -269,7 +269,7 @@ const UserDashboard = () => {
             <li className="group">
               <a
                 href="/under-dev"
-                className="flex items-center p-2 lg:text-gray-500  text-black rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
+                className="flex items-center p-2 lg:text-gray-500 text-gray-300 rounded-sm border lg:border-0 border-gray-400 lg:hover:bg-gray-700 group"
               >
                 <FontAwesomeIcon
                   icon={faGear}

@@ -1,5 +1,7 @@
 import React from "react";
 import { Linkedin, Github ,ArrowLeft } from "lucide-react";
+import FooterSection from "../UserDashBoard/FooterSection";
+
 function About() {
   return (
     <>
@@ -267,6 +269,9 @@ function About() {
           </div>
         </div>
       </section>
+      <div className="h-[50px] bg-black block  w-full flex items-center justify-center text-white text-sm">
+      © 2025 Hisab-Kitab. All rights reserved.
+    </div>
     </>
   );
 }
