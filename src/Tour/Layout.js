@@ -98,7 +98,7 @@ export default function Layout() {
             ))}
             <li className="lg:justify-start lg:pl-5 justify-center flex">
               <button
-                onClick={() => window.history.back()}
+                 onClick={() => navigate("/user-dashboard")}
                 className="lg:bg-gray-500 lg:text-white lg:border-gray-400 border border-black border-sm text-black bg-gray-200 rounded-full p-2 hover:bg-gray-600"
               >
                 <ArrowLeft className="w-6 h-6 animate-swing-x" />

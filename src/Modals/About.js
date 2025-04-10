@@ -1,9 +1,9 @@
 import React from "react";
-import { Linkedin, Github ,ArrowLeft } from "lucide-react";
+import { Linkedin, Github, ArrowLeft } from "lucide-react";
 import FooterSection from "../UserDashBoard/FooterSection";
-import ravi_pic from "../../assets/images/ravi.jpg";
-import anukrity_pic from "../../assets/images/anukrity.jpg";
-// import {jay_pic} from "../../assets/images/jay.png";        
+import ravi_pic from "../assets/images/ravi.jpg";
+import anukrity_pic from "../assets/images/anukrity.jpg";
+// import {jay_pic} from "../../assets/images/jay.png";
 
 function About() {
   return (
@@ -68,63 +68,80 @@ function About() {
         </div>
       </section>
 
-   {/* 1st section */}
-<section id="section_3" className="p-16 bg-gray-50">
-  <div className="container mx-auto px-4">
-    <div className="flex flex-col lg:flex-row items-center gap-8">
-      <div className="w-80 h-80 rounded-full border-4 border-gray-500 overflow-hidden flex items-center justify-center">
-        <img
-          src={ravi_pic}
-          alt="Ravi Kumar"
-          className="w-full h-full object-cover rounded-full"
-        />
-      </div>
+      {/* 1st section */}
+      <section id="section_3" className="p-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col lg:flex-row items-center gap-8">
+            <div className="w-80 h-80 rounded-full border-4 border-gray-500 overflow-hidden flex items-center justify-center">
+              <img
+                src={ravi_pic}
+                alt="Ravi Kumar"
+                className="w-full h-full object-cover rounded-full"
+              />
+            </div>
 
-      <div className="lg:w-2/3 w-full">
-        <h6 className="text-sm text-gray-500 uppercase tracking-wide">
-          Meet
-        </h6>
-        <h2 className="text-3xl font-bold text-gray-800 mb-4">
-          Ravi Kumar
-        </h2>
-        <p className="text-gray-600 text-justify text-sm mb-4">
-          I’m Ravi Kumar, a Software Engineer at HCLTech with a Bachelor’s in Computer Science from Technocrats Institute of Technology, Bhopal. I specialize in building scalable full-stack applications with a strong foundation in microservices, Docker, Kubernetes, and modern DevOps practices. With a knack for clean architecture and functional programming, I blend backend efficiency with user-focused frontends using React and React Native.
-        </p>
-        <p className="text-gray-600 text-justify text-sm mb-4">
-          <strong>Hisab Kitab</strong> is one of my flagship projects—an intelligent expense and balance management platform inspired by KhataBook but enhanced for collaborative and secure financial tracking. It features two-way transaction syncing, OTP authentication, comment-based conflict resolution, PDF bill generation, and granular permission controls. Built using React.js, Spring Boot, JWT, WebSockets, and secured with Spring Security, the platform ensures a robust and user-friendly experience.
-        </p>
-        <p className="text-gray-600 text-justify text-sm">
-          I’m continually working on refining this platform with community feedback. If you come across bugs or have improvement suggestions, feel free to connect via LinkedIn or use the in-app Help & Support system. This journey is just getting started.
-        </p>
+            <div className="lg:w-2/3 w-full">
+              <h6 className="text-sm text-gray-500 uppercase tracking-wide">
+                Meet
+              </h6>
+              <h2 className="text-3xl font-bold text-gray-800 mb-4">
+                Ravi Kumar
+              </h2>
+              <p className="text-gray-600 text-justify text-sm mb-4">
+                I’m Ravi Kumar, a Software Engineer at HCLTech with a Bachelor’s
+                in Computer Science from Technocrats Institute of Technology,
+                Bhopal. I specialize in building scalable full-stack
+                applications with a strong foundation in microservices, Docker,
+                Kubernetes, and modern DevOps practices. With a knack for clean
+                architecture and functional programming, I blend backend
+                efficiency with user-focused frontends using React and React
+                Native.
+              </p>
+              <p className="text-gray-600 text-justify text-sm mb-4">
+                <strong>Hisab Kitab</strong> is one of my flagship projects—an
+                intelligent expense and balance management platform inspired by
+                KhataBook but enhanced for collaborative and secure financial
+                tracking. It features two-way transaction syncing, OTP
+                authentication, comment-based conflict resolution, PDF bill
+                generation, and granular permission controls. Built using
+                React.js, Spring Boot, JWT, WebSockets, and secured with Spring
+                Security, the platform ensures a robust and user-friendly
+                experience.
+              </p>
+              <p className="text-gray-600 text-justify text-sm">
+                I’m continually working on refining this platform with community
+                feedback. If you come across bugs or have improvement
+                suggestions, feel free to connect via LinkedIn or use the in-app
+                Help & Support system. This journey is just getting started.
+              </p>
 
-        <div className="text-left">
-          <p className="font-semibold mt-2">Connect with me:</p>
-          <div className="flex items-center space-x-4 mt-1">
-            <a
-              href="https://www.linkedin.com/in/ravi-kumar-a1a227207/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex text-blue-600 hover:underline"
-            >
-              <Linkedin className="w-5 h-5 mr-1" />
-              LinkedIn
-            </a>
-            <a
-              href="https://github.com/cyboravidell"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex text-gray-800 hover:underline"
-            >
-              <Github className="w-5 h-5 mr-1" />
-              GitHub
-            </a>
+              <div className="text-left">
+                <p className="font-semibold mt-2">Connect with me:</p>
+                <div className="flex items-center space-x-4 mt-1">
+                  <a
+                    href="https://www.linkedin.com/in/ravi-kumar-a1a227207/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex text-blue-600 hover:underline"
+                  >
+                    <Linkedin className="w-5 h-5 mr-1" />
+                    LinkedIn
+                  </a>
+                  <a
+                    href="https://github.com/cyboravidell"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex text-gray-800 hover:underline"
+                  >
+                    <Github className="w-5 h-5 mr-1" />
+                    GitHub
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
+      </section>
 
       {/* 2nd section */}
       <section id="section_2" className="p-16  bg-gray-50">
@@ -137,27 +154,24 @@ function About() {
               <h2 className="text-3xl font-bold text-gray-800 mb-4">
                 Jaysingh Patel
               </h2>
-              <p className="text-gray-600  text-justify text-sm mb-4">
-                I’m Jaysingh Patel, co-founder of this platform and part of the
-                development team  that brought this idea to life.I have a deep
-                interest in building clean, reliable, and scalable software
-                solutions that solve real-world problems.
+              <p className="text-gray-600 text-justify text-sm mb-4">
+                I’m Jaysingh Patel, a third-year Computer Science student at
+                Ajay Kumar Garg Engineering College, set to graduate in 2026. As
+                a co-founder of this platform, I’ve always believed that great
+                software is not just built—it’s designed with care, tested with
+                intent, and polished with purpose. My passion lies in turning
+                ideas into intuitive digital experiences that users truly enjoy.
               </p>
-              <p className="text-gray-600  text-justify text-sm">
-                In this project, I collaborated closely with Alok on the
-                frontend design and development while also contributing to
-                backend logic and system integration. From planning the
-                architecture to refining the user experience, my focus was on
-                ensuring the platform remains smooth, responsive, and
-                user-focused. Working on this product has been a valuable
-                journey—sharpening both my technical and collaborative skills.
-                Together with Alok and Ravi, we’ve built a solution that
-                reflects not just our coding abilities, but our shared vision
-                and dedication to quality.
-                <span className="font-bold text-sm">
-                  “Build with purpose. Code with clarity.”
-                </span>
+              <p className="text-gray-600 text-justify text-sm">
+                For this project, I focused on UI development, responsiveness,
+                and seamless integration across modules. From aligning pixels to
+                connecting APIs, I aimed to ensure every interaction feels
+                natural and fluid. Collaborating with Alok and Ravi has been an
+                inspiring ride, driven by creativity, precision, and shared
+                goals. This platform reflects our combined vision—clean,
+                functional, and ready to make group finances effortless.
               </p>
+
               <div className="text-left">
                 <p className="font-semibold mt-2">Connect with me:</p>
                 <div className="flex items-center space-x-4 mt-1">
@@ -223,17 +237,18 @@ function About() {
                 scalable, user-friendly solutions. I enjoy building meaningful
                 digital products that blend clean code with thoughtful design..
               </p>
-              <p className="text-gray-600  text-justify text-sm">
-                This platform is one of our proud projects, built to simplify
+              <p className="text-gray-600 text-justify text-sm">
+                In this project, I contributed to frontend ,backend development
+                and integration, ensuring a seamless and responsive user
+                experience across devices. This platform is built to simplify
                 and organize financial transactions among friends and groups.
-                We're constantly working to improve it and would love your
-                feedback. If you find any bugs or have suggestions, feel free to
-                reach out to us through the Help & Support section or connect
-                with us on LinkedIn.
-                {/* <span className="font-bold text-sm">
-                  “Design is not just what it looks like—it’s how it works.”
-                </span> */}
+                We're always working to improve it .
               </p>
+              <p className="text-gray-600 text-justify text-sm">
+                your feedback means a lot! If
+                you spot any issues or have suggestions, feel free to reach out
+                through the Help & Support section or connect with us on
+                LinkedIn.</p>
               <div className="text-left">
                 <p className="font-semibold mt-2">Connect with me:</p>
                 <div className="flex items-center space-x-4 mt-1">
@@ -262,8 +277,8 @@ function About() {
         </div>
       </section>
 
-          {/* 4th section */}
-          <section id="section_2" className="p-16  bg-gray-50">
+      {/* 4th section */}
+      <section id="section_2" className="p-16  bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="flex flex-col-reverse lg:flex-row items-center gap-8">
             <div className="lg:w-2/3 w-full">
@@ -274,31 +289,25 @@ function About() {
                 Anukrity Srivastava
               </h2>
               <p className="text-gray-600  text-justify text-sm mb-4">
-                I’m Jaysingh Patel, co-founder of this platform and part of the
-                development team  that brought this idea to life.I have a deep
-                interest in building clean, reliable, and scalable software
-                solutions that solve real-world problems.
+                I’m Anukrity Srivastava, currently working as a QA Engineer at
+                Care Health Insurance. With a strong foundation in backend
+                technologies and a passion for quality assurance, I bring a
+                detail-oriented and collaborative approach to every project I
+                work on.
               </p>
               <p className="text-gray-600  text-justify text-sm">
-                In this project, I collaborated closely with Alok on the
-                frontend design and development while also contributing to
-                backend logic and system integration. From planning the
-                architecture to refining the user experience, my focus was on
-                ensuring the platform remains smooth, responsive, and
-                user-focused. Working on this product has been a valuable
-                journey—sharpening both my technical and collaborative skills.
-                Together with Alok and Ravi, we’ve built a solution that
-                reflects not just our coding abilities, but our shared vision
-                and dedication to quality.
-                <span className="font-bold text-sm">
-                  “Build with purpose. Code with clarity.”
-                </span>
+                In the Hisab Kitab project, I contributed to software testing
+                and backend support. I conducted comprehensive API, integration,
+                and performance testing to ensure the system's reliability and
+                scalability. I also assisted in debugging Spring Boot
+                microservices, helping the team maintain a robust and efficient
+                backend.
               </p>
               <div className="text-left">
                 <p className="font-semibold mt-2">Connect with me:</p>
                 <div className="flex items-center space-x-4 mt-1">
                   <a
-                    href="https://www.linkedin.com/in/jaysinghpatel/"
+                    href="https://www.linkedin.com/in/anukrity-srivastava-1161221b8/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex  text-blue-600 hover:underline"
@@ -307,7 +316,7 @@ function About() {
                     LinkedIn
                   </a>
                   <a
-                    href="https://github.com/Jaysingh2003"
+                    href="https://github.com/anukritysrivastava1"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex  text-gray-800 hover:underline"
@@ -329,8 +338,8 @@ function About() {
         </div>
       </section>
       <div className="h-[50px] bg-black block  w-full flex items-center justify-center text-white text-sm">
-      © 2025 Hisab-Kitab. All rights reserved.
-    </div>
+        © 2025 Hisab-Kitab. All rights reserved.
+      </div>
     </>
   );
 }
