@@ -3,7 +3,7 @@ import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import hisabKitabBlack from "../assets/images/hisabkitab-black.png";
 import logo from "../assets/logo-hisab-kitab.png";
-
+import { ArrowLeft } from "lucide-react";
 export default function Layout() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
@@ -17,6 +17,7 @@ export default function Layout() {
       navigate("/document/invite", { replace: true });
     }
   }, [location.pathname, navigate]);
+
   const globalNavToggler = () => {
     if (isOpen) {
       setIsOpen(!isOpen);
@@ -95,6 +96,14 @@ export default function Layout() {
                 </button>
               </li>
             ))}
+            <li className="lg:justify-start lg:pl-5 justify-center flex">
+              <button
+                onClick={() => window.history.back()}
+                className="lg:bg-gray-500 lg:text-white lg:border-gray-400 border border-black border-sm text-black bg-gray-200 rounded-full p-2 hover:bg-gray-600"
+              >
+                <ArrowLeft className="w-6 h-6 animate-swing-x" />
+              </button>
+            </li>
           </ul>
         </div>
       </aside>
