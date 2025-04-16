@@ -155,13 +155,15 @@ function About() {
                 Jaysingh Patel
               </h2>
               <p className="text-gray-600 text-justify text-sm mb-4">
-                I’m Jaysingh Patel, a third-year Computer Science student at
-                Ajay Kumar Garg Engineering College, set to graduate in 2026. As
-                a co-founder of this platform, I’ve always believed that great
-                software is not just built—it’s designed with care, tested with
-                intent, and polished with purpose. My passion lies in turning
-                ideas into intuitive digital experiences that users truly enjoy.
+                I’m Jaysingh Patel, a third-year Computer Science student at Ajay Kumar Garg Engineering College, set to graduate in 2026. I’m a Full Stack Java Developer with a growing passion for building intuitive and responsive user experiences. From developing RESTful APIs to optimizing database interactions, I enjoy solving real-world problems with clean, maintainable code.
+
               </p>
+              <p className="text-gray-600 text-justify text-sm mb-4">
+               I’ve worked on various projects using Java, Spring Boot, and MySQL, and I’m always eager to explore new tools and frameworks. I’ve also contributed to frontend development using React and Tailwind CSS, ensuring our UI stays responsive and user-friendly across devices.
+
+
+              </p>
+        
               <p className="text-gray-600 text-justify text-sm">
                 For this project, I focused on UI development, responsiveness,
                 and seamless integration across modules. From aligning pixels to
