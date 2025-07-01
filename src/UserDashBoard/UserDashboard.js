@@ -1,35 +1,34 @@
-import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { faMapLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getFriendList } from "../Api/HisabKitabApi";
-import LeftSideDashBoard from "./LeftSideDashboard";
-import RightSideDashBoard from "./RightSideDashboard";
 import logo from "../assets/logo-hisab-kitab.png";
+import "../CssStyle/LoaderStyle.css";
 import HelpAndSupport from "../Modals/HelpAndSupport";
 import InviteModal from "../Modals/InviteModal";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapLocationDot } from "@fortawesome/free-solid-svg-icons";
-import "../CssStyle/LoaderStyle.css";
-import { useAuth } from "../security/AuthContext";
-import FooterSection from "./FooterSection";
+import LeftSideDashBoard from "./LeftSideDashboard";
+import RightSideDashBoard from "./RightSideDashboard";
 
 
 
 import hisabKitabBlack from "../assets/images/hisabkitab-black.png";
 
 import {
-  faCalculator,
-  faGear,
-faEnvelope,
-  faClipboardQuestion,
-  faPeoplePulling,
-  faPeopleGroup,
-  faBook,
-  faUser,
+  faAddressCard,
   faArrowRightFromBracket,
   faBars,
-  faAddressCard,
+  faBook,
+  faClipboardQuestion,
+  faEnvelope,
+  faGear,
+  faPeopleGroup,
+  faPeoplePulling,
+  faUser
 } from "@fortawesome/free-solid-svg-icons";
-import About from "../Modals/About";
+import { useDispatch, useSelector } from "react-redux";
+import { selectFriendRequestCount, selectFriends, selectUser } from "../Redux/Selector";
+import { getAllFriends, logout } from "../Redux/Thunk";
 
 
 
@@ -37,13 +36,13 @@ const UserDashboard = () => {
   const [isFriendSelected, setIsFriendSelected] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState(null);
   const location = useLocation();
-  const [friends, setFriends] = useState([]);
+  const friends = useSelector(selectFriends);
   const [error, setError] = useState(null);
   const [isHelpAndSupportOpen, setIsHelpAndSupportOpen] = useState(false);
   // const user = location.state?.user;
   const [refreshFriendTransaction, setRefreshFriendTransaction] =
     useState(false);
-  const [friendRequestCount, setFriendRequestCount] = useState(0);
+  const friendRequestCount = useSelector(selectFriendRequestCount);
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(true);
@@ -51,7 +50,8 @@ const UserDashboard = () => {
   const [friendAndTransloader, setFriendAndTransLoader] = useState(false);
   const [refreshResize, setRefreshResize] = useState(false); // State to trigger manual refresh
   const [isInviteOpen, setIsInviteOpen] = useState(false);
-  const { user, logout } = useAuth();
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
 
 //handle about page
   const handleClick = () => {
@@ -64,9 +64,14 @@ const UserDashboard = () => {
       if (!user) return;
 
       try {
-        const response = await getFriendList();
-        setFriends(response.data.friendList);
-        setFriendRequestCount(response.data.friendRequestCount);
+        const response = await dispatch(getAllFriends());
+        if (getAllFriends.fulfilled.match(response)) {
+          console.log("Friends fetched successfully:");
+          
+        } else {
+          console.log("Friends list not fetched successfully:");
+        }
+     
         setFriendAndTransLoader(false);
       } catch (err) {
         setError(err.message);
@@ -234,7 +239,7 @@ const UserDashboard = () => {
                 />
                 <span className="flex-1 ms-3 whitespace-nowrap">Friends</span>
                 <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full">
-                  {friends.length}
+                  {friends?.length}
                 </span>
               </a>
             </li>
@@ -321,10 +326,11 @@ const UserDashboard = () => {
               </a>
             </li>
             <li
-              onClick={() => {
+              onClick={ async() => {
                 // Clear user state (example assumes user is managed in state or context)
                 try {
-                  logout();
+                  await logout();
+                  
                 } catch (error) {
                   navigate("/");
                 }
@@ -419,7 +425,7 @@ const UserDashboard = () => {
                   isRightSidebarOpen ? "block" : "hidden"
                 } lg:block`}
               >
-                <RightSideDashBoard
+                {/* <RightSideDashBoard
                   user={user}
                   isFriendSelected={isFriendSelected}
                   selectedFriend={selectedFriend}
@@ -432,7 +438,7 @@ const UserDashboard = () => {
                   setIsFriendSelected={setIsFriendSelected}
                   setSelectedFriend={setSelectedFriend}
                   friendAndTransloader={friendAndTransloader}
-                />
+                /> */}
               </div>
             </div>
           </div>

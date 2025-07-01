@@ -1,11 +1,15 @@
 import hisabKitabBlack from "../assets/images/hisabkitab-black.png";
 import { useNavigate } from "react-router-dom";
 import React from "react";
-import { useAuth } from "../security/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "../Redux/Selector";
+import { logoutUser } from "../Redux/Slice";
 
 export default function Home() {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
 
   return (
     <div className="p-4 min-h-screen w-full bg-black">
@@ -40,7 +44,7 @@ export default function Home() {
             <button
               onClick={() => {
                 try {
-                  logout();
+                  dispatch(logoutUser());
                 } catch (error) {
                   navigate("/");
                 }

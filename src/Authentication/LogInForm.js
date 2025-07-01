@@ -1,50 +1,53 @@
-import React, { useState ,useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // import { loginApi } from "../Api/HisabKitabApi"; // Assuming you have an API to check user credentials
-import ForgetPasswordModal from "./ForgetPasswordModal";
-import "../CssStyle/GroupDashboard.css";
-import { useAuth } from "../security/AuthContext";
-import forget from "../assets/forget1.jpg";
 import hisabKitabBlack from "../assets/images/hisabkitab-black.png";
+import "../CssStyle/GroupDashboard.css";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "../Redux/Selector";
+import { signIn } from "../Redux/Thunk";
+
 
 const LogInForm = () => {
   const navigate = useNavigate();
-  const authContext = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("user"); // default to user role
   const [error, setError] = useState(null);
   const [showDisclaimer, setShowDisclaimer] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const { user } = useAuth();
-const [errors, setErrors] = useState({});
+  const user = useSelector(selectUser); // Get user from Redux store
+  const [errors, setErrors] = useState({});
+  const dispatch = useDispatch();
+
   // Check if user is already logged in and redirect to user dashboard if true
   const validate = () => {
     let tempErrors = {};
-  
-  
+
+
     // Email: Validate format
     if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
       tempErrors.email = "Invalid email format";
     }
 
-    
+
     setErrors(tempErrors);
-    
+
     return Object.keys(tempErrors).length === 0; // Returns true if no errors
   };
   useEffect(() => {
     if (user) {
-      navigate("/");
+      navigate("/user-dashboard");
     }
   }, [user, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    if(!validate())return;
+    if (!validate()) return;
     setIsLoading(true);
     setError(null); // Reset error before login attempt
- 
+
     // Hardcoded admin credentials
     const adminEmail = "alokadmin@gmail.com";
     const adminPassword = "98765";
@@ -59,19 +62,23 @@ const [errors, setErrors] = useState({});
     }
 
     try {
-      if (await authContext.login(email, password)) {
-         navigate("/user-dashboard");
-      } else {
-        setError("Invalid login credentials");
+      console.log("Attempting login...");
+      const response = await dispatch(signIn({ email, password, role }));
+      if (signIn.fulfilled.match(response)) {
+        // If login is successful, redirect to user dashboard
+        navigate("/user-dashboard");
+        console.log("User logged in successfully:", response.payload);
       }
     } catch (error) {
-      setError("Invalid login credentials");
+      console.error("Login failed:", error);
+      // Set error message to display
+      setError(error?.message || "Login failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
   const handleClose = () => {
-    
+
     navigate("/"); // Redirect to the home page
   };
 
@@ -98,7 +105,7 @@ const [errors, setErrors] = useState({});
                 Thank you for your patience.
               </p>
               <p className="text-gray-700 text-xs">
-                For the best experience,  <span className="font-semibold text-xs">please use a desktop-sized screen</span> 
+                For the best experience,  <span className="font-semibold text-xs">please use a desktop-sized screen</span>
                 with Chrome or Brave browsers. Your patience is appreciated. 🙏
               </p>
             </div>
@@ -116,12 +123,12 @@ const [errors, setErrors] = useState({});
             <div className="flex items-center justify-between p-3  bg-gray-600 ">
               <div className="  font-semibold text-gray-200">
                 <span> <img
-                    src={hisabKitabBlack}
-                    alt="logo"
-                    className="h-8 max-w-md sm:max-w-lg md:max-w-xl filter invert brightness-200"
-                  /></span>
-                   </div>
-                   <button
+                  src={hisabKitabBlack}
+                  alt="logo"
+                  className="h-8 max-w-md sm:max-w-lg md:max-w-xl filter invert brightness-200"
+                /></span>
+              </div>
+              <button
                 type="button"
                 className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-6 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                 onClick={handleClose}
@@ -143,8 +150,8 @@ const [errors, setErrors] = useState({});
                 </svg>
                 <span className="sr-only">Close modal</span>
               </button>
-             
-            </div> 
+
+            </div>
             <form className="p-4" onSubmit={handleLogin}>
               <div className="mb-3">
                 <label className="block mb-2 text-sm font-medium text-gray-900">
@@ -189,7 +196,7 @@ const [errors, setErrors] = useState({});
                 />
               </div>
               <span className="text-rose-600 text-xs">{errors.email}</span>
-           
+
 
               <div className="mb-3">
                 <label className="block mb-2 text-sm font-medium text-gray-900">
