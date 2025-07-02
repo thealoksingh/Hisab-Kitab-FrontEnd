@@ -89,8 +89,8 @@ function LeftSideDashBoard({
       setSearchQuery(query);
 
       // Filter friends based on the search query and any applied filters
-      const filtered = friends.filter((friend) => {
-        const nameMatch = friend.userEntity.fullName
+      const filtered = friends?.filter((friend) => {
+        const nameMatch = friend?.userEntity?.fullName
           .toLowerCase()
           .includes(query);
         const balanceMatch = friend.closingBalance.toString().includes(query);
@@ -140,7 +140,7 @@ function LeftSideDashBoard({
       sorted.sort((a, b) => a.closingBalance - b.closingBalance); // Sort by lowest amount first
     } else if (criteria === "By Name") {
       sorted.sort((a, b) =>
-        a.userEntity.fullName.localeCompare(b.userEntity.fullName)
+        a?.userEntity?.fullName.localeCompare(b?.userEntity?.fullName)
       ); // Sort alphabetically by name
     }
 
@@ -154,7 +154,7 @@ function LeftSideDashBoard({
     setSearchQuery(query);
     if (query !== "") {
       const filtered = filteredFriends.filter((friend) => {
-        const nameMatch = friend.userEntity.fullName
+        const nameMatch = friend?.userEntity?.fullName
           .toLowerCase()
           .includes(query);
         const balanceMatch = friend.closingBalance.toString().includes(query);
@@ -190,7 +190,7 @@ function LeftSideDashBoard({
   const [selectedRowId, setSelectedRowId] = useState(null);
 
   const handleRowClick = (friend) => {
-    setSelectedFriend(friend.userEntity);
+    setSelectedFriend(friend?.userEntity);
     setIsFriendSelected(true);
     if (window.innerWidth < 1024) {
       toggleLeftSidebar(); // Close the left sidebar on mobile when a friend is selected
@@ -218,7 +218,7 @@ function LeftSideDashBoard({
     setGiveAmount(totalGiveAmount);
   }
   useEffect(() => {
-    setUserId(user.userId);
+    setUserId(user?.userId);
   }, [user]);
 
   if (!user) {
@@ -247,7 +247,7 @@ function LeftSideDashBoard({
 
       // Extract filename from Content-Disposition header (if available)
       const contentDisposition = response.headers["content-disposition"];
-      let filename = user.fullName + "Transaction report.pdf";
+      let filename = user?.fullName + "Transaction report.pdf";
       if (contentDisposition) {
         const match = contentDisposition.match(/filename="(.+?)"/);
         if (match && match[1]) {
@@ -462,9 +462,9 @@ function LeftSideDashBoard({
 
                 {filteredFriends.map((friend) => (
                   <tr
-                    key={friend.userEntity.userId}
+                    key={friend?.userEntity?.userId}
                     className={`bg-white border-b border-1 shadow-inner-custom rounded-sm  dark:border-gray-100 cursor-pointer ${
-                      selectedRowId === friend.userEntity.userId
+                      selectedRowId === friend?.userEntity?.userId
                         ? "bg-gray-300 dark:bg-gray-300"
                         : "bg-gray-100 dark:bg-gray-100"
                     }`}
@@ -476,17 +476,17 @@ function LeftSideDashBoard({
                     >
                       <ProfileCircle
                         className="h-8 w-8 mr-4"
-                        key={friend.userEntity.userId}
-                        name={friend.userEntity.fullName}
-                        color={friend.userEntity.colorHexValue} // Pass the user's associated color
+                        key={friend?.userEntity?.userId}
+                        name={friend?.userEntity?.fullName}
+                        color={friend?.userEntity?.colorHexValue} // Pass the user's associated color
                       />
 
                       <div className="flex flex-col">
                         <span className="font-medium text-gray-800">
-                          {friend.userEntity.fullName}
+                          {friend?.userEntity?.fullName}
                         </span>
                         <span className="text-xs text-gray-800">
-                          {friend.lastTransactionDate
+                          {friend?.lastTransactionDate
                             ? moment(friend.lastTransactionDate)
                                 .tz("Asia/Kolkata")
                                 .fromNow()

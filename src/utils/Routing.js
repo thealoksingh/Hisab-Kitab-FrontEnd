@@ -1,24 +1,27 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import AdminDashboard from '../AdminDashboard/AdminDashboard';
-import ForgetPasswordModal from '../Authentication/ForgetPasswordModal';
-import LoginForm from '../Authentication/LogInForm';
-import SignUpForm from '../Authentication/SignupForm';
+import { useDispatch, useSelector } from "react-redux";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import AdminDashboard from "../AdminDashboard/AdminDashboard";
+import ForgetPasswordModal from "../Authentication/ForgetPasswordModal";
+import LoginForm from "../Authentication/LogInForm";
+import SignUpForm from "../Authentication/SignupForm";
 import Home from "../LandingPage/Home";
-import About from '../Modals/About';
-import { selectUser } from '../Redux/Selector';
-import Addfriend from '../Tour/Addfriend';
-import Document from '../Tour/Document';
-import Forget from '../Tour/Forget';
-import Help from '../Tour/Help';
-import Invite from '../Tour/Invite';
-import Transaction from '../Tour/Transaction';
-import LeftSideDashboard from '../UserDashBoard/LeftSideDashboard';
-import UnderDevPage from '../UserDashBoard/UnderDevPage';
-import UserDashboard from '../UserDashBoard/UserDashboard';
-import ErrorComponent from './ErrorComponent';
-import { useEffect } from 'react';
-import { getUserByToken } from '../Redux/Thunk';
+import About from "../Modals/About";
+import { selectUser } from "../Redux/Selector";
+import Addfriend from "../Tour/Addfriend";
+import Document from "../Tour/Document";
+import Forget from "../Tour/Forget";
+import Help from "../Tour/Help";
+import Invite from "../Tour/Invite";
+import Transaction from "../Tour/Transaction";
+import LeftSideDashboard from "../UserDashBoard/LeftSideDashboard";
+import UnderDevPage from "../UserDashBoard/UnderDevPage";
+import UserDashboard from "../UserDashBoard/UserDashboard";
+import ErrorComponent from "./ErrorComponent";
+import { useEffect } from "react";
+import { getUserByToken } from "../Redux/Thunk";
+import Friends from "../UserDashBoard/Friends";
+import FriendTranscationDetail from "../UserDashBoard/FriendTransactionDetail";
+import InstructionToSelect from "../UserDashBoard/instructionToSelect";
 
 // AuthenticatedRoute using Redux state
 function AuthenticatedRoute({ children }) {
@@ -27,13 +30,12 @@ function AuthenticatedRoute({ children }) {
 }
 
 const Routing = () => {
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchUser = async () => {
-      const refreshToken = localStorage.getItem('refreshToken');
-      const accessToken = localStorage.getItem('accessToken');
+      const refreshToken = localStorage.getItem("refreshToken");
+      const accessToken = localStorage.getItem("accessToken");
 
       if (refreshToken && accessToken) {
         await dispatch(getUserByToken());
@@ -42,25 +44,50 @@ const Routing = () => {
     fetchUser();
   }, [dispatch]);
 
-  return (
+  const user = useSelector(selectUser);
+  const role = "user"; 
+   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+        {/* Public Routes */}
+        <Route path="/" element={user ? <Navigate to="/user-dashboard" /> : <Home />} />
         <Route path="/signin" element={<LoginForm />} />
         <Route path="/signup" element={<SignUpForm />} />
         <Route path="/forget-password" element={<ForgetPasswordModal />} />
-        <Route path="/user-dashboard" element={<AuthenticatedRoute><UserDashboard /></AuthenticatedRoute>} />
-        <Route path="/admin-dashboard" element={<AuthenticatedRoute><AdminDashboard /></AuthenticatedRoute>} />
-        <Route path="/under-dev" element={<AuthenticatedRoute><UnderDevPage /></AuthenticatedRoute>} />
-        <Route path="/leftsection" element={<AuthenticatedRoute><LeftSideDashboard /></AuthenticatedRoute>} />
-        <Route path="/about" element={<About />} />
-        <Route path="/document" element={<Document />}>
-          <Route path="invite" element={<Invite />} />
-          <Route path="addfriend" element={<Addfriend />} />
-          <Route path="transaction" element={<Transaction />} />
-          <Route path="help" element={<Help />} />
-          <Route path="forget" element={<Forget />} />
-        </Route>
+
+        {/* User Routes */}
+        {role === "user" && (
+          <>
+            <Route path="/user-dashboard" element={<UserDashboard />}>
+           <Route index element={<Navigate to="friends" />} />
+              <Route path="friends" element={<Friends />}>
+                <Route index element={<InstructionToSelect />} />
+                <Route path="transaction/:id" element={<FriendTranscationDetail />} />
+                <Route path="instructionToSelect" element={<InstructionToSelect />} />
+              </Route>
+              <Route path="under-dev" element={<UnderDevPage />} />
+              <Route path="about" element={<About />} />
+            </Route>
+
+            <Route path="/document" element={<Document />}>
+              <Route path="invite" element={<Invite />} />
+              <Route path="addfriend" element={<Addfriend />} />
+              <Route path="transaction" element={<Transaction />} />
+              <Route path="help" element={<Help />} />
+              <Route path="forget" element={<Forget />} />
+            </Route>
+          </>
+        )}
+
+        {/* Admin Routes */}
+        {role === "admin" && (
+          <>
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/under-dev" element={<UnderDevPage />} />
+          </>
+        )}
+
+        {/* Fallback */}
         <Route path="*" element={<ErrorComponent />} />
       </Routes>
     </BrowserRouter>

@@ -48,36 +48,7 @@ function FriendTranscationDetail({
     }
   }, [isAuthenticated, navigate]);
 
-  // Prevent the user from going back to the previous page// and implemnt custom functionality
-  // useEffect(() => {
-  //   const handlePopState = (e) => {
-  //     e.preventDefault(); // Prevent the default back navigation
-  //     console.log("isCommentSection: open --->", isCommentSectionOpen);
-
-  //     if (isAuthenticated) {
-  //       if (isCommentSectionOpen) {
-  //         console.log("toggle comment section in if :", isCommentSectionOpen);
-  //         toggleCommentSection(); // Close the comment section if it's open
-  //       } else {
-  //         console.log("Navigating to /user-dashboard");
-  //         setRefreshFriendTransaction(!refreshFriendTransaction);
-  //         setIsFriendSelected(false);
-  //         setSelectedFriend(null);
-  //         toggleRightSidebar();
-  //         toggleLeftSidebar();
-  //         navigate("/user-dashboard"); // Redirect to /user-dashboard if the user tries to go back
-  //       }
-  //     }
-  //   };
-
-  //   // Listen for back button or history changes
-  //   window.history.pushState(null, document.title);
-  //   window.addEventListener('popstate', handlePopState);
-
-  //   return () => {
-  //     window.removeEventListener('popstate', handlePopState); // Clean up the event listener on unmount
-  //   };
-  // }, [isAuthenticated, isCommentSectionOpen, navigate]); // Add `isCommentSectionOpen` in dependency array
+  
   useEffect(() => {
     const handlePopState = (e) => {
       e.preventDefault();
@@ -180,7 +151,7 @@ function FriendTranscationDetail({
   }, [commentTransaction]);
 
   return (
-    <>
+    <div className="flex flex-col h-[90%] lg:h-[98%] overflow-y-auto lg:pt-0">
       <div
         onClick={() => {
           if (isCommentSectionOpen) {
@@ -423,7 +394,7 @@ function FriendTranscationDetail({
         setRefreshFriendTransaction={setRefreshFriendTransaction}
         setCommentTransaction={setCommentTransaction}
       />
-    </>
+    </div>
   );
 }
 
