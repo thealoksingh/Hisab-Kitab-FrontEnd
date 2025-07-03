@@ -45,8 +45,8 @@ const Routing = () => {
   }, [dispatch]);
 
   const user = useSelector(selectUser);
-  const role = "user"; 
-   return (
+  const role = "user";
+  return (
     <BrowserRouter>
       <Routes>
         {/* Public Routes */}
@@ -59,10 +59,10 @@ const Routing = () => {
         {role === "user" && (
           <>
             <Route path="/user-dashboard" element={<UserDashboard />}>
-           <Route index element={<Navigate to="friends" />} />
+              <Route index element={<Navigate to="friends" />} />
               <Route path="friends" element={<Friends />}>
                 <Route index element={<InstructionToSelect />} />
-                <Route path="transaction/:id" element={<FriendTranscationDetail />} />
+                <Route path=":friendId/transactions" element={<FriendTranscationDetail />} />
                 <Route path="instructionToSelect" element={<InstructionToSelect />} />
               </Route>
               <Route path="under-dev" element={<UnderDevPage />} />

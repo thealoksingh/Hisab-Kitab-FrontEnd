@@ -1,15 +1,15 @@
 // src/components/Friends.jsx (adjust path as needed)
 
-import React, { useEffect, useState } from "react";
-import LeftSideDashBoard from "./LeftSideDashboard";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   selectFriendRequestCount,
   selectFriends,
   selectUser,
 } from "../Redux/Selector";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { getAllFriends } from "../Redux/Thunk";
+import LeftSideDashBoard from "./LeftSideDashboard";
 
 // import RightSideDashBoard from "./RightSideDashBoard"; // Uncomment if needed
 

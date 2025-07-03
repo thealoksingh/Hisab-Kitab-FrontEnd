@@ -66,7 +66,7 @@ const LogInForm = () => {
       const response = await dispatch(signIn({ email, password, role }));
       if (signIn.fulfilled.match(response)) {
         // If login is successful, redirect to user dashboard
-        navigate("/user-dashboard");
+        navigate("/user-dashboard/friends");
         console.log("User logged in successfully:", response.payload);
       }
     } catch (error) {

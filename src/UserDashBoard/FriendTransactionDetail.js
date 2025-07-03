@@ -1,21 +1,22 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
-import CommentSection from "./CommentSection";
-import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from "react";
 import { getTransactionDetailsWithFriend } from "../Api/HisabKitabApi";
-import GiveGotModal from "../Modals/GiveGotModal";
+import unFriendImage from "../assets/unFriend.png";
 import "../CssStyle/GroupDashboard.css";
 import FriendTransactionReport from "../Modals/FriendTransactionReport";
-import ProfileCircle from "../utils/ProfileCircle";
-import unFriendImage from "../assets/unFriend.png";
+import GiveGotModal from "../Modals/GiveGotModal";
 import UnfriendModal from "../Modals/UnfriendModal";
+import ProfileCircle from "../utils/ProfileCircle";
+import CommentSection from "./CommentSection";
 import FooterSection from "./FooterSection";
 
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../security/AuthContext";
+import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { selectFriends, selectUser } from "../Redux/Selector";
 function FriendTranscationDetail({
-  user,
-  selectedFriend,
+  
+
   refreshFriendTransaction,
   setRefreshFriendTransaction,
   isOpen,
@@ -25,6 +26,13 @@ function FriendTranscationDetail({
   setSelectedFriend,
   friendAndTransloader,
 }) {
+
+  const user = useSelector(selectUser);
+  const {friendId} = useParams();
+
+  const friends = useSelector(selectFriends);
+  const selectedFriend = friends?.find(friend => friend?.userEntity?.userId == friendId)?.userEntity || null;
+
   const [transactionsDto, setTransactionsDto] = useState([]);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,14 +47,14 @@ function FriendTranscationDetail({
   const [isTransactionLoading, setIsTransactionLoading] = useState(false);
 
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
 
-  // Redirect if the user is not authenticated
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/"); // Redirect to login page if not authenticated
-    }
-  }, [isAuthenticated, navigate]);
+
+  // // Redirect if the user is not authenticated
+  // useEffect(() => {
+  //   if (!user) {
+  //     navigate("/"); // Redirect to login page if not authenticated
+  //   }
+  // }, [user, navigate]);
 
   
   useEffect(() => {
@@ -62,7 +70,7 @@ function FriendTranscationDetail({
         setSelectedFriend(null);
         toggleRightSidebar();
         toggleLeftSidebar();
-        navigate("/user-dashboard");
+        navigate("/user-dashboard/friends", { replace: true }); // Navigate to friends page
       }
     };
 
@@ -72,7 +80,7 @@ function FriendTranscationDetail({
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };
-  }, [isAuthenticated, isCommentSectionOpen, navigate]);
+  }, [user, isCommentSectionOpen, navigate]);
 
   // End of Prevent the user from going back to the previous page
 
@@ -129,14 +137,14 @@ function FriendTranscationDetail({
 
       try {
         const response = await getTransactionDetailsWithFriend(
-          selectedFriend.userId
+          selectedFriend?.userId
         );
 
         setTransactionsDto(response.data);
         setIsTransactionLoading(false)
 
       } catch (err) {
-        setError(err.message);
+        setError(err?.message);
       } finally { setIsTransactionLoading(false); }
     };
 
@@ -144,7 +152,9 @@ function FriendTranscationDetail({
   }, [user, selectedFriend, refreshFriendTransaction]);
 
 
-
+useEffect(() => {
+  console.log('selected friend = ', selectedFriend);
+}, [selectedFriend]);
 
 
   useEffect(() => {
@@ -162,17 +172,16 @@ function FriendTranscationDetail({
       >
         <div className=" flex gap-3 sm:gap-2 md:gap-2">
           <ProfileCircle
-            className="h-10 w-10 sm:h-12 sm:w-12 md:h-13 md:w-13  text-white text-lg"
-            name={selectedFriend.fullName}
-            color={selectedFriend.colorHexValue}
+            name={selectedFriend?.fullName}
+            color={selectedFriend?.colorHexValue}
           />
 
           <div className="user-name-number   ">
             <h2 className="sm:text-sm  md:text-sm lg:text-lg text-gray-800 line-clamp-1">
-              {selectedFriend.fullName}
+              {selectedFriend?.fullName}
             </h2>
             <p className="text-[10px] sm:text-sm  md:text-sm text-green-700 line-clamp-2">
-              +91 <span>{selectedFriend.contactNo}</span>
+              +91 <span>{selectedFriend?.contactNo}</span>
             </p>
           </div>
         </div>
@@ -240,8 +249,8 @@ function FriendTranscationDetail({
           <UnfriendModal
             isOpen={isUnfriendModalOpen}
             toggleModal={toggleUnfriendModal}
-            userId={user.userId}
-            friendId={selectedFriend.userId}
+            userId={user?.userId}
+            friendId={selectedFriend?.userId}
             refreshFriendTransaction={refreshFriendTransaction}
             setRefreshFriendTransaction={setRefreshFriendTransaction}
             setIsFriendSelected={ setIsFriendSelected}
@@ -301,7 +310,7 @@ function FriendTranscationDetail({
               )}
               {transactionsDto.map((transactionDto, index) => {
                 const isUserGave =
-                  user.userId === transactionDto.transaction.fromUserId;
+                  user?.userId === transactionDto.transaction.fromUserId;
 
                 return (
                   <tr
@@ -371,11 +380,11 @@ function FriendTranscationDetail({
           You Got : <span>₹</span>
         </button>
         <GiveGotModal
-          userId={user.userId}
+          userId={user?.userId}
           isOpen={isModalOpen}
           toggleModal={toggleModal}
           transactionType={transactionType}
-          friendId={selectedFriend.userId}
+          friendId={selectedFriend?.userId}
           refreshFriendTransaction={refreshFriendTransaction}
           setRefreshFriendTransaction={setRefreshFriendTransaction}
         />

@@ -12,8 +12,8 @@ const FriendTransactionReport= ({isOpen, toggleModal,selectedFriend, user}) => {
 
 
   useEffect(() => {
-    setFriendId(selectedFriend.userId);
-    setUserId(user.userId); 
+    setFriendId(selectedFriend?.userId);
+    setUserId(user?.userId);
   }, [selectedFriend, user]);
  
   

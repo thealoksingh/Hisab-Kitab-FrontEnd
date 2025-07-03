@@ -19,7 +19,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
   };
 
   const [formData, setFormData] = useState({
-    userId: user.userId,
+    userId: user?.userId,
     title: "",
     description: "",
   });
