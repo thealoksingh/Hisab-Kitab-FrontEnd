@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { getFriendList, logoutUserAPI, refreshTokenAPI, refreshTokenApi, registerAPI, resetPasswordAPI, sendOtpAPI } from "../utils/HisabKitabApi";
+import { getAllFriendTransactionsAPI, getFriendList, logoutUserAPI, refreshTokenAPI, refreshTokenApi, registerAPI, resetPasswordAPI, sendOtpAPI } from "../utils/HisabKitabApi";
 import { getUserByIdAPI, loginAPI } from "../utils/HisabKitabApi";
 import { handleAxiosError, withRefreshTokenRetry } from "../utils/HandleError";
 
@@ -117,6 +117,27 @@ export const getAllFriends = createAsyncThunk(
     return withRefreshTokenRetry(
       async () => {
         const response = await getFriendList();
+        console.log("this is response.status == " + response?.status);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;
+        } else {
+          return thunkAPI.rejectWithValue(
+            response?.data?.message || "Failed to get friend list."
+          );
+        }
+      },
+      thunkAPI
+    );
+  }
+);
+
+//Get-All transaction with friend Thunk
+export const getAllFriendTransactions = createAsyncThunk(
+  "auth/getAllFriendTransactions",
+  async (data, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response = await getAllFriendTransactionsAPI(data);
         console.log("this is response.status == " + response?.status);
         if (response?.status === 200 || response?.status === 201) {
           return response?.data;

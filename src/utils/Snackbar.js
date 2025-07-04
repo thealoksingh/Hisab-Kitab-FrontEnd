@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearSnackbar } from '../redux/snackbar/snackbarSlice';
+import { clearSnackbar } from '../Redux/SanckbarSlice';
 
 const Snackbar = () => {
   const dispatch = useDispatch();

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import {
   selectFriendRequestCount,
   selectFriends,
@@ -13,7 +13,7 @@ import LeftSideDashBoard from "./LeftSideDashboard";
 
 // import RightSideDashBoard from "./RightSideDashBoard"; // Uncomment if needed
 
-const Friends = ({ globalNavToggler, setIsSidebarOpen, isSidebarOpen }) => {
+const Friends = () => {
   const [isFriendSelected, setIsFriendSelected] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState(null);
   const location = useLocation();
@@ -29,6 +29,10 @@ const Friends = ({ globalNavToggler, setIsSidebarOpen, isSidebarOpen }) => {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const friends = useSelector(selectFriends);
+
+  // Inside your component use OutletContext to access the context
+  // This allows you to pass down the context to child components:
+  const { setIsSidebarOpen, isSidebarOpen, globalNavToggler } = useOutletContext();
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -106,27 +110,27 @@ const Friends = ({ globalNavToggler, setIsSidebarOpen, isSidebarOpen }) => {
     }
   };
 
-// useEffect(() => {
-//   if (!selectedFriend) {
-//     navigate("/user-dashboard/friends/instructionToSelect");
-//   }
-// }, []);
+  // useEffect(() => {
+  //   if (!selectedFriend) {
+  //     navigate("/user-dashboard/friends/instructionToSelect");
+  //   }
+  // }, []);
 
 
-const handleFriendSelect = (friend) => {
-  setSelectedFriend(friend);
-  setIsFriendSelected(!!friend);
+  const handleFriendSelect = (friend) => {
+    setSelectedFriend(friend);
+    setIsFriendSelected(!!friend);
 
-  if (friend) {
-    navigate(`/user-dashboard/friends/transaction/${friend?.id}`);
-    // if (window.innerWidth < 1024) {
-    //   setIsRightSidebarOpen(true);
-    //   setIsLeftSidebarOpen(false);
-    // }
-  } else {
-    navigate("/user-dashboard/friends/instructionToSelect");
-  }
-};
+    if (friend) {
+      navigate(`/user-dashboard/friends/transaction/${friend?.id}`);
+      // if (window.innerWidth < 1024) {
+      //   setIsRightSidebarOpen(true);
+      //   setIsLeftSidebarOpen(false);
+      // }
+    } else {
+      navigate("/user-dashboard/friends/instructionToSelect");
+    }
+  };
 
 
 
@@ -138,9 +142,8 @@ const handleFriendSelect = (friend) => {
       <div className="max-w-7xl sm:overflow-y-auto">
         <div className="flex flex-col lg:flex-row">
           <div
-            className={`sm:w-1/2 h-screen md:w-[100%] m-2 ${
-              isLeftSidebarOpen ? "block" : "hidden"
-            } lg:block`}
+            className={`sm:w-1/2 h-screen md:w-[100%] m-2 ${isLeftSidebarOpen ? "block" : "hidden"
+              } lg:block`}
           >
             <LeftSideDashBoard
               user={user}
@@ -156,11 +159,10 @@ const handleFriendSelect = (friend) => {
             />
           </div>
           <div
-            className={`sm:w-1/2 md:w-full p-2 sm:pl-0 h-screen ${
-              isRightSidebarOpen ? "block" : "hidden"
-            } lg:block`}
+            className={`sm:w-1/2 md:w-full p-2 sm:pl-0 h-screen ${isRightSidebarOpen ? "block" : "hidden"
+              } lg:block`}
           >
-             <Outlet />
+            <Outlet />
             {/* <FriendTranscationDetail
               user={user}
               isFriendSelected={isFriendSelected}

@@ -1,5 +1,4 @@
 import {
-  faMapLocationDot,
   faAddressCard,
   faArrowRightFromBracket,
   faBars,
@@ -7,23 +6,24 @@ import {
   faClipboardQuestion,
   faEnvelope,
   faGear,
+  faMapLocationDot,
   faPeopleGroup,
   faPeoplePulling,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
-import { selectFriendRequestCount, selectFriends, selectUser } from "../Redux/Selector";
+import { selectFriends, selectUser } from "../Redux/Selector";
 import { getAllFriends, logout } from "../Redux/Thunk";
 
-import logo from "../assets/logo-hisab-kitab.png";
 import hisabKitabBlack from "../assets/images/hisabkitab-black.png";
-import InviteModal from "../Modals/InviteModal";
-import HelpAndSupport from "../Modals/HelpAndSupport";
+import logo from "../assets/logo-hisab-kitab.png";
 import "../CssStyle/LoaderStyle.css";
+import HelpAndSupport from "../Modals/HelpAndSupport";
+import InviteModal from "../Modals/InviteModal";
 
 const UserDashboard = () => {
   const navigate = useNavigate();
@@ -42,6 +42,7 @@ const UserDashboard = () => {
   const toggleInvite = () => setIsInviteOpen(!isInviteOpen);
   const toggleHelpAndSupport = () => setIsHelpAndSupportOpen(!isHelpAndSupportOpen);
 
+
   const handleLogout = async () => {
     try {
       await dispatch(logout());
@@ -51,8 +52,11 @@ const UserDashboard = () => {
   };
 
   useEffect(() => {
-    dispatch(getAllFriends());
-  }, [dispatch]);
+    // Call getAllFriends when component mounts or when URL is /user-dashboard/friends
+    if (location.pathname === "/user-dashboard/friends") {
+      dispatch(getAllFriends());
+    }
+  }, [dispatch, location.pathname]);
 
   const sidebarItems = [
     {
@@ -103,9 +107,8 @@ const UserDashboard = () => {
     <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-50 w-64 lg:bg-gray-800 bg-gray-50 border rounded-sm border-gray-800 text-white transition-transform duration-300 ease-in-out transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:relative lg:translate-x-0 h-auto lg:h-full`}
+        className={`fixed top-0 left-0 z-50 w-64 lg:bg-gray-800 bg-gray-50 border rounded-sm border-gray-800 text-white transition-transform duration-300 ease-in-out transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } lg:relative lg:translate-x-0 h-auto lg:h-full`}
         role="navigation"
       >
         <div className="h-full px-3 py-4 overflow-y-auto">
@@ -141,17 +144,15 @@ const UserDashboard = () => {
               return (
                 <li key={idx} onClick={() => item.onClick ? item.onClick() : navigate(item.path)}>
                   <div
-                    className={`flex items-center p-2 rounded-sm border lg:border-0 group transition-all duration-200 cursor-pointer ${
-                      isActive
+                    className={`flex items-center p-2 rounded-sm border lg:border-0 group transition-all duration-200 cursor-pointer ${isActive
                         ? "bg-yellow-100 border border-yellow-400 text-yellow-800"
                         : "lg:text-gray-300 text-black lg:hover:bg-gray-700"
-                    }`}
+                      }`}
                   >
                     <FontAwesomeIcon
                       icon={item.icon}
-                      className={`${
-                        isActive ? "text-yellow-800" : "lg:text-gray-300 text-gray-600"
-                      } ${item.animate ? "group-hover:animate-spin" : ""}`}
+                      className={`${isActive ? "text-yellow-800" : "lg:text-gray-300 text-gray-600"
+                        } ${item.animate ? "group-hover:animate-spin" : ""}`}
                       style={{ fontSize: "25px" }}
                     />
                     <span className="flex-1 ms-3 whitespace-nowrap">{item.label}</span>
@@ -200,7 +201,7 @@ const UserDashboard = () => {
 
         {/* Routed content */}
         <div className="flex-1 overflow-y-auto bg-orange-50" onClick={globalNavToggler}>
-          <Outlet />
+          <Outlet context={{ globalNavToggler, setIsSidebarOpen, isSidebarOpen }} />
         </div>
       </div>
 

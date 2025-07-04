@@ -130,7 +130,7 @@ export const rejectRequest = (requestId) =>
   });
 
 // API for Get Friend Transaction Details
-export const getTransactionDetailsWithFriend = (friendId) =>
+export const getAllFriendTransactionsAPI = (friendId) =>
   apiGetRequest({
     apiUrl: `${baseURL}/user/getAllTransactionWithFriend?friendId=${friendId}`,
     content_type: "application/json",

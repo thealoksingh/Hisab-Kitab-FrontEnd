@@ -11,9 +11,10 @@ import ProfileCircle from "../utils/ProfileCircle";
 import CommentSection from "./CommentSection";
 import FooterSection from "./FooterSection";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { selectFriends, selectUser } from "../Redux/Selector";
+import { getAllFriendTransactions } from "../Redux/Thunk";
 function FriendTranscationDetail({
   
 
@@ -47,7 +48,7 @@ function FriendTranscationDetail({
   const [isTransactionLoading, setIsTransactionLoading] = useState(false);
 
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
 
   // // Redirect if the user is not authenticated
   // useEffect(() => {
@@ -136,14 +137,23 @@ function FriendTranscationDetail({
       if (!transactionsDto) return;
 
       try {
-        const response = await getTransactionDetailsWithFriend(
+        const response = await dispatch(getAllFriendTransactions(
           selectedFriend?.userId
-        );
+        ));
 
-        setTransactionsDto(response.data);
-        setIsTransactionLoading(false)
+
+        if (getAllFriendTransactions.fulfilled.match(response)) {
+          // If the action was fulfilled, it means the transactions were fetched successfully
+          console.log("Transactions fetched successfully:", response?.payload?.data);
+          setTransactionsDto(response?.payload?.data || []);
+        } else {
+          setError(response?.payload?.message || "Failed to fetch transactions");
+        }
+
+        setIsTransactionLoading(false);
 
       } catch (err) {
+        console.error(err.message || "An error occurred while fetching transactions");
         setError(err?.message);
       } finally { setIsTransactionLoading(false); }
     };
