@@ -22,6 +22,7 @@ import { getUserByToken } from "../Redux/Thunk";
 import Friends from "../UserDashBoard/Friends";
 import FriendTranscationDetail from "../UserDashBoard/FriendTransactionDetail";
 import InstructionToSelect from "../UserDashBoard/instructionToSelect";
+import CommentSection from "../UserDashBoard/CommentSection";
 
 // AuthenticatedRoute using Redux state
 function AuthenticatedRoute({ children }) {
@@ -50,7 +51,10 @@ const Routing = () => {
     <BrowserRouter>
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={user ? <Navigate to="/user-dashboard" /> : <Home />} />
+        <Route
+          path="/"
+          element={user ? <Navigate to="/user-dashboard" /> : <Home />}
+        />
         <Route path="/signin" element={<LoginForm />} />
         <Route path="/signup" element={<SignUpForm />} />
         <Route path="/forget-password" element={<ForgetPasswordModal />} />
@@ -62,8 +66,16 @@ const Routing = () => {
               <Route index element={<Navigate to="friends" />} />
               <Route path="friends" element={<Friends />}>
                 <Route index element={<InstructionToSelect />} />
-                <Route path=":friendId/transactions" element={<FriendTranscationDetail />} />
-                <Route path="instructionToSelect" element={<InstructionToSelect />} />
+                <Route
+                  path=":friendId/transactions"
+                  element={<FriendTranscationDetail />}
+                >
+                  <Route path=":transactionId" element={<CommentSection />} />
+                </Route>
+                <Route
+                  path="instructionToSelect"
+                  element={<InstructionToSelect />}
+                />
               </Route>
               <Route path="under-dev" element={<UnderDevPage />} />
               <Route path="about" element={<About />} />

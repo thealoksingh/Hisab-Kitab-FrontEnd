@@ -122,7 +122,8 @@ const Friends = () => {
     setIsFriendSelected(!!friend);
 
     if (friend) {
-      navigate(`/user-dashboard/friends/transaction/${friend?.id}`);
+      console.log("Selected friendid:", friend?.id);
+      navigate(`/user-dashboard/friends/${friend?.id}/transaction`);
       // if (window.innerWidth < 1024) {
       //   setIsRightSidebarOpen(true);
       //   setIsLeftSidebarOpen(false);

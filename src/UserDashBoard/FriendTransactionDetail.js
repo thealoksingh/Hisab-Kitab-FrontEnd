@@ -10,7 +10,7 @@ import UnfriendModal from "../Modals/UnfriendModal";
 import ProfileCircle from "../utils/ProfileCircle";
 import CommentSection from "./CommentSection";
 import FooterSection from "./FooterSection";
-
+import { Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { selectFriends, selectUser } from "../Redux/Selector";
@@ -58,30 +58,30 @@ function FriendTranscationDetail({
   // }, [user, navigate]);
 
   
-  useEffect(() => {
-    const handlePopState = (e) => {
-      e.preventDefault();
+  // useEffect(() => {
+  //   const handlePopState = (e) => {
+  //     e.preventDefault();
 
-      if (window.history.state?.commentOpen) {
-        toggleCommentSection(); // Close comment section
-      } else {
+  //     if (window.history.state?.commentOpen) {
+  //       toggleCommentSection(); // Close comment section
+  //     } else {
        
-        setRefreshFriendTransaction((prev) => !prev);
-        setIsFriendSelected(false);
-        setSelectedFriend(null);
-        toggleRightSidebar();
-        toggleLeftSidebar();
-        navigate("/user-dashboard/friends", { replace: true }); // Navigate to friends page
-      }
-    };
+  //       setRefreshFriendTransaction((prev) => !prev);
+  //       setIsFriendSelected(false);
+  //       setSelectedFriend(null);
+  //       toggleRightSidebar();
+  //       toggleLeftSidebar();
+  //       navigate("/user-dashboard/friends", { replace: true }); // Navigate to friends page
+  //     }
+  //   };
 
-    window.history.replaceState({ dashboard: true }, ""); // Ensure initial state is set
-    window.addEventListener("popstate", handlePopState);
+  //   window.history.replaceState({ dashboard: true }, ""); // Ensure initial state is set
+  //   window.addEventListener("popstate", handlePopState);
 
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, [user, isCommentSectionOpen, navigate]);
+  //   return () => {
+  //     window.removeEventListener("popstate", handlePopState);
+  //   };
+  // }, [user, isCommentSectionOpen, navigate]);
 
   // End of Prevent the user from going back to the previous page
 
@@ -90,16 +90,16 @@ function FriendTranscationDetail({
     setSelectedRowId(transactionId);
   };
 
-  const toggleCommentSection = () => {
-    setIsCommentSetionOpen((prevState) => {
-      if (!prevState) {
-        window.history.pushState({ commentOpen: true }, ""); // Push new history entry
-      } else {
-        window.history.replaceState({ dashboard: true }, ""); // Replace state when closing
-      }
-      return !prevState;
-    });
-  };
+  // const toggleCommentSection = () => {
+  //   setIsCommentSetionOpen((prevState) => {
+  //     if (!prevState) {
+  //       window.history.pushState({ commentOpen: true }, ""); // Push new history entry
+  //     } else {
+  //       window.history.replaceState({ dashboard: true }, ""); // Replace state when closing
+  //     }
+  //     return !prevState;
+  //   });
+  // };
 
   const toggleReportModal = () => {
     if (!isReportModalOpen) {
@@ -330,9 +330,10 @@ useEffect(() => {
                         : "bg-gray-100 dark:bg-gray-100"
                       }`}
                     onClick={() => {
-                      handleRowClick(transactionDto.transaction.transId); // Set the selected row's ID on click
-                      setCommentTransaction(transactionDto.transaction);
-                      toggleCommentSection();
+                     
+                    
+                       navigate(`/user-dashboard/friends/${friendId}/transactions/${transactionDto.transaction.transId}`);
+                     
                     }}
                   >
                     <td
@@ -400,8 +401,8 @@ useEffect(() => {
         />
       </div>
       <FooterSection/>
-
-      <CommentSection
+<Outlet />
+      {/* <CommentSection
         selectedFriend={selectedFriend}
         isOpen={isCommentSectionOpen}
         isRowClicked={isRowClicked}
@@ -412,7 +413,7 @@ useEffect(() => {
         refreshFriendTransaction={refreshFriendTransaction}
         setRefreshFriendTransaction={setRefreshFriendTransaction}
         setCommentTransaction={setCommentTransaction}
-      />
+      /> */}
     </div>
   );
 }

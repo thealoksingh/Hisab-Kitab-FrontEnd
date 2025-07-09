@@ -17,6 +17,7 @@ import {
 } from "../Api/HisabKitabApi";
 import UpdateFriendTransaction from "../Modals/UpdateFriendTransactionModel";
 import DeleteAlertModal from "../Modals/DeleteAlertModal";
+import { useNavigate, useParams } from "react-router-dom";
 // import { useNavigate, useLocation } from "react-router-dom";
 // import { useAuth } from "../security/AuthContext";
 
@@ -41,7 +42,8 @@ function CommentSection({
   const [isLoading, setIsLoading] = useState(false);
   const [isCommentLoading, setIsCommentLoading] = useState(false);
   const [creator, setCreator] = useState(null);
-
+  const navigate = useNavigate();
+   const { transactionId,friendId } = useParams();
   const toggleDeleteAlert = () => {
     setIsDeleteAlertOpen(!isDeleteAlertOpen);
   };
@@ -58,31 +60,26 @@ function CommentSection({
 
   }, [commentTransaction, user, selectedFriend]);
 
-  useEffect(() => {
-    if (isOpen) {
-      setWidth("100%"); // Set to 100% for all screen sizes initially
+ useEffect(() => {
+  if (!transactionId) {
+    setWidth("0"); // Close if not on transaction route
+    return;
+  }
+
+  const handleResize = () => {
+    if (window.innerWidth >= 1024) {
+      setWidth("60%");
     } else {
-      setWidth("0");
+      setWidth("100%");
     }
-  }, [isOpen]);
+  };
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (isOpen) {
-        if (window.innerWidth >= 1024) {
-          // lg breakpoint
-          setWidth("60%");
-        } else {
-          setWidth("100%");
-        }
-      }
-    };
+  window.addEventListener("resize", handleResize);
+  handleResize(); // initial call
 
-    window.addEventListener("resize", handleResize);
-    handleResize(); // Call once to set initial state
+  return () => window.removeEventListener("resize", handleResize);
+}, [transactionId]);
 
-    return () => window.removeEventListener("resize", handleResize);
-  }, [isOpen]);
 
   useEffect(() => {
     if (commentTransaction == null) return;
@@ -165,7 +162,7 @@ function CommentSection({
 
   return (
     <>
-      {commentTransaction && (
+      {transactionId && (
         <div
           className="Details absolute right-0 top-0 h-full shadow-inner-custom bg-gray-100 z-50 p-2"
           style={{
@@ -179,7 +176,7 @@ function CommentSection({
             <button
               type="button"
               className=" close-button text-gray-400 bg-transparent hover:bg-gray-600 hover:text-gray-500 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-300 dark:hover:text-white"
-              onClick={toggleCommentSection}
+              onClick={()=>navigate(`/user-dashboard/friends/${friendId}`)}
             >
               <svg
                 className="w-3 h-3"

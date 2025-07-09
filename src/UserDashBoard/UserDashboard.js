@@ -29,8 +29,9 @@ const UserDashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
-
+const getAccessToken = () => localStorage.getItem('accessToken');
   const user = useSelector(selectUser);
+  console.log("user id",user?.userId);
   const friends = useSelector(selectFriends);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
