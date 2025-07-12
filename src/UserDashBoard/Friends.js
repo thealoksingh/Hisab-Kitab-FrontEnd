@@ -37,6 +37,7 @@ const Friends = () => {
   useEffect(() => {
     const fetchFriends = async () => {
       setFriendAndTransLoader(true);
+      console.log("Fetching friends for user:", user);
       if (!user) return;
 
       try {

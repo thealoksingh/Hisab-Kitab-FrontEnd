@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { getAllFriendTransactionsAPI, getFriendList, logoutUserAPI, refreshTokenAPI, refreshTokenApi, registerAPI, resetPasswordAPI, sendOtpAPI } from "../utils/HisabKitabApi";
+import { getAllCommentsByTransactionIdAPI, getAllFriendTransactionsAPI, getFriendList, logoutUserAPI, refreshTokenAPI, refreshTokenApi, registerAPI, resetPasswordAPI, sendOtpAPI } from "../utils/HisabKitabApi";
 import { getUserByIdAPI, loginAPI } from "../utils/HisabKitabApi";
 import { handleAxiosError, withRefreshTokenRetry } from "../utils/HandleError";
 
@@ -144,6 +144,26 @@ export const getAllFriendTransactions = createAsyncThunk(
         } else {
           return thunkAPI.rejectWithValue(
             response?.data?.message || "Failed to get friend list."
+          );
+        }
+      },
+      thunkAPI
+    );
+  }
+);
+//Get-All Comment of transaction with friend Thunk
+export const getAllTransactionComments = createAsyncThunk(
+  "auth/getAllTransactionComments",
+  async (data, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response = await getAllCommentsByTransactionIdAPI(data);
+        console.log("this is response.status == " + response?.status);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;
+        } else {
+          return thunkAPI.rejectWithValue(
+            response?.data?.message || "Failed to get comment list."
           );
         }
       },

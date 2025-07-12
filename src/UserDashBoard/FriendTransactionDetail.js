@@ -16,7 +16,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { selectFriends, selectUser } from "../Redux/Selector";
 import { getAllFriendTransactions } from "../Redux/Thunk";
 function FriendTranscationDetail({
-  
+
 
   refreshFriendTransaction,
   setRefreshFriendTransaction,
@@ -29,7 +29,7 @@ function FriendTranscationDetail({
 }) {
 
   const user = useSelector(selectUser);
-  const {friendId} = useParams();
+  const { friendId } = useParams();
 
   const friends = useSelector(selectFriends);
   const selectedFriend = friends?.find(friend => friend?.userEntity?.userId == friendId)?.userEntity || null;
@@ -49,6 +49,7 @@ function FriendTranscationDetail({
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
 
   // // Redirect if the user is not authenticated
   // useEffect(() => {
@@ -57,7 +58,7 @@ function FriendTranscationDetail({
   //   }
   // }, [user, navigate]);
 
-  
+
   // useEffect(() => {
   //   const handlePopState = (e) => {
   //     e.preventDefault();
@@ -65,7 +66,7 @@ function FriendTranscationDetail({
   //     if (window.history.state?.commentOpen) {
   //       toggleCommentSection(); // Close comment section
   //     } else {
-       
+
   //       setRefreshFriendTransaction((prev) => !prev);
   //       setIsFriendSelected(false);
   //       setSelectedFriend(null);
@@ -133,8 +134,9 @@ function FriendTranscationDetail({
 
   useEffect(() => {
     const fetchTransactions = async () => {
+      
+      if (!transactionsDto || !user) return;
       setIsTransactionLoading(true);
-      if (!transactionsDto) return;
 
       try {
         const response = await dispatch(getAllFriendTransactions(
@@ -162,9 +164,9 @@ function FriendTranscationDetail({
   }, [user, selectedFriend, refreshFriendTransaction]);
 
 
-useEffect(() => {
-  console.log('selected friend = ', selectedFriend);
-}, [selectedFriend]);
+  useEffect(() => {
+    console.log('selected friend = ', selectedFriend);
+  }, [selectedFriend]);
 
 
   useEffect(() => {
@@ -198,30 +200,30 @@ useEffect(() => {
 
         {transactionsDto.length > 0 && <div
           className={`net-balance border  text-xs ml-2 font-medium sm:font-semibold sm:ml-2 p-1 sm:p-2 h-8 w-25 sm:h-9 sm:w-35  md:h-9 md:w-35 rounded-sm flex flex-col justify-center   ${transactionsDto.length > 0 &&
-              transactionsDto[0].lastClosingBalance >= 0
-              ? "border-green-900 text-green-900"
-              : "border-red-900 text-red-900"
+            transactionsDto[0].lastClosingBalance >= 0
+            ? "border-green-900 text-green-900"
+            : "border-red-900 text-red-900"
             }`}
         >
           <h2
             className={`text-black line-clamp-2  sm:line-clamp-1  text-xs md:text-xs sm:text-xs ${transactionsDto.length > 0 &&
-                transactionsDto[0].lastClosingBalance >= 0
-                ? "border-green-900 text-green-900"
-                : "border-red-900 text-red-900"
+              transactionsDto[0].lastClosingBalance >= 0
+              ? "border-green-900 text-green-900"
+              : "border-red-900 text-red-900"
               }`}
           >  </h2>
-            {transactionsDto.length > 0 && (
-              <>
-                {transactionsDto[0].lastClosingBalance >= 0
-                  ? "You will get"
-                  : "You will give"}
-                <p className="text-center text-[10px]">
-                 
-                  ₹{Math.abs(transactionsDto[0].lastClosingBalance)}
-                </p>
-              </>
-            )}
-        
+          {transactionsDto.length > 0 && (
+            <>
+              {transactionsDto[0].lastClosingBalance >= 0
+                ? "You will get"
+                : "You will give"}
+              <p className="text-center text-[10px]">
+
+                ₹{Math.abs(transactionsDto[0].lastClosingBalance)}
+              </p>
+            </>
+          )}
+
         </div>}
 
         {/* Report */}
@@ -263,7 +265,7 @@ useEffect(() => {
             friendId={selectedFriend?.userId}
             refreshFriendTransaction={refreshFriendTransaction}
             setRefreshFriendTransaction={setRefreshFriendTransaction}
-            setIsFriendSelected={ setIsFriendSelected}
+            setIsFriendSelected={setIsFriendSelected}
           />
         </div>
       </div>
@@ -326,14 +328,14 @@ useEffect(() => {
                   <tr
                     key={transactionDto.transaction.transId}
                     className={`bg-white border-b border-1 shadow-inner-custom rounded-sm dark:border-gray-100 cursor-pointer ${selectedRowId === transactionDto.transaction.transId
-                        ? "bg-gray-300 dark:bg-gray-300"
-                        : "bg-gray-100 dark:bg-gray-100"
+                      ? "bg-gray-300 dark:bg-gray-300"
+                      : "bg-gray-100 dark:bg-gray-100"
                       }`}
                     onClick={() => {
-                     
-                    
-                       navigate(`/user-dashboard/friends/${friendId}/transactions/${transactionDto.transaction.transId}`);
-                     
+
+                      setSelectedTransaction(transactionDto?.transaction );
+                      navigate(`/user-dashboard/friends/${friendId}/transactions/${transactionDto.transaction.transId}`);
+
                     }}
                   >
                     <td
@@ -400,8 +402,8 @@ useEffect(() => {
           setRefreshFriendTransaction={setRefreshFriendTransaction}
         />
       </div>
-      <FooterSection/>
-<Outlet />
+      <FooterSection />
+    <Outlet context={{ selectedTransaction }} />
       {/* <CommentSection
         selectedFriend={selectedFriend}
         isOpen={isCommentSectionOpen}

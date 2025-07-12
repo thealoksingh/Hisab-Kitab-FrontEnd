@@ -7,11 +7,14 @@ export async function withRefreshTokenRetry(apiCall, thunkAPI) {
         return await apiCall();
     } catch (error) {
         // If unauthorized, try to refresh token and retry once
+        console.log("API call failed:", error.response?.status);
         if (error?.response?.status === 401) {
             const refreshToken = localStorage.getItem('refreshToken');
+            console.log("Attempting to refresh token with:", refreshToken);
             if (refreshToken) {
                 try {
                     const refreshResponse = await thunkAPI.dispatch(handleRefreshToken({ refreshToken }));
+                    console.log("Refresh response:", refreshResponse?.payload);
                     // Check if refresh was successful
                     if (handleRefreshToken.fulfilled.match(refreshResponse)) {
                         console.log("New Access Token = ", refreshResponse?.payload?.data);
@@ -37,9 +40,9 @@ export const handleAxiosError = (error) => {
     if (axios.isAxiosError(error)) {
         console.log('error occured in axios', error);
 
-        if (error.response) {
+        if (error?.response) {
             // Server responded with a status code outside 2xx
-            console.log(error.response.data);
+            console.log('error response = ', error?.response?.data);
             return error.response.data;
 
         } else if (error.request) {

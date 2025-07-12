@@ -17,23 +17,23 @@ import {
 } from "../Api/HisabKitabApi";
 import UpdateFriendTransaction from "../Modals/UpdateFriendTransactionModel";
 import DeleteAlertModal from "../Modals/DeleteAlertModal";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "../Redux/Selector";
+import { getAllTransactionComments } from "../Redux/Thunk";
+import { showSnackbar } from "../Redux/SanckbarSlice";
 // import { useNavigate, useLocation } from "react-router-dom";
 // import { useAuth } from "../security/AuthContext";
 
 function CommentSection({
   selectedFriend,
-  isOpen,
-  toggleCommentSection,
-  commentTransaction,
-  setCommentTransaction,
-  user,
+
   setIsRowClicked,
   isRowClicked,
   refreshFriendTransaction,
   setRefreshFriendTransaction,
 }) {
-  const [width, setWidth] = useState("0"); // Initially set width to 0%
+  const [width, setWidth] = useState("0%"); // Initially set width to 0%
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState("");
   const [error, setError] = useState(null);
@@ -43,15 +43,23 @@ function CommentSection({
   const [isCommentLoading, setIsCommentLoading] = useState(false);
   const [creator, setCreator] = useState(null);
   const navigate = useNavigate();
-   const { transactionId,friendId } = useParams();
+  const { transactionId, friendId } = useParams();
+  console.log("transactionId:", transactionId); 
   const toggleDeleteAlert = () => {
     setIsDeleteAlertOpen(!isDeleteAlertOpen);
   };
   const toggleUpdateForm = () => {
     setIsUpdateFormOpen(!isUpdateFormOpen);
   };
+  const { selectedTransaction } = useOutletContext();
+  const [commentTransaction, setCommentTransaction] = useState(selectedTransaction || null);
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
+  console.log("selectedTransaction in CommentSection:", selectedTransaction);
+
 
   useEffect(() => {
+    console.log("Comment Transaction open:");
     if (commentTransaction) {
       setCreator(
         commentTransaction.createdBy === user.userId ? user : selectedFriend
@@ -60,41 +68,49 @@ function CommentSection({
 
   }, [commentTransaction, user, selectedFriend]);
 
- useEffect(() => {
-  if (!transactionId) {
-    setWidth("0"); // Close if not on transaction route
-    return;
-  }
-
-  const handleResize = () => {
-    if (window.innerWidth >= 1024) {
-      setWidth("60%");
-    } else {
-      setWidth("100%");
+  useEffect(() => {
+    if (!transactionId) {
+      setWidth("0"); // Close if not on transaction route
+      return;
     }
-  };
 
-  window.addEventListener("resize", handleResize);
-  handleResize(); // initial call
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setWidth("30%");
+      } else {
+        setWidth("100%");
+      }
+    };
 
-  return () => window.removeEventListener("resize", handleResize);
-}, [transactionId]);
+    window.addEventListener("resize", handleResize);
+    handleResize(); // initial call
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, [transactionId]);
 
 
   useEffect(() => {
     if (commentTransaction == null) return;
     const fetchComments = async () => {
       setIsCommentLoading(true);
-      if (!isOpen) {
-        setComments([]); // Clear comments when the sidebar is closed
-        return;
-      }
+     
       try {
-        const response = await getAllCommentsByTransactionId(
+        const response = await dispatch(getAllTransactionComments(
           commentTransaction.transId
-        );
+        ));
 
-        setComments(response.data); // Assuming the data is in response.data.friendList
+        if (getAllTransactionComments.fulfilled.match(response)) {
+          console.log("Fetched comments successfully:", response?.payload);
+          setComments(response?.payload?.data);
+        }
+
+
+
+        await dispatch(showSnackbar({
+          message: "Comments fetched successfully", type: "success"
+        }))
+
+        // setComments(response.data); // Assuming the data is in response.data.friendList
 
         setIsCommentLoading(false);
       } catch (err) {
@@ -105,7 +121,7 @@ function CommentSection({
     };
 
     fetchComments();
-  }, [user, isRowClicked, commentTransaction, isOpen]);
+  }, [user, isRowClicked, commentTransaction]);
 
   if (commentTransaction == null) return;
 
@@ -176,7 +192,7 @@ function CommentSection({
             <button
               type="button"
               className=" close-button text-gray-400 bg-transparent hover:bg-gray-600 hover:text-gray-500 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-300 dark:hover:text-white"
-              onClick={()=>navigate(`/user-dashboard/friends/${friendId}`)}
+              onClick={() => navigate(`/user-dashboard/friends/${friendId}/transactions`)}
             >
               <svg
                 className="w-3 h-3"
@@ -228,12 +244,12 @@ function CommentSection({
 
               <UpdateFriendTransaction
                 user={user}
-                toggleCommentSection={toggleCommentSection}
+                // toggleCommentSection={toggleCommentSection}
                 refreshFriendTransaction={refreshFriendTransaction}
                 setRefreshFriendTransaction={setRefreshFriendTransaction}
                 commentTransaction={commentTransaction}
                 setCommentTransaction={setCommentTransaction}
-                isOpen={isUpdateFormOpen}
+                // isOpen={isUpdateFormOpen}
                 toggleModal={toggleUpdateForm}
               />
             </div>
@@ -255,8 +271,8 @@ function CommentSection({
                 :
                 <span
                   className={`text-sm font-semibold ${commentTransaction.fromUserId === user.userId
-                      ? "text-red-600"
-                      : "text-green-600"
+                    ? "text-red-600"
+                    : "text-green-600"
                     }`}
                 >
                   ₹ <span> {commentTransaction.amount}</span>
@@ -347,7 +363,7 @@ function CommentSection({
                           <p className="text-sm mb-4  text-gray-600 break-all overflow-hidden">
                             {comment.comments}
                           </p>
-                          <p className="text-xs font-semibold absolute bottom-0 right-1">                 
+                          <p className="text-xs font-semibold absolute bottom-0 right-1">
                             {moment(comment.commentTime, "YYYY-MM-DD HH:mm:ss").fromNow()}
                           </p>
                         </div>
@@ -398,7 +414,7 @@ function CommentSection({
               <DeleteAlertModal
                 transId={commentTransaction.transId}
                 isOpen={isDeleteAlertOpen}
-                toggleCommentSection={toggleCommentSection}
+                // toggleCommentSection={toggleCommentSection}
                 toggleModal={toggleDeleteAlert}
                 refreshFriendTransaction={refreshFriendTransaction}
                 setRefreshFriendTransaction={setRefreshFriendTransaction}

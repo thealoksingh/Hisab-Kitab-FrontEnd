@@ -17,7 +17,7 @@ export const refreshTokenApi = (refreshToken) =>
 
 export const refreshTokenAPI = () =>
     apiPostRequest({
-    apiUrl: `${baseURL}/user/refreshtoken`,
+    apiUrl: `${baseURL}/user/refresh-token`,
     content_type: "application/json",
     data: { refreshToken: getRefreshToken() },
     
@@ -166,7 +166,7 @@ export const updateFriendTransactionById = (updatedTransactionData) =>
   });
 
 // API for getting comments of a transaction
-export const getAllCommentsByTransactionId = (transId) =>
+export const getAllCommentsByTransactionIdAPI = (transId) =>
   apiGetRequest({
     apiUrl: `${baseURL}/user/transaction/getAllComments?transId=${transId}`,
     content_type: "application/json",
