@@ -6,6 +6,7 @@ import "../CssStyle/GroupDashboard.css";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../Redux/Selector";
 import { signIn } from "../Redux/Thunk";
+import { showSnackbar } from "../Redux/SanckbarSlice";
 
 
 const LogInForm = () => {
@@ -42,7 +43,7 @@ const LogInForm = () => {
     }
   }, [user, navigate]);
 
-  const handleLogin = async (e) => {
+ const handleLogin = async (e) => {
     e.preventDefault();
     if (!validate()) return;
     setIsLoading(true);
@@ -57,7 +58,9 @@ const LogInForm = () => {
       email === adminEmail &&
       password === adminPassword
     ) {
+      dispatch(showSnackbar({ message: "Admin login successful!", type: "success" })); // <-- Success snackbar
       navigate("/admin-dashboard");
+      setIsLoading(false);
       return;
     }
 
@@ -65,13 +68,16 @@ const LogInForm = () => {
       console.log("Attempting login...");
       const response = await dispatch(signIn({ email, password, role }));
       if (signIn.fulfilled.match(response)) {
-        // If login is successful, redirect to user dashboard
+        dispatch(showSnackbar({ message: "Login successful!", type: "success" })); // <-- Success snackbar
         navigate("/user-dashboard/friends");
         console.log("User logged in successfully:", response.payload);
+      } else {
+        dispatch(showSnackbar({ message: "Login failed. Please check your credentials.", type: "error" })); // <-- Failure snackbar
+        setError("Login failed. Please check your credentials.");
       }
     } catch (error) {
       console.error("Login failed:", error);
-      // Set error message to display
+      dispatch(showSnackbar({ message: error?.message || "Login failed. Please try again.", type: "error" })); // <-- Failure snackbar
       setError(error?.message || "Login failed. Please try again.");
     } finally {
       setIsLoading(false);

@@ -24,6 +24,7 @@ import logo from "../assets/logo-hisab-kitab.png";
 import "../CssStyle/LoaderStyle.css";
 import HelpAndSupport from "../Modals/HelpAndSupport";
 import InviteModal from "../Modals/InviteModal";
+import Snackbar from "../utils/Snackbar";
 
 const UserDashboard = () => {
   const navigate = useNavigate();
@@ -207,6 +208,7 @@ const getAccessToken = () => localStorage.getItem('accessToken');
       </div>
 
       {/* Modals */}
+      
       <InviteModal isOpen={isInviteOpen} user={user} toggleModal={toggleInvite} />
       <HelpAndSupport user={user} isOpen={isHelpAndSupportOpen} toggleModal={toggleHelpAndSupport} />
     </div>

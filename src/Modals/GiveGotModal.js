@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { createTransaction } from "../Api/HisabKitabApi";
 import "../CssStyle/GroupDashboard.css";
+import { showSnackbar } from "../Redux/SanckbarSlice";
+import { useDispatch } from "react-redux";
 const GiveGotModal = ({
   isOpen,
   toggleModal,
@@ -14,7 +16,7 @@ const GiveGotModal = ({
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const dispatch = useDispatch();
   const maxChars = 50;
   const [countText, setCountText] = useState("");
   const [error, setError] = useState("");
@@ -82,22 +84,26 @@ const validateTransaction = () => {
       createdBy: userId,
     };
     // console.log("Transaction submitted", transactionData);
-    try {
+     try {
       const response = await createTransaction(transactionData);
-   
-      // console.log("Transaction created successfully", response);
       setCountText("");
-      toggleModal(); // Close the modal after submission
-      // setTransactionsDto([...transactionsDto, transactionData]);
+      toggleModal();
       setAmount("");
       setDate("");
       setDescription("");
       refreshFriendTransaction
         ? setRefreshFriendTransaction(false)
         : setRefreshFriendTransaction(true);
+      dispatch(showSnackbar({ 
+        message: transactionType === "give" ? "Amount given successfully!" : "Amount received successfully!", 
+        type: "success" 
+      })); // <-- Success snackbar
     } catch (error) {
-      // console.error("Error creating transaction", error);
-      setError(error);
+      setError(error?.message || "Error creating transaction");
+      dispatch(showSnackbar({ 
+        message: error?.message || "Error creating transaction", 
+        type: "error" 
+      })); // <-- Failure snackbar
     } finally {
       setIsLoading(false);
     }
