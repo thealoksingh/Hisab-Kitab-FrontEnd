@@ -3,9 +3,9 @@ import { apiDeleteRequest, apiGetRequest, apiPostRequest, apiPutRequest } from "
 
 export const baseURL = process.env.REACT_APP_API_BASE_URL;
 
-
 const getAccessToken = () => localStorage.getItem('accessToken');
 const getRefreshToken = () => localStorage.getItem('refreshToken');
+
 // Api for login user
 console.log ("acces Token is==> ",getAccessToken())
 export const loginApi = (email, password) => {
@@ -23,7 +23,7 @@ export const refreshTokenAPI = () =>
     
   });
 
-
+  
 // Api for register user
 export const registerAPI = (data) =>
   apiPostRequest({
@@ -140,7 +140,7 @@ export const getAllFriendTransactionsAPI = (friendId) =>
   });
 
 // API for saving new Transaction Details
-export const createTransaction = (transactionData) =>
+export const createTransactionAPI = (transactionData) =>
   apiPostRequest({
     apiUrl: `${baseURL}/user/friendTransactions`,
     content_type: "application/json",

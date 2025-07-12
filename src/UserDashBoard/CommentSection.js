@@ -26,7 +26,7 @@ import { showSnackbar } from "../Redux/SanckbarSlice";
 // import { useAuth } from "../security/AuthContext";
 
 function CommentSection({
-  selectedFriend,
+
 
   setIsRowClicked,
   isRowClicked,
@@ -51,7 +51,7 @@ function CommentSection({
   const toggleUpdateForm = () => {
     setIsUpdateFormOpen(!isUpdateFormOpen);
   };
-  const { selectedTransaction } = useOutletContext();
+  const { selectedTransaction, selectedFriend } = useOutletContext();
   const [commentTransaction, setCommentTransaction] = useState(selectedTransaction || null);
   const user = useSelector(selectUser);
   const dispatch = useDispatch();

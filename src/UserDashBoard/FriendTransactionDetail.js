@@ -403,7 +403,7 @@ function FriendTranscationDetail({
         />
       </div>
       <FooterSection />
-    <Outlet context={{ selectedTransaction }} />
+    <Outlet context={{ selectedTransaction, selectedFriend }} />
       {/* <CommentSection
         selectedFriend={selectedFriend}
         isOpen={isCommentSectionOpen}
