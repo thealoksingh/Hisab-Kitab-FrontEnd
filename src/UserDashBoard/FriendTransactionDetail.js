@@ -1,20 +1,17 @@
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { getTransactionDetailsWithFriend } from "../Api/HisabKitabApi";
+import { useDispatch, useSelector } from "react-redux";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import unFriendImage from "../assets/unFriend.png";
 import "../CssStyle/GroupDashboard.css";
 import FriendTransactionReport from "../Modals/FriendTransactionReport";
 import GiveGotModal from "../Modals/GiveGotModal";
 import UnfriendModal from "../Modals/UnfriendModal";
-import ProfileCircle from "../utils/ProfileCircle";
-import CommentSection from "./CommentSection";
-import FooterSection from "./FooterSection";
-import { Outlet } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
 import { selectFriends, selectUser } from "../Redux/Selector";
 import { getAllFriendTransactions } from "../Redux/Thunk";
+import ProfileCircle from "../utils/ProfileCircle";
+import FooterSection from "./FooterSection";
 function FriendTranscationDetail({
 
 
@@ -86,21 +83,9 @@ function FriendTranscationDetail({
 
   // End of Prevent the user from going back to the previous page
 
-  const handleRowClick = (transactionId) => {
-    //sets transaction Id when we open comment section for any transaction
-    setSelectedRowId(transactionId);
-  };
+ 
 
-  // const toggleCommentSection = () => {
-  //   setIsCommentSetionOpen((prevState) => {
-  //     if (!prevState) {
-  //       window.history.pushState({ commentOpen: true }, ""); // Push new history entry
-  //     } else {
-  //       window.history.replaceState({ dashboard: true }, ""); // Replace state when closing
-  //     }
-  //     return !prevState;
-  //   });
-  // };
+
 
   const toggleReportModal = () => {
     if (!isReportModalOpen) {
@@ -382,20 +367,21 @@ function FriendTranscationDetail({
       <div className="left-side-lower font-Poppins  rounded-sm    text-xs sm:text-sm gap-1 justify-evenly border-none whitespace-nowrap md:text-xs border-gray-400 w-full lg:gap-4  bg-gray-300 p-2  h-[50px] flex items-center  ">
         <button
           className="w-[44%]  rounded-sm   shadow-inner-custom h-full bg-rose-600 text-sm text-white 600    hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-          onClick={handleGiveButtonClick}
+        onClick={() => navigate(`/user-dashboard/friends/${friendId}/transactions/?action=add&type=give`)}
+
         >
           You Gave : <span>₹</span>
         </button>
         <button
           className="w-[44%]  rounded-sm    shadow-inner-custom h-full bg-green-800  text-sm text-white 600    hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-          onClick={handleGotButtonClick}
+          onClick={() => navigate(`/user-dashboard/friends/${friendId}/transactions/?action=add&type=got`)}
         >
           You Got : <span>₹</span>
         </button>
         <GiveGotModal
-          userId={user?.userId}
+         
           isOpen={isModalOpen}
-          toggleModal={toggleModal}
+          
           transactionType={transactionType}
           friendId={selectedFriend?.userId}
           refreshFriendTransaction={refreshFriendTransaction}
