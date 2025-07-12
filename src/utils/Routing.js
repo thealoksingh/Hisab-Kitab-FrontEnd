@@ -23,6 +23,7 @@ import Friends from "../UserDashBoard/Friends";
 import FriendTranscationDetail from "../UserDashBoard/FriendTransactionDetail";
 import InstructionToSelect from "../UserDashBoard/instructionToSelect";
 import CommentSection from "../UserDashBoard/CommentSection";
+import GiveGotModal from "../Modals/GiveGotModal";
 
 // AuthenticatedRoute using Redux state
 function AuthenticatedRoute({ children }) {
@@ -71,7 +72,12 @@ const Routing = () => {
                   element={<FriendTranscationDetail />}
                 >
                   <Route path=":transactionId" element={<CommentSection />} />
+                  <Route
+                    path="/user-dashboard/friends/:friendId/transactions"
+                    element={<GiveGotModal />}
+                  />
                 </Route>
+
                 <Route
                   path="instructionToSelect"
                   element={<InstructionToSelect />}

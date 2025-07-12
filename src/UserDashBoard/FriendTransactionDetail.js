@@ -86,21 +86,9 @@ function FriendTranscationDetail({
 
   // End of Prevent the user from going back to the previous page
 
-  const handleRowClick = (transactionId) => {
-    //sets transaction Id when we open comment section for any transaction
-    setSelectedRowId(transactionId);
-  };
+ 
 
-  // const toggleCommentSection = () => {
-  //   setIsCommentSetionOpen((prevState) => {
-  //     if (!prevState) {
-  //       window.history.pushState({ commentOpen: true }, ""); // Push new history entry
-  //     } else {
-  //       window.history.replaceState({ dashboard: true }, ""); // Replace state when closing
-  //     }
-  //     return !prevState;
-  //   });
-  // };
+
 
   const toggleReportModal = () => {
     if (!isReportModalOpen) {
@@ -382,20 +370,21 @@ function FriendTranscationDetail({
       <div className="left-side-lower font-Poppins  rounded-sm    text-xs sm:text-sm gap-1 justify-evenly border-none whitespace-nowrap md:text-xs border-gray-400 w-full lg:gap-4  bg-gray-300 p-2  h-[50px] flex items-center  ">
         <button
           className="w-[44%]  rounded-sm   shadow-inner-custom h-full bg-rose-600 text-sm text-white 600    hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-          onClick={handleGiveButtonClick}
+        onClick={() => navigate(`/user-dashboard/friends/${friendId}/transactions/?action=add&type=give`)}
+
         >
           You Gave : <span>₹</span>
         </button>
         <button
           className="w-[44%]  rounded-sm    shadow-inner-custom h-full bg-green-800  text-sm text-white 600    hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-          onClick={handleGotButtonClick}
+          onClick={() => navigate(`/user-dashboard/friends/${friendId}/transactions/?action=add&type=got`)}
         >
           You Got : <span>₹</span>
         </button>
         <GiveGotModal
-          userId={user?.userId}
+         
           isOpen={isModalOpen}
-          toggleModal={toggleModal}
+          
           transactionType={transactionType}
           friendId={selectedFriend?.userId}
           refreshFriendTransaction={refreshFriendTransaction}
@@ -404,18 +393,7 @@ function FriendTranscationDetail({
       </div>
       <FooterSection />
     <Outlet context={{ selectedTransaction }} />
-      {/* <CommentSection
-        selectedFriend={selectedFriend}
-        isOpen={isCommentSectionOpen}
-        isRowClicked={isRowClicked}
-        setIsRowClicked={setIsRowClicked}
-        user={user}
-        commentTransaction={commentTransaction}
-        toggleCommentSection={toggleCommentSection}
-        refreshFriendTransaction={refreshFriendTransaction}
-        setRefreshFriendTransaction={setRefreshFriendTransaction}
-        setCommentTransaction={setCommentTransaction}
-      /> */}
+      
     </div>
   );
 }

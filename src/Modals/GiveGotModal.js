@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createTransaction } from "../Api/HisabKitabApi";
 import "../CssStyle/GroupDashboard.css";
 import { showSnackbar } from "../Redux/SanckbarSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "../Redux/Selector";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 const GiveGotModal = ({
-  isOpen,
-  toggleModal,
-  userId,
-  transactionType,
-  friendId,
+
   refreshFriendTransaction,
   setRefreshFriendTransaction,
 }) => {
+  const navigate = useNavigate();
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
@@ -20,43 +19,69 @@ const GiveGotModal = ({
   const maxChars = 50;
   const [countText, setCountText] = useState("");
   const [error, setError] = useState("");
-const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({});
+  const user = useSelector(selectUser);
+  const userId = user?.userId || null; // Fallback to 0 if userId is not available
+  const { friendId } = useParams(); // path param
+  const [isOpen,setIsOpen]=useState(false);
 
-const validateTransaction = () => {
-  let tempErrors = {};
-
-  // Amount: Must be a non-negative number
-  if (isNaN(amount) || Number(amount) < 0) {
-    tempErrors.amount = "Amount must be a non-negative number";
-  }
-
-  // Description: Must be less than 50 characters
-  if (!description.trim()) {
-    tempErrors.description = "Description is required";
-  } else if (description.length > 50) {
-    tempErrors.description = "Description must be less than 50 characters";
-  }
-
-  // Date: Cannot be in the future
-  if (!date) {
-    tempErrors.date = "Date is required";
+ 
+  const [searchParams] = useSearchParams(); // query params
+  console.log("FriendId in GiveGotModal:", friendId); 
+  const action = searchParams.get("action"); // 'add'
+  const transactionType = searchParams.get("type"); // 'give/got'
+useEffect(() => {
+  if (friendId) {
+    setIsOpen(true);
+       console.log("isopen:", isOpen);
+    console.log("GiveGotModal opening with friendId:", friendId);
   } else {
-    const today = new Date();
-    const selectedDate = new Date(date);
-
-    // Reset time to midnight for accurate date-only comparison
-    today.setHours(0, 0, 0, 0);
-    selectedDate.setHours(0, 0, 0, 0);
-
-    if (selectedDate > today) {
-      tempErrors.date = "Date cannot be in the future";
-    }
+    setIsOpen(false);
+      console.log("isopen:", isOpen);
+    console.log("GiveGotModal closed - no friendId");
   }
+}, [friendId]);
 
-  setErrors(tempErrors);
-  return Object.keys(tempErrors).length === 0; // Returns true if no errors
-};
 
+useEffect(() => {
+  console.log("Updated open status GiveGotModal:", isOpen);
+}, [isOpen]);
+
+
+  const validateTransaction = () => {
+    let tempErrors = {};
+
+    // Amount: Must be a non-negative number
+    if (isNaN(amount) || Number(amount) < 0) {
+      tempErrors.amount = "Amount must be a non-negative number";
+    }
+
+    // Description: Must be less than 50 characters
+    if (!description.trim()) {
+      tempErrors.description = "Description is required";
+    } else if (description.length > 50) {
+      tempErrors.description = "Description must be less than 50 characters";
+    }
+
+    // Date: Cannot be in the future
+    if (!date) {
+      tempErrors.date = "Date is required";
+    } else {
+      const today = new Date();
+      const selectedDate = new Date(date);
+
+      // Reset time to midnight for accurate date-only comparison
+      today.setHours(0, 0, 0, 0);
+      selectedDate.setHours(0, 0, 0, 0);
+
+      if (selectedDate > today) {
+        tempErrors.date = "Date cannot be in the future";
+      }
+    }
+
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0; // Returns true if no errors
+  };
 
   const handleChange = (e) => {
     setCountText(e.target.value);
@@ -65,12 +90,12 @@ const validateTransaction = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log("amount before backend call"+amount);
-    if(!validateTransaction()) return;
+    if (!validateTransaction()) return;
     if (countText.length > maxChars) {
       setError(`Description exceeds ${maxChars} characters!`);
       return;
     }
-    
+
     e.preventDefault();
     setIsLoading(true);
     // Set fromUserId and toUserId based on the transaction type
@@ -84,32 +109,37 @@ const validateTransaction = () => {
       createdBy: userId,
     };
     // console.log("Transaction submitted", transactionData);
-     try {
+    try {
       const response = await createTransaction(transactionData);
       setCountText("");
-      toggleModal();
+
       setAmount("");
       setDate("");
       setDescription("");
       refreshFriendTransaction
         ? setRefreshFriendTransaction(false)
         : setRefreshFriendTransaction(true);
-      dispatch(showSnackbar({ 
-        message: transactionType === "give" ? "Amount given successfully!" : "Amount received successfully!", 
-        type: "success" 
-      })); // <-- Success snackbar
+      dispatch(
+        showSnackbar({
+          message:
+            transactionType === "give"
+              ? "Amount given successfully!"
+              : "Amount received successfully!",
+          type: "success",
+        })
+      ); // <-- Success snackbar
     } catch (error) {
       setError(error?.message || "Error creating transaction");
-      dispatch(showSnackbar({ 
-        message: error?.message || "Error creating transaction", 
-        type: "error" 
-      })); // <-- Failure snackbar
+      dispatch(
+        showSnackbar({
+          message: error?.message || "Error creating transaction",
+          type: "error",
+        })
+      ); // <-- Failure snackbar
     } finally {
       setIsLoading(false);
     }
   };
-
-
 
   return (
     <div
@@ -137,7 +167,10 @@ const validateTransaction = () => {
               } hover:text-gray-900 rounded-sm text-sm w-6 h-6 ms-auto inline-flex dark:hover:${
                 transactionType === "give" ? "bg-rose-600" : "bg-emerald-600"
               } justify-center items-center dark:hover:text-white`}
-              onClick={toggleModal}
+              onClick={() =>{
+                navigate(`/user-dashboard/friends/${friendId}/transactions`);
+                setIsOpen(false) ;// Close the modal
+               } }
             >
               <svg
                 className="w-3 h-3"
@@ -177,7 +210,7 @@ const validateTransaction = () => {
               />
             </div>
             <span className="text-rose-600 text-xs">{errors.amount}</span>
-           
+
             <div className="mb-1">
               <label
                 htmlFor="description"
@@ -199,7 +232,7 @@ const validateTransaction = () => {
               />
             </div>
             <span className="text-rose-600 text-xs">{errors.description}</span>
-           
+
             <span
               className={`text-xs ${
                 maxChars - countText.length < 0
@@ -225,10 +258,9 @@ const validateTransaction = () => {
                 required
               />
             </div>
-           {error && <div className="mb-2 text-rose-600">{error}</div>}
-           <div className="text-rose-600 text-xs mb-4">{errors.date}</div>
-           
-        
+            {error && <div className="mb-2 text-rose-600">{error}</div>}
+            <div className="text-rose-600 text-xs mb-4">{errors.date}</div>
+
             <button
               type="submit"
               className={`w-full text-white 
