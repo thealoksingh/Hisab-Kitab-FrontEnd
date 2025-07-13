@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { addFriend, sendInvitationEmail } from "../Api/HisabKitabApi";
-import { useSelector } from "react-redux";
-import { selectUser } from "../Redux/Selector";
-import { useNavigate, useSearchParams } from "react-router-dom";
 
-const AddFriendModal = () => {
+const AddFriendModal = ({ isOpen, toggleModal, user }) => {
   const [isAddButtonVisible, setIsAddButtonVisible] = useState(true); // Tracks whether to show Add or Invite button
   const [contactNo, setContactNo] = useState(""); // State to store the contact number
   const [email, setEmail] = useState(""); // State to store the email
@@ -15,16 +12,7 @@ const AddFriendModal = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // State for disabling button
   const [isLoading, setIsLoading] = useState(false);
   const [inviteLoading, setInviteLoading] = useState(false);
- const user =useSelector(selectUser); 
- const navigate = useNavigate();
- const [searchParams] = useSearchParams(); 
-       
-        const action = searchParams.get("action"); 
-     
-      const isOpen = action === "add-friend";
- console.log("add friend Modal isOpen:", isOpen);
 
- 
   useEffect(() => {
     let interval;
 
@@ -150,7 +138,7 @@ const AddFriendModal = () => {
               type="button"
               className="text-gray-400 bg-transparent hover:bg-cyan-200 hover:text-gray-900 rounded-lg text-sm w-6 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-cyan-600 dark:hover:text-white"
               onClick={() => {
-                navigate(-1); 
+                toggleModal(); // Close modal
                 setIsAddButtonVisible(true); // Reset to Add mode
                 setAddFriendErrorMessage(null);
                 setSuccessMessage(null);
@@ -275,7 +263,7 @@ const AddFriendModal = () => {
               </button>
               <button
                 onClick={() => {
-                  navigate(-1);     // toggleModal(); // Close modal
+                  toggleModal(); // Close modal
                   setIsAddButtonVisible(true); // Reset to Add mode
                   setAddFriendErrorMessage(null);
                   setSuccessMessage(null);

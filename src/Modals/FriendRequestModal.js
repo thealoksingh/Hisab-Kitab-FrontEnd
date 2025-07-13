@@ -7,27 +7,19 @@ import {
   rejectRequest,
   unsendRequest,
 } from "../Api/HisabKitabApi";
-import { selectUser } from "../Redux/Selector";
-import { useSelector } from "react-redux";
-import { useNavigate, useSearchParams } from "react-router-dom";
 
 const FriendRequestModal = ({
- 
-
+  isOpen,
+  toggleModal,
+  user,
   setFriendRequestActivity,
+  friendRequestActivity,
 }) => {
-   const navigate = useNavigate();
   const [pendingRequests, setPendingRequests] = useState([]);
   const [sentRequests, setSentRequests] = useState([]);
   const [requestLoading, setRequestLoading] = useState(false);
   // const [isLoading, setIsLoading] = useState(true);
-  const user = useSelector(selectUser);
-  const [searchParams] = useSearchParams(); // query params
 
-  const action = searchParams.get("action");
-
-  const isOpen = true;
-  console.log("Friend Request Modal isOpen:", isOpen);
   useEffect(() => {
     if (!isOpen) return; // Avoid fetching if modal is closed
     setRequestLoading(true);
@@ -57,7 +49,7 @@ const FriendRequestModal = ({
       setPendingRequests((prev) =>
         prev.filter((request) => request.id !== requestId)
       );
-      setFriendRequestActivity(true);
+       setFriendRequestActivity(true);
       // console.log("Request accepted successfully");
       setRequestLoading(false);
     } catch (error) {
@@ -96,7 +88,7 @@ const FriendRequestModal = ({
       setFriendRequestActivity(true);
     } catch (error) {
       // console.error("Error unsending request:", error);
-    } finally {
+    }finally {
       setRequestLoading(false);
     }
   };
@@ -119,7 +111,7 @@ const FriendRequestModal = ({
             <button
               type="button"
               className="text-gray-100 bg-transparent hover:bg-gray-100 hover:text-gray-900 rounded-lg text-sm w-6 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-              onClick={()=>navigate(-1)}
+              onClick={toggleModal}
             >
               <svg
                 className="w-3 h-3"
