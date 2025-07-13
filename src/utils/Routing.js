@@ -28,6 +28,7 @@ import UpdateFriendTransactionModel from "../Modals/UpdateFriendTransactionModel
 import DeleteAlertModal from "../Modals/DeleteAlertModal";
 import TransactionModals from "../Modals/TransactionModals";
 import UnfriendModal from "../Modals/UnfriendModal";
+import CommonModals from "../Modals/commonModals";
 
 // AuthenticatedRoute using Redux state
 function AuthenticatedRoute({ children }) {
@@ -68,9 +69,12 @@ const Routing = () => {
         {role === "user" && (
           <>
             <Route path="/user-dashboard" element={<UserDashboard />}>
-              <Route index element={<Navigate to="friends" />} />
+             <Route path="" element={<CommonModals />} />
+              {/* <Route index element={<Navigate to="friends" />} /> */}
+          
               <Route path="friends" element={<Friends />}>
-                <Route index element={<InstructionToSelect />} />
+                <Route path="" element={<TransactionModals />} />
+                {/* <Route index element={<InstructionToSelect />} /> */}
                 <Route
                   path=":friendId/transactions"
                   element={<FriendTranscationDetail />}

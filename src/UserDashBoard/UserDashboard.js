@@ -32,7 +32,7 @@ const UserDashboard = () => {
   const location = useLocation();
 const getAccessToken = () => localStorage.getItem('accessToken');
   const user = useSelector(selectUser);
-  console.log("user id",user?.userId);
+  // console.log("user id",user?.userId);
   const friends = useSelector(selectFriends);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -86,7 +86,7 @@ const getAccessToken = () => localStorage.getItem('accessToken');
     {
       label: "Invite",
       icon: faEnvelope,
-      onClick: toggleInvite,
+      path:"/user-dashboard?action=invite",
     },
     {
       label: "About",
@@ -96,7 +96,7 @@ const getAccessToken = () => localStorage.getItem('accessToken');
     {
       label: "Help & Support",
       icon: faClipboardQuestion,
-      onClick: toggleHelpAndSupport,
+       path:"/user-dashboard?action=help",
     },
     {
       label: "Sign Out",
@@ -208,9 +208,9 @@ const getAccessToken = () => localStorage.getItem('accessToken');
       </div>
 
       {/* Modals */}
-      
-      <InviteModal isOpen={isInviteOpen} user={user} toggleModal={toggleInvite} />
-      <HelpAndSupport user={user} isOpen={isHelpAndSupportOpen} toggleModal={toggleHelpAndSupport} />
+      {/* <Outlet/> */}
+      {/* <InviteModal isOpen={isInviteOpen} />
+      <HelpAndSupport isOpen={isHelpAndSupportOpen} /> */}
     </div>
   );
 };

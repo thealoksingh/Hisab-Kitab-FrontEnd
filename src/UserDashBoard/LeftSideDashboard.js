@@ -11,7 +11,7 @@ import ProfileCircle from "../utils/ProfileCircle";
 import FooterSection from "./FooterSection";
 import { useSelector } from "react-redux";
 import { selectFriends, selectUser } from "../Redux/Selector";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 function LeftSideDashBoard({
 
@@ -533,23 +533,19 @@ function LeftSideDashBoard({
         <div className="left-side-lower  font-Poppins   text-xs sm:text-sm md:text-sm gap-1 justify-evenly border-none whitespace-nowrap  border-gray-400 w-full lg:gap-4  bg-gray-300 p-2  h-[50px] flex items-center ">
           {/* Add Friend Button */}
           <button
-            onClick={handleAddFriendClick}
+              onClick={() => navigate(`/user-dashboard/friends?action=add-friend`)}
+     
             className="w-[40%] h-full flex rounded-sm items-center justify-center shadow-inner-custom bg-cyan-700 text-sm text-white hover:bg-cyan-600 focus:outline-none focus:ring-4 focus:ring-cyan-300  px-2 py-1 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
           >
             Add Friend
           </button>
 
-          <AddFriendModal
-            user={user}
-            isOpen={isModalOpen}
-            toggleModal={toggleModal}
-            refreshFriendTransaction={refreshFriendTransaction}
-            setRefreshFriendTransaction={setRefreshFriendTransaction}
-          />
+        
 
           {/* View Friend Request Button */}
           <button
-            onClick={toggleFriendRequestModal}
+               onClick={() => navigate(`/user-dashboard/friends?action=friend-request`)}
+     
             className="relative w-[44%] px-2 h-full   flex items-center rounded-sm justify-center bg-teal-700 text-sm text-white hover:bg-teal-600 focus:outline-none focus:ring-4 focus:ring-emerald-300 px-2 py-1 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
           >
             {/* Notification Badge */}
@@ -565,15 +561,18 @@ function LeftSideDashBoard({
           </button>
         </div>
         <FooterSection />
-        <FriendRequestModal
-          refreshFriendTransaction={refreshFriendTransaction}
-          setRefreshFriendTransaction={setRefreshFriendTransaction}
-          user={user}
+        {/* <Outlet/> */}
+          {/* <AddFriendModal
+          
+            isOpen={isModalOpen}
+          
+            refreshFriendTransaction={refreshFriendTransaction}
+            setRefreshFriendTransaction={setRefreshFriendTransaction}
+          />
+        <FriendRequestModal       
           isOpen={isFriendRequestModalOpen}
-          toggleModal={toggleFriendRequestModal}
-          setFriendRequestActivity={setFriendRequestActivity}
-          friendRequestActivity={friendRequestActivity}
-        />
+          setFriendRequestActivity={setFriendRequestActivity} 
+        /> */}
       </div>
     </>
   );

@@ -4,13 +4,23 @@ import "../CssStyle/GroupDashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { deleteTicketApi } from "../Api/HisabKitabApi";
+import { selectUser } from "../Redux/Selector";
+import { useSelector } from "react-redux";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
-function HelpAndSupport({ user, isOpen, toggleModal }) {
+function HelpAndSupport() {
+   const navigate = useNavigate();
   const [choice, setChoice] = useState(null);
   const [tickets, setTickets] = useState([]);
   const [isRefreshTicket, setRefreshTicket] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isTicketsLoading, setTicketsLoading] = useState(false);
+    const user =useSelector(selectUser);
+    const [searchParams] = useSearchParams(); // query params
+       
+        const action = searchParams.get("action"); 
+
+      const isOpen = action === "help";
   const handleChoice = (value) => {
     setChoice(value);
     if (value === "view") {
@@ -75,7 +85,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
   const handleClose = () => {
     setChoice(null);
     setFormData({ userId: user.userId, title: "", description: "" });
-    toggleModal();
+    navigate(-1); 
   };
 
   const handleDeleteTicket = async (ticketId) => {

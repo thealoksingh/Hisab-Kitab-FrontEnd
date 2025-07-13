@@ -21,7 +21,7 @@ const GiveGotModal = () => {
   const { friendId } = useParams(); // path param
 
   const [searchParams] = useSearchParams(); // query params
-  console.log("FriendId in GiveGotModal:", friendId);
+  // console.log("FriendId in GiveGotModal:", friendId);
   const action = searchParams.get("action"); // 'add'
   const transactionType = searchParams.get("type"); // 'give/got'
 

@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { sendInvitationEmail } from "../Api/HisabKitabApi";
 import { isDisabled } from "@testing-library/user-event/dist/utils";
+import { useSelector } from "react-redux";
+import { selectUser } from "../Redux/Selector";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
-const InviteModal = ({ isOpen, toggleModal, user }) => {
+const InviteModal = () => {
+   const navigate = useNavigate();
   const [email, setEmail] = useState(""); // State to store the email
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [timer, setTimer] = useState(30); // State for timer
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // State for disabling button
   const [inviteLoading, setInviteLoading] = useState(false);
-
+  const user =useSelector(selectUser);
+   const [searchParams] = useSearchParams(); // query params
+   
+    const action = searchParams.get("action"); 
+  // Only show modal if action is 'invite'
+  const isOpen = action === "invite";
   useEffect(() => {
     let interval;
 
@@ -81,7 +90,7 @@ const InviteModal = ({ isOpen, toggleModal, user }) => {
               type="button"
               className="text-gray-400 bg-transparent hover:bg-cyan-200 hover:text-gray-900 rounded-lg text-sm w-6 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-cyan-600 dark:hover:text-white"
               onClick={() => {
-                toggleModal(); // Close modal
+               navigate(-1); 
                 setSuccessMessage(null);
                 setErrorMessage(null);
               }}
@@ -168,7 +177,7 @@ const InviteModal = ({ isOpen, toggleModal, user }) => {
               </button>
               <button
                 onClick={() => {
-                  toggleModal(); // Close modal
+                navigate(-1); 
                  setSuccessMessage(null);
                  setErrorMessage(null);
                 }}
