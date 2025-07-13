@@ -149,7 +149,7 @@ export const createTransactionAPI = (transactionData) =>
   });
 
 // API for Deleting the Transaction with Id
-export const deleteTransactionById = (transId) =>
+export const deleteTransactionByIdAPI = (transId) =>
   apiDeleteRequest({
     apiUrl: `${baseURL}/user/transaction/${transId}`,
     content_type: "application/json",
@@ -157,7 +157,7 @@ export const deleteTransactionById = (transId) =>
   });
 
 // API for updating a transaction by ID
-export const updateFriendTransactionById = (updatedTransactionData) =>
+export const updateFriendTransactionByIdAPI = (updatedTransactionData) =>
   apiPutRequest({
     apiUrl: `${baseURL}/user/updatefriendTransactions`,
     content_type: "application/json",
@@ -174,7 +174,7 @@ export const getAllCommentsByTransactionIdAPI = (transId) =>
   });
 
 // API for Posting new comments of a transaction
-export const postNewCommentsByTransactionId = (commentRequestDto) =>
+export const postNewCommentsByTransactionIdAPI = (commentRequestDto) =>
   apiPostRequest({
     apiUrl: `${baseURL}/user/transaction/comment/save`,
     content_type: "application/json",
@@ -201,7 +201,7 @@ export const sendOtpEmail = (email, type) =>
   });
 
 // to delete comments
-export const deleteComment = (commentId) =>
+export const deleteCommentByIdAPI = (commentId) =>
   apiDeleteRequest({
     apiUrl: `${baseURL}/user/transaction/comment/${commentId}`,
     content_type: "application/json",
@@ -223,7 +223,7 @@ export const getAllTickets = () =>
     accessToken: getAccessToken(),
   });
 
-export const unFriendApi = (friendId) =>
+export const unFriendAPI = (friendId) =>
   apiDeleteRequest({
     apiUrl: `${baseURL}/user/friends/${friendId}`,
     content_type: "application/json",

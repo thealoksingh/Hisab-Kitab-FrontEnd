@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { createTransaction } from "../Api/HisabKitabApi";
 import "../CssStyle/GroupDashboard.css";
 import { showSnackbar } from "../Redux/SanckbarSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../Redux/Selector";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-const GiveGotModal = ({
-
-  refreshFriendTransaction,
-  setRefreshFriendTransaction,
-}) => {
+import { createTransaction, getAllFriends } from "../Redux/Thunk";
+const GiveGotModal = () => {
   const navigate = useNavigate();
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
@@ -23,31 +19,17 @@ const GiveGotModal = ({
   const user = useSelector(selectUser);
   const userId = user?.userId || null; // Fallback to 0 if userId is not available
   const { friendId } = useParams(); // path param
-  const [isOpen,setIsOpen]=useState(false);
 
- 
   const [searchParams] = useSearchParams(); // query params
-  console.log("FriendId in GiveGotModal:", friendId); 
+  console.log("FriendId in GiveGotModal:", friendId);
   const action = searchParams.get("action"); // 'add'
   const transactionType = searchParams.get("type"); // 'give/got'
-useEffect(() => {
-  if (friendId) {
-    setIsOpen(true);
-       console.log("isopen:", isOpen);
-    console.log("GiveGotModal opening with friendId:", friendId);
-  } else {
-    setIsOpen(false);
-      console.log("isopen:", isOpen);
-    console.log("GiveGotModal closed - no friendId");
-  }
-}, [friendId]);
+
+  const isOpen =
+    friendId && action === "add" && (transactionType === "give" || transactionType === "got");
 
 
-useEffect(() => {
-  console.log("Updated open status GiveGotModal:", isOpen);
-}, [isOpen]);
-
-
+  if (!isOpen) return null;
   const validateTransaction = () => {
     let tempErrors = {};
 
@@ -110,24 +92,31 @@ useEffect(() => {
     };
     // console.log("Transaction submitted", transactionData);
     try {
-      const response = await createTransaction(transactionData);
-      setCountText("");
+      const response = await dispatch(createTransaction(transactionData));
 
-      setAmount("");
-      setDate("");
-      setDescription("");
-      refreshFriendTransaction
-        ? setRefreshFriendTransaction(false)
-        : setRefreshFriendTransaction(true);
-      dispatch(
-        showSnackbar({
-          message:
-            transactionType === "give"
-              ? "Amount given successfully!"
-              : "Amount received successfully!",
-          type: "success",
-        })
-      ); // <-- Success snackbar
+      if (createTransaction.fulfilled.match(response)) {
+        // console.log("Transaction created successfully", response.payload);
+        const getAllFriendsResponse = await dispatch(getAllFriends());
+        if (getAllFriends.fulfilled.match(getAllFriendsResponse)) {
+          await dispatch(showSnackbar({
+            message: "Transaction created successfully!",
+          }));
+          setCountText("");
+          setAmount("");
+          setDate("");
+          setDescription("");
+
+          dispatch(
+            showSnackbar({
+              message:
+                transactionType === "give"
+                  ? "Given amount added successfully!"
+                  : "Received amount added successfully!",
+              type: "success",
+            })
+          );
+        }
+      } // <-- Success snackbar
     } catch (error) {
       setError(error?.message || "Error creating transaction");
       dispatch(
@@ -146,31 +135,27 @@ useEffect(() => {
       id="add-friend-modal"
       tabIndex="-1"
       aria-hidden={!isOpen}
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ${
-        isOpen ? "" : "hidden"
-      }`}
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ${isOpen ? "" : "hidden"
+        }`}
     >
       <div className="main-form relative p-4 w-full lg:w-[70%] sm:w-1/2 md:w-1/2 max-w-5xl flex gap-4 justify-center transform transition-transform duration-500">
         <div className="form-give-got border border-gray-400 shadow-inner-custom relative bg-white w-full h-1/2 rounded-sm shadow dark:bg-gray-300">
           <div
-            className={`flex items-center justify-between p-2 md:p-2 rounded-sm ${
-              transactionType === "give" ? "bg-rose-600" : "bg-emerald-600"
-            }`}
+            className={`flex items-center justify-between p-2 md:p-2 rounded-sm ${transactionType === "give" ? "bg-rose-600" : "bg-emerald-600"
+              }`}
           >
             <h3 className="text-lg font-semibold text-gray-200">
               {transactionType === "give" ? "You Gave" : "You Got"}
             </h3>
             <button
               type="button"
-              className={`text-gray-300 bg-transparent hover:${
-                transactionType === "give" ? "bg-rose-100" : "bg-emerald-200"
-              } hover:text-gray-900 rounded-sm text-sm w-6 h-6 ms-auto inline-flex dark:hover:${
-                transactionType === "give" ? "bg-rose-600" : "bg-emerald-600"
-              } justify-center items-center dark:hover:text-white`}
-              onClick={() =>{
+              className={`text-gray-300 bg-transparent hover:${transactionType === "give" ? "bg-rose-100" : "bg-emerald-200"
+                } hover:text-gray-900 rounded-sm text-sm w-6 h-6 ms-auto inline-flex dark:hover:${transactionType === "give" ? "bg-rose-600" : "bg-emerald-600"
+                } justify-center items-center dark:hover:text-white`}
+              onClick={() => {
                 navigate(`/user-dashboard/friends/${friendId}/transactions`);
-                setIsOpen(false) ;// Close the modal
-               } }
+                // setIsOpen(false);// Close the modal
+              }}
             >
               <svg
                 className="w-3 h-3"
@@ -234,11 +219,10 @@ useEffect(() => {
             <span className="text-rose-600 text-xs">{errors.description}</span>
 
             <span
-              className={`text-xs ${
-                maxChars - countText.length < 0
-                  ? "text-red-600"
-                  : "text-green-600"
-              }`}
+              className={`text-xs ${maxChars - countText.length < 0
+                ? "text-red-600"
+                : "text-green-600"
+                }`}
             >
               {maxChars - countText.length} chars left
             </span>
@@ -264,11 +248,10 @@ useEffect(() => {
             <button
               type="submit"
               className={`w-full text-white 
-    ${
-      transactionType === "give"
-        ? "bg-[#be123c] hover:bg-[#9b0e35] border border-[#9b0e35] focus:ring-[#Ff007f]"
-        : "bg-[#10b981] hover:bg-[#059669] border border-[#059669] focus:ring-[#50c878]"
-    }
+    ${transactionType === "give"
+                  ? "bg-[#be123c] hover:bg-[#9b0e35] border border-[#9b0e35] focus:ring-[#Ff007f]"
+                  : "bg-[#10b981] hover:bg-[#059669] border border-[#059669] focus:ring-[#50c878]"
+                }
     focus:ring-4 focus:outline-none  font-medium rounded-sm text-sm px-5 py-2.5 text-center`}
             >
               {isLoading ? (

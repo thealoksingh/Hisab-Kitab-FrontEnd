@@ -1,18 +1,23 @@
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import "../CssStyle/GroupDashboard.css";
-import React, { useState } from "react";
-import { unFriendApi } from "../Api/HisabKitabApi";
+import { unFriend } from "../Redux/Thunk";
+import { showSnackbar } from "../Redux/SanckbarSlice";
 
-const UnfriendModal = ({
-  isOpen,
-  toggleModal,
-  userId,
-  friendId,
-  refreshFriendTransaction,
-  setRefreshFriendTransaction,
-  setIsFriendSelected,
-}) => {
+const UnfriendModal = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const { friendId } = useParams();
+  const [searchParams] = useSearchParams();
+  const action = searchParams.get("action");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Only show modal if action is 'unfriend'
+  const isOpen = friendId && action === "unfriend";
+  if (!isOpen) return null;
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -29,13 +34,19 @@ const UnfriendModal = ({
     }
 
     try {
-      const response = await unFriendApi(friendId);
+      const response = await dispatch(unFriend(friendId));
       // console.log("Unfriend successful ", response.data);
-      toggleModal();
-      setRefreshFriendTransaction(!refreshFriendTransaction);
-      setIsFriendSelected(null);
+      if (unFriend.fulfilled.match(response)) {
+        await dispatch(showSnackbar({
+          message: response?.payload?.message || "Unfriended successfully",
+          type: "success",
+        }));
+        navigate('/user-dashboard/friends'); // Navigate back to the previous page
+      } else {
+        console.error("Unfriend failed:", response?.payload?.message);
+      }
     } catch (error) {
-      // console.error("Error while unfriending", error);
+      console.error("Error while unfriending", error);
     } finally {
       setIsLoading(false);
     }
@@ -59,7 +70,7 @@ const UnfriendModal = ({
             <button
               type="button"
               className="text-gray-400 bg-transparent hover:bg-rose-700 hover:text-rose-900 rounded-lg text-sm w-6 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-rose-600 dark:hover:text-white"
-              onClick={toggleModal}
+              onClick={() => navigate(-1)} // Close modal on button click
             >
               <svg
                 className="w-3 h-3"
@@ -132,7 +143,7 @@ const UnfriendModal = ({
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  toggleModal();
+                  navigate(-1); // Close modal on button click
                 }}
                 type="button"
                 className="text-white bg-cyan-500 hover:bg-cyan-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 rounded-sm px-3 py-2 sm:px-4 sm:py-2 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"

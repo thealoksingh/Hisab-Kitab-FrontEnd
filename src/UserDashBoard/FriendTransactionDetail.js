@@ -83,7 +83,7 @@ function FriendTranscationDetail({
 
   // End of Prevent the user from going back to the previous page
 
- 
+
 
 
 
@@ -119,7 +119,7 @@ function FriendTranscationDetail({
 
   useEffect(() => {
     const fetchTransactions = async () => {
-      
+
       if (!transactionsDto || !user) return;
       setIsTransactionLoading(true);
 
@@ -233,7 +233,7 @@ function FriendTranscationDetail({
             user={user}
           />
           <div
-            onClick={toggleUnfriendModal}
+            onClick={()=> navigate(`/user-dashboard/friends/${friendId}?action=unfriend`)}
             className="settings h-9 w-9 sm:h-10 sm:w-10 md:h-10 md:w-10 right-0 hover:scale-110 rounded-full border shadow-md  flex items-center justify-center bg-cyan-800 "
           >
             <img
@@ -318,7 +318,7 @@ function FriendTranscationDetail({
                       }`}
                     onClick={() => {
 
-                      setSelectedTransaction(transactionDto?.transaction );
+                      setSelectedTransaction(transactionDto?.transaction);
                       navigate(`/user-dashboard/friends/${friendId}/transactions/${transactionDto.transaction.transId}`);
 
                     }}
@@ -367,29 +367,29 @@ function FriendTranscationDetail({
       <div className="left-side-lower font-Poppins  rounded-sm    text-xs sm:text-sm gap-1 justify-evenly border-none whitespace-nowrap md:text-xs border-gray-400 w-full lg:gap-4  bg-gray-300 p-2  h-[50px] flex items-center  ">
         <button
           className="w-[44%]  rounded-sm   shadow-inner-custom h-full bg-rose-600 text-sm text-white 600    hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-        onClick={() => navigate(`/user-dashboard/friends/${friendId}/transactions/?action=add&type=give`)}
+          onClick={() => navigate(`/user-dashboard/friends/${friendId}/transactions?action=add&type=give`)}
 
         >
           You Gave : <span>₹</span>
         </button>
         <button
           className="w-[44%]  rounded-sm    shadow-inner-custom h-full bg-green-800  text-sm text-white 600    hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-          onClick={() => navigate(`/user-dashboard/friends/${friendId}/transactions/?action=add&type=got`)}
+          onClick={() => navigate(`/user-dashboard/friends/${friendId}/transactions?action=add&type=got`)}
         >
           You Got : <span>₹</span>
         </button>
-        <GiveGotModal
-         
+        {/* <GiveGotModal
+
           isOpen={isModalOpen}
-          
+
           transactionType={transactionType}
           friendId={selectedFriend?.userId}
           refreshFriendTransaction={refreshFriendTransaction}
           setRefreshFriendTransaction={setRefreshFriendTransaction}
-        />
+        /> */}
       </div>
       <FooterSection />
-    <Outlet context={{ selectedTransaction, selectedFriend }} />
+      <Outlet context={{ selectedTransaction, selectedFriend }} />
       {/* <CommentSection
         selectedFriend={selectedFriend}
         isOpen={isCommentSectionOpen}

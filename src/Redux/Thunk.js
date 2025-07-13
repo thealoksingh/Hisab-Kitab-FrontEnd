@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { createTransactionAPI, getAllCommentsByTransactionIdAPI, getAllFriendTransactionsAPI, getFriendList, logoutUserAPI, refreshTokenAPI, refreshTokenApi, registerAPI, resetPasswordAPI, sendOtpAPI } from "../utils/HisabKitabApi";
+import { createTransactionAPI, deleteCommentByIdAPI, deleteTransactionByIdAPI, getAllCommentsByTransactionIdAPI, getAllFriendTransactionsAPI, getFriendList, logoutUserAPI, postNewCommentsByTransactionIdAPI, refreshTokenAPI, refreshTokenApi, registerAPI, resetPasswordAPI, sendOtpAPI, unFriendAPI, updateFriendTransactionByIdAPI } from "../utils/HisabKitabApi";
 import { getUserByIdAPI, loginAPI } from "../utils/HisabKitabApi";
 import { handleAxiosError, withRefreshTokenRetry } from "../utils/HandleError";
 
@@ -130,6 +130,26 @@ export const getAllFriends = createAsyncThunk(
     );
   }
 );
+//Get-All friends Thunk
+export const unFriend = createAsyncThunk(
+  "auth/unFriend",
+  async (friendId, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response = await unFriendAPI(friendId);
+        console.log("this is response.status == " + response?.status);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;
+        } else {
+          return thunkAPI.rejectWithValue(
+            response?.data?.message || "Failed to unfriend."
+          );
+        }
+      },
+      thunkAPI
+    );
+  }
+);
 
 //Get-All transaction with friend Thunk
 export const getAllFriendTransactions = createAsyncThunk(
@@ -172,6 +192,91 @@ export const createTransaction = createAsyncThunk(
     );
   }
 );
+
+//Update Transaction by Id Thunk
+export const updateFriendTransactionById = createAsyncThunk(
+  "auth/updateTransaction",
+  async (data, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response = await updateFriendTransactionByIdAPI(data);
+        console.log("this is response.status == " + response?.status);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;
+        } else {
+          return thunkAPI.rejectWithValue(
+            response?.data?.message || "Failed to update Transaction."
+          );
+        }
+      },
+      thunkAPI
+    );
+  }
+);
+
+//Delete Transaction by Id Thunk
+export const deleteTransactionById = createAsyncThunk(
+  "auth/deleteTransaction",
+  async (data, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response = await deleteTransactionByIdAPI(data);
+        console.log("this is response.status == " + response?.status);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;
+        } else {
+          return thunkAPI.rejectWithValue(
+            response?.data?.message || "Failed to delete Transaction."
+          );
+        }
+      },
+      thunkAPI
+    );
+  }
+);
+//Post New Comments by Transaction Id Thunk
+export const postNewCommentsByTransactionId = createAsyncThunk(
+  "auth/postNewComments",
+  async (data, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response = await postNewCommentsByTransactionIdAPI(data);
+        console.log("this is response.status == " + response?.status);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;
+        } else {
+          return thunkAPI.rejectWithValue(
+            response?.data?.message || "Failed to post new comments."
+          );
+        }
+      },
+      thunkAPI
+    );
+  }
+);
+
+//Post New Comments by Transaction Id Thunk
+export const deleteCommentById = createAsyncThunk(
+  "auth/deleteComment",
+  async (data, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response = await deleteCommentByIdAPI(data);
+        console.log("this is response.status == " + response?.status);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;
+        } else {
+          return thunkAPI.rejectWithValue(
+            response?.data?.message || "Failed to Delete comment."
+          );
+        }
+      },
+      thunkAPI
+    );
+  }
+);
+
+
 //Get-All Comment of transaction with friend Thunk
 export const getAllTransactionComments = createAsyncThunk(
   "auth/getAllTransactionComments",

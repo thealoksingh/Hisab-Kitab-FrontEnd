@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAllFriends, getUserByToken, handleRefreshToken, register, signIn } from "./Thunk";
+import { createTransaction, getAllFriends, getUserByToken, handleRefreshToken, register, signIn } from "./Thunk";
 
 const initialState = {
     user: null,
@@ -67,8 +67,8 @@ const authSlice = createSlice({
                 state.user = action?.payload?.data?.user;
                 state.accessToken = action?.payload?.data?.accessToken;
                 state.refreshToken = action?.payload?.data?.refreshToken;
-                localStorage.setItem('accessToken', state.accessToken);
-                localStorage.setItem('refreshToken', state.refreshToken);
+                localStorage.setItem('accessToken', state?.accessToken);
+                localStorage.setItem('refreshToken', state?.refreshToken);
             })
             .addCase(getUserByToken.rejected, (state, action) => {
                 state.loading = false;
@@ -91,7 +91,6 @@ const authSlice = createSlice({
                 state.error = action.payload.message;
             })
             // Get Friends
-          
             .addCase(getAllFriends.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -105,7 +104,9 @@ const authSlice = createSlice({
             .addCase(getAllFriends.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload.message;
-            });
+            })
+            // Create Transaction
+            ;
     },
 });
 
