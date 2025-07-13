@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { createTransactionAPI, deleteCommentByIdAPI, deleteTransactionByIdAPI, getAllCommentsByTransactionIdAPI, getAllFriendTransactionsAPI, getFriendList, logoutUserAPI, postNewCommentsByTransactionIdAPI, refreshTokenAPI, refreshTokenApi, registerAPI, resetPasswordAPI, sendOtpAPI, unFriendAPI, updateFriendTransactionByIdAPI } from "../utils/HisabKitabApi";
+import { acceptFriendRequestAPI, cancelFriendRequestAPI, createTicketAPI, createTransactionAPI, deleteCommentByIdAPI, deleteTicketAPI, deleteTransactionByIdAPI, getAllCommentsByTransactionIdAPI, getAllFriendTransactionsAPI, getAllPendingRequestAPI, getAllSentRequestAPI, getAllTicketsAPI, getFriendList, logoutUserAPI, postNewCommentsByTransactionIdAPI, refreshTokenAPI, refreshTokenApi, registerAPI, rejectFriendRequestAPI, resetPasswordAPI, sendEmailInviteAPI, sendOtpAPI, unFriendAPI, updateFriendTransactionByIdAPI } from "../utils/HisabKitabApi";
 import { getUserByIdAPI, loginAPI } from "../utils/HisabKitabApi";
 import { handleAxiosError, withRefreshTokenRetry } from "../utils/HandleError";
 
@@ -150,6 +150,128 @@ export const unFriend = createAsyncThunk(
     );
   }
 );
+//Get-All friends Thunk
+export const getAllPendingRequest = createAsyncThunk(
+  "auth/getAllPendingRequest",
+  async (_, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response = await getAllPendingRequestAPI();
+        console.log("this is response.status == " + response?.status);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;
+        } else {
+          return thunkAPI.rejectWithValue(
+            response?.data?.message || "Failed to get all pending requests."
+          );
+        }
+      },
+      thunkAPI
+    );
+  }
+);
+//Get-All Sent Request Thunk
+export const getAllSentRequest = createAsyncThunk(
+  "auth/getAllSentRequest",
+  async (_, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response = await getAllSentRequestAPI();
+        console.log("this is response.status == " + response?.status);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;
+        } else {
+          return thunkAPI.rejectWithValue(
+            response?.data?.message || "Failed to get all sent requests."
+          );
+        }
+      },
+      thunkAPI
+    );
+  }
+);
+//Accept Friend Request Thunk
+export const acceptFriendRequest = createAsyncThunk(
+  "auth/acceptFriendRequest",
+  async (requestId, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response = await acceptFriendRequestAPI(requestId);
+        console.log("this is response.status == " + response?.status);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;
+        } else {
+          return thunkAPI.rejectWithValue(
+            response?.data?.message || "Failed to accept requests."
+          );
+        }
+      },
+      thunkAPI
+    );
+  }
+);
+//Get-All Sent Request Thunk
+export const cancelFriendRequest = createAsyncThunk(
+  "auth/cancelFriendRequest",
+  async (requestId, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response = await cancelFriendRequestAPI(requestId);
+        console.log("this is response.status == " + response?.status);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;
+        } else {
+          return thunkAPI.rejectWithValue(
+            response?.data?.message || "Failed to cancel request."
+          );
+        }
+      },
+      thunkAPI
+    );
+  }
+);
+
+//Reject Friend Request Thunk
+export const rejectFriendRequest = createAsyncThunk(
+  "auth/rejectFriendRequest",
+  async (requestId, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response = await rejectFriendRequestAPI(requestId);
+        console.log("this is response.status == " + response?.status);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;
+        } else {
+          return thunkAPI.rejectWithValue(
+            response?.data?.message || "Failed to get friend list."
+          );
+        }
+      },
+      thunkAPI
+    );
+  }
+);
+
+//Send Invite Email Thunk
+export const sendEmailInvite = createAsyncThunk(
+  "auth/sendEmailInvite",
+  async (data, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response = await sendEmailInviteAPI(data);
+        console.log("this is response.status == " + response?.status);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;
+        } else {
+          return thunkAPI.rejectWithValue(
+            response?.data?.message || "Failed to send email invite."
+          );
+        }
+      },
+      thunkAPI
+    );
+  }
+);
 
 //Get-All transaction with friend Thunk
 export const getAllFriendTransactions = createAsyncThunk(
@@ -171,6 +293,7 @@ export const getAllFriendTransactions = createAsyncThunk(
     );
   }
 );
+
 
 //Get-All transaction with friend Thunk
 export const createTransaction = createAsyncThunk(
@@ -290,6 +413,68 @@ export const getAllTransactionComments = createAsyncThunk(
         } else {
           return thunkAPI.rejectWithValue(
             response?.data?.message || "Failed to get comment list."
+          );
+        }
+      },
+      thunkAPI
+    );
+  }
+);
+
+//Create new ticket Thunk
+export const createTicket = createAsyncThunk(
+  "auth/createTicket",
+  async (data, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response = await createTicketAPI(data);
+        console.log("this is response.status == " + response?.status);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;
+        } else {
+          return thunkAPI.rejectWithValue(
+            response?.data?.message || "Failed to create ticket."
+          );
+        }
+      },
+      thunkAPI
+    );
+  }
+);
+
+//Get all ticket Thunk
+export const getAllTickets = createAsyncThunk(
+  "auth/getAllTickets",
+  async (data, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response = await getAllTicketsAPI(data);
+        console.log("this is response.status == " + response?.status);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;
+        } else {
+          return thunkAPI.rejectWithValue(
+            response?.data?.message || "Failed to get All ticket."
+          );
+        }
+      },
+      thunkAPI
+    );
+  }
+);
+//Get all ticket Thunk
+export const deleteTicket = createAsyncThunk(
+  "auth/deleteTicket",
+  async (data, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response = await deleteTicketAPI(data);
+        console.log("this is response.status == " + response?.status);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;
+        } else {
+          return thunkAPI.rejectWithValue(
+            response?.data?.message || "Failed to delete ticket."
           );
         }
       },

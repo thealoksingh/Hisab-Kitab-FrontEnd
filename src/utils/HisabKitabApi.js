@@ -91,7 +91,7 @@ export const addFriend = (contactNo) =>
   });
 
 // API for getting all pending friend requests
-export const getAllPendingRequest = () =>
+export const getAllPendingRequestAPI = () =>
   apiGetRequest({
     apiUrl: `${baseURL}/user/friend-request/pending`,
     content_type: "application/json",
@@ -99,7 +99,7 @@ export const getAllPendingRequest = () =>
   });
 
 // API for getting all sent friend requests
-export const getAllSentRequest = () =>
+export const getAllSentRequestAPI = () =>
   apiGetRequest({
     apiUrl: `${baseURL}/user/friend-request/sent`,
     content_type: "application/json",
@@ -107,7 +107,7 @@ export const getAllSentRequest = () =>
   });
 
 // API for accepting a friend request
-export const acceptRequest = (requestId) =>
+export const acceptFriendRequestAPI = (requestId) =>
   apiPutRequest({
     apiUrl: `${baseURL}/user/friend-request/accept/${requestId}`,
     content_type: "application/json",
@@ -115,8 +115,8 @@ export const acceptRequest = (requestId) =>
     accessToken: getAccessToken(),
   });
 
-// API for unsend a friend request
-export const unsendRequest = (requestId) =>
+// API for canceling a friend request
+export const cancelFriendRequestAPI = (requestId) =>
   apiDeleteRequest({
     apiUrl: `${baseURL}/user/friend-request/unsend/${requestId}`,
     content_type: "application/json",
@@ -124,7 +124,7 @@ export const unsendRequest = (requestId) =>
   });
 
 // API for rejecting a friend request
-export const rejectRequest = (requestId) =>
+export const rejectFriendRequestAPI = (requestId) =>
   apiDeleteRequest({
     apiUrl: `${baseURL}/user/friend-request/delete/${requestId}`,
     content_type: "application/json",
@@ -183,9 +183,9 @@ export const postNewCommentsByTransactionIdAPI = (commentRequestDto) =>
   });
 
 // API for sending Invitation Email
-export const sendInvitationEmail = (email, senderName) =>
+export const sendEmailInviteAPI = (data) =>
   apiPostRequest({
-    apiUrl: `${baseURL}/user/sendInvite?email=${email}&senderName=${senderName}`,
+    apiUrl: `${baseURL}/user/sendInvite?email=${data.email}&senderName=${data.senderName}`,
     content_type: "application/json",
     data: {},
     accessToken: getAccessToken(),
@@ -208,7 +208,7 @@ export const deleteCommentByIdAPI = (commentId) =>
     accessToken: getAccessToken(),
   });
 
-export const createTicket = (ticketData) =>
+export const createTicketAPI = (ticketData) =>
   apiPostRequest({
     apiUrl: `${baseURL}/user/tickets`,
     content_type: "application/json",
@@ -216,9 +216,9 @@ export const createTicket = (ticketData) =>
     accessToken: getAccessToken(),
   });
 
-export const getAllTickets = () =>
+export const getAllTicketsAPI = () =>
   apiGetRequest({
-    apiUrl: `${baseURL}/user/tickets/all`,
+    apiUrl: `${baseURL}/user/tickets`,
     content_type: "application/json",
     accessToken: getAccessToken(),
   });
@@ -230,7 +230,7 @@ export const unFriendAPI = (friendId) =>
     accessToken: getAccessToken(),
   });
 
-export const deleteTicketApi = (ticketId) =>
+export const deleteTicketAPI = (ticketId) =>
   apiDeleteRequest({
     apiUrl: `${baseURL}/user/tickets/${ticketId}`,
     content_type: "application/json",
