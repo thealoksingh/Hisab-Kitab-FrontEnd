@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ProfileCircle = ({ name,  color }) => {
+const ProfileCircle = ({ name, color, className }) => {
   const styles = {
     backgroundColor: color,
     borderRadius: '50%',
@@ -11,16 +11,15 @@ const ProfileCircle = ({ name,  color }) => {
     textTransform: 'uppercase',
     boxShadow: 'inset 0px 1px 3px rgba(0, 0, 0, 0.2)',
     border: '1px solid #E5E7EB',
-
   };
 
-
-  // Only display the first letter if name exists and is a string
   const displayLetter = typeof name === "string" && name?.length > 0 ? name[0] : "?";
 
   return (
-    <div className="h-10 w-10 sm:h-12 sm:w-12 md:h-13 md:w-13  text-white text-lg"
-      style={styles}>
+    <div
+      className={`text-white text-lg ${className}`}
+      style={styles}
+    >
       {displayLetter}
     </div>
   );

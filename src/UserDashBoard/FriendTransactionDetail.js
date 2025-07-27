@@ -169,6 +169,7 @@ function FriendTranscationDetail({
       >
         <div className=" flex gap-3 sm:gap-2 md:gap-2">
           <ProfileCircle
+            className="h-12 w-12 sm:h-10 sm:w-10 md:h-12 md:w-12"
             name={selectedFriend?.fullName}
             color={selectedFriend?.colorHexValue}
           />

@@ -115,7 +115,7 @@ const ForgetPasswordForm = () => {
     try {
 
         const response = await sendOtpEmail(email, "forget-password");
-        setOtp(response.data);
+        setOtp(response.data.data);
         setOtpSent(true);
         
         setSuccessMessage("OTP sent successfully.");
@@ -133,7 +133,8 @@ const ForgetPasswordForm = () => {
     resetMessages();
     setClicked(true);
     e.preventDefault();
-
+  //  console.log("OTP Entered:", otpEntered);
+  //   console.log("OTP Sent:", otp);
     if (otpEntered.trim() !== otp.toString().trim()) {
       setOtpVerified(false);
       setErrorMessage("Incorrect OTP");

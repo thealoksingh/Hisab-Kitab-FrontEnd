@@ -483,7 +483,8 @@ function LeftSideDashBoard({
                       className="px-6 py-4 font-medium text-gray-200 whitespace-nowrap dark:text-white flex items-center"
                     >
                       <ProfileCircle
-                        className="h-8 w-8 mr-4"
+                      
+                        className="h-10 w-10 mr-4"
                         key={friend?.userEntity?.userId}
                         name={friend?.userEntity?.fullName}
                         color={friend?.userEntity?.colorHexValue} // Pass the user's associated color

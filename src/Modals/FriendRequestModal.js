@@ -3,7 +3,13 @@ import ProfileCircle from "../utils/ProfileCircle";
 
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../Redux/SanckbarSlice";
-import { acceptFriendRequest, cancelFriendRequest, getAllPendingRequest, getAllSentRequest, rejectFriendRequest } from "../Redux/Thunk";
+import {
+  acceptFriendRequest,
+  cancelFriendRequest,
+  getAllPendingRequest,
+  getAllSentRequest,
+  rejectFriendRequest,
+} from "../Redux/Thunk";
 
 const FriendRequestModal = ({
   isOpen,
@@ -17,139 +23,160 @@ const FriendRequestModal = ({
   const [requestLoading, setRequestLoading] = useState(false);
   // const [isLoading, setIsLoading] = useState(true);
 
-   const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (!isOpen) return;
+    setRequestLoading(true);
+    const fetchRequests = async () => {
+      try {
+        // Fetch pending requests using thunk
+        const pendingResponse = await dispatch(getAllPendingRequest());
+        if (getAllPendingRequest.fulfilled.match(pendingResponse)) {
+          setPendingRequests(pendingResponse?.payload?.data || []);
+        } else {
+          dispatch(
+            showSnackbar({
+              message:
+                pendingResponse?.payload?.message ||
+                "Error fetching pending requests",
+              type: "error",
+            })
+          );
+        }
 
-
-useEffect(() => {
-  if (!isOpen) return;
-  setRequestLoading(true);
-  const fetchRequests = async () => {
-    try {
-      // Fetch pending requests using thunk
-      const pendingResponse = await dispatch(getAllPendingRequest());
-      if (getAllPendingRequest.fulfilled.match(pendingResponse)) {
-        setPendingRequests(pendingResponse.payload || []);
-      } else {
-        dispatch(showSnackbar({
-          message: pendingResponse?.payload || "Error fetching pending requests",
-          type: "error"
-        }));
+        // Fetch sent requests using thunk
+        const sentResponse = await dispatch(getAllSentRequest());
+        if (getAllSentRequest.fulfilled.match(sentResponse)) {
+          setSentRequests(sentResponse?.payload?.data || []);
+        } else {
+          dispatch(
+            showSnackbar({
+              message:
+                sentResponse?.payload?.data || "Error fetching sent requests",
+              type: "error",
+            })
+          );
+        }
+      } catch (error) {
+        dispatch(
+          showSnackbar({
+            message: error?.message || "Error fetching requests",
+            type: "error",
+          })
+        );
+      } finally {
+        setRequestLoading(false);
       }
+    };
 
-      // Fetch sent requests using thunk
-      const sentResponse = await dispatch(getAllSentRequest());
-      if (getAllSentRequest.fulfilled.match(sentResponse)) {
-        setSentRequests(sentResponse.payload || []);
+    fetchRequests();
+  }, [isOpen, user, dispatch]);
+
+  const handleAccept = async (requestId) => {
+    setRequestLoading(true);
+    try {
+      const response = await dispatch(acceptFriendRequest(requestId));
+      if (acceptFriendRequest.fulfilled.match(response)) {
+        setPendingRequests((prev) =>
+          prev.filter((request) => request.id !== requestId)
+        );
+        setFriendRequestActivity(true);
+        dispatch(
+          showSnackbar({
+            message: "Friend request accepted!",
+            type: "success",
+          })
+        );
       } else {
-        dispatch(showSnackbar({
-          message: sentResponse?.payload || "Error fetching sent requests",
-          type: "error"
-        }));
+        dispatch(
+          showSnackbar({
+            message: response?.payload || "Error accepting request",
+            type: "error",
+          })
+        );
       }
     } catch (error) {
-      dispatch(showSnackbar({
-        message: error?.message || "Error fetching requests",
-        type: "error"
-      }));
+      dispatch(
+        showSnackbar({
+          message: error?.message || "Error accepting request",
+          type: "error",
+        })
+      );
     } finally {
       setRequestLoading(false);
     }
   };
 
-  fetchRequests();
-}, [isOpen, user, dispatch]);
-
-
-
-const handleAccept = async (requestId) => {
-  setRequestLoading(true);
-  try {
-    const response = await dispatch(acceptFriendRequest (requestId));
-    if (acceptFriendRequest.fulfilled.match(response)) {
-      setPendingRequests((prev) =>
-        prev.filter((request) => request.id !== requestId)
+  const handleReject = async (requestId) => {
+    setRequestLoading(true);
+    try {
+      const response = await dispatch(rejectFriendRequest(requestId));
+      if (rejectFriendRequest.fulfilled.match(response)) {
+        setPendingRequests((prev) =>
+          prev.filter((request) => request.id !== requestId)
+        );
+        setFriendRequestActivity(true);
+        dispatch(
+          showSnackbar({
+            message: "Friend request rejected!",
+            type: "success",
+          })
+        );
+      } else {
+        dispatch(
+          showSnackbar({
+            message: response?.payload || "Error rejecting request",
+            type: "error",
+          })
+        );
+      }
+    } catch (error) {
+      dispatch(
+        showSnackbar({
+          message: error?.message || "Error rejecting request",
+          type: "error",
+        })
       );
-      setFriendRequestActivity(true);
-      dispatch(showSnackbar({
-        message: "Friend request accepted!",
-        type: "success"
-      }));
-    } else {
-      dispatch(showSnackbar({
-        message: response?.payload || "Error accepting request",
-        type: "error"
-      }));
+    } finally {
+      setRequestLoading(false);
     }
-  } catch (error) {
-    dispatch(showSnackbar({
-      message: error?.message || "Error accepting request",
-      type: "error"
-    }));
-  } finally {
-    setRequestLoading(false);
-  }
-};
+  };
 
-const handleReject = async (requestId) => {
-  setRequestLoading(true);
-  try {
-    const response = await dispatch(rejectFriendRequest(requestId));
-    if (rejectFriendRequest.fulfilled.match(response)) {
-      setPendingRequests((prev) =>
-        prev.filter((request) => request.id !== requestId)
+  const handleUnsend = async (requestId) => {
+    setRequestLoading(true);
+    try {
+      const response = await dispatch(cancelFriendRequest(requestId));
+      if (cancelFriendRequest.fulfilled.match(response)) {
+        setSentRequests((prev) =>
+          prev.filter((request) => request.id !== requestId)
+        );
+        setFriendRequestActivity(true);
+        dispatch(
+          showSnackbar({
+            message: "Friend request unsent!",
+            type: "success",
+          })
+        );
+      } else {
+        dispatch(
+          showSnackbar({
+            message: response?.payload || "Error unsending request",
+            type: "error",
+          })
+        );
+      }
+    } catch (error) {
+      dispatch(
+        showSnackbar({
+          message: error?.message || "Error unsending request",
+          type: "error",
+        })
       );
-      setFriendRequestActivity(true);
-      dispatch(showSnackbar({
-        message: "Friend request rejected!",
-        type: "success"
-      }));
-    } else {
-      dispatch(showSnackbar({
-        message: response?.payload || "Error rejecting request",
-        type: "error"
-      }));
+    } finally {
+      setRequestLoading(false);
     }
-  } catch (error) {
-    dispatch(showSnackbar({
-      message: error?.message || "Error rejecting request",
-      type: "error"
-    }));
-  } finally {
-    setRequestLoading(false);
-  }
-};
-
-const handleUnsend = async (requestId) => {
-  setRequestLoading(true);
-  try {
-    const response = await dispatch(cancelFriendRequest(requestId));
-    if (cancelFriendRequest.fulfilled.match(response)) {
-      setSentRequests((prev) =>
-        prev.filter((request) => request.id !== requestId)
-      );
-      setFriendRequestActivity(true);
-      dispatch(showSnackbar({
-        message: "Friend request unsent!",
-        type: "success"
-      }));
-    } else {
-      dispatch(showSnackbar({
-        message: response?.payload || "Error unsending request",
-        type: "error"
-      }));
-    }
-  } catch (error) {
-    dispatch(showSnackbar({
-      message: error?.message || "Error unsending request",
-      type: "error"
-    }));
-  } finally {
-    setRequestLoading(false);
-  }
-};
-
-
+  };
 
   if (!isOpen) return null;
 
@@ -213,7 +240,7 @@ const handleUnsend = async (requestId) => {
                       >
                         <div className="w-36 flex items-center gap-1 p-0.5">
                           <ProfileCircle
-                            className="h-6 w-6 sm:h-7 sm:w-7 md:h-7 md:w-7   text-white text-sm"
+                            className="h-6 w-6 sm:h-7 sm:w-7 text-xs"
                             name={request.sender?.fullName}
                             color={request.sender?.colorHexValue}
                           />
@@ -271,13 +298,13 @@ const handleUnsend = async (requestId) => {
                       >
                         <div className="w-36 text-xs sm:text-md  flex items-center gap-1 p-0.5">
                           <ProfileCircle
-                            className="h-6 w-6 sm:h-7 sm:w-7  text-xs   text-white "
+                            className="h-6 w-6 sm:h-7 sm:w-7 text-xs"
                             name={request.receiver?.fullName}
                             color={request.receiver?.colorHexValue}
                           />
                           <h4 className="px-2 ">
                             {request.receiver?.fullName?.length > 10
-                              ? request.receiver.fullName.slice(0, 10) + "..."
+                              ? request.receiver.fullName.slice(0, 12) + "..."
                               : request.receiver.fullName}
                           </h4>
                         </div>

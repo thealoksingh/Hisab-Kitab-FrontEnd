@@ -228,7 +228,7 @@ function CommentSection({
 
           <div className="friend-profile h-[10%] w-full p-[10px]  gap-[10px] flex items-center">
             <ProfileCircle
-              className="h-10 w-10 mr-4 text-white text-sm"
+              className="h-12 w-12 mr-4 text-white text-sm"
               name={creator?.fullName || "Unknown"}
               color={creator?.colorHexValue || "#ccc"}
             />

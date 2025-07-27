@@ -218,7 +218,7 @@ export const createTicketAPI = (ticketData) =>
 
 export const getAllTicketsAPI = () =>
   apiGetRequest({
-    apiUrl: `${baseURL}/user/tickets`,
+    apiUrl: `${baseURL}/user/tickets/all`,
     content_type: "application/json",
     accessToken: getAccessToken(),
   });
