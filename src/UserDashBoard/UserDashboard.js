@@ -25,6 +25,7 @@ import "../CssStyle/LoaderStyle.css";
 import HelpAndSupport from "../Modals/HelpAndSupport";
 import InviteModal from "../Modals/InviteModal";
 import Snackbar from "../utils/Snackbar";
+import { showSnackbar } from "../Redux/SanckbarSlice";
 
 const UserDashboard = () => {
   const navigate = useNavigate();
@@ -48,8 +49,18 @@ const getAccessToken = () => localStorage.getItem('accessToken');
   const handleLogout = async () => {
     try {
       await dispatch(logout());
-    } catch {
+      dispatch(showSnackbar({
+        message: "logged out successfully",
+        type: "success",
+      }))
       navigate("/");
+    } catch(error) {
+      console.error("Logout failed:", error);
+      dispatch(showSnackbar({
+        message: "Logout failed",
+        type: "error",
+      }));
+      // navigate("/");
     }
   };
 
