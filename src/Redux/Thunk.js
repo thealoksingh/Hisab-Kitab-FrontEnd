@@ -53,16 +53,11 @@ export const register = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await registerAPI(data);
-     console.log("this is response.status == "+response?.status);
-      if (response?.status === 200 || response?.status === 201) {
+      console.log("this is response.status == " + response?.status);
         return response?.data;
-      } else {
-        return rejectWithValue(
-          response?.data?.message || "OTP verification failed"
-        );
-      }
-    } catch (error) {
       
+    } catch (error) {
+
       return rejectWithValue(handleAxiosError(error));
     }
   }
@@ -74,7 +69,7 @@ export const resetPassword = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await resetPasswordAPI(data);
-     console.log("this is response.status == "+response?.status);
+      console.log("this is response.status == " + response?.status);
       if (response?.status === 200 || response?.status === 201) {
         return response?.data;
       } else {
@@ -83,7 +78,7 @@ export const resetPassword = createAsyncThunk(
         );
       }
     } catch (error) {
-      
+
       return rejectWithValue(handleAxiosError(error));
     }
   }
@@ -490,20 +485,20 @@ export const sendOTP = createAsyncThunk(
     try {
       const response = await sendOtpAPI(data);
       return response?.data;
-     
+
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log('error occured in axios', error);
 
         if (error.response) {
           // Server responded with a status code outside 2xx
-           console.log(error.response.data);
-          return  error.response.data;
+          console.log('Server responded with a status code outside 2xx', error.response.data);
+          return error.response.data;
 
         } else if (error.request) {
           // No response received from the server
-           console.log("Network Error: No response received", error.request);
-          const data =  {
+          console.log("Network Error: No response received", error.request);
+          const data = {
             message: "Oops! Something went wrong with the network. Please try again later.",
             statusCode: 500,
             data: null,
@@ -513,12 +508,12 @@ export const sendOTP = createAsyncThunk(
           return data;
         } else {
           // Something happened while setting up the request
-           console.log("Request Error:", error.message);
+          console.log("Request Error:", error.message);
           return error.message;
         }
       } else {
         // Non-Axios error (e.g. bug in your code)
-         console.log("Unexpected Error:", error);
+        console.log("Unexpected Error:", error);
       }
 
     }
@@ -529,9 +524,9 @@ export const handleRefreshToken = createAsyncThunk(
   "auth/handleRefreshToken",
   async (_, { rejectWithValue }) => {
     try {
-      
+
       const response = await refreshTokenAPI();
-       if (response?.status === 200 || response?.status === 201) {
+      if (response?.status === 200 || response?.status === 201) {
         return response?.data;
       } else {
         return rejectWithValue(
@@ -539,7 +534,7 @@ export const handleRefreshToken = createAsyncThunk(
         );
       }
     } catch (error) {
-      
+
       return rejectWithValue(handleAxiosError(error));
     }
   }

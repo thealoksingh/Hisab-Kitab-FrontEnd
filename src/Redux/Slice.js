@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createTransaction, getAllFriends, getUserByToken, handleRefreshToken, register, signIn } from "./Thunk";
+import { createTransaction, getAllFriends, getUserByToken, handleRefreshToken, logout, register, signIn } from "./Thunk";
 
 const initialState = {
     user: null,
@@ -102,6 +102,26 @@ const authSlice = createSlice({
                 state.friendRequestCount = action?.payload?.data?.friendRequestCount;
             })
             .addCase(getAllFriends.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload.message;
+            })
+            // Log-Out user
+            .addCase(logout.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(logout.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = null;
+                state.accessToken = null;
+                state.refreshToken = null;
+                state.friends = [];
+                state.friendRequestCount = 0;
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
+                console.log("User logged out successfully");
+            })
+            .addCase(logout.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload.message;
             })
