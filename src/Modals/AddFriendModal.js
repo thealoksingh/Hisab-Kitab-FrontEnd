@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { addFriend, sendInvitationEmail } from "../Api/HisabKitabApi";
+import { useDispatch } from "react-redux";
+import { sendEmailInvite, sendFriendRequest } from "../Redux/Thunk";
+import { showSnackbar } from "../Redux/SanckbarSlice";
 
 const AddFriendModal = ({ isOpen, toggleModal, user }) => {
   const [isAddButtonVisible, setIsAddButtonVisible] = useState(true); // Tracks whether to show Add or Invite button
@@ -12,7 +15,7 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // State for disabling button
   const [isLoading, setIsLoading] = useState(false);
   const [inviteLoading, setInviteLoading] = useState(false);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     let interval;
 
@@ -39,62 +42,64 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
     }
   };
 
-  const handleAddFriend = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setAddFriendErrorMessage(null);
-    setSuccessMessage(null);
+const handleAddFriend = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
+  setAddFriendErrorMessage(null);
+  setSuccessMessage(null);
 
-    if (contactNo.trim() !== "") {
-      try {
-        const data = await addFriend(contactNo);
-        // console.log("Friend request sent successfully:", data);
+  if (contactNo.trim() !== "") {
+    try {
+      const response = await dispatch(sendFriendRequest(contactNo));
+      if (sendFriendRequest.fulfilled.match(response)) {
         setSuccessMessage("Friend request sent successfully");
         setContactNo(""); // Reset the contact number
-      } catch (error) {
-        // console.error("Error adding friend:", error);
-
-        // Handle specific error messages from the backend
-        if (error.response && error.response.data) {
-          const errorMessage = error.response.data;
-          // console.log("🥹" + errorMessage);
-          switch (errorMessage) {
-            case "You cannot send a friend request to yourself.":
-              setAddFriendErrorMessage(
-                "You cannot send a friend request to yourself."
-              );
-              break;
-            case "You are already friends.":
-              setAddFriendErrorMessage("You are already friends.");
-              break;
-            case "Friend request already sent.":
-              setAddFriendErrorMessage("Friend request already sent.");
-              break;
-            case "User not exist":
-              setIsAddButtonVisible(false); // Switch to invite mode
-              setAddFriendErrorMessage("The user does not exist.");
-              break;
-            default:
-              setAddFriendErrorMessage(
-                "An unexpected error occurred. Please try again."
-              );
-          }
-        } else {
-          // Handle other generic errors
-          setAddFriendErrorMessage(
-            "Failed to send friend request. Please check your network or try again later."
-          );
+        dispatch(showSnackbar({
+          message: "Friend request sent successfully!",
+          type: "success"
+        }));
+      } else {
+        // Handle backend error messages
+        const errorMessage = response?.payload;
+        switch (errorMessage) {
+          case "You cannot send a friend request to yourself.":
+            setAddFriendErrorMessage("You cannot send a friend request to yourself.");
+            break;
+          case "You are already friends.":
+            setAddFriendErrorMessage("You are already friends.");
+            break;
+          case "Friend request already sent.":
+            setAddFriendErrorMessage("Friend request already sent.");
+            break;
+          case "User not exist":
+            setIsAddButtonVisible(false); // Switch to invite mode
+            setAddFriendErrorMessage("The user does not exist.");
+            break;
+          default:
+            setAddFriendErrorMessage(errorMessage || "An unexpected error occurred. Please try again.");
         }
-
         setContactNo(""); // Reset the contact number
-      } finally {
-        setIsLoading(false); // Ensure loading state is reset
+        dispatch(showSnackbar({
+          message: errorMessage || "Failed to send friend request.",
+          type: "error"
+        }));
       }
-    } else {
-      setAddFriendErrorMessage("Please enter a valid mobile number.");
-      setIsLoading(false); // Also reset the loading state for invalid input
+    } catch (error) {
+      setAddFriendErrorMessage("Failed to send friend request. Please check your network or try again later.");
+      setContactNo(""); // Reset the contact number
+      dispatch(showSnackbar({
+        message: "Failed to send friend request. Please check your network or try again later.",
+        type: "error"
+      }));
+    } finally {
+      setIsLoading(false);
     }
-  };
+  } else {
+    setAddFriendErrorMessage("Please enter a valid mobile number.");
+    setIsLoading(false);
+  }
+};
+
 
   const handleInvite = async (e) => {
     e.preventDefault();
@@ -103,24 +108,37 @@ const AddFriendModal = ({ isOpen, toggleModal, user }) => {
     setSuccessMessage(null);
     if (email !== "") {
       try {
-        await sendInvitationEmail(email, user.fullName);
-        // Success: Invite sent
-        setSuccessMessage("Invitation sent successfully");
-       
-        setEmail(""); // Reset the email
-      
+        const response = await dispatch(sendEmailInvite({ email, fullName: user.fullName }));
+        if (sendEmailInvite.fulfilled.match(response)) {
+          setSuccessMessage("Invitation sent successfully");
+          setEmail(""); // Reset the email
+          dispatch(showSnackbar({
+            message: "Invitation sent successfully!",
+            type: "success"
+          }));
+        } else {
+          setAddFriendErrorMessage(response?.payload || "An unexpected error occurred");
+          setEmail(""); // Reset the email
+          dispatch(showSnackbar({
+            message: response?.payload || "Failed to send invitation.",
+            type: "error"
+          }));
+        }
       } catch (error) {
-        // Error: Failed to send invite
         setAddFriendErrorMessage(error.message || "An unexpected error occurred");
         setEmail(""); // Reset the email
+        dispatch(showSnackbar({
+          message: error.message || "Failed to send invitation.",
+          type: "error"
+        }));
       } finally {
-        // Reset loading state
         setInviteLoading(false);
       }
     } else {
       alert("Please enter a valid email");
     }
   };
+
   return (
     <div
       id="add-friend-modal"

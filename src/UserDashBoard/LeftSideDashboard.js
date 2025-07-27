@@ -489,8 +489,8 @@ function LeftSideDashBoard({
                         color={friend?.userEntity?.colorHexValue} // Pass the user's associated color
                       />
 
-                      <div className="flex flex-col">
-                        <span className="font-medium text-gray-800">
+                      <div className="flex ml-2 flex-col">
+                        <span className="font-medium  text-gray-800">
                           {friend?.userEntity?.fullName}
                         </span>
                         <span className="text-xs text-gray-800">

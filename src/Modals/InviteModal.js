@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { sendInvitationEmail } from "../Api/HisabKitabApi";
 import { isDisabled } from "@testing-library/user-event/dist/utils";
+import { sendEmailInvite } from "../Redux/Thunk";
+import { showSnackbar } from "../Redux/SanckbarSlice";
+import { useDispatch } from "react-redux";
 
 const InviteModal = ({ isOpen, toggleModal, user }) => {
   const [email, setEmail] = useState(""); // State to store the email
@@ -9,7 +12,7 @@ const InviteModal = ({ isOpen, toggleModal, user }) => {
   const [timer, setTimer] = useState(30); // State for timer
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // State for disabling button
   const [inviteLoading, setInviteLoading] = useState(false);
-
+const dispatch = useDispatch(); 
   useEffect(() => {
     let interval;
 
@@ -37,8 +40,6 @@ const InviteModal = ({ isOpen, toggleModal, user }) => {
     }
   };
 
- 
-
   const handleInvite = async (e) => {
     e.preventDefault();
     setInviteLoading(true);
@@ -47,23 +48,37 @@ const InviteModal = ({ isOpen, toggleModal, user }) => {
 
     if (email !== "") {
       try {
-        await sendInvitationEmail(email, user.fullName);
-        // Success: Invite sent
-        setSuccessMessage("Invitation sent successfully");
-        setEmail(""); // Reset the email
-       
+        const response = await dispatch(sendEmailInvite({ email, fullName: user.fullName }));
+        if (sendEmailInvite.fulfilled.match(response)) {
+          setSuccessMessage("Invitation sent successfully");
+          setEmail("");
+          dispatch(showSnackbar({
+            message: "Invitation sent successfully!",
+            type: "success"
+          }));
+        } else {
+          setErrorMessage(response?.payload || "An unexpected error occurred");
+          setEmail(""); 
+          dispatch(showSnackbar({
+            message: response?.payload || "Failed to send invitation.",
+            type: "error"
+          }));
+        }
       } catch (error) {
-        // Error: Failed to send invite
         setErrorMessage(error.message || "An unexpected error occurred");
-        setEmail(""); // Reset the email
+        setEmail(""); 
+        dispatch(showSnackbar({
+          message: error.message || "Failed to send invitation.",
+          type: "error"
+        }));
       } finally {
-        // Reset loading state
         setInviteLoading(false);
       }
     } else {
       alert("Please enter a valid email");
     }
   };
+
   return (
     <div
       id="Invite-modal"

@@ -3,6 +3,7 @@ import axios from "axios";
 import { acceptFriendRequestAPI, cancelFriendRequestAPI, createTicketAPI, createTransactionAPI, deleteCommentByIdAPI, deleteTicketAPI, deleteTransactionByIdAPI, getAllCommentsByTransactionIdAPI, getAllFriendTransactionsAPI, getAllPendingRequestAPI, getAllSentRequestAPI, getAllTicketsAPI, getFriendList, logoutUserAPI, postNewCommentsByTransactionIdAPI, refreshTokenAPI, refreshTokenApi, registerAPI, rejectFriendRequestAPI, resetPasswordAPI, sendEmailInviteAPI, sendOtpAPI, unFriendAPI, updateFriendTransactionByIdAPI } from "../utils/HisabKitabApi";
 import { getUserByIdAPI, loginAPI } from "../utils/HisabKitabApi";
 import { handleAxiosError, withRefreshTokenRetry } from "../utils/HandleError";
+import { addFriend } from "../Api/HisabKitabApi";
 
 // Async Thunks
 
@@ -545,3 +546,22 @@ export const handleRefreshToken = createAsyncThunk(
   }
 );
 
+export const sendFriendRequest = createAsyncThunk(
+  "auth/sendFriendRequest",
+  async (contactNo, thunkAPI) => {
+    try {
+      const response = await addFriend(contactNo);
+      if (response?.status === 200 || response?.status === 201) {
+        return response?.data;
+      } else {
+        return thunkAPI.rejectWithValue(
+          response?.data?.message || "Failed to send friend request."
+        );
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error?.response?.data || "Failed to send friend request."
+      );
+    }
+  }
+);
