@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { sendInvitationEmail } from "../Api/HisabKitabApi";
-import { isDisabled } from "@testing-library/user-event/dist/utils";
-import { sendEmailInvite } from "../Redux/Thunk";
-import { showSnackbar } from "../Redux/SanckbarSlice";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { showSnackbar } from "../Redux/SanckbarSlice";
+import { sendEmailInvite } from "../Redux/Thunk";
 
 const InviteModal = ({ isOpen, toggleModal, user }) => {
   const [email, setEmail] = useState(""); // State to store the email

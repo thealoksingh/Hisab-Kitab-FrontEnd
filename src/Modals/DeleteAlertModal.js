@@ -5,9 +5,7 @@ import "../CssStyle/GroupDashboard.css";
 import { showSnackbar } from "../Redux/SanckbarSlice";
 import { deleteTransactionById, getAllFriends } from "../Redux/Thunk";
 
-const DeleteAlertModal = ({
-
-}) => {
+const DeleteAlertModal = () => {
 
   const { friendId, transactionId } = useParams();
   const [searchParams] = useSearchParams(); // query params

@@ -17,6 +17,7 @@ import { Outlet, useNavigate, useOutletContext, useParams } from "react-router-d
 import { showSnackbar } from "../Redux/SanckbarSlice";
 import { selectUser } from "../Redux/Selector";
 import { getAllTransactionComments, postNewCommentsByTransactionId } from "../Redux/Thunk";
+import { useCommentSubscription } from "../hooks/useCommentSubscription";
 // import { useNavigate, useLocation } from "react-router-dom";
 // import { useAuth } from "../security/AuthContext";
 
@@ -127,6 +128,11 @@ function CommentSection({
     fetchComments();
   }, [user, commentTransaction]);
 
+  // Real-time updates
+  useCommentSubscription(transactionId, (comment) => {
+    setComments((prev) => [...prev, comment]);
+  });
+
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -153,10 +159,10 @@ function CommentSection({
       if (postNewCommentsByTransactionId.fulfilled.match(response)) {
         console.log("Comment posted successfully:", response?.payload);
         setCommentText("");
-        setComments((prevComments) => [
-          ...prevComments,
-          response?.payload?.data,
-        ]);
+        // setComments((prevComments) => [
+        //   ...prevComments,
+        //   response?.payload?.data,
+        // ]);
         await dispatch(showSnackbar({
           message: "Comment posted successfully", type: "success"
         }));

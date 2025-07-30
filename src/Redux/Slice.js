@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createTransaction, getAllFriends, getUserByToken, handleRefreshToken, logout, register, signIn } from "./Thunk";
+import { getAllFriends, getUserByToken, handleRefreshToken, logout, register, signIn } from "./Thunk";
 
 const initialState = {
     user: null,

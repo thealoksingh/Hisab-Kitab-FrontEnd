@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AdminDashboard from "../AdminDashboard/AdminDashboard";
@@ -6,28 +7,24 @@ import LoginForm from "../Authentication/LogInForm";
 import SignUpForm from "../Authentication/SignupForm";
 import Home from "../LandingPage/Home";
 import About from "../Modals/About";
+import GiveGotModal from "../Modals/GiveGotModal";
+import TransactionModals from "../Modals/TransactionModals";
+import UnfriendModal from "../Modals/UnfriendModal";
 import { selectUser } from "../Redux/Selector";
+import { getUserByToken } from "../Redux/Thunk";
 import Addfriend from "../Tour/Addfriend";
 import Document from "../Tour/Document";
 import Forget from "../Tour/Forget";
 import Help from "../Tour/Help";
 import Invite from "../Tour/Invite";
 import Transaction from "../Tour/Transaction";
-import LeftSideDashboard from "../UserDashBoard/LeftSideDashboard";
-import UnderDevPage from "../UserDashBoard/UnderDevPage";
-import UserDashboard from "../UserDashBoard/UserDashboard";
-import ErrorComponent from "./ErrorComponent";
-import { useEffect } from "react";
-import { getUserByToken } from "../Redux/Thunk";
+import CommentSection from "../UserDashBoard/CommentSection";
 import Friends from "../UserDashBoard/Friends";
 import FriendTranscationDetail from "../UserDashBoard/FriendTransactionDetail";
 import InstructionToSelect from "../UserDashBoard/instructionToSelect";
-import CommentSection from "../UserDashBoard/CommentSection";
-import GiveGotModal from "../Modals/GiveGotModal";
-import UpdateFriendTransactionModel from "../Modals/UpdateFriendTransactionModel";
-import DeleteAlertModal from "../Modals/DeleteAlertModal";
-import TransactionModals from "../Modals/TransactionModals";
-import UnfriendModal from "../Modals/UnfriendModal";
+import UnderDevPage from "../UserDashBoard/UnderDevPage";
+import UserDashboard from "../UserDashBoard/UserDashboard";
+import ErrorComponent from "./ErrorComponent";
 
 // AuthenticatedRoute using Redux state
 function AuthenticatedRoute({ children }) {

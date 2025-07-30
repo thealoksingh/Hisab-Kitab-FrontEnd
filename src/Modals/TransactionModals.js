@@ -1,6 +1,6 @@
-import UpdateFriendTransactionModel from "./UpdateFriendTransactionModel";
+import { useOutletContext, useParams, useSearchParams } from "react-router-dom";
 import DeleteAlertModal from "./DeleteAlertModal";
-import { useSearchParams, useParams, useOutletContext } from "react-router-dom";
+import UpdateFriendTransactionModel from "./UpdateFriendTransactionModel";
 
 const TransactionModals = () => {
   const [searchParams] = useSearchParams();
