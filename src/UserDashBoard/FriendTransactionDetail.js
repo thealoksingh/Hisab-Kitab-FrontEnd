@@ -158,7 +158,7 @@ function FriendTranscationDetail({
   }, [commentTransaction]);
 
   return (
-    <div className="flex flex-col h-[90%] lg:h-[98%] overflow-y-auto lg:pt-0">
+    <div className="flex flex-col h-[90%] lg:h-[100%] overflow-y-auto lg:pt-0">
       <div
         onClick={() => {
           if (isCommentSectionOpen) {

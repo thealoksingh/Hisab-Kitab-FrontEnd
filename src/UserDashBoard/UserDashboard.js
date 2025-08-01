@@ -9,6 +9,7 @@ import {
   faMapLocationDot,
   faPeopleGroup,
   faPeoplePulling,
+  faBell,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,40 +27,47 @@ import HelpAndSupport from "../Modals/HelpAndSupport";
 import InviteModal from "../Modals/InviteModal";
 import Snackbar from "../utils/Snackbar";
 import { showSnackbar } from "../Redux/SanckbarSlice";
+import NotificationModal from "../Modals/NotificationModal";
 
 const UserDashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
-const getAccessToken = () => localStorage.getItem('accessToken');
+  const getAccessToken = () => localStorage.getItem("accessToken");
   const user = useSelector(selectUser);
-  console.log("user id",user?.userId);
+  console.log("user id", user?.userId);
   const friends = useSelector(selectFriends);
+  const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
 
+ 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [isHelpAndSupportOpen, setIsHelpAndSupportOpen] = useState(false);
-
+ 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
   const globalNavToggler = () => isSidebarOpen && setIsSidebarOpen(false);
   const toggleInvite = () => setIsInviteOpen(!isInviteOpen);
-  const toggleHelpAndSupport = () => setIsHelpAndSupportOpen(!isHelpAndSupportOpen);
-
+  const toggleHelpAndSupport = () =>
+    setIsHelpAndSupportOpen(!isHelpAndSupportOpen);
 
   const handleLogout = async () => {
     try {
       await dispatch(logout());
-      dispatch(showSnackbar({
-        message: "logged out successfully",
-        type: "success",
-      }))
+      dispatch(
+        showSnackbar({
+          message: "logged out successfully",
+          type: "success",
+        })
+      );
       navigate("/");
-    } catch(error) {
+    } catch (error) {
       console.error("Logout failed:", error);
-      dispatch(showSnackbar({
-        message: "Logout failed",
-        type: "error",
-      }));
+      dispatch(
+        showSnackbar({
+          message: "Logout failed",
+          type: "error",
+        })
+      );
       // navigate("/");
     }
   };
@@ -115,13 +123,16 @@ const getAccessToken = () => localStorage.getItem('accessToken');
       onClick: handleLogout,
     },
   ];
-
+ const toggleNotificationModal = () => {
+    setIsNotificationModalOpen(!isNotificationModalOpen);
+  };
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-50 w-64 lg:bg-gray-800 bg-gray-50 border rounded-sm border-gray-800 text-white transition-transform duration-300 ease-in-out transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } lg:relative lg:translate-x-0 h-auto lg:h-full`}
+        className={`fixed top-0 left-0 z-50 w-64 lg:bg-gray-800 bg-gray-50 border rounded-sm border-gray-800 text-white transition-transform duration-300 ease-in-out transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:relative lg:translate-x-0 h-auto lg:h-full`}
         role="navigation"
       >
         <div className="h-full px-3 py-4 overflow-y-auto">
@@ -132,7 +143,11 @@ const getAccessToken = () => localStorage.getItem('accessToken');
                 href="/user-dashboard"
                 className="flex items-center p-2 lg:text-gray-300 text-black lg:hover:bg-gray-700 group"
               >
-                <img src={logo || "/placeholder.svg"} alt="Hisab Kitab Logo" className="w-6 h-6" />
+                <img
+                  src={logo || "/placeholder.svg"}
+                  alt="Hisab Kitab Logo"
+                  className="w-6 h-6"
+                />
                 <span className="ms-3">
                   <img
                     src={hisabKitabBlack}
@@ -145,30 +160,64 @@ const getAccessToken = () => localStorage.getItem('accessToken');
 
             {/* User Info */}
             <li>
-              <div className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 group">
-                <FontAwesomeIcon icon={faUser} className="lg:text-gray-300 text-gray-600" style={{ fontSize: "25px" }} />
-                <span className="flex-1 ms-3 whitespace-nowrap">{user?.fullName}</span>
+              <div  onClick={toggleNotificationModal}  className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 group">
+                <FontAwesomeIcon
+                  icon={faUser}
+                  className="lg:text-gray-300 text-gray-600"
+                  style={{ fontSize: "25px" }}
+                />
+
+                <span className="flex-1 ms-3 whitespace-nowrap">
+                  {user?.fullName}
+                </span>
+
+                <div className="relative p-2">
+                  <FontAwesomeIcon
+                    icon={faBell}
+                    className="text-gray-600 lg:text-gray-300"
+                    style={{ fontSize: "20px" }}
+                  />
+
+                  <span className="absolute -top-1 -right-1 flex size-4 justify-center items-center">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-orange-500 opacity-75"></span>
+                    <span className="relative inline-flex size-4 rounded-full bg-orange-500 text-white text-[8px] font-bold justify-center items-center border border-white">
+                      7
+                    </span>
+                  </span>
+                </div>
               </div>
             </li>
 
             {/* Sidebar Items */}
             {sidebarItems.map((item, idx) => {
-              const isActive = item.path && location.pathname.startsWith(item.path);
+              const isActive =
+                item.path && location.pathname.startsWith(item.path);
               return (
-                <li key={idx} onClick={() => item.onClick ? item.onClick() : navigate(item.path)}>
+                <li
+                  key={idx}
+                  onClick={() =>
+                    item.onClick ? item.onClick() : navigate(item.path)
+                  }
+                >
                   <div
-                    className={`flex items-center p-2 rounded-sm border lg:border-0 group transition-all duration-200 cursor-pointer ${isActive
+                    className={`flex items-center p-2 rounded-sm border lg:border-0 group transition-all duration-200 cursor-pointer ${
+                      isActive
                         ? "bg-yellow-100 border border-yellow-400 text-yellow-800"
                         : "lg:text-gray-300 text-black lg:hover:bg-gray-700"
-                      }`}
+                    }`}
                   >
                     <FontAwesomeIcon
                       icon={item.icon}
-                      className={`${isActive ? "text-yellow-800" : "lg:text-gray-300 text-gray-600"
-                        } ${item.animate ? "group-hover:animate-spin" : ""}`}
+                      className={`${
+                        isActive
+                          ? "text-yellow-800"
+                          : "lg:text-gray-300 text-gray-600"
+                      } ${item.animate ? "group-hover:animate-spin" : ""}`}
                       style={{ fontSize: "25px" }}
                     />
-                    <span className="flex-1 ms-3 whitespace-nowrap">{item.label}</span>
+                    <span className="flex-1 ms-3 whitespace-nowrap">
+                      {item.label}
+                    </span>
                     {item.badge && (
                       <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full">
                         {friends?.length}
@@ -185,7 +234,10 @@ const getAccessToken = () => localStorage.getItem('accessToken');
             onClick={() => navigate("/document")}
             className="flex items-center mt-4 px-4 py-1 font-semibold bg-red-500 text-white space-x-2 rounded-sm cursor-pointer"
           >
-            <FontAwesomeIcon icon={faMapLocationDot} style={{ fontSize: "18px" }} />
+            <FontAwesomeIcon
+              icon={faMapLocationDot}
+              style={{ fontSize: "18px" }}
+            />
             <span className="pl-4">Take a Tour</span>
           </div>
         </div>
@@ -213,15 +265,36 @@ const getAccessToken = () => localStorage.getItem('accessToken');
         </header>
 
         {/* Routed content */}
-        <div className="flex-1 overflow-y-auto bg-orange-50" onClick={globalNavToggler}>
-          <Outlet context={{ globalNavToggler, setIsSidebarOpen, isSidebarOpen }} />
+        <div
+          className="flex-1 overflow-y-auto bg-orange-50"
+          onClick={globalNavToggler}
+        >
+          <Outlet
+            context={{ globalNavToggler, setIsSidebarOpen, isSidebarOpen }}
+          />
         </div>
       </div>
 
       {/* Modals */}
-      
-      <InviteModal isOpen={isInviteOpen} user={user} toggleModal={toggleInvite} />
-      <HelpAndSupport user={user} isOpen={isHelpAndSupportOpen} toggleModal={toggleHelpAndSupport} />
+
+      <InviteModal
+        isOpen={isInviteOpen}
+        user={user}
+        toggleModal={toggleInvite}
+      />
+      <HelpAndSupport
+        user={user}
+        isOpen={isHelpAndSupportOpen}
+        toggleModal={toggleHelpAndSupport}
+      />
+      <div className="fixed top-6 right-6 z-50 bg-yellow-100 text-yellow-800 border-l-4 border-yellow-500 px-5 py-3 rounded-md shadow-md animate-slide-in">
+        <p className="font-semibold text-sm">🔔 New Notification!</p>
+        <p className="text-xs">You have 7 new alerts.</p>
+      </div>
+     <NotificationModal
+     isOpen={isNotificationModalOpen}
+      onClose={toggleNotificationModal}
+     />
     </div>
   );
 };

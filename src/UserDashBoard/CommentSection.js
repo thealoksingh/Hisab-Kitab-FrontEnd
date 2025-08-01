@@ -332,8 +332,8 @@ function CommentSection({
                 ))}
               </div>
             ) : (
-              <div className="comment-box scroll-auto overflow-y-scroll flex flex-col border border-gray-400 gap-2 bg-gray-300 shadow-inner-custom border border-gray-300 p-2  h-[70%] scrollable">
-                {/* Repeat User Comments */}
+          <div className="comment-box scroll-auto overflow-y-scroll flex flex-col-reverse border border-gray-400 gap-2 bg-gray-300 shadow-inner-custom border-gray-300 p-2 h-[70%] scrollable">
+      {/* Repeat User Comments */}
                 {!comments.length && (
                   <div className="flex items-center justify-center  w-full h-full">
                     <div className="text-xl text-gray-400">
@@ -342,7 +342,7 @@ function CommentSection({
                   </div>
                 )}
 
-                {comments.map((comment, index) => {
+                {[...comments].reverse().map((comment, index) => {
                   // Calculate lastClosingAmount dynamically
 
                   return (

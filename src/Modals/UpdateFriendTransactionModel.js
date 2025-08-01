@@ -181,7 +181,7 @@ const UpdateFriendTransactionModel = ({
         }`}
     >
       <div className="main-form relative p-4 w-full max-w-5xl flex gap-4 justify-center">
-        <div className="form1 relative w-full sm:w-1/2 lg:w-[70%]  bg-white rounded-sm shadow dark:bg-gray-300 shadow-inner-custom">
+        <div className="form1 relative w-full sm:w-1/2 lg:w-[40%]  bg-white rounded-sm shadow dark:bg-gray-300 shadow-inner-custom">
           <div
             className={`flex items-center  justify-between p-2 md:p-2 rounded-sm ${transactionType === "give" ? "bg-rose-600" : "bg-emerald-600"
               }`}

@@ -77,7 +77,7 @@ const DeleteAlertModal = () => {
         }`}
     >
       <div className="main-form relative p-10 w-full max-w-5xl flex gap-4 justify-center">
-        <div className="form1 relative w-[90%] sm:w-[70%]  md:w-[70%]   bg-white rounded-sm shadow dark:bg-gray-300 shadow-inner-custom">
+        <div className="form1 relative w-[90%] sm:w-[90%]  md:w-[40%]   bg-white rounded-sm shadow dark:bg-gray-300 shadow-inner-custom">
           <div className="flex items-center justify-between p-4 md:p-4  rounded-sm bg-rose-500 dark:border-gray-700">
             <h4 className="text-lg font-semibold  text-white">
               Delete Alert

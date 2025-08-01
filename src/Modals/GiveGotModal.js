@@ -138,7 +138,7 @@ const GiveGotModal = () => {
       className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ${isOpen ? "" : "hidden"
         }`}
     >
-      <div className="main-form relative p-4 w-full lg:w-[70%] sm:w-1/2 md:w-1/2 max-w-5xl flex gap-4 justify-center transform transition-transform duration-500">
+      <div className="main-form relative p-4 w-full lg:w-[30%] sm:w-1/2 md:w-1/2 max-w-5xl flex gap-4 justify-center transform transition-transform duration-500">
         <div className="form-give-got border border-gray-400 shadow-inner-custom relative bg-white w-full h-1/2 rounded-sm shadow dark:bg-gray-300">
           <div
             className={`flex items-center justify-between p-2 md:p-2 rounded-sm ${transactionType === "give" ? "bg-rose-600" : "bg-emerald-600"
@@ -176,7 +176,7 @@ const GiveGotModal = () => {
             </button>
           </div>
 
-          <form className="p-4 md:p-5" onSubmit={handleSubmit}>
+          <form className="p-4 md:p-5 text-sm" onSubmit={handleSubmit}>
             <div className="mb-2">
               <label
                 htmlFor="amount"
@@ -189,7 +189,7 @@ const GiveGotModal = () => {
                 id="amount"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="w-full input-field-shadow border border-gray-400 text-gray-600 rounded-sm p-2"
+                className="w-full text-sm input-field-shadow border border-gray-400 text-gray-600 rounded-sm p-2"
                 placeholder="Enter amount"
                 required
               />
