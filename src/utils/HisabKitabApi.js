@@ -126,7 +126,7 @@ export const cancelFriendRequestAPI = (requestId) =>
 // API for rejecting a friend request
 export const rejectFriendRequestAPI = (requestId) =>
   apiDeleteRequest({
-    apiUrl: `${baseURL}/user/friend-request/delete/${requestId}`,
+    apiUrl: `${baseURL}/user/friend-request/reject/${requestId}`,
     content_type: "application/json",
     accessToken: getAccessToken(),
   });

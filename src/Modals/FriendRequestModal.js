@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
-import ProfileCircle from "../utils/ProfileCircle";
-
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useFriendRequestSubscription } from "../hooks/useFriendRequestSubscription";
 import { showSnackbar } from "../Redux/SanckbarSlice";
 import {
   acceptFriendRequest,
@@ -10,6 +9,8 @@ import {
   getAllSentRequest,
   rejectFriendRequest,
 } from "../Redux/Thunk";
+import ProfileCircle from "../utils/ProfileCircle";
+import { updateFriendRequestCount } from "../Redux/Slice";
 
 const FriendRequestModal = ({
   isOpen,
@@ -72,6 +73,63 @@ const FriendRequestModal = ({
 
     fetchRequests();
   }, [isOpen, user, dispatch]);
+
+  //Call the subscription hook to listen for friend request updates
+console.log("Subscribing to friend request updates for user:", user);
+useFriendRequestSubscription(
+  user?.userId,
+  (data) => {
+    // Example: If the backend sends the updated request, update your state accordingly
+    // You can customize this logic as per your backend event structure
+    console.log("Friend request update received:", data);
+    // if (data.status === "PENDING" && data?.receiver?.userId === user?.userId) {
+    //   setPendingRequests((prev) => [...prev, data]);
+    // } else if (data.status === "PENDING" && data?.sender?.userId === user?.userId) {
+    //   setSentRequests((prev) => [...prev, data]);
+    // } else if (data.status === "ACCEPTED" && data?.receiver?.userId === user?.userId) {
+    //   setPendingRequests((prev) => prev.filter((req) => req.id !== data.id));
+    // } else if (data.status === "ACCEPTED" && data?.sender?.userId === user?.userId) {
+    //   setSentRequests((prev) => prev.filter((req) => req.id !== data.id));
+    // } else if (data.status === "REJECTED" && data?.receiver?.userId === user?.userId) {
+    //   setPendingRequests((prev) => prev.filter((req) => req.id !== data.id));
+    // } else if (data.status === "REJECTED" && data?.sender?.userId === user?.userId) {
+    //   setSentRequests((prev) => prev.filter((req) => req.id !== data.id));
+    // } else if (data.status === "UNSENT" && data?.receiver?.userId === user?.userId) {
+    //   setPendingRequests((prev) => prev.filter((req) => req.id !== data.id));
+    // } else if (data.status === "UNSENT" && data?.sender?.userId === user?.userId) {
+    //   setSentRequests((prev) => prev.filter((req) => req.id !== data.id));
+    // }
+
+    const isReceiver = data?.receiver?.userId === user?.userId;
+const isSender = data?.sender?.userId === user?.userId;
+
+switch (data.status) {
+  case "PENDING":
+    if (isReceiver) setPendingRequests((prev) => [...prev, data]);
+    else if (isSender) setSentRequests((prev) => [...prev, data]);
+    break;
+  case "ACCEPTED":
+  case "REJECTED":
+  case "UNSENT":
+    if (isReceiver) setPendingRequests((prev) => prev.filter((req) => req.id !== data.id));
+    else if (isSender) setSentRequests((prev) => prev.filter((req) => req.id !== data.id));
+    break;
+  default:
+    // Optionally handle other statuses
+    break;
+}
+
+//Update the friend request count in slice
+    dispatch(updateFriendRequestCount(pendingRequests.length));
+    // Optionally show a snackbar or notification
+    dispatch(
+      showSnackbar({
+        message: data.message || "Friend request updated!",
+        type: "info",
+      })
+    );
+  }
+);
 
   const handleAccept = async (requestId) => {
     setRequestLoading(true);

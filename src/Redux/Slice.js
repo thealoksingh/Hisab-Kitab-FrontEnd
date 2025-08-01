@@ -19,6 +19,10 @@ const authSlice = createSlice({
             console.log("User logged out successfully");
             return initialState;
         },
+
+        updateFriendRequestCount: (state, action) => {
+            state.friendRequestCount = action.payload;
+        },
       
     },
     extraReducers: (builder) => {
@@ -133,6 +137,7 @@ const authSlice = createSlice({
     
 export const {
     logoutUser,
+    updateFriendRequestCount,
 
 } = authSlice.actions;
 
