@@ -75,7 +75,7 @@ useEffect(() => {
     setSelectedFriend(friend);
 
     const isUserCreator = commentTransaction.createdBy === user.userId;
-    setCreator(isUserCreator ? user : friend);
+    setCreator(isUserCreator ? user : friend?.userEntity);
   }
 }, [commentTransaction, user, friends]);
 
