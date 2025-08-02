@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { acceptFriendRequestAPI, cancelFriendRequestAPI, createTicketAPI, createTransactionAPI, deleteCommentByIdAPI, deleteTicketAPI, deleteTransactionByIdAPI, getAllCommentsByTransactionIdAPI, getAllFriendTransactionsAPI, getAllPendingRequestAPI, getAllSentRequestAPI, getAllTicketsAPI, getFriendList, logoutUserAPI, postNewCommentsByTransactionIdAPI, refreshTokenAPI, refreshTokenApi, registerAPI, rejectFriendRequestAPI, resetPasswordAPI, sendEmailInviteAPI, sendOtpAPI, unFriendAPI, updateFriendTransactionByIdAPI } from "../utils/HisabKitabApi";
+import { acceptFriendRequestAPI, cancelFriendRequestAPI, createTicketAPI, createTransactionAPI, deleteCommentByIdAPI, deleteTicketAPI, deleteTransactionByIdAPI, getAllCommentsByTransactionIdAPI, getAllFriendTransactionsAPI, getAllPendingRequestAPI, getAllSentRequestAPI, getAllTicketsAPI, getFriendList, getTransactionByIdAPI, logoutUserAPI, postNewCommentsByTransactionIdAPI, refreshTokenAPI, refreshTokenApi, registerAPI, rejectFriendRequestAPI, resetPasswordAPI, sendEmailInviteAPI, sendOtpAPI, unFriendAPI, updateFriendTransactionByIdAPI } from "../utils/HisabKitabApi";
 import { getUserByIdAPI, loginAPI } from "../utils/HisabKitabApi";
 import { handleAxiosError, withRefreshTokenRetry } from "../utils/HandleError";
 import { addFriend } from "../Api/HisabKitabApi";
@@ -346,6 +346,27 @@ export const deleteTransactionById = createAsyncThunk(
         } else {
           return thunkAPI.rejectWithValue(
             response?.data?.message || "Failed to delete Transaction."
+          );
+        }
+      },
+      thunkAPI
+    );
+  }
+);
+
+//Get Transaction by Id Thunk
+export const getTransactionById = createAsyncThunk(
+  "auth/getTransactionById",
+  async (data, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response = await getTransactionByIdAPI(data);
+        console.log("this is response.status == " + response?.status);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;
+        } else {
+          return thunkAPI.rejectWithValue(
+            response?.data?.message || "Failed to fetch Transaction."
           );
         }
       },

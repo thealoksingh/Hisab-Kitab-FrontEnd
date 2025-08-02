@@ -6,7 +6,6 @@ import { Outlet, useNavigate, useParams } from "react-router-dom";
 import unFriendImage from "../assets/unFriend.png";
 import "../CssStyle/GroupDashboard.css";
 import FriendTransactionReport from "../Modals/FriendTransactionReport";
-import GiveGotModal from "../Modals/GiveGotModal";
 import UnfriendModal from "../Modals/UnfriendModal";
 import { selectFriends, selectUser } from "../Redux/Selector";
 import { getAllFriendTransactions } from "../Redux/Thunk";

@@ -156,6 +156,15 @@ export const deleteTransactionByIdAPI = (transId) =>
     accessToken: getAccessToken(),
   });
 
+  // API for Deleting the Transaction with Id
+export const getTransactionByIdAPI = (transId) =>
+  apiGetRequest({
+    apiUrl: `${baseURL}/user/transaction/${transId}`,
+    content_type: "application/json",
+    accessToken: getAccessToken(),
+  });
+
+
 // API for updating a transaction by ID
 export const updateFriendTransactionByIdAPI = (updatedTransactionData) =>
   apiPutRequest({
