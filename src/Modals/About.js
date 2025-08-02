@@ -10,12 +10,12 @@ function About() {
     <>
       {/* About Us Description */}
       <section className="py-16 bg-gray-50 ">
-        <button
+        {/* <button
           onClick={() => window.history.back()}
-          className=" fixed top-10 lg:left-16 left-6 bg-gray-500 text-white rounded-full p-2 hover:bg-gray-600"
+          className=" fixed top-10 lg:left-16 sm:hidden left-6 bg-gray-500 text-white rounded-full p-2 hover:bg-gray-600"
         >
           <ArrowLeft className="w-6 h-6" />
-        </button>
+        </button> */}
 
         <div className="container mx-auto px-4  text-center pr-16 pl-16 ">
           <h2 className="text-4xl font-bold text-gray-800 mb-6">About Us</h2>

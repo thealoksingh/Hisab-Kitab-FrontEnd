@@ -364,7 +364,7 @@ function LeftSideDashBoard({
               )}
             </div>
 
-            {/* shortBy */}
+            {/* sortBy */}
 
             <div className="sort-section text-gray-700 h-full w-[30%] mr-2">
               <p className="p-1 font-Poppins font-semibold lg:text-sm text-sm">

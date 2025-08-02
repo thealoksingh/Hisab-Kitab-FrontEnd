@@ -80,47 +80,31 @@ useEffect(() => {
 }, [commentTransaction, user, friends]);
 
 
-  useEffect(() => {
-    if (!transactionId) return;
+ useEffect(() => {
+  if (!transactionId) return;
 
-    if (selectedTransaction) {
-      setCommentTransaction(selectedTransaction);
-    } else {
-      console.log("Fetching transaction by ID:", transactionId);
-      // Fetch from backend if not present
-      const fetchTransaction = async () => {
-        
-        console.log("Fetching transaction by ID:", transactionId);
-        const response = await dispatch(getTransactionById(transactionId));
+  if (selectedTransaction?.transId === transactionId) {
+    setCommentTransaction(selectedTransaction);
+  } else {
+    const fetchTransaction = async () => {
+      const response = await dispatch(getTransactionById(transactionId));
+      if (getTransactionById.fulfilled.match(response)) {
+        setCommentTransaction(response?.payload?.data);
+      } else {
+        dispatch(
+          showSnackbar({
+            message:
+              response?.payload?.message || "Failed to fetch transaction",
+            type: "error",
+          })
+        );
+      }
+    };
 
-        if (getTransactionById.fulfilled.match(response)) {
-          console.log("Fetched transaction successfully:", response?.payload);
-          setCommentTransaction(response?.payload?.data);
-          setCreator(
-            commentTransaction?.createdBy === user?.userId
-              ? user
-              : selectedFriend
-          );
+    fetchTransaction();
+  }
+}, [transactionId, selectedTransaction]);
 
-          console.log("Creator set to:", creator);
-          // Optionally, you can also set the comments here if needed
-          // await dispatch(getAllTransactionComments(transactionId));
-          // setComments(response?.payload?.data);
-        } else {
-          console.error("Failed to fetch transaction:", response?.error);
-          dispatch(
-            showSnackbar({
-              message:
-                response?.payload?.message || "Failed to fetch transaction",
-              type: "error",
-            })
-          );
-        }
-      };
-
-      fetchTransaction();
-    }
-  }, []);
 
   useEffect(() => {
     if (!transactionId) {
@@ -262,7 +246,9 @@ useEffect(() => {
             <button
               type="button"
               className=" close-button text-gray-400 bg-transparent hover:bg-gray-600 hover:text-gray-500 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-300 dark:hover:text-white"
-              onClick={() => navigate(-1)} //Calling navigate(-1) to go back
+              onClick={() => navigate(
+                          `/user-dashboard/friends/${friendId}/transactions`
+                        )} //Calling navigate(-1) to go back
             >
               <svg
                 className="w-3 h-3"

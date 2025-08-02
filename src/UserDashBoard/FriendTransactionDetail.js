@@ -1,6 +1,6 @@
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import unFriendImage from "../assets/unFriend.png";
@@ -12,8 +12,6 @@ import { getAllFriendTransactions } from "../Redux/Thunk";
 import ProfileCircle from "../utils/ProfileCircle";
 import FooterSection from "./FooterSection";
 function FriendTranscationDetail({
-
-
   refreshFriendTransaction,
   setRefreshFriendTransaction,
   isOpen,
@@ -23,12 +21,13 @@ function FriendTranscationDetail({
   setSelectedFriend,
   friendAndTransloader,
 }) {
-
   const user = useSelector(selectUser);
   const { friendId } = useParams();
 
   const friends = useSelector(selectFriends);
-  const selectedFriend = friends?.find(friend => friend?.userEntity?.userId == friendId)?.userEntity || null;
+  const selectedFriend =
+    friends?.find((friend) => friend?.userEntity?.userId == friendId)
+      ?.userEntity || null;
 
   const [transactionsDto, setTransactionsDto] = useState([]);
   const [error, setError] = useState(null);
@@ -47,13 +46,13 @@ function FriendTranscationDetail({
   const dispatch = useDispatch();
   const [selectedTransaction, setSelectedTransaction] = useState(null);
 
+
   // // Redirect if the user is not authenticated
   // useEffect(() => {
   //   if (!user) {
   //     navigate("/"); // Redirect to login page if not authenticated
   //   }
   // }, [user, navigate]);
-
 
   // useEffect(() => {
   //   const handlePopState = (e) => {
@@ -82,10 +81,6 @@ function FriendTranscationDetail({
 
   // End of Prevent the user from going back to the previous page
 
-
-
-
-
   const toggleReportModal = () => {
     if (!isReportModalOpen) {
       if (transactionsDto.length === 0) {
@@ -96,11 +91,9 @@ function FriendTranscationDetail({
     setReportModalOpen(!isReportModalOpen);
   };
 
-
   const toggleUnfriendModal = () => {
     setIsUnfriendModalOpen(!isUnfriendModalOpen);
-  }
-
+  };
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -118,52 +111,51 @@ function FriendTranscationDetail({
 
   useEffect(() => {
     const fetchTransactions = async () => {
-
       if (!transactionsDto || !user) return;
       setIsTransactionLoading(true);
 
       try {
-        const response = await dispatch(getAllFriendTransactions(
-          selectedFriend?.userId
-        ));
-
+        const response = await dispatch(
+          getAllFriendTransactions(selectedFriend?.userId)
+        );
 
         if (getAllFriendTransactions.fulfilled.match(response)) {
           // If the action was fulfilled, it means the transactions were fetched successfully
-          console.log("Transactions fetched successfully:", response?.payload?.data);
+          console.log(
+            "Transactions fetched successfully:",
+            response?.payload?.data
+          );
           setTransactionsDto(response?.payload?.data || []);
         } else {
-          setError(response?.payload?.message || "Failed to fetch transactions");
+          setError(
+            response?.payload?.message || "Failed to fetch transactions"
+          );
         }
 
         setIsTransactionLoading(false);
-
       } catch (err) {
-        console.error(err.message || "An error occurred while fetching transactions");
+        console.error(
+          err.message || "An error occurred while fetching transactions"
+        );
         setError(err?.message);
-      } finally { setIsTransactionLoading(false); }
+      } finally {
+        setIsTransactionLoading(false);
+      }
     };
 
     fetchTransactions();
   }, [user, selectedFriend, refreshFriendTransaction]);
 
-
   useEffect(() => {
-    console.log('selected friend = ', selectedFriend);
+    console.log("selected friend = ", selectedFriend);
   }, [selectedFriend]);
 
-
-  useEffect(() => {
-  }, [commentTransaction]);
+  useEffect(() => {}, [commentTransaction]);
 
   return (
     <div className="flex flex-col h-[90%] lg:h-[100%] overflow-y-auto lg:pt-0">
       <div
-        onClick={() => {
-          if (isCommentSectionOpen) {
-            setIsCommentSetionOpen(false);
-          }
-        }}
+      //  ref={tableRef}
         className="right-header  gap-[8px]  sm:gap-[8px] md:gap-[7px]  p-1   lg:p-2  md:p-4     border border-gray-400 shadow-inner-custom justify-between h-20 sm:h-24 md:h-24 bg-gray-300  w-full flex items-center "
       >
         <div className=" flex gap-3 sm:gap-2 md:gap-2">
@@ -183,33 +175,37 @@ function FriendTranscationDetail({
           </div>
         </div>
 
-        {transactionsDto.length > 0 && <div
-          className={`net-balance border  text-xs ml-2 font-medium sm:font-semibold sm:ml-2 p-1 sm:p-2 h-8 w-25 sm:h-9 sm:w-35  md:h-9 md:w-35 rounded-sm flex flex-col justify-center   ${transactionsDto.length > 0 &&
-            transactionsDto[0].lastClosingBalance >= 0
-            ? "border-green-900 text-green-900"
-            : "border-red-900 text-red-900"
-            }`}
-        >
-          <h2
-            className={`text-black line-clamp-2  sm:line-clamp-1  text-xs md:text-xs sm:text-xs ${transactionsDto.length > 0 &&
+        {transactionsDto.length > 0 && (
+          <div
+            className={`net-balance border  text-xs ml-2 font-medium sm:font-semibold sm:ml-2 p-1 sm:p-2 h-8 w-25 sm:h-9 sm:w-35  md:h-9 md:w-35 rounded-sm flex flex-col justify-center   ${
+              transactionsDto.length > 0 &&
               transactionsDto[0].lastClosingBalance >= 0
-              ? "border-green-900 text-green-900"
-              : "border-red-900 text-red-900"
+                ? "border-green-900 text-green-900"
+                : "border-red-900 text-red-900"
+            }`}
+          >
+            <h2
+              className={`text-black line-clamp-2  sm:line-clamp-1  text-xs md:text-xs sm:text-xs ${
+                transactionsDto.length > 0 &&
+                transactionsDto[0].lastClosingBalance >= 0
+                  ? "border-green-900 text-green-900"
+                  : "border-red-900 text-red-900"
               }`}
-          >  </h2>
-          {transactionsDto.length > 0 && (
-            <>
-              {transactionsDto[0].lastClosingBalance >= 0
-                ? "You will get"
-                : "You will give"}
-              <p className="text-center text-[10px]">
-
-                ₹{Math.abs(transactionsDto[0].lastClosingBalance)}
-              </p>
-            </>
-          )}
-
-        </div>}
+            >
+              {" "}
+            </h2>
+            {transactionsDto.length > 0 && (
+              <>
+                {transactionsDto[0].lastClosingBalance >= 0
+                  ? "You will get"
+                  : "You will give"}
+                <p className="text-center text-[10px]">
+                  ₹{Math.abs(transactionsDto[0].lastClosingBalance)}
+                </p>
+              </>
+            )}
+          </div>
+        )}
 
         {/* Report */}
 
@@ -222,8 +218,13 @@ function FriendTranscationDetail({
               <FontAwesomeIcon className=" " icon={faDownload} />
             </span>
             <span className="hidden sm:flex items-center">
-              <FontAwesomeIcon icon={faDownload} className="mr-1 group-hover:animate-bounce  text-black  sm:text-white" />
-              <span className="line-clamp-1 text-white sm:text-sm">View Report</span>
+              <FontAwesomeIcon
+                icon={faDownload}
+                className="mr-1 group-hover:animate-bounce  text-black  sm:text-white"
+              />
+              <span className="line-clamp-1 text-white sm:text-sm">
+                View Report
+              </span>
             </span>
           </button>
           <FriendTransactionReport
@@ -233,7 +234,9 @@ function FriendTranscationDetail({
             user={user}
           />
           <div
-            onClick={()=> navigate(`/user-dashboard/friends/${friendId}?action=unfriend`)}
+            onClick={() =>
+              navigate(`/user-dashboard/friends/${friendId}?action=unfriend`)
+            }
             className="settings h-9 w-9 sm:h-10 sm:w-10 md:h-10 md:w-10 right-0 hover:scale-110 rounded-full border shadow-md  flex items-center justify-center bg-cyan-800 "
           >
             <img
@@ -241,7 +244,6 @@ function FriendTranscationDetail({
               alt="Settings"
               className="w-4 h-10 sm:h-6 sm:w-6 object-contain filter invert brightness-0"
             />
-
           </div>
           <UnfriendModal
             isOpen={isUnfriendModalOpen}
@@ -258,23 +260,28 @@ function FriendTranscationDetail({
       {/* middle section */}
 
       <div
-        onClick={() => {
-          if (isCommentSectionOpen) {
-            setIsCommentSetionOpen(false);
-          }
-        }}
+       
         class="table-division mb-1  border border-gray-400 w-full  flex-1 overflow-auto  bg-gray-400  overflow-y-scroll  scrollable  "
       >
         <table className="w-full p-0   sm:p-2 md:p-2   border-separate border-spacing-y-1 text-sm text-left text-black dark:text-black">
           <thead className="sticky top-0  border  shadow-inner-custom    bg-gray-100  text-xs text-gray-600 uppercase dark:text-gray-800">
             <tr className="border-b ">
-              <th scope="col" className="px-2 py-4 lg:px-3 lg:py-3 md:px-4 md:py-3 ">
+              <th
+                scope="col"
+                className="px-2 py-4 lg:px-3 lg:py-3 md:px-4 md:py-3 "
+              >
                 Entries
               </th>
-              <th scope="col" className="px-2 py-4 lg:px-3 lg:py-3 md:px-4 md:py-3">
+              <th
+                scope="col"
+                className="px-2 py-4 lg:px-3 lg:py-3 md:px-4 md:py-3"
+              >
                 You gave
               </th>
-              <th scope="col" className="px-2 py-4 lg:px-3 lg:py-3 md:px-4 md:py-3 text-right">
+              <th
+                scope="col"
+                className="px-2 py-4 lg:px-3 lg:py-3 md:px-4 md:py-3 text-right"
+              >
                 You got
               </th>
             </tr>
@@ -287,23 +294,21 @@ function FriendTranscationDetail({
                   className="bg-gray-200 animate-pulse mb-1  shadow-inner-custom rounded-sm dark:border-gray-100 cursor-pointer"
                 >
                   <td colSpan="3" className="h-14"></td>
-
                 </tr>
               ))}
             </tbody>
           ) : (
             <tbody>
-
               {!transactionsDto.length > 0 && (
                 <tr>
                   <td colSpan="3" className="h-96 w-full p-4 text-center">
                     <p className="text-gray-300 text-xl font-bold">
-                      You don't have any transactions yet. Start managing your transactions, add real-time comments,
-                      view reports, and access summaries.
+                      You don't have any transactions yet. Start managing your
+                      transactions, add real-time comments, view reports, and
+                      access summaries.
                     </p>
                   </td>
                 </tr>
-
               )}
               {transactionsDto.map((transactionDto, index) => {
                 const isUserGave =
@@ -312,15 +317,29 @@ function FriendTranscationDetail({
                 return (
                   <tr
                     key={transactionDto.transaction.transId}
-                    className={`bg-white border-b border-1 shadow-inner-custom rounded-sm dark:border-gray-100 cursor-pointer ${selectedRowId === transactionDto.transaction.transId
-                      ? "bg-gray-300 dark:bg-gray-300"
-                      : "bg-gray-100 dark:bg-gray-100"
-                      }`}
+                    className={`bg-white border-b border-1 shadow-inner-custom rounded-sm dark:border-gray-100 cursor-pointer ${
+                      selectedRowId === transactionDto.transaction.transId
+                        ? "bg-gray-300 dark:bg-gray-300"
+                        : "bg-gray-100 dark:bg-gray-100"
+                    }`}
                     onClick={() => {
+                      const transactionId = transactionDto.transaction.transId;
 
-                      setSelectedTransaction(transactionDto?.transaction);
-                      navigate(`/user-dashboard/friends/${friendId}/transactions/${transactionDto.transaction.transId}`);
-
+                      if (selectedTransaction?.transId === transactionId) {
+                        // Second click: close modal
+                        navigate(
+                          `/user-dashboard/friends/${friendId}/transactions`
+                        );
+                        setSelectedTransaction(null);
+                        setSelectedRowId(null);
+                      } else {
+                        // First click: open modal
+                        setSelectedTransaction(transactionDto.transaction);
+                        setSelectedRowId(transactionId);
+                        navigate(
+                          `/user-dashboard/friends/${friendId}/transactions/${transactionId}`
+                        );
+                      }
                     }}
                   >
                     <td
@@ -329,8 +348,11 @@ function FriendTranscationDetail({
                     >
                       <div className="flex flex-col">
                         <span className="font-medium text-xs  line-clamp-2 sm:line-clamp-0 text-cyan-700">
-                          Closing Balance :<span className="text-black"> ₹</span>{" "}
-                          <span className="text-black">{transactionDto.lastClosingBalance}</span>
+                          Closing Balance :
+                          <span className="text-black"> ₹</span>{" "}
+                          <span className="text-black">
+                            {transactionDto.lastClosingBalance}
+                          </span>
                         </span>
                         <span className="text-xs text-gray-900 mt-1">
                           {transactionDto.transaction.transDate}
@@ -360,21 +382,29 @@ function FriendTranscationDetail({
                   </tr>
                 );
               })}
-            </tbody>)}
+            </tbody>
+          )}
         </table>
       </div>
 
       <div className="left-side-lower font-Poppins  rounded-sm    text-xs sm:text-sm gap-1 justify-evenly border-none whitespace-nowrap md:text-xs border-gray-400 w-full lg:gap-4  bg-gray-300 p-2  h-[50px] flex items-center  ">
         <button
           className="w-[44%]  rounded-sm   shadow-inner-custom h-full bg-rose-600 text-sm text-white 600    hover:bg-rose-500 focus:outline-none focus:ring-4 focus:ring-rose-300 font-medium px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-          onClick={() => navigate(`/user-dashboard/friends/${friendId}/transactions?action=add&type=give`)}
-
+          onClick={() =>
+            navigate(
+              `/user-dashboard/friends/${friendId}/transactions?action=add&type=give`
+            )
+          }
         >
           You Gave : <span>₹</span>
         </button>
         <button
           className="w-[44%]  rounded-sm    shadow-inner-custom h-full bg-green-800  text-sm text-white 600    hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300 font-medium px-0.5 py-0.5 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-          onClick={() => navigate(`/user-dashboard/friends/${friendId}/transactions?action=add&type=got`)}
+          onClick={() =>
+            navigate(
+              `/user-dashboard/friends/${friendId}/transactions?action=add&type=got`
+            )
+          }
         >
           You Got : <span>₹</span>
         </button>
