@@ -246,9 +246,13 @@ useEffect(() => {
             <button
               type="button"
               className=" close-button text-gray-400 bg-transparent hover:bg-gray-600 hover:text-gray-500 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-300 dark:hover:text-white"
-              onClick={() => navigate(
-                          `/user-dashboard/friends/${friendId}/transactions`
-                        )} //Calling navigate(-1) to go back
+              onClick={() =>
+                
+                // navigate(
+                //           `/user-dashboard/friends/${friendId}/transactions`
+                //         )
+                      navigate(-1)
+                      } //Calling navigate(-1) to go back
             >
               <svg
                 className="w-3 h-3"

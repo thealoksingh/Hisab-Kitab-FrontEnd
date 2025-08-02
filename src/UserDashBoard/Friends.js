@@ -6,6 +6,7 @@ import { Outlet, useLocation, useNavigate, useOutletContext } from "react-router
 import {
   selectFriendRequestCount,
   selectFriends,
+  selectIsFriendSelected,
   selectUser,
 } from "../Redux/Selector";
 import { getAllFriends } from "../Redux/Thunk";
@@ -14,8 +15,9 @@ import LeftSideDashBoard from "./LeftSideDashboard";
 // import RightSideDashBoard from "./RightSideDashBoard"; // Uncomment if needed
 
 const Friends = () => {
-  const [isFriendSelected, setIsFriendSelected] = useState(false);
+  // const [isFriendSelected, setIsFriendSelected] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState(null);
+  const [isFriendSelected, setIsFriendSelected] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(true);
@@ -29,7 +31,7 @@ const Friends = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const friends = useSelector(selectFriends);
-
+// const isFriendSelected = useSelector(selectIsFriendSelected);
   // Inside your component use OutletContext to access the context
   // This allows you to pass down the context to child components:
   const { setIsSidebarOpen, isSidebarOpen, globalNavToggler } = useOutletContext();
@@ -102,38 +104,18 @@ const Friends = () => {
     }
   };
 
-  const toggleRightSidebar = () => {
-    // console.log("toggle right side callled")
+ 
+const handleFriendSelect = (friend) => {
+  setSelectedFriend(friend);
+  setIsFriendSelected(!!friend);
 
-    setIsRightSidebarOpen(!isRightSidebarOpen);
-    if (!isRightSidebarOpen && window.innerWidth < 1024) {
-      setIsLeftSidebarOpen(true);
-    }
-  };
-
-  // useEffect(() => {
-  //   if (!selectedFriend) {
-  //     navigate("/user-dashboard/friends/instructionToSelect");
-  //   }
-  // }, []);
-
-
-  const handleFriendSelect = (friend) => {
-    setSelectedFriend(friend);
-    setIsFriendSelected(!!friend);
-
-    if (friend) {
-      console.log("Selected friendid:", friend?.id);
-      navigate(`/user-dashboard/friends/${friend?.id}/transaction`);
-      // if (window.innerWidth < 1024) {
-      //   setIsRightSidebarOpen(true);
-      //   setIsLeftSidebarOpen(false);
-      // }
-    } else {
-      navigate("/user-dashboard/friends/instructionToSelect");
-    }
-  };
-
+  if (friend && friend.userEntity && friend.userEntity.userId) {
+    navigate(`/user-dashboard/friends/${friend.userEntity.userId}/transactions`);
+  } else {
+    navigate("/user-dashboard/friends");
+  }
+};
+ 
 
 
   return (
@@ -144,13 +126,12 @@ const Friends = () => {
       <div className="max-w-7xl sm:overflow-y-auto">
         <div className="flex flex-col lg:flex-row">
           <div
-            className={`sm:w-1/2 h-screen md:w-[100%] m-2 ${isLeftSidebarOpen ? "block" : "hidden"
+            className={`sm:w-full h-screen md:w-full m-2 ${isLeftSidebarOpen ? "block" : "hidden"
               } lg:block`}
           >
             <LeftSideDashBoard
               user={user}
               friends={friends}
-              setIsFriendSelected={setIsFriendSelected}
               setSelectedFriend={handleFriendSelect}
               refreshFriendTransaction={refreshFriendTransaction}
               setRefreshFriendTransaction={setRefreshFriendTransaction}
@@ -160,26 +141,12 @@ const Friends = () => {
               friendAndTransloader={friendAndTransloader}
             />
           </div>
-          <div
-            className={`sm:w-1/2 md:w-full p-2 sm:pl-0 h-screen ${isRightSidebarOpen ? "block" : "hidden"
-              } lg:block`}
+          {isFriendSelected &&<div
+            className={`sm:w-full md:w-full p-2 sm:pl-0 h-screen `}
           >
             <Outlet />
-            {/* <FriendTranscationDetail
-              user={user}
-              isFriendSelected={isFriendSelected}
-              selectedFriend={selectedFriend}
-              refreshFriendTransaction={refreshFriendTransaction}
-              setRefreshFriendTransaction={setRefreshFriendTransaction}
-              isOpen={isRightSidebarOpen}
-              setIsRightSidebarOpen={setIsRightSidebarOpen}
-              toggleRightSidebar={toggleRightSidebar}
-              toggleLeftSidebar={toggleLeftSidebar}
-              setIsFriendSelected={setIsFriendSelected}
-              setSelectedFriend={setSelectedFriend}
-              friendAndTransloader={friendAndTransloader}
-            /> */}
-          </div>
+           
+          </div>}
         </div>
       </div>
     </main>
