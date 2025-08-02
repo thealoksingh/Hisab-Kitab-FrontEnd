@@ -1,13 +1,18 @@
 import apiClient, { publicApiClient } from "../Api/ApiClient";
-import { apiDeleteRequest, apiGetRequest, apiPostRequest, apiPutRequest } from "./HttpsMethod";
+import {
+  apiDeleteRequest,
+  apiGetRequest,
+  apiPostRequest,
+  apiPutRequest,
+} from "./HttpsMethod";
 
 export const baseURL = process.env.REACT_APP_API_BASE_URL;
 
-const getAccessToken = () => localStorage.getItem('accessToken');
-const getRefreshToken = () => localStorage.getItem('refreshToken');
+const getAccessToken = () => localStorage.getItem("accessToken");
+const getRefreshToken = () => localStorage.getItem("refreshToken");
 
 // Api for login user
-console.log ("acces Token is==> ",getAccessToken())
+console.log("acces Token is==> ", getAccessToken());
 export const loginApi = (email, password) => {
   return publicApiClient.post(`${baseURL}/user/login`, { email, password });
 };
@@ -16,14 +21,12 @@ export const refreshTokenApi = (refreshToken) =>
   publicApiClient.post(`${baseURL}/user/refreshtoken`, { refreshToken });
 
 export const refreshTokenAPI = () =>
-    apiPostRequest({
+  apiPostRequest({
     apiUrl: `${baseURL}/user/refresh-token`,
     content_type: "application/json",
     data: { refreshToken: getRefreshToken() },
-    
   });
 
-  
 // Api for register user
 export const registerAPI = (data) =>
   apiPostRequest({
@@ -156,14 +159,13 @@ export const deleteTransactionByIdAPI = (transId) =>
     accessToken: getAccessToken(),
   });
 
-  // API for Deleting the Transaction with Id
+// API for Deleting the Transaction with Id
 export const getTransactionByIdAPI = (transId) =>
   apiGetRequest({
     apiUrl: `${baseURL}/user/transaction/${transId}`,
     content_type: "application/json",
     accessToken: getAccessToken(),
   });
-
 
 // API for updating a transaction by ID
 export const updateFriendTransactionByIdAPI = (updatedTransactionData) =>
@@ -242,6 +244,28 @@ export const unFriendAPI = (friendId) =>
 export const deleteTicketAPI = (ticketId) =>
   apiDeleteRequest({
     apiUrl: `${baseURL}/user/tickets/${ticketId}`,
+    content_type: "application/json",
+    accessToken: getAccessToken(),
+  });
+
+export const getAllUserNotificationAPI = (data) =>
+  apiGetRequest({
+    apiUrl: `${baseURL}/user/notifications/filter?userId=${data.userId}&status=${data.status}`,
+    content_type: "application/json",
+    accessToken: getAccessToken(),
+  });
+
+export const updateNotificationAPI = (data) =>
+  apiPutRequest({
+    apiUrl: `${baseURL}/user/notifications/${data.id}`,
+    content_type: "application/json",
+    accessToken: getAccessToken(),
+    data: { status: data.status },
+  });
+
+export const deleteNotificationAPI = (data) =>
+  apiDeleteRequest({
+    apiUrl: `${baseURL}/user/notifications/${data.id}`,
     content_type: "application/json",
     accessToken: getAccessToken(),
   });

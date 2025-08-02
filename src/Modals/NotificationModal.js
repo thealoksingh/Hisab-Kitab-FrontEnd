@@ -1,33 +1,38 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { selectNotifications } from "../Redux/Selector";
+import { deleteNotification, updateNotificationStatus } from "../Redux/Thunk";
 
 const NotificationModal = ({ isOpen, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [notifications, setNotifications] = useState([
-    {
-      title: "Friend Request",
-      message:
-        "You have a friend request from Jay Singh You have a friend request from Jay Singh You have a friend request from Jay Singh",
-      isRead: false,
-    },
-    {
-      title: "New Message",
-      message: "You received a message from Priya Sharma",
-      isRead: true,
-    },
-     {
-      title: "Friend Request",
-      message:
-        "You have a friend request from Jay Singh You have a friend request from Jay Singh You have a friend request from Jay Singh",
-      isRead: false,
-    },
-    {
-      title: "New Message",
-      message: "You received a message from Priya Sharma",
-      isRead: true,
-    },
-  ]);
+  const notifications = useSelector(selectNotifications); // Assuming you have a selector to get notifications
+  const dispatch = useDispatch();
+
+  const handleDelete = async (id) => {
+    // Call your API to delete the notification
+    setIsLoading(true);
+    try {
+      await dispatch(deleteNotification(id));
+    } catch (error) {
+      console.error("Failed to delete notification:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleStatusChange = async (id, status) => {
+    setIsLoading(true);
+    // Call your API to update the notification status
+    try {
+      await dispatch(updateNotificationStatus({ id, status }));
+    } catch (error) {
+      console.error("Failed to update notification status:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -46,7 +51,10 @@ const NotificationModal = ({ isOpen, onClose }) => {
           {isLoading ? (
             <div className="space-y-4 animate-pulse">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="h-16 bg-yellow-100 shadow-sm rounded-md"></div>
+                <div
+                  key={i}
+                  className="h-16 bg-yellow-100 shadow-sm rounded-md"
+                ></div>
               ))}
             </div>
           ) : notifications.length > 0 ? (
@@ -57,7 +65,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
               >
                 <div
                   className={`flex flex-col gap-1 ${
-                    item.isRead ? "opacity-60" : "opacity-100"
+                    item.seen ? "opacity-60" : "opacity-100"
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -70,19 +78,19 @@ const NotificationModal = ({ isOpen, onClose }) => {
                       onClick={onClose}
                     />
                   </div>
-                  <p className="text-xs sm:text-xs">{item.message}</p>
+                  <p className="text-xs sm:text-xs">{item.description}</p>
                 </div>
                 <div className="flex items-center justify-between">
                   <p></p>
                   <button
                     className={`mt-1 text-xs sm:text-xs font-semibold 
         ${
-          item.isRead
+          item.seen
             ? " text-yellow-600 hover:text-yellow-800"
             : " text-teal-600 hover:text-teal-800"
         }`}
                   >
-                    {item.isRead ? (
+                    {item.seen ? (
                       <span>Mark as unread</span>
                     ) : (
                       <span>Mark as read</span>
@@ -93,8 +101,8 @@ const NotificationModal = ({ isOpen, onClose }) => {
             ))
           ) : (
             <div className="flex items-center justify-center h-full">
-        <p className="text-sm text-yellow-700">No notifications found.</p>
-    </div>
+              <p className="text-sm text-yellow-700">No notifications found.</p>
+            </div>
           )}
         </div>
       </div>

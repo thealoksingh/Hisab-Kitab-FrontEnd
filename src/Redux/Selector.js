@@ -5,3 +5,9 @@ export const selectLoading = (state) => state.auth.loading;  // ✅ Get loading 
 export const selectError = (state) => state.auth.error;  // ✅ Get error state
 export const selectFriends = (state) => state.auth.friends;  // ✅ Get friends
 export const selectFriendRequestCount = (state) => state.auth.friendRequestCount;  // ✅ Get friend request count
+export const selectNotifications = (state) => state.auth.notifications;  // ✅ Get notifications
+export const selectUnreadNotifications = (state) =>
+  state.auth.notifications?.filter((n) => n.seen === false);  // ✅ Get unread notifications
+export const selectReadNotifications = (state) =>
+  state.auth.notifications?.filter((n) => n.seen === true);  // ✅ Get read notifications
+

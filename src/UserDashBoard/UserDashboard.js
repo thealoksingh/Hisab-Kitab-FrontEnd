@@ -17,8 +17,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
-import { selectFriends, selectUser } from "../Redux/Selector";
-import { getAllFriends, logout } from "../Redux/Thunk";
+import { selectFriends, selectNotifications, selectUnreadNotifications, selectUser } from "../Redux/Selector";
+import { getAllFriends, getAllUserNotifications, logout } from "../Redux/Thunk";
 
 import hisabKitabBlack from "../assets/images/hisabkitab-black.png";
 import logo from "../assets/logo-hisab-kitab.png";
@@ -35,6 +35,7 @@ const UserDashboard = () => {
   const location = useLocation();
   const getAccessToken = () => localStorage.getItem("accessToken");
   const user = useSelector(selectUser);
+  const unreadNotifications = useSelector(selectUnreadNotifications);
   console.log("user id", user?.userId);
   const friends = useSelector(selectFriends);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
@@ -76,6 +77,15 @@ const UserDashboard = () => {
     // Call getAllFriends when component mounts or when URL is /user-dashboard/friends
     if (location.pathname === "/user-dashboard/friends") {
       dispatch(getAllFriends());
+    }
+  }, [dispatch, location.pathname]);
+
+  // use effect for notification modal
+  useEffect(() => {
+    
+    if (user) {
+      
+      dispatch(getAllUserNotifications({ userId: user.userId , status : "ALL"}));
     }
   }, [dispatch, location.pathname]);
 
@@ -181,7 +191,7 @@ const UserDashboard = () => {
                   <span className="absolute -top-1 -right-1 flex size-4 justify-center items-center">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-orange-500 opacity-75"></span>
                     <span className="relative inline-flex size-4 rounded-full bg-orange-500 text-white text-[8px] font-bold justify-center items-center border border-white">
-                      7
+                      {unreadNotifications?.length || 0}
                     </span>
                   </span>
                 </div>

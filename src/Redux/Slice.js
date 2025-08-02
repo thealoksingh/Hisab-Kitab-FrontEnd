@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAllFriends, getUserByToken, handleRefreshToken, logout, register, signIn } from "./Thunk";
+import { deleteNotification, getAllFriends, getAllUserNotifications, getUserByToken, handleRefreshToken, logout, register, signIn, updateNotificationStatus } from "./Thunk";
 
 const initialState = {
     user: null,
@@ -9,6 +9,7 @@ const initialState = {
     accessToken: null,
     refreshToken: null,
     friendRequestCount: 0,
+    notifications: [],
 };
 
 const authSlice = createSlice({
@@ -129,8 +130,56 @@ const authSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload.message;
             })
-            // Create Transaction
-            ;
+            // Notifications thunks
+
+            .addCase(getAllUserNotifications.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getAllUserNotifications.fulfilled, (state, action) => {
+                state.loading = false;
+                state.notifications = action?.payload?.data;
+                console.log("User Notifications = ", state.notifications);
+            })
+            .addCase(getAllUserNotifications.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload.message;
+            })
+            
+            // Update notification status
+            .addCase(updateNotificationStatus.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(updateNotificationStatus.fulfilled, (state, action) => {
+                state.loading = false;
+                const { notificationId, status } = action.payload;
+                const notification = state.notifications.find(
+                    (notif) => notif.id === notificationId
+                );
+                if (notification) {
+                    notification.status = status;
+                }
+            })
+            .addCase(updateNotificationStatus.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload.message;
+            })
+            // Delete notification
+            .addCase(deleteNotification.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(deleteNotification.fulfilled, (state, action) => {
+                state.loading = false;
+                state.notifications = state.notifications.filter(
+                    (notif) => notif.id !== action.payload.id
+                );
+            })
+            .addCase(deleteNotification.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload.message;
+            });
     },
 });
 

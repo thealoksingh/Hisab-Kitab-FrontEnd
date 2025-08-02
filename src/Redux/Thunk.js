@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { acceptFriendRequestAPI, cancelFriendRequestAPI, createTicketAPI, createTransactionAPI, deleteCommentByIdAPI, deleteTicketAPI, deleteTransactionByIdAPI, getAllCommentsByTransactionIdAPI, getAllFriendTransactionsAPI, getAllPendingRequestAPI, getAllSentRequestAPI, getAllTicketsAPI, getFriendList, getTransactionByIdAPI, logoutUserAPI, postNewCommentsByTransactionIdAPI, refreshTokenAPI, refreshTokenApi, registerAPI, rejectFriendRequestAPI, resetPasswordAPI, sendEmailInviteAPI, sendOtpAPI, unFriendAPI, updateFriendTransactionByIdAPI } from "../utils/HisabKitabApi";
+import { acceptFriendRequestAPI, cancelFriendRequestAPI, createTicketAPI, createTransactionAPI, deleteCommentByIdAPI, deleteNotificationAPI, deleteTicketAPI, deleteTransactionByIdAPI, getAllCommentsByTransactionIdAPI, getAllFriendTransactionsAPI, getAllPendingRequestAPI, getAllSentRequestAPI, getAllTicketsAPI, getAllUserNotificationAPI, getFriendList, getTransactionByIdAPI, logoutUserAPI, postNewCommentsByTransactionIdAPI, refreshTokenAPI, refreshTokenApi, registerAPI, rejectFriendRequestAPI, resetPasswordAPI, sendEmailInviteAPI, sendOtpAPI, unFriendAPI, updateFriendTransactionByIdAPI, updateNotificationAPI } from "../utils/HisabKitabApi";
 import { getUserByIdAPI, loginAPI } from "../utils/HisabKitabApi";
 import { handleAxiosError, withRefreshTokenRetry } from "../utils/HandleError";
 import { addFriend } from "../Api/HisabKitabApi";
@@ -579,5 +579,72 @@ export const sendFriendRequest = createAsyncThunk(
         error?.response?.data || "Failed to send friend request."
       );
     }
+  }
+);
+
+
+// get all user's notifications
+
+export const getAllUserNotifications = createAsyncThunk(
+  "auth/getAllUserNotifications",
+  async (data, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response = await getAllUserNotificationAPI(data);
+        console.log("this is response.status == " + response?.status);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;
+        } else {
+          return thunkAPI.rejectWithValue(
+            response?.data?.message || "Failed to get All Notifications."
+          );
+        }
+      },
+      thunkAPI
+    );
+  }
+);
+
+// Update notification status
+
+export const updateNotificationStatus = createAsyncThunk(
+  "auth/updateNotificationStatus",
+  async (data, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response = await updateNotificationAPI(data);
+        console.log("this is response.status == " + response?.status);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;
+        } else {
+          return thunkAPI.rejectWithValue(
+            response?.data?.message || "Failed to get update Notification status."
+          );
+        }
+      },
+      thunkAPI
+    );
+  }
+);
+
+// delete notification
+
+export const deleteNotification = createAsyncThunk(
+  "auth/deleteNotification",
+  async (data, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response = await deleteNotificationAPI(data);   
+        console.log("this is response.status == " + response?.status);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;  
+        } else {
+          return thunkAPI.rejectWithValue(
+            response?.data?.message || "Failed to delete Notification."
+          );
+        }
+      },
+      thunkAPI
+    );
   }
 );
