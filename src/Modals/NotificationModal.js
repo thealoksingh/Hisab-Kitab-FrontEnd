@@ -2,33 +2,40 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { selectNotifications } from "../Redux/Selector";
+import { selectNotifications, selectUser } from "../Redux/Selector";
 import { deleteNotification, updateNotificationStatus } from "../Redux/Thunk";
-
+import { showSnackbar } from "../Redux/SanckbarSlice";
+import moment from "moment-timezone";
 const NotificationModal = ({ isOpen, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const notifications = useSelector(selectNotifications); // Assuming you have a selector to get notifications
   const dispatch = useDispatch();
+  const user = useSelector(selectUser); // Get user data for notification actions
+  console.log("Notifications in modal:", notifications);
 
   const handleDelete = async (id) => {
     // Call your API to delete the notification
     setIsLoading(true);
     try {
       await dispatch(deleteNotification(id));
+      dispatch(showSnackbar({ message: "Notification deleted successfully", type: "success" }));
     } catch (error) {
       console.error("Failed to delete notification:", error);
+      dispatch(showSnackbar({ message: "Failed to delete notification", type: "error" }));
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleStatusChange = async (id, status) => {
+  const handleStatusChange = async (id, status ) => {
     setIsLoading(true);
     // Call your API to update the notification status
     try {
-      await dispatch(updateNotificationStatus({ id, status }));
+      await dispatch(updateNotificationStatus({ id, status ,userId:user?.userId }));
+      dispatch(showSnackbar({ message: `Notification marked as ${status}`, type: "success" }));
     } catch (error) {
       console.error("Failed to update notification status:", error);
+      dispatch(showSnackbar({ message: "Failed to update notification status", type: "error" }));
     } finally {
       setIsLoading(false);
     }
@@ -58,7 +65,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
               ))}
             </div>
           ) : notifications.length > 0 ? (
-            notifications.map((item, index) => (
+            [...notifications].reverse().map((item, index) => (
               <div
                 key={index}
                 className={`mb-3 bg-yellow-50 border-l-4 border-yellow-500 px-4 py-3 rounded-md shadow`}
@@ -75,13 +82,16 @@ const NotificationModal = ({ isOpen, onClose }) => {
                     <FontAwesomeIcon
                       icon={faTrashCan}
                       className="text-sm sm:text-sm cursor-pointer hover:opacity-80 text-red-600"
-                      onClick={onClose}
+                      onClick={()=>handleDelete(item?.id)}
                     />
                   </div>
                   <p className="text-xs sm:text-xs">{item.description}</p>
                 </div>
                 <div className="flex items-center justify-between">
-                  <p></p>
+                  <p className="text-[8px] "> {moment(
+                              item?.createdAt,
+                              "YYYY-MM-DD HH:mm:ss"
+                            ).fromNow()}</p>
                   <button
                     className={`mt-1 text-xs sm:text-xs font-semibold 
         ${
@@ -91,9 +101,9 @@ const NotificationModal = ({ isOpen, onClose }) => {
         }`}
                   >
                     {item.seen ? (
-                      <span>Mark as unread</span>
+                      <span onClick={()=>handleStatusChange(item?.id,"unseen")}>Mark as unread</span>
                     ) : (
-                      <span>Mark as read</span>
+                      <span onClick={()=>handleStatusChange(item?.id,"seen")}>Mark as read</span>
                     )}
                   </button>
                 </div>

@@ -153,12 +153,13 @@ const authSlice = createSlice({
             })
             .addCase(updateNotificationStatus.fulfilled, (state, action) => {
                 state.loading = false;
-                const { notificationId, status } = action.payload;
+                const { id, seen } = action?.payload?.data;
+                // console.log("Updating notification action.payload:", action?.payload?.data);
                 const notification = state.notifications.find(
-                    (notif) => notif.id === notificationId
+                    (notif) => notif.id === id
                 );
                 if (notification) {
-                    notification.status = status;
+                    notification.seen = seen;
                 }
             })
             .addCase(updateNotificationStatus.rejected, (state, action) => {
@@ -172,8 +173,9 @@ const authSlice = createSlice({
             })
             .addCase(deleteNotification.fulfilled, (state, action) => {
                 state.loading = false;
+                console.log("Deleting notification action.payload:", action?.payload?.message);
                 state.notifications = state.notifications.filter(
-                    (notif) => notif.id !== action.payload.id
+                    (notif) => notif.id !== action.payload.data
                 );
             })
             .addCase(deleteNotification.rejected, (state, action) => {

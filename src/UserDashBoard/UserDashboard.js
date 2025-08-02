@@ -297,10 +297,7 @@ const UserDashboard = () => {
         isOpen={isHelpAndSupportOpen}
         toggleModal={toggleHelpAndSupport}
       />
-      {/* <div className="fixed top-6 right-6 z-50 bg-yellow-100 text-yellow-800 border-l-4 border-yellow-500 px-5 py-3 rounded-md shadow-md animate-slide-in">
-        <p className="font-semibold text-sm">🔔 New Notification!</p>
-        <p className="text-xs">You have 7 new alerts.</p>
-      </div> */}
+      
      <NotificationModal
      isOpen={isNotificationModalOpen}
       onClose={toggleNotificationModal}

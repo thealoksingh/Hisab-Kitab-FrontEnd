@@ -133,6 +133,7 @@ const handleFriendSelect = (friend) => {
               user={user}
               friends={friends}
               setSelectedFriend={handleFriendSelect}
+              setIsFriendSelected={setIsFriendSelected}
               refreshFriendTransaction={refreshFriendTransaction}
               setRefreshFriendTransaction={setRefreshFriendTransaction}
               friendRequestCount={friendRequestCount}

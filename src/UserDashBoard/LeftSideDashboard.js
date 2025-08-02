@@ -191,8 +191,15 @@ function LeftSideDashBoard({
   };
 
   const handleAddFriendClick = () => {
+     const audio = new Audio("/notification.mp3");
+    audio.play().catch((err) => {
+     
+      console.warn("Notification sound blocked until user interacts with the page.");
+    });
     toggleModal(); // Open the modal
   };
+
+
   const [selectedRowId, setSelectedRowId] = useState(null);
 
   const handleRowClick = (friend) => {

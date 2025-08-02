@@ -260,12 +260,12 @@ export const updateNotificationAPI = (data) =>
     apiUrl: `${baseURL}/user/notifications/${data.id}`,
     content_type: "application/json",
     accessToken: getAccessToken(),
-    data: { status: data.status },
+    data: { status: data.status  , userId: data.userId },
   });
 
 export const deleteNotificationAPI = (data) =>
   apiDeleteRequest({
-    apiUrl: `${baseURL}/user/notifications/${data.id}`,
+    apiUrl: `${baseURL}/user/notifications/${data}`,
     content_type: "application/json",
     accessToken: getAccessToken(),
   });
