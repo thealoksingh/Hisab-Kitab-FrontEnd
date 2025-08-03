@@ -24,6 +24,10 @@ const authSlice = createSlice({
         updateFriendRequestCount: (state, action) => {
             state.friendRequestCount = action.payload;
         },
+        addNotification: (state, action) => {
+            state.notifications.push(action.payload);
+        },
+      
       
     },
     extraReducers: (builder) => {
@@ -189,6 +193,7 @@ const authSlice = createSlice({
 export const {
     logoutUser,
     updateFriendRequestCount,
+    addNotification,
 
 } = authSlice.actions;
 

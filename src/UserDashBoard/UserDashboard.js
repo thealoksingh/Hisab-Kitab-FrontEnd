@@ -28,6 +28,9 @@ import InviteModal from "../Modals/InviteModal";
 import Snackbar from "../utils/Snackbar";
 import { showSnackbar } from "../Redux/SanckbarSlice";
 import NotificationModal from "../Modals/NotificationModal";
+import { useNotificationSubscription } from "../hooks/useNotificationSubscription";
+import { showNotification } from "../Redux/NotificationAlertSlice";
+import { addNotification } from "../Redux/Slice";
 
 const UserDashboard = () => {
   const navigate = useNavigate();
@@ -88,6 +91,16 @@ const UserDashboard = () => {
       dispatch(getAllUserNotifications({ userId: user.userId , status : "ALL"}));
     }
   }, [dispatch, location.pathname]);
+
+
+//Subscribe to notifications
+useNotificationSubscription(user?.userId, (notification) => {
+  dispatch(addNotification(notification)); // Add to Redux
+  dispatch(showNotification({
+    description: notification.description,
+    title: notification.title,
+  }));
+});
 
   const sidebarItems = [
     {

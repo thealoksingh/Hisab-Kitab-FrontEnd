@@ -16,9 +16,7 @@ const store = configureStore({
 
 const loadUserData = async () => {
     try {
-         store.dispatch(
-           showNotification ({ description: "Logged-In failed. Try again", title: "this is title" })
-        );
+        // Check if tokens are available in localStorage
         const refreshToken = await localStorage.getItem('refreshToken');
         const accessToken = await localStorage.getItem('accessToken');
         console.log("refreshToken in localStorage", refreshToken);
