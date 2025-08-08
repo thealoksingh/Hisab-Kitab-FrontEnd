@@ -27,8 +27,8 @@ const authSlice = createSlice({
         addNotification: (state, action) => {
             state.notifications.push(action.payload);
         },
-      
-      
+
+
     },
     extraReducers: (builder) => {
         builder
@@ -93,7 +93,7 @@ const authSlice = createSlice({
                 state.accessToken = action?.payload?.data;
                 localStorage.setItem('accessToken', state.accessToken);
                 console.log("New Access Token = ", state.accessToken);
-            
+
             })
             .addCase(handleRefreshToken.rejected, (state, action) => {
                 state.loading = false;
@@ -149,7 +149,7 @@ const authSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload.message;
             })
-            
+
             // Update notification status
             .addCase(updateNotificationStatus.pending, (state) => {
                 state.loading = true;
@@ -157,39 +157,51 @@ const authSlice = createSlice({
             })
             .addCase(updateNotificationStatus.fulfilled, (state, action) => {
                 state.loading = false;
-                const { id, seen } = action?.payload?.data;
-                // console.log("Updating notification action.payload:", action?.payload?.data);
-                const notification = state.notifications.find(
-                    (notif) => notif.id === id
+                const updatedNotif = action?.payload?.data;
+
+                console.log('Update = ',updatedNotif);
+
+                const index = state.notifications.findIndex(
+                    (notif) => notif?.id === updatedNotif?.id
                 );
-                if (notification) {
-                    notification.seen = seen;
+                console.log('index= ', index);
+
+                if (index !== -1) {
+                    // ✅ Replace the existing notification with the updated one
+                    state.notifications[index] = updatedNotif;
+                } 
+                else {
+                    // ⚠️ Optional: If it doesn't exist, maybe add it (if your app expects that)
+                    state?.notifications?.push(updatedNotif);
+                    console.log('else executed');
                 }
+
+                console.log("Updated notification list:", state?.notifications);
             })
             .addCase(updateNotificationStatus.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload.message;
             })
-            // Delete notification
-            .addCase(deleteNotification.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(deleteNotification.fulfilled, (state, action) => {
-                state.loading = false;
-                console.log("Deleting notification action.payload:", action?.payload?.message);
-                state.notifications = state.notifications.filter(
-                    (notif) => notif.id !== action.payload.data
-                );
-            })
-            .addCase(deleteNotification.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload.message;
-            });
-    },
+        // Delete notification
+        .addCase(deleteNotification.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(deleteNotification.fulfilled, (state, action) => {
+            state.loading = false;
+            console.log("Deleting notification action.payload:", action?.payload?.message);
+            state.notifications = state.notifications.filter(
+                (notif) => notif.id !== action.payload.data
+            );
+        })
+        .addCase(deleteNotification.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload.message;
+        });
+},
 });
 
-    
+
 export const {
     logoutUser,
     updateFriendRequestCount,
