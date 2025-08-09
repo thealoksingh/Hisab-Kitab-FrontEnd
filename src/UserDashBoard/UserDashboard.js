@@ -183,7 +183,7 @@ useNotificationSubscription(user?.userId, (notification) => {
 
             {/* User Info */}
             <li>
-              <div  onClick={toggleNotificationModal}  className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 group">
+              <div className="flex items-center p-2 lg:text-gray-300 text-black rounded-sm border lg:border-0 border-gray-400 group">
                 <FontAwesomeIcon
                   icon={faUser}
                   className="lg:text-gray-300 text-gray-600"
@@ -194,11 +194,12 @@ useNotificationSubscription(user?.userId, (notification) => {
                   {user?.fullName}
                 </span>
 
-                <div className="relative p-2">
+                {unreadNotifications?.length >=0 && (<div  onClick={toggleNotificationModal} className="relative p-2">
                   <FontAwesomeIcon
                     icon={faBell}
-                    className="text-gray-600 lg:text-gray-300"
+                    className="text-gray-600 lg:text-gray-300 hover:text-gray-400 cursor-pointer"
                     style={{ fontSize: "20px" }}
+                   
                   />
 
                   <span className="absolute -top-1 -right-1 flex size-4 justify-center items-center">
@@ -207,7 +208,7 @@ useNotificationSubscription(user?.userId, (notification) => {
                       {unreadNotifications?.length || 0}
                     </span>
                   </span>
-                </div>
+                </div>)}
               </div>
             </li>
 
