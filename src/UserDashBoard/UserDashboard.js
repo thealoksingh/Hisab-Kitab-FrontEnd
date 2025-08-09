@@ -194,7 +194,7 @@ useNotificationSubscription(user?.userId, (notification) => {
                   {user?.fullName}
                 </span>
 
-                {unreadNotifications?.length >=0 && (<div  onClick={toggleNotificationModal} className="relative p-2">
+                {unreadNotifications?.length >0 && (<div  onClick={toggleNotificationModal} className="relative p-2">
                   <FontAwesomeIcon
                     icon={faBell}
                     className="text-gray-600 lg:text-gray-300 hover:text-gray-400 cursor-pointer"
