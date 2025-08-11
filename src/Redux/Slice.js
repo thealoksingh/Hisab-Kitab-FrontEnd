@@ -17,7 +17,7 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         logoutUser: () => {
-            console.log("User logged out successfully");
+            // console.log("User logged out successfully");
             return initialState;
         },
 
@@ -128,7 +128,7 @@ const authSlice = createSlice({
                 state.friendRequestCount = 0;
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('refreshToken');
-                console.log("User logged out successfully");
+                // console.log("User logged out successfully");
             })
             .addCase(logout.rejected, (state, action) => {
                 state.loading = false;
@@ -143,7 +143,7 @@ const authSlice = createSlice({
             .addCase(getAllUserNotifications.fulfilled, (state, action) => {
                 state.loading = false;
                 state.notifications = action?.payload?.data;
-                console.log("User Notifications = ", state.notifications);
+                // console.log("User Notifications = ", state.notifications);
             })
             .addCase(getAllUserNotifications.rejected, (state, action) => {
                 state.loading = false;

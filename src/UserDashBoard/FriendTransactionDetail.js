@@ -2,7 +2,14 @@ import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet, useNavigate, useParams } from "react-router-dom";
+import {
+  Outlet,
+  useLocation,
+  useNavigate,
+  useNavigationType,
+  useOutletContext,
+  useParams,
+} from "react-router-dom";
 import unFriendImage from "../assets/unFriend.png";
 import "../CssStyle/GroupDashboard.css";
 import FriendTransactionReport from "../Modals/FriendTransactionReport";
@@ -17,7 +24,7 @@ function FriendTranscationDetail({
   isOpen,
   toggleLeftSidebar,
   toggleRightSidebar,
-  setIsFriendSelected,
+
   setSelectedFriend,
   friendAndTransloader,
 }) {
@@ -46,6 +53,9 @@ function FriendTranscationDetail({
   const dispatch = useDispatch();
   const [selectedTransaction, setSelectedTransaction] = useState(null);
 
+  const { setIsFriendSelected } = useOutletContext();
+
+  const isBackNavigation = useRef(false); // Ref to track back navigation
 
   // // Redirect if the user is not authenticated
   // useEffect(() => {
@@ -155,7 +165,7 @@ function FriendTranscationDetail({
   return (
     <div className="flex flex-col h-[90%] lg:h-[100%] overflow-y-auto lg:pt-0">
       <div
-      //  ref={tableRef}
+        //  ref={tableRef}
         className="right-header  gap-[8px]  sm:gap-[8px] md:gap-[7px]  p-1   lg:p-2  md:p-4     border border-gray-400 shadow-inner-custom justify-between h-20 sm:h-24 md:h-24 bg-gray-300  w-full flex items-center "
       >
         <div className=" flex gap-3 sm:gap-2 md:gap-2">
@@ -166,8 +176,14 @@ function FriendTranscationDetail({
           />
 
           <div className="user-name-number   ">
-            <h2 className="sm:text-sm  md:text-sm lg:text-lg text-gray-800 line-clamp-1">
-              {selectedFriend?.fullName}
+            <h2 className="sm:text-sm md:text-sm lg:text-lg text-gray-800 line-clamp-1">
+              {selectedFriend?.fullName && selectedFriend.fullName.length > 10
+                ? selectedFriend.fullName.split(" ")[0].length > 10
+                  ? `${selectedFriend.fullName
+                      .split(" ")[0]
+                      .substring(0, 10)}...`
+                  : selectedFriend.fullName.split(" ")[0]
+                : selectedFriend?.fullName}
             </h2>
             <p className="text-[10px] sm:text-sm  md:text-sm text-green-700 line-clamp-2">
               +91 <span>{selectedFriend?.contactNo}</span>
@@ -177,29 +193,21 @@ function FriendTranscationDetail({
 
         {transactionsDto.length > 0 && (
           <div
-            className={`net-balance border  text-xs ml-2 font-medium sm:font-semibold sm:ml-2 p-1 sm:p-2 h-8 w-25 sm:h-9 sm:w-35  md:h-9 md:w-35 rounded-sm flex flex-col justify-center   ${
+            className={`net-balance border text-xs ml-2 font-medium sm:font-semibold sm:ml-2 p-1 sm:p-2 h-8 w-25 sm:h-9 sm:w-35 md:h-9 md:w-35 rounded-sm flex flex-col justify-center ${
               transactionsDto.length > 0 &&
               transactionsDto[0].lastClosingBalance >= 0
                 ? "border-green-900 text-green-900"
                 : "border-red-900 text-red-900"
             }`}
           >
-            <h2
-              className={`text-black line-clamp-2  sm:line-clamp-1  text-xs md:text-xs sm:text-xs ${
-                transactionsDto.length > 0 &&
-                transactionsDto[0].lastClosingBalance >= 0
-                  ? "border-green-900 text-green-900"
-                  : "border-red-900 text-red-900"
-              }`}
-            >
-              {" "}
-            </h2>
             {transactionsDto.length > 0 && (
               <>
-                {transactionsDto[0].lastClosingBalance >= 0
-                  ? "You will get"
-                  : "You will give"}
-                <p className="text-center text-[10px]">
+                <p className="text-center text-xs">
+                  {transactionsDto[0].lastClosingBalance >= 0
+                    ? "You'll get"
+                    : "You'll give"}
+                </p>
+                <p className="text-center text-xs font-semibold">
                   ₹{Math.abs(transactionsDto[0].lastClosingBalance)}
                 </p>
               </>
@@ -259,10 +267,7 @@ function FriendTranscationDetail({
 
       {/* middle section */}
 
-      <div
-       
-        class="table-division mb-1  border border-gray-400 w-full  flex-1 overflow-auto  bg-gray-400  overflow-y-scroll  scrollable  "
-      >
+      <div class="table-division mb-1  border border-gray-400 w-full  flex-1 overflow-auto  bg-gray-400  overflow-y-scroll  scrollable  ">
         <table className="w-full p-0   sm:p-2 md:p-2   border-separate border-spacing-y-1 text-sm text-left text-black dark:text-black">
           <thead className="sticky top-0  border  shadow-inner-custom    bg-gray-100  text-xs text-gray-600 uppercase dark:text-gray-800">
             <tr className="border-b ">

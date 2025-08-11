@@ -11,7 +11,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
   const notifications = useSelector(selectNotifications); // Assuming you have a selector to get notifications
   const dispatch = useDispatch();
   const user = useSelector(selectUser); // Get user data for notification actions
-  console.log("Notifications in modal:", notifications);
+  // console.log("Notifications in modal:", notifications);
 
   const handleDelete = async (id) => {
     // Call your API to delete the notification

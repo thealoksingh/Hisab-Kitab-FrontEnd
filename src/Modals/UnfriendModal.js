@@ -37,11 +37,13 @@ const UnfriendModal = () => {
       const response = await dispatch(unFriend(friendId));
       // console.log("Unfriend successful ", response.data);
       if (unFriend.fulfilled.match(response)) {
-        await dispatch(showSnackbar({
-          message: response?.payload?.message || "Unfriended successfully",
-          type: "success",
-        }));
-        navigate('/user-dashboard/friends'); // Navigate back to the previous page
+        await dispatch(
+          showSnackbar({
+            message: response?.payload?.message || "Unfriended successfully",
+            type: "success",
+          })
+        );
+        navigate("/user-dashboard/friends"); // Navigate back to the previous page
       } else {
         console.error("Unfriend failed:", response?.payload?.message);
       }
@@ -57,12 +59,20 @@ const UnfriendModal = () => {
       id="UpdateFriendTransaction-modal"
       tabIndex="-1"
       aria-hidden={!isOpen}
-      className={`fixed inset-0 z-50  flex items-center justify-center bg-gray-500 bg-opacity-70 ${
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-70 ${
         isOpen ? "" : "hidden"
       }`}
     >
-      <div className="main-form relative p-4 w-full sm:w-1/2 md:w-1/2 max-w-5xl flex gap-4 justify-center transform transition-transform duration-500">
-        <div className="form-give-got border border-gray-400 shadow-inner-custom relative bg-white w-full h-1/2 rounded-sm shadow dark:bg-gray-300">
+      <div
+        className="main-form relative p-4 w-full sm:w-4/5 md:w-2/3 lg:w-1/3 xl:w-1/3
+               max-w-5xl flex flex-col md:flex-row gap-4 justify-center 
+               transform transition-transform duration-500"
+      >
+        <div
+          className="form-give-got border border-gray-400 shadow-inner-custom relative 
+                 bg-white lg:w-3/4 lg:h-1/3 w-full h-auto md:h-1/2 rounded-sm shadow dark:bg-gray-300"
+        >
+          {" "}
           <div className="flex border-black-400 items-center justify-between p-1 md:p-2 rounded-sm bg-rose-500 dark:border-gray-700">
             <h4 className="text-lg font-xs sm:font-medium  text-white">
               Alert !!!

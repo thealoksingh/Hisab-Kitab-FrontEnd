@@ -57,12 +57,12 @@ const UserDashboard = () => {
   const handleLogout = async () => {
     try {
       await dispatch(logout());
-      dispatch(
-        showSnackbar({
-          message: "logged out successfully",
-          type: "success",
-        })
-      );
+      // dispatch(
+      //   showSnackbar({
+      //     message: "logged out successfully",
+      //     type: "success",
+      //   })
+      // );
       navigate("/");
     } catch (error) {
       console.error("Logout failed:", error);
@@ -194,7 +194,7 @@ useNotificationSubscription(user?.userId, (notification) => {
                   {user?.fullName}
                 </span>
 
-              <div  onClick={toggleNotificationModal} className="relative p-2">
+                <div  onClick={toggleNotificationModal} className="relative p-2">
                   <FontAwesomeIcon
                     icon={faBell}
                     className="text-gray-600 lg:text-gray-300 hover:text-gray-400 cursor-pointer"

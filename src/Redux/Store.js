@@ -19,8 +19,8 @@ const loadUserData = async () => {
         // Check if tokens are available in localStorage
         const refreshToken = await localStorage.getItem('refreshToken');
         const accessToken = await localStorage.getItem('accessToken');
-        console.log("refreshToken in localStorage", refreshToken);
-        console.log("Access token in localStorage", accessToken);
+        // console.log("refreshToken in localStorage", refreshToken);
+        // console.log("Access token in localStorage", accessToken);
         if (refreshToken && accessToken) {
 
             await store.dispatch(getUserByToken());
