@@ -51,7 +51,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
       type: "success"
     }));
     setFormData({ userId: user.userId, title: "", description: "" });
-    handleClose();
+    handleChoice("view");
   } catch (error) {
     dispatch(showSnackbar({
       message: "Failed to create ticket. Please try again.",

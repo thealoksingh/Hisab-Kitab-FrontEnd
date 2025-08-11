@@ -141,16 +141,17 @@ const UpdateFriendTransactionModel = ({
       // console.log("Updating transaction...");
       const response = await dispatch(updateFriendTransactionById(updatedCommentTransaction));
       if (updateFriendTransactionById.fulfilled.match(response)) {
-        console.log("Transaction updated successfully", response?.payload?.data);
+        // console.log("Transaction updated successfully", response?.payload?.data);
+
         const getAllFriendsResponse = await dispatch(getAllFriends());
 
         if (getAllFriends.fulfilled.match(getAllFriendsResponse)) {
-          console.log("Friends list updated successfully");
+          // console.log("Friends list updated successfully");
           await dispatch(showSnackbar({
             message: response?.payload?.message || "Transaction updated successfully",
             type: "success",
           }));
-
+ navigate(-1);
           // setCommentTransaction((prev) => ({ ...prev, ...response.data }));
           // // console.log("after setting value...");
           // toggleModal();
