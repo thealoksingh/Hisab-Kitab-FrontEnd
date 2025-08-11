@@ -218,11 +218,17 @@ useNotificationSubscription(user?.userId, (notification) => {
                 item.path && location.pathname.startsWith(item.path);
               return (
                 <li
-                  key={idx}
-                  onClick={() =>
-                    item.onClick ? item.onClick() : navigate(item.path)
-                  }
-                >
+  key={idx}
+  onClick={() => {
+    if (item.onClick) {
+      item.onClick();
+    } else {
+      navigate(item.path);
+    }
+    toggleSidebar();
+  }}
+>
+
                   <div
                     className={`flex items-center p-2 rounded-sm border lg:border-0 group transition-all duration-200 cursor-pointer ${
                       isActive

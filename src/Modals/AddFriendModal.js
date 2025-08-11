@@ -53,14 +53,15 @@ const handleAddFriend = async (e) => {
       const response = await dispatch(sendFriendRequest(contactNo));
       if (sendFriendRequest.fulfilled.match(response)) {
         setSuccessMessage("Friend request sent successfully");
-        setContactNo(""); // Reset the contact number
-        dispatch(showSnackbar({
+       
+         handleClose(); // Reset the contact number
+        await dispatch(showSnackbar({
           message: "Friend request sent successfully!",
           type: "success"
         }));
       } else {
         // Handle backend error messages
-        const errorMessage = response?.payload;
+        const errorMessage = response?.payload?.message || "An unexpected error occurred";
         switch (errorMessage) {
           case "You cannot send a friend request to yourself.":
             setAddFriendErrorMessage("You cannot send a friend request to yourself.");
@@ -111,7 +112,8 @@ const handleAddFriend = async (e) => {
         const response = await dispatch(sendEmailInvite({ email, fullName: user.fullName }));
         if (sendEmailInvite.fulfilled.match(response)) {
           setSuccessMessage("Invitation sent successfully");
-          setEmail(""); // Reset the email
+       handleClose();
+
           dispatch(showSnackbar({
             message: "Invitation sent successfully!",
             type: "success"
@@ -138,7 +140,14 @@ const handleAddFriend = async (e) => {
       alert("Please enter a valid email");
     }
   };
-
+ const handleClose = () => {
+    toggleModal(); // Close modal
+                setIsAddButtonVisible(true); // Reset to Add mode
+                setAddFriendErrorMessage(null);
+                setSuccessMessage(null);
+                setContactNo("");
+                setEmail("");
+ }
   return (
     <div
       id="add-friend-modal"
@@ -155,12 +164,7 @@ const handleAddFriend = async (e) => {
             <button
               type="button"
               className="text-gray-400 bg-transparent hover:bg-cyan-200 hover:text-gray-900 rounded-lg text-sm w-6 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-cyan-600 dark:hover:text-white"
-              onClick={() => {
-                toggleModal(); // Close modal
-                setIsAddButtonVisible(true); // Reset to Add mode
-                setAddFriendErrorMessage(null);
-                setSuccessMessage(null);
-              }}
+              onClick={handleClose}
             >
               <svg
                 className="w-3 h-3"
