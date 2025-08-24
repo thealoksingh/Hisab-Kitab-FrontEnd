@@ -105,7 +105,7 @@ const GiveGotModal = () => {
           setAmount("");
           setDate("");
           setDescription("");
-
+  navigate(`/user-dashboard/friends/${friendId}/transactions`);
           dispatch(
             showSnackbar({
               message:
@@ -115,6 +115,7 @@ const GiveGotModal = () => {
               type: "success",
             })
           );
+          
         }
       } // <-- Success snackbar
     } catch (error) {

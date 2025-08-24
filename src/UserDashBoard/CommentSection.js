@@ -191,18 +191,18 @@ useEffect(() => {
         postNewCommentsByTransactionId(commentRequestDto)
       );
       if (postNewCommentsByTransactionId.fulfilled.match(response)) {
-        console.log("Comment posted successfully:", response?.payload);
+        // console.log("Comment posted successfully:", response?.payload);
         setCommentText("");
         // setComments((prevComments) => [
         //   ...prevComments,
         //   response?.payload?.data,
         // ]);
-        await dispatch(
-          showSnackbar({
-            message: "Comment posted successfully",
-            type: "success",
-          })
-        );
+        // await dispatch(
+        //   showSnackbar({
+        //     message: "Comment posted successfully",
+        //     type: "success",
+        //   })
+        // );
       }
     } catch (error) {
       // console.error("Error creating transaction", error);
@@ -456,10 +456,10 @@ useEffect(() => {
               <button
                 type="button"
                 onClick={handleCommentSubmit}
-                className="bg-teal-600 text-white text-sm px-4 py-1 rounded-sm hover:bg-teal-700 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                className="bg-teal-600 text-white text-sm px-4 py-2 rounded-sm hover:bg-teal-700 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
               >
                 {isLoading ? (
-                  <div className="flex">
+                  <div className="flex ">
                     <div className="w-5 h-5 border-3 border-t-4 border-white rounded-full animate-spin"></div>
                   </div>
                 ) : (

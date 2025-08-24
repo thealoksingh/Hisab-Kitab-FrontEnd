@@ -1,8 +1,8 @@
 // src/components/Friends.jsx (adjust path as needed)
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet, useLocation, useNavigate, useOutletContext } from "react-router-dom";
+import { matchPath, Outlet, useLocation, useMatch, useNavigate, useNavigationType, useOutletContext } from "react-router-dom";
 import {
   selectFriendRequestCount,
   selectFriends,
@@ -35,11 +35,40 @@ const Friends = () => {
   // Inside your component use OutletContext to access the context
   // This allows you to pass down the context to child components:
   const { setIsSidebarOpen, isSidebarOpen, globalNavToggler } = useOutletContext();
+  
+ const navType = useNavigationType();
+  const matchFriendRoute = useMatch("/friends/:friendId"); // adjust base path
+
+  // useEffect(() => {
+  //   if (navType === "POP" && matchFriendRoute) {
+  //     console.log("Back from UnfriendModal route");
+  //     setIsFriendSelected(false);
+  //     setIsLeftSidebarOpen(true);
+  //   }
+  // }, [location, navType, matchFriendRoute]);
+ const prevPathRef = useRef(location.pathname);
+
+  useEffect(() => {
+    // When going back
+    if (navType === "POP") {
+      const wasFriendModal = matchPath("/:friendId", prevPathRef.current);
+      const isFriendModalNow = matchPath("/:friendId", location.pathname);
+
+      if (wasFriendModal && !isFriendModalNow) {
+        console.log("Back from friend modal detected");
+        setIsFriendSelected(false);
+        setIsLeftSidebarOpen(true);
+      }
+    }
+
+    // Store current path for next comparison
+    prevPathRef.current = location.pathname;
+  }, [location, navType]);
 
   useEffect(() => {
     const fetchFriends = async () => {
       setFriendAndTransLoader(true);
-      console.log("Fetching friends for user:", user);
+      // console.log("Fetching friends for user:", user);
       if (!user) return;
 
       try {
@@ -47,7 +76,7 @@ const Friends = () => {
         if (getAllFriends.fulfilled.match(response)) {
           console.log("Friends fetched successfully:");
         } else {
-          console.log("Friends list not fetched successfully:");
+          console.log("Friends list not fetched");
         }
 
         setFriendAndTransLoader(false);
@@ -145,7 +174,8 @@ const handleFriendSelect = (friend) => {
           {isFriendSelected &&<div
             className={`sm:w-full md:w-full p-2 sm:pl-0 h-screen `}
           >
-            <Outlet />
+                     <Outlet context={{ setIsFriendSelected }} />
+
            
           </div>}
         </div>

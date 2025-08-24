@@ -21,11 +21,9 @@ import Transaction from "../Tour/Transaction";
 import CommentSection from "../UserDashBoard/CommentSection";
 import Friends from "../UserDashBoard/Friends";
 import FriendTranscationDetail from "../UserDashBoard/FriendTransactionDetail";
-import InstructionToSelect from "../UserDashBoard/instructionToSelect";
 import UnderDevPage from "../UserDashBoard/UnderDevPage";
 import UserDashboard from "../UserDashBoard/UserDashboard";
 import ErrorComponent from "./ErrorComponent";
-
 
 // AuthenticatedRoute using Redux state
 function AuthenticatedRoute({ children }) {
@@ -49,7 +47,8 @@ const Routing = () => {
   }, [dispatch]);
 
   const user = useSelector(selectUser);
-  
+  // console.log("User in Routing:", user?.user);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -67,10 +66,10 @@ const Routing = () => {
           <>
             <Route path="/user-dashboard" element={<UserDashboard />}>
               <Route index element={<Navigate to="friends" />} />
-             
+
               <Route path="friends" element={<Friends />}>
-               
-                {/* <Route index element={<InstructionToSelect />} /> */}
+                <Route index element={<div />} />{" "}
+                {/* <- safe index (empty placeholder) */}
                 <Route
                   path=":friendId/transactions"
                   element={<FriendTranscationDetail />}
@@ -78,20 +77,9 @@ const Routing = () => {
                   <Route path=":transactionId" element={<CommentSection />}>
                     <Route path="" element={<TransactionModals />} />
                   </Route>
-                  <Route
-                    path=""
-                    element={<GiveGotModal />}
-                  />
-
+                  <Route path="" element={<GiveGotModal />} />
                 </Route>
-
-                <Route path=":friendId" element={<UnfriendModal />} /> {/* <-- Add this */}
-
-
-                <Route
-                  path="instructionToSelect"
-                  element={<InstructionToSelect />}
-                />
+                <Route path=":friendId" element={<UnfriendModal />} />
               </Route>
               <Route path="under-dev" element={<UnderDevPage />} />
               <Route path="about" element={<About />} />

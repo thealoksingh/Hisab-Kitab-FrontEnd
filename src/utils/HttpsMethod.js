@@ -20,7 +20,7 @@ export const apiPostRequest = async ({ apiUrl, content_type, data, accessToken =
     console.log('Body:', data);
 
     const response = await axios.post(apiUrl, data, { headers });
-    console.log('raw api response = ', response.data);
+    // console.log('raw api response = ', response.data);
     return response; // axios parses JSON by default
   
 };
@@ -41,7 +41,7 @@ export const apiGetRequest = async (request) => {
         });
 
         // Log the raw response for debugging
-        console.log("Raw API Response:", response.data);
+        // console.log("Raw API Response:", response.data);
 
         return response; // Axios automatically parses JSON
    
