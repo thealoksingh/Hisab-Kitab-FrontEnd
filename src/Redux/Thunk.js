@@ -8,25 +8,43 @@ import { addFriend } from "../Api/HisabKitabApi";
 // Async Thunks
 
 // Sign In (public, no refresh)
-export const signIn = createAsyncThunk(
-  "auth/signIn",
-  async (data, { rejectWithValue }) => {
-    try {
-      console.log("this is data in thunk " + JSON.stringify(data));
-      const response = await loginAPI(data);
+// export const signIn = createAsyncThunk(
+//   "auth/signIn",
+//   async (data, { rejectWithValue }) => {
+//     try {
+//       console.log("this is data in thunk " + JSON.stringify(data));
+//       const response = await loginAPI(data);
 
-      if (response?.status === 200 || response?.status === 201) {
-        // console.log("API Response:", response.data);
-        return response?.data;
-      } else {
-        throw new Error(response?.data?.message || "OTP not sent, try again");
-      }
-    } catch (error) {
-      console.log("Error in postSignIn:", error);
-      return rejectWithValue(
-        error?.response?.data?.message || "Something went wrong"
-      );
-    }
+//       if (response?.status === 200 || response?.status === 201) {
+//         // console.log("API Response:", response.data);
+//         return response?.data;
+//       } else {
+//         throw new Error(response?.data?.message || "OTP not sent, try again");
+//       }
+//     } catch (error) {
+//       console.log("Error in postSignIn:", error);
+//       return rejectWithValue(
+//         error?.response?.data?.message || "Something went wrong"
+//       );
+//     }
+//   }
+// );
+
+// Get User By Token (protected, use refresh)
+export const signIn = createAsyncThunk(
+  "auth/singin",
+  async (data, thunkAPI) => {
+    return withRefreshTokenRetry(
+      async () => {
+        const response =  await loginAPI(data);
+        if (response?.status === 200 || response?.status === 201) {
+          return response?.data;
+        } else {
+          throw new Error(response?.data?.message || "Failed to Signin");
+        }
+      },
+      thunkAPI
+    );
   }
 );
 

@@ -64,24 +64,39 @@ const LogInForm = () => {
       return;
     }
 
-    try {
-      console.log("Attempting login...");
+    console.log("Attempting login...");
       const response = await dispatch(signIn({ email, password, role }));
+      console.log("Login response:", response?.payload);
       if (signIn.fulfilled.match(response)) {
-        dispatch(showSnackbar({ message: "Login successful!", type: "success" })); // <-- Success snackbar
+        await dispatch(showSnackbar({ message: "Login successful!", type: "success" })); // <-- Success snackbar
         navigate("/user-dashboard/friends");
         console.log("User logged in successfully:", response.payload);
       } else {
-        dispatch(showSnackbar({ message: "Login failed. Please check your credentials.", type: "error" })); // <-- Failure snackbar
-        setError("Login failed. Please check your credentials.");
+        await dispatch(showSnackbar({ message: response?.payload?.message, type: "error" })); // <-- Failure snackbar
+        setError(response?.payload?.message);
       }
-    } catch (error) {
-      console.error("Login failed:", error);
-      dispatch(showSnackbar({ message: error?.message || "Login failed. Please try again.", type: "error" })); // <-- Failure snackbar
-      setError(error?.message || "Login failed. Please try again.");
-    } finally {
+
       setIsLoading(false);
-    }
+
+    // try {
+    //   console.log("Attempting login...");
+    //   const response = await dispatch(signIn({ email, password, role }));
+    //   console.log("Login response:", response?.payload);
+    //   if (signIn.fulfilled.match(response)) {
+    //     dispatch(showSnackbar({ message: "Login successful!", type: "success" })); // <-- Success snackbar
+    //     navigate("/user-dashboard/friends");
+    //     console.log("User logged in successfully:", response.payload);
+    //   } else {
+    //     dispatch(showSnackbar({ message: "Login failed. Please check your credentials.", type: "error" })); // <-- Failure snackbar
+    //     setError("Login failed. Please check your credentials.");
+    //   }
+    // } catch (error) {
+    //   console.error("Login failed in error block:", error);
+    //   dispatch(showSnackbar({ message: error?.message || "Login failed. Please try again.", type: "error" })); // <-- Failure snackbar
+    //   setError(error?.message || "Login failed. Please try again.");
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
   const handleClose = () => {
 

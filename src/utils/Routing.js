@@ -63,7 +63,7 @@ const Routing = () => {
         <Route path="/forget-password" element={<ForgetPasswordModal />} />
 
         {/* User Routes */}
-        {user?.role === "USER" && (
+        {user?.role.toUpperCase() === "USER" && (
           <>
             <Route path="/user-dashboard" element={<UserDashboard />}>
               <Route index element={<Navigate to="friends" />} />
@@ -108,7 +108,7 @@ const Routing = () => {
         )}
 
         {/* Admin Routes */}
-        {user?.role === "ADMIN" && (
+        {user?.role.toUpperCase() === "ADMIN" && (
           <>
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
             <Route path="/under-dev" element={<UnderDevPage />} />

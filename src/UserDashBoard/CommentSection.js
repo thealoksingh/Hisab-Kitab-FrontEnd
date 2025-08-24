@@ -161,6 +161,7 @@ useEffect(() => {
 
   // Real-time updates
   useCommentSubscription(transactionId, (comment) => {
+    console.log("Comment recieved from kafka = ", comment);
     setComments((prev) => [...prev, comment]);
   });
 
