@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from "react";
-import AddFriendModal from "../Modals/AddFriendModal";
-import moment from "moment-timezone";
-import "../CssStyle/GroupDashboard.css";
-import FriendRequestModal from "../Modals/FriendRequestModal";
-import  apiClient  from "../Api/ApiClient";
+import { faCaretDown, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload, faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import moment from "moment-timezone";
+import { useEffect, useState } from "react";
+import apiClient from "../Api/ApiClient";
+import "../CssStyle/GroupDashboard.css";
+import AddFriendModal from "../Modals/AddFriendModal";
+import FriendRequestModal from "../Modals/FriendRequestModal";
 
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { selectFriends, selectUser } from "../Redux/Selector";
 import ProfileCircle from "../utils/ProfileCircle";
 import FooterSection from "./FooterSection";
 
 function LeftSideDashBoard({
-  user,
-  friends,
+
   setIsFriendSelected,
   setSelectedFriend,
   refreshFriendTransaction,
@@ -22,7 +24,10 @@ function LeftSideDashBoard({
   toggleLeftSidebar,
   friendAndTransloader,
 }) {
-  
+
+  const user = useSelector(selectUser);
+  const friends = useSelector(selectFriends);
+
   const [isModalOpen, setModalOpen] = useState(false);
 
   const [getAmount, setGetAmount] = useState(0);
@@ -43,6 +48,7 @@ function LeftSideDashBoard({
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState("");
   const [friendRequestActivity, setFriendRequestActivity] = useState(false);
+  const navigate = useNavigate();
 
   const toggleFriendRequestModal = () => {
     if (friendRequestActivity) {
@@ -89,8 +95,8 @@ function LeftSideDashBoard({
       setSearchQuery(query);
 
       // Filter friends based on the search query and any applied filters
-      const filtered = friends.filter((friend) => {
-        const nameMatch = friend.userEntity.fullName
+      const filtered = friends?.filter((friend) => {
+        const nameMatch = friend?.userEntity?.fullName
           .toLowerCase()
           .includes(query);
         const balanceMatch = friend.closingBalance.toString().includes(query);
@@ -140,21 +146,21 @@ function LeftSideDashBoard({
       sorted.sort((a, b) => a.closingBalance - b.closingBalance); // Sort by lowest amount first
     } else if (criteria === "By Name") {
       sorted.sort((a, b) =>
-        a.userEntity.fullName.localeCompare(b.userEntity.fullName)
+        a?.userEntity?.fullName.localeCompare(b?.userEntity?.fullName)
       ); // Sort alphabetically by name
     }
 
     setFilteredFriends(sorted);
-   
+
   };
-  
+
 
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchQuery(query);
     if (query !== "") {
       const filtered = filteredFriends.filter((friend) => {
-        const nameMatch = friend.userEntity.fullName
+        const nameMatch = friend?.userEntity?.fullName
           .toLowerCase()
           .includes(query);
         const balanceMatch = friend.closingBalance.toString().includes(query);
@@ -185,16 +191,26 @@ function LeftSideDashBoard({
   };
 
   const handleAddFriendClick = () => {
+    //  const audio = new Audio("/notification.mp3");
+    // audio.play().catch((err) => {
+     
+    //   console.warn("Notification sound blocked until user interacts with the page.");
+    // });
     toggleModal(); // Open the modal
   };
+
+
   const [selectedRowId, setSelectedRowId] = useState(null);
 
   const handleRowClick = (friend) => {
-    setSelectedFriend(friend.userEntity);
+    setSelectedFriend(friend?.userEntity);
     setIsFriendSelected(true);
     if (window.innerWidth < 1024) {
       toggleLeftSidebar(); // Close the left sidebar on mobile when a friend is selected
     }
+    // Navigate to the friend's transactions page
+    navigate(`/user-dashboard/friends/${friend?.userEntity?.userId}/transactions`);
+
   };
 
   useEffect(() => {
@@ -218,7 +234,7 @@ function LeftSideDashBoard({
     setGiveAmount(totalGiveAmount);
   }
   useEffect(() => {
-    setUserId(user.userId);
+    setUserId(user?.userId);
   }, [user]);
 
   if (!user) {
@@ -226,9 +242,10 @@ function LeftSideDashBoard({
   }
 
   const handleDownload = async (e) => {
-    if(friends.length===0){
+    if (friends.length === 0) {
       alert("You must have at least one friend to download the summary.");
-      return};
+      return
+    };
     e.preventDefault();
     setLoading(true);
     setError("");
@@ -247,7 +264,7 @@ function LeftSideDashBoard({
 
       // Extract filename from Content-Disposition header (if available)
       const contentDisposition = response.headers["content-disposition"];
-      let filename = user.fullName + "Transaction report.pdf";
+      let filename = user?.fullName + "Transaction report.pdf";
       if (contentDisposition) {
         const match = contentDisposition.match(/filename="(.+?)"/);
         if (match && match[1]) {
@@ -269,9 +286,8 @@ function LeftSideDashBoard({
   return (
     <>
       <div
-        className={`left-side rounded flex flex-col h-[90%] lg:h-[98%] w-full relative overflow-hidden transition-all duration-300 pr-0 md:pr-5  lg:pr-0  ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0`}
+        className={`left-side rounded flex flex-col h-[90%] lg:h-[98%] w-full relative overflow-hidden transition-all duration-300 pr-0 md:pr-5  lg:pr-0  ${isOpen ? "translate-x-0" : "-translate-x-full"
+          } lg:translate-x-0`}
       >
         <div className="left-upper sm:font-normal justify-between h-32   w-full ">
           <div className="flex px-2  shadow-inner-custom items-center gap-1 justify-between border border-gray-400 sm:h-10 md:h-10   h-12 bg-gray-300">
@@ -355,7 +371,7 @@ function LeftSideDashBoard({
               )}
             </div>
 
-            {/* shortBy */}
+            {/* sortBy */}
 
             <div className="sort-section text-gray-700 h-full w-[30%] mr-2">
               <p className="p-1 font-Poppins font-semibold lg:text-sm text-sm">
@@ -367,7 +383,7 @@ function LeftSideDashBoard({
                 type="button"
               >
                 {sortCriteria}
-             <span><FontAwesomeIcon className="text-white" icon={faCaretDown} /></span>
+                <span><FontAwesomeIcon className="text-white" icon={faCaretDown} /></span>
               </button>
 
               {isSortOpen && (
@@ -441,7 +457,7 @@ function LeftSideDashBoard({
                     key={index}
                     className="bg-gray-200 animate-pulse mb-1  shadow-inner-custom rounded-sm dark:border-gray-100 cursor-pointer"
                   >
-                   <td colSpan="2" className="h-14"></td>
+                    <td colSpan="2" className="h-14"></td>
                   </tr>
                 ))}
               </tbody>
@@ -449,25 +465,24 @@ function LeftSideDashBoard({
               <tbody>
                 {!filteredFriends.length > 0 && (
                   <tr>
-                  <td colSpan="2" className="h-96 w-full p-4 text-center">
-                    <p className="text-gray-300 text-xl font-bold">
-                      You don't have any friends yet. Start building your connections!  
-                      <span className="">Click below</span> to add an existing friend or invite new ones to join.  
-                      Don't worry, you can unfriend them anytime if you want.
-                    </p>
-                  </td>
-                </tr>
-                
+                    <td colSpan="2" className="h-96 w-full p-4 text-center">
+                      <p className="text-gray-300 text-xl font-bold">
+                        You don't have any friends yet. Start building your connections!
+                        <span className="">Click below</span> to add an existing friend or invite new ones to join.
+                        Don't worry, you can unfriend them anytime if you want.
+                      </p>
+                    </td>
+                  </tr>
+
                 )}
 
                 {filteredFriends.map((friend) => (
                   <tr
-                    key={friend.userEntity.userId}
-                    className={`bg-white border-b border-1 shadow-inner-custom rounded-sm  dark:border-gray-100 cursor-pointer ${
-                      selectedRowId === friend.userEntity.userId
+                    key={friend?.userEntity?.userId}
+                    className={`bg-white border-b border-1 shadow-inner-custom rounded-sm  dark:border-gray-100 cursor-pointer ${selectedRowId === friend?.userEntity?.userId
                         ? "bg-gray-300 dark:bg-gray-300"
                         : "bg-gray-100 dark:bg-gray-100"
-                    }`}
+                      }`}
                     onClick={() => handleRowClick(friend)} // Pass `userEntity` here
                   >
                     <td
@@ -475,21 +490,22 @@ function LeftSideDashBoard({
                       className="px-6 py-4 font-medium text-gray-200 whitespace-nowrap dark:text-white flex items-center"
                     >
                       <ProfileCircle
-                        className="h-8 w-8 mr-4"
-                        key={friend.userEntity.userId}
-                        name={friend.userEntity.fullName}
-                        color={friend.userEntity.colorHexValue} // Pass the user's associated color
+                      
+                        className="h-10 w-10 mr-4"
+                        key={friend?.userEntity?.userId}
+                        name={friend?.userEntity?.fullName}
+                        color={friend?.userEntity?.colorHexValue} // Pass the user's associated color
                       />
 
-                      <div className="flex flex-col">
-                        <span className="font-medium text-gray-800">
-                          {friend.userEntity.fullName}
+                      <div className="flex ml-2 flex-col">
+                        <span className="font-medium  text-gray-800">
+                          {friend?.userEntity?.fullName}
                         </span>
                         <span className="text-xs text-gray-800">
-                          {friend.lastTransactionDate
+                          {friend?.lastTransactionDate
                             ? moment(friend.lastTransactionDate)
-                                .tz("Asia/Kolkata")
-                                .fromNow()
+                              .tz("Asia/Kolkata")
+                              .fromNow()
                             : ""}
                         </span>
                       </div>
@@ -497,18 +513,17 @@ function LeftSideDashBoard({
                     <td className="px-6 py-4 text-right pr-[25px]">
                       <div className="flex flex-col">
                         <span
-                          className={` font-semibold  ${
-                            friend.closingBalance >= 0
+                          className={` font-semibold  ${friend.closingBalance >= 0
                               ? "text-green-500 "
                               : "text-red-500"
-                          }`}
+                            }`}
                         >
                           ₹ {Math.abs(friend.closingBalance)}
                         </span>
 
                         <span className="text-xs text-gray-800">
                           {friend.closingBalance != null &&
-                          friend.closingBalance >= 0
+                            friend.closingBalance >= 0
                             ? "You will get"
                             : "You will give"}
                         </span>
@@ -557,7 +572,7 @@ function LeftSideDashBoard({
             View Friend Request
           </button>
         </div>
-        <FooterSection/>
+        <FooterSection />
         <FriendRequestModal
           refreshFriendTransaction={refreshFriendTransaction}
           setRefreshFriendTransaction={setRefreshFriendTransaction}

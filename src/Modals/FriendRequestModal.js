@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from "react";
-import ProfileCircle from "../utils/ProfileCircle";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useFriendRequestSubscription } from "../hooks/useFriendRequestSubscription";
+import { showSnackbar } from "../Redux/SanckbarSlice";
 import {
-  acceptRequest,
+  acceptFriendRequest,
+  cancelFriendRequest,
+  getAllFriends,
   getAllPendingRequest,
   getAllSentRequest,
-  rejectRequest,
-  unsendRequest,
-} from "../Api/HisabKitabApi";
+  rejectFriendRequest,
+} from "../Redux/Thunk";
+import ProfileCircle from "../utils/ProfileCircle";
+import { updateFriendRequestCount } from "../Redux/Slice";
 
 const FriendRequestModal = ({
   isOpen,
@@ -20,40 +25,146 @@ const FriendRequestModal = ({
   const [requestLoading, setRequestLoading] = useState(false);
   // const [isLoading, setIsLoading] = useState(true);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    if (!isOpen) return; // Avoid fetching if modal is closed
+    if (!isOpen) return;
     setRequestLoading(true);
     const fetchRequests = async () => {
       try {
-        const pendingResponse = await getAllPendingRequest();
-        setPendingRequests(pendingResponse?.data || []);
-        // console.log("Pending requests fetched:", pendingResponse.data);
-        const sentResponse = await getAllSentRequest();
-        setSentRequests(sentResponse?.data || []);
-        // console.log("Sent requests fetched:", sentResponse.data);
-        setRequestLoading(false);
+        // Fetch pending requests using thunk
+        const pendingResponse = await dispatch(getAllPendingRequest());
+        if (getAllPendingRequest.fulfilled.match(pendingResponse)) {
+          setPendingRequests(pendingResponse?.payload?.data || []);
+        } else {
+          dispatch(
+            showSnackbar({
+              message:
+                pendingResponse?.payload?.message ||
+                "Error fetching pending requests",
+              type: "error",
+            })
+          );
+        }
+
+        // Fetch sent requests using thunk
+        const sentResponse = await dispatch(getAllSentRequest());
+        if (getAllSentRequest.fulfilled.match(sentResponse)) {
+          setSentRequests(sentResponse?.payload?.data || []);
+        } else {
+          dispatch(
+            showSnackbar({
+              message:
+                sentResponse?.payload?.data || "Error fetching sent requests",
+              type: "error",
+            })
+          );
+        }
       } catch (error) {
-        // console.error("Error fetching requests:", error);
+        dispatch(
+          showSnackbar({
+            message: error?.message || "Error fetching requests",
+            type: "error",
+          })
+        );
       } finally {
         setRequestLoading(false);
       }
     };
 
     fetchRequests();
-  }, [isOpen, user]);
+  }, [isOpen, user, dispatch]);
+
+  //Call the subscription hook to listen for friend request updates
+console.log("Subscribing to friend request updates for user:", user);
+useFriendRequestSubscription(
+  user?.userId,
+  (data) => {
+    // Example: If the backend sends the updated request, update your state accordingly
+    // You can customize this logic as per your backend event structure
+    console.log("Friend request update received:", data);
+    // if (data.status === "PENDING" && data?.receiver?.userId === user?.userId) {
+    //   setPendingRequests((prev) => [...prev, data]);
+    // } else if (data.status === "PENDING" && data?.sender?.userId === user?.userId) {
+    //   setSentRequests((prev) => [...prev, data]);
+    // } else if (data.status === "ACCEPTED" && data?.receiver?.userId === user?.userId) {
+    //   setPendingRequests((prev) => prev.filter((req) => req.id !== data.id));
+    // } else if (data.status === "ACCEPTED" && data?.sender?.userId === user?.userId) {
+    //   setSentRequests((prev) => prev.filter((req) => req.id !== data.id));
+    // } else if (data.status === "REJECTED" && data?.receiver?.userId === user?.userId) {
+    //   setPendingRequests((prev) => prev.filter((req) => req.id !== data.id));
+    // } else if (data.status === "REJECTED" && data?.sender?.userId === user?.userId) {
+    //   setSentRequests((prev) => prev.filter((req) => req.id !== data.id));
+    // } else if (data.status === "UNSENT" && data?.receiver?.userId === user?.userId) {
+    //   setPendingRequests((prev) => prev.filter((req) => req.id !== data.id));
+    // } else if (data.status === "UNSENT" && data?.sender?.userId === user?.userId) {
+    //   setSentRequests((prev) => prev.filter((req) => req.id !== data.id));
+    // }
+
+    const isReceiver = data?.receiver?.userId === user?.userId;
+const isSender = data?.sender?.userId === user?.userId;
+
+switch (data.status) {
+  case "PENDING":
+    if (isReceiver) setPendingRequests((prev) => [...prev, data]);
+    else if (isSender) setSentRequests((prev) => [...prev, data]);
+    break;
+  case "ACCEPTED":
+  case "REJECTED":
+  case "UNSENT":
+    if (isReceiver) setPendingRequests((prev) => prev.filter((req) => req.id !== data.id));
+    else if (isSender) setSentRequests((prev) => prev.filter((req) => req.id !== data.id));
+
+    console.log('get all friends called to get updated')
+    dispatch(getAllFriends());
+    break;
+  default:
+    // Optionally handle other statuses
+    break;
+}
+
+//Update the friend request count in slice
+    dispatch(updateFriendRequestCount(pendingRequests.length));
+    // Optionally show a snackbar or notification
+    dispatch(
+      showSnackbar({
+        message: data.message || "Friend request updated!",
+        type: "info",
+      })
+    );
+  }
+);
 
   const handleAccept = async (requestId) => {
     setRequestLoading(true);
     try {
-      await acceptRequest(requestId);
-      setPendingRequests((prev) =>
-        prev.filter((request) => request.id !== requestId)
-      );
-       setFriendRequestActivity(true);
-      // console.log("Request accepted successfully");
-      setRequestLoading(false);
+      const response = await dispatch(acceptFriendRequest(requestId));
+      if (acceptFriendRequest.fulfilled.match(response)) {
+        setPendingRequests((prev) =>
+          prev.filter((request) => request.id !== requestId)
+        );
+        setFriendRequestActivity(true);
+        dispatch(
+          showSnackbar({
+            message: "Friend request accepted!",
+            type: "success",
+          })
+        );
+      } else {
+        dispatch(
+          showSnackbar({
+            message: response?.payload || "Error accepting request",
+            type: "error",
+          })
+        );
+      }
     } catch (error) {
-      // console.error("Error accepting request:", error);
+      dispatch(
+        showSnackbar({
+          message: error?.message || "Error accepting request",
+          type: "error",
+        })
+      );
     } finally {
       setRequestLoading(false);
     }
@@ -62,15 +173,33 @@ const FriendRequestModal = ({
   const handleReject = async (requestId) => {
     setRequestLoading(true);
     try {
-      await rejectRequest(requestId);
-      setPendingRequests((prev) =>
-        prev.filter((request) => request.id !== requestId)
-      );
-      // console.log("Request rejected successfully");
-      setRequestLoading(false);
-      setFriendRequestActivity(true);
+      const response = await dispatch(rejectFriendRequest(requestId));
+      if (rejectFriendRequest.fulfilled.match(response)) {
+        setPendingRequests((prev) =>
+          prev.filter((request) => request.id !== requestId)
+        );
+        setFriendRequestActivity(true);
+        dispatch(
+          showSnackbar({
+            message: "Friend request rejected!",
+            type: "success",
+          })
+        );
+      } else {
+        dispatch(
+          showSnackbar({
+            message: response?.payload || "Error rejecting request",
+            type: "error",
+          })
+        );
+      }
     } catch (error) {
-      // console.error("Error rejecting request:", error);
+      dispatch(
+        showSnackbar({
+          message: error?.message || "Error rejecting request",
+          type: "error",
+        })
+      );
     } finally {
       setRequestLoading(false);
     }
@@ -79,16 +208,34 @@ const FriendRequestModal = ({
   const handleUnsend = async (requestId) => {
     setRequestLoading(true);
     try {
-      await unsendRequest(requestId);
-      setSentRequests((prev) =>
-        prev.filter((request) => request.id !== requestId)
-      );
-      // console.log("Request unsent successfully");
-      setRequestLoading(false);
-      setFriendRequestActivity(true);
+      const response = await dispatch(cancelFriendRequest(requestId));
+      if (cancelFriendRequest.fulfilled.match(response)) {
+        setSentRequests((prev) =>
+          prev.filter((request) => request.id !== requestId)
+        );
+        setFriendRequestActivity(true);
+        dispatch(
+          showSnackbar({
+            message: "Friend request unsent!",
+            type: "success",
+          })
+        );
+      } else {
+        dispatch(
+          showSnackbar({
+            message: response?.payload || "Error unsending request",
+            type: "error",
+          })
+        );
+      }
     } catch (error) {
-      // console.error("Error unsending request:", error);
-    }finally {
+      dispatch(
+        showSnackbar({
+          message: error?.message || "Error unsending request",
+          type: "error",
+        })
+      );
+    } finally {
       setRequestLoading(false);
     }
   };
@@ -155,7 +302,7 @@ const FriendRequestModal = ({
                       >
                         <div className="w-36 flex items-center gap-1 p-0.5">
                           <ProfileCircle
-                            className="h-6 w-6 sm:h-7 sm:w-7 md:h-7 md:w-7   text-white text-sm"
+                            className="h-6 w-6 sm:h-7 sm:w-7 text-xs"
                             name={request.sender?.fullName}
                             color={request.sender?.colorHexValue}
                           />
@@ -213,13 +360,13 @@ const FriendRequestModal = ({
                       >
                         <div className="w-36 text-xs sm:text-md  flex items-center gap-1 p-0.5">
                           <ProfileCircle
-                            className="h-6 w-6 sm:h-7 sm:w-7  text-xs   text-white "
+                            className="h-6 w-6 sm:h-7 sm:w-7 text-xs"
                             name={request.receiver?.fullName}
                             color={request.receiver?.colorHexValue}
                           />
                           <h4 className="px-2 ">
                             {request.receiver?.fullName?.length > 10
-                              ? request.receiver.fullName.slice(0, 10) + "..."
+                              ? request.receiver.fullName.slice(0, 12) + "..."
                               : request.receiver.fullName}
                           </h4>
                         </div>

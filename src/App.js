@@ -1,13 +1,21 @@
-// App.js
-import React from 'react';
-import Routing from './utils/Routing'; // No .js extension
-
+import { Provider } from 'react-redux';
+import store from './Redux/Store';
+import Routing from './utils/Routing';
+import Snackbar from './utils/Snackbar';
+import NotificationAlert from './utils/NotificationAlert';
 
 function App() {
+
+
+
   return (
-    <div className="App font-Poppins font-weight-500">
-      <Routing />
-    </div>
+    <Provider store={store}>
+      <div className="App font-Poppins font-weight-500">
+        <Snackbar/>
+        <NotificationAlert />
+        <Routing />
+      </div>
+    </Provider>
   );
 }
 

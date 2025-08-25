@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { createTicket, getAllTickets } from "../Api/HisabKitabApi";
+
 import "../CssStyle/GroupDashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { deleteTicketApi } from "../Api/HisabKitabApi";
+import { useDispatch } from "react-redux";
+import { createTicket, getAllTickets } from "../Redux/Thunk";
+import { showSnackbar } from "../Redux/SanckbarSlice";
 
 function HelpAndSupport({ user, isOpen, toggleModal }) {
   const [choice, setChoice] = useState(null);
@@ -11,6 +14,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
   const [isRefreshTicket, setRefreshTicket] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isTicketsLoading, setTicketsLoading] = useState(false);
+  const dispatch = useDispatch();
   const handleChoice = (value) => {
     setChoice(value);
     if (value === "view") {
@@ -19,7 +23,7 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
   };
 
   const [formData, setFormData] = useState({
-    userId: user.userId,
+    userId: user?.userId,
     title: "",
     description: "",
   });
@@ -29,48 +33,60 @@ function HelpAndSupport({ user, isOpen, toggleModal }) {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!formData.title.trim() || !formData.description.trim()) {
-      alert("Title and description cannot be empty.");
-      return;
-    }
+  if (!formData.title.trim() || !formData.description.trim()) {
+    dispatch(showSnackbar({
+      message: "Title and description cannot be empty.",
+      type: "error"
+    }));
+    return;
+  }
 
-    setLoading(true);
+  setLoading(true);
+  try {
+    const response = await dispatch(createTicket(formData));
+    dispatch(showSnackbar({
+      message: "Ticket created successfully! With Ticket ID: " + response?.payload?.data?.ticketId,
+      type: "success"
+    }));
+    setFormData({ userId: user.userId, title: "", description: "" });
+    handleChoice("view");
+  } catch (error) {
+    dispatch(showSnackbar({
+      message: "Failed to create ticket. Please try again.",
+      type: "error"
+    }));
+    handleClose();
+  } finally {
+    setLoading(false);
+  }
+};
+
+ useEffect(() => {
+  if (choice !== "view") return;
+  const fetchAllTickets = async () => {
+    setTicketsLoading(true);
     try {
-      const response = await createTicket(formData);
-      alert(
-        "Ticket created successfully! With Ticket ID: " + response.data.ticketId
-      );
-      setFormData({ userId: user.userId, title: "", description: "" });
-      handleClose();
+      const response = await dispatch(getAllTickets());
+      // console.log("Tickets fetched successfully:", response?.payload?.data);
+      setTickets(response?.payload?.data || []);
+      // Optionally show a success snackbar:
+      // dispatch(showSnackbar({
+      //   message: "Tickets fetched successfully!",
+      //   type: "success"
+      // }));
     } catch (error) {
-      alert("Failed to create ticket. Please try again.");
-      handleClose();
+      dispatch(showSnackbar({
+        message: "Failed to fetch Tickets.",
+        type: "error"
+      }));
     } finally {
-      setLoading(false);
+      setTicketsLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (choice !== "view") return;
-    const fetchAllTickets = async () => {
-      setTicketsLoading(true);
-      try {
-        const response = await getAllTickets();
-
-        setTickets(response.data);
-        // console.log("Tickets fetched successfully");
-
-        // console.log(tickets);
-      } catch (error) {
-        alert("Failed to fetch Tickets.");
-      } finally {
-        setTicketsLoading(false);
-      }
-    };
-    fetchAllTickets();
-  }, [isRefreshTicket]);
+  fetchAllTickets();
+}, [isRefreshTicket, dispatch, choice]);
 
   const handleClose = () => {
     setChoice(null);
