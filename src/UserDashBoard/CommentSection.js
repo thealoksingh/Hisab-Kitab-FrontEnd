@@ -28,7 +28,7 @@ import {
 } from "../Redux/Thunk";
 import { useCommentSubscription } from "../hooks/useCommentSubscription";
 
-function CommentSection({}) {
+function CommentSection({ }) {
   const [width, setWidth] = useState("0%"); // Initially set width to 0%
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState("");
@@ -40,6 +40,8 @@ function CommentSection({}) {
   const [creator, setCreator] = useState(null);
   const navigate = useNavigate();
   const { transactionId, friendId } = useParams();
+  const [isSubscriptionReady, setIsSubscriptionReady] = useState(false);
+
   // console.log("transactionId:", transactionId);
   const toggleDeleteAlert = () => {
     setIsDeleteAlertOpen(!isDeleteAlertOpen);
@@ -56,54 +58,54 @@ function CommentSection({}) {
   const dispatch = useDispatch();
   // console.log("selectedTransaction in CommentSection:", selectedTransaction);
 
-useEffect(() => {
-  console.log("🔍 Creator Check:", {
-    commentTransaction,
-    user,
-    friends,
-    selectedFriend,
-    creator,
-  });
-}, [commentTransaction, user, friends, selectedFriend, creator]);
+  useEffect(() => {
+    console.log("🔍 Creator Check:", {
+      commentTransaction,
+      user,
+      friends,
+      selectedFriend,
+      creator,
+    });
+  }, [commentTransaction, user, friends, selectedFriend, creator]);
 
 
   useEffect(() => {
-  if (commentTransaction && user && friends?.length > 0) {
-    const friend = friends.find(
-      (f) => f.friendId === commentTransaction.friendId
-    );
-    setSelectedFriend(friend);
+    if (commentTransaction && user && friends?.length > 0) {
+      const friend = friends.find(
+        (f) => f.friendId === commentTransaction.friendId
+      );
+      setSelectedFriend(friend);
 
-    const isUserCreator = commentTransaction.createdBy === user.userId;
-    setCreator(isUserCreator ? user : friend?.userEntity);
-  }
-}, [commentTransaction, user, friends]);
+      const isUserCreator = commentTransaction.createdBy === user.userId;
+      setCreator(isUserCreator ? user : friend?.userEntity);
+    }
+  }, [commentTransaction, user, friends]);
 
 
- useEffect(() => {
-  if (!transactionId) return;
+  useEffect(() => {
+    if (!transactionId) return;
 
-  if (selectedTransaction?.transId === transactionId) {
-    setCommentTransaction(selectedTransaction);
-  } else {
-    const fetchTransaction = async () => {
-      const response = await dispatch(getTransactionById(transactionId));
-      if (getTransactionById.fulfilled.match(response)) {
-        setCommentTransaction(response?.payload?.data);
-      } else {
-        dispatch(
-          showSnackbar({
-            message:
-              response?.payload?.message || "Failed to fetch transaction",
-            type: "error",
-          })
-        );
-      }
-    };
+    if (selectedTransaction?.transId === transactionId) {
+      setCommentTransaction(selectedTransaction);
+    } else {
+      const fetchTransaction = async () => {
+        const response = await dispatch(getTransactionById(transactionId));
+        if (getTransactionById.fulfilled.match(response)) {
+          setCommentTransaction(response?.payload?.data);
+        } else {
+          dispatch(
+            showSnackbar({
+              message:
+                response?.payload?.message || "Failed to fetch transaction",
+              type: "error",
+            })
+          );
+        }
+      };
 
-    fetchTransaction();
-  }
-}, [transactionId, selectedTransaction]);
+      fetchTransaction();
+    }
+  }, [transactionId, selectedTransaction]);
 
 
   useEffect(() => {
@@ -160,14 +162,29 @@ useEffect(() => {
   }, [user, commentTransaction]);
 
   // Real-time updates
-  useCommentSubscription(transactionId, (comment) => {
-    console.log("Comment recieved from kafka = ", comment);
-    setComments((prev) => [...prev, comment]);
-  });
+  useCommentSubscription(
+    transactionId,
+    (comment) => {
+      console.log("Comment recieved from kafka = ", comment);
+      setComments((prevComments) => {
+        // const newComment = comment;
+        // Only add if commentId is not already present
+        if (!prevComments.some(c => c.commentId === comment.commentId)) {
+          return [...prevComments, comment];
+        }
+        return prevComments;
+      });
+    },
+    () => setIsSubscriptionReady(true) // Set ready when subscription is active
+  );
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     // console.log("Comment Cliked");
+    if (!isSubscriptionReady) {
+      alert("Real-time connection not ready. Please wait...");
+      return;
+    }
     if (!commentText.trim()) {
       alert("Comment cannot be empty.");
       return;
@@ -191,18 +208,22 @@ useEffect(() => {
         postNewCommentsByTransactionId(commentRequestDto)
       );
       if (postNewCommentsByTransactionId.fulfilled.match(response)) {
-        // console.log("Comment posted successfully:", response?.payload);
+        console.log("Comment posted successfully:", response?.payload);
         setCommentText("");
-        // setComments((prevComments) => [
-        //   ...prevComments,
-        //   response?.payload?.data,
-        // ]);
-        // await dispatch(
-        //   showSnackbar({
-        //     message: "Comment posted successfully",
-        //     type: "success",
-        //   })
-        // );
+        setComments((prevComments) => {
+          const newComment = response?.payload?.data;
+          // Only add if commentId is not already present
+          if (!prevComments.some(c => c.commentId === newComment.commentId)) {
+            return [...prevComments, newComment];
+          }
+          return prevComments;
+        });
+        await dispatch(
+          showSnackbar({
+            message: "Comment posted successfully",
+            type: "success",
+          })
+        );
       }
     } catch (error) {
       // console.error("Error creating transaction", error);
@@ -248,12 +269,12 @@ useEffect(() => {
               type="button"
               className=" close-button text-gray-400 bg-transparent hover:bg-gray-600 hover:text-gray-500 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-300 dark:hover:text-white"
               onClick={() =>
-                
+
                 // navigate(
                 //           `/user-dashboard/friends/${friendId}/transactions`
                 //         )
-                      navigate(-1)
-                      } //Calling navigate(-1) to go back
+                navigate(-1)
+              } //Calling navigate(-1) to go back
             >
               <svg
                 className="w-3 h-3"
@@ -335,11 +356,10 @@ useEffect(() => {
                   : " Got "}{" "}
                 :
                 <span
-                  className={`text-sm font-semibold ${
-                    commentTransaction?.fromUserId === user?.userId
-                      ? "text-red-600"
-                      : "text-green-600"
-                  }`}
+                  className={`text-sm font-semibold ${commentTransaction?.fromUserId === user?.userId
+                    ? "text-red-600"
+                    : "text-green-600"
+                    }`}
                 >
                   ₹ <span> {commentTransaction?.amount}</span>
                 </span>

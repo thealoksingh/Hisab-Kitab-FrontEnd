@@ -145,10 +145,17 @@ const SignUpForm = () => {
       setIsLoading(true);
       try {
         const response = await dispatch(register(userData));
-        setSuccessMessage("Signup successful! You can now log in.");
-        setTimeout(() => {
-          navigate(`/signin`);
-        }, 3000);
+
+        if(register.fulfilled.match(response)){
+
+          setSuccessMessage("Signup successful! You can now log in.");
+          
+            navigate(`/user-dashboard`);
+         
+        } else{
+          setErrorMessage(response?.payload?.message || "Signup failed. Please try again.");
+          console.log("Error in signup:", response?.payload?.message);
+        }
       } catch (error) {
         setErrorMessage(
           error.response?.data?.message || "User already exists or invalid input"
@@ -178,7 +185,7 @@ const SignUpForm = () => {
         if(sendOTP.fulfilled.match(response)){
 
           setOtp(response?.payload?.data); // Update state with OTP
-          //  console.log("OTP sent successfully:",response?.payload?.data);
+           console.log("OTP sent successfully:",response?.payload?.data);
           setOtpSent(true);
           setErrorMessage(null);
           setSuccessMessage("Otp sent successfully");

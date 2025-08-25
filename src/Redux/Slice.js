@@ -58,8 +58,12 @@ const authSlice = createSlice({
             })
             .addCase(register.fulfilled, (state, action) => {
                 state.loading = false;
-                console.log("User = ", action.payload);
-                state.user = action?.payload?.data;
+                console.log("User = ", action?.payload?.data?.user);
+                state.user = action?.payload?.data?.user;
+                state.accessToken = action?.payload?.data?.accessToken;
+                state.refreshToken = action?.payload?.data?.refreshToken;
+                localStorage.setItem('accessToken', state.accessToken);
+                localStorage.setItem('refreshToken', state.refreshToken);
             })
             .addCase(register.rejected, (state, action) => {
                 state.loading = false;

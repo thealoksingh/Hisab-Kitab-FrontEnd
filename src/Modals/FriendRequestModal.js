@@ -5,6 +5,7 @@ import { showSnackbar } from "../Redux/SanckbarSlice";
 import {
   acceptFriendRequest,
   cancelFriendRequest,
+  getAllFriends,
   getAllPendingRequest,
   getAllSentRequest,
   rejectFriendRequest,
@@ -113,6 +114,9 @@ switch (data.status) {
   case "UNSENT":
     if (isReceiver) setPendingRequests((prev) => prev.filter((req) => req.id !== data.id));
     else if (isSender) setSentRequests((prev) => prev.filter((req) => req.id !== data.id));
+
+    console.log('get all friends called to get updated')
+    dispatch(getAllFriends());
     break;
   default:
     // Optionally handle other statuses

@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
-export const useCommentSubscription = (transactionId, onCommentReceived) => {
+export const useCommentSubscription = (transactionId, onCommentReceived, onReady) => {
   const clientRef = useRef(null);
 
   useEffect(() => {
@@ -19,6 +19,8 @@ export const useCommentSubscription = (transactionId, onCommentReceived) => {
           const comment = JSON.parse(message.body);
           onCommentReceived(comment);
         });
+          // Notify parent that subscription is ready
+        if (onReady) onReady();
       },
     });
 

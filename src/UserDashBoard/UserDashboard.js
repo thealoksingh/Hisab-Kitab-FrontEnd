@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
-import { selectFriends, selectNotifications, selectUnreadNotifications, selectUser } from "../Redux/Selector";
+import { selectFriendRequestCount, selectFriends, selectNotifications, selectUnreadNotifications, selectUser } from "../Redux/Selector";
 import { getAllFriends, getAllUserNotifications, logout } from "../Redux/Thunk";
 
 import hisabKitabBlack from "../assets/images/hisabkitab-black.png";
@@ -30,7 +30,7 @@ import { showSnackbar } from "../Redux/SanckbarSlice";
 import NotificationModal from "../Modals/NotificationModal";
 import { useNotificationSubscription } from "../hooks/useNotificationSubscription";
 import { showNotification } from "../Redux/NotificationAlertSlice";
-import { addNotification } from "../Redux/Slice";
+import { addNotification, updateFriendRequestCount } from "../Redux/Slice";
 
 const UserDashboard = () => {
   const navigate = useNavigate();
@@ -47,6 +47,7 @@ const UserDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [isHelpAndSupportOpen, setIsHelpAndSupportOpen] = useState(false);
+  const friendRequestCount = useSelector(selectFriendRequestCount);
  
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
   const globalNavToggler = () => isSidebarOpen && setIsSidebarOpen(false);
@@ -95,6 +96,15 @@ const UserDashboard = () => {
 
 //Subscribe to notifications
 useNotificationSubscription(user?.userId, (notification) => {
+  console.log("Received notification:", notification);
+  if (notification?.title === 'Friend request accepted') {
+    dispatch(updateFriendRequestCount(friendRequestCount-1))
+    // If it's a friend request accepted notification, refresh the friends list
+     dispatch(getAllFriends());
+    
+  } else if (notification?.title === 'New friend request') {
+    dispatch(updateFriendRequestCount(friendRequestCount+1))
+  }
   dispatch(addNotification(notification)); // Add to Redux
   dispatch(showNotification({
     description: notification.description,
